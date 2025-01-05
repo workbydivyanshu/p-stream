@@ -156,8 +156,8 @@ export function HomePage() {
                 </p>
                 <br />
                 <p>
-                  You will need to <strong>manually move your data</strong> to
-                  the new server or choose to continue using the old server by
+                  You will need to <strong>migrate your account </strong> to the
+                  new server or choose to continue using the old server by
                   updating your settings.
                 </p>
                 <br />
@@ -166,10 +166,10 @@ export function HomePage() {
                 </p>
                 <ul>
                   <li>
-                    1. <strong>Manually Moving Data:</strong> Your data (e.g.,
+                    1. <strong>Migrating Your Account:</strong> Your data (e.g.,
                     bookmarks) will not be automatically transferred. You’ll
-                    need to re-create it on the new server. Follow the steps
-                    below to move your data.
+                    need to migrate your account from the settings page. Or from
+                    below.
                   </li>
                   <li>
                     2. <strong>Staying on the Old Server:</strong> If you don’t
@@ -185,8 +185,20 @@ export function HomePage() {
                 </p>
                 <ol>
                   <li>
-                    1. Screenshot or write down your bookmarked shows and
-                    movies.
+                    1. Log into your account on{" "}
+                    <strong>server.vidbinge.com</strong>.
+                  </li>
+                  <li>
+                    (If you already are logged in, press here:{" "}
+                    <a
+                      href="https://server.vidbinge.com/migrate"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-type-link"
+                    >
+                      Migrate my data.
+                    </a>
+                    )
                   </li>
                   <li>
                     2. Go to the <strong>Settings</strong> page.
@@ -196,13 +208,15 @@ export function HomePage() {
                     <strong>Connections &gt; Custom Server</strong>.
                   </li>
                   <li>
-                    4. Input the new server URL:{" "}
-                    <strong>https://server.fifthwit.tech</strong>
+                    3. Press the &quot;Migrate my data to a new server.&quot;
+                    button.
                   </li>
                   <li>
-                    5. Create a <strong>new account</strong> on the new server.
+                    4. Enter the new server url:{" "}
+                    <strong>https://server.fifthwit.tech</strong> and press
+                    &quot;Migrate&quot;.
                   </li>
-                  <li>6. Find your media and rebookmark it.</li>
+                  <li>5. Login to your account with the same passphrase!</li>
                 </ol>
                 <br />
                 <p>
