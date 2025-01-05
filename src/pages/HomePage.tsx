@@ -190,12 +190,7 @@ export function HomePage() {
                   </li>
                   <li>
                     (If you already are logged in, press here:{" "}
-                    <a
-                      href="https://server.vidbinge.com/migrate"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-type-link"
-                    >
+                    <a href="/migration" className="text-type-link">
                       Migrate my data.
                     </a>
                     )
