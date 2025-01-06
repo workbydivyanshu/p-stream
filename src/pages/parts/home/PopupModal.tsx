@@ -37,6 +37,7 @@ export function PopupModal({
         "transition-opacity duration-400",
         "pointer-events-auto",
       )}
+      onClick={onClose}
     >
       <Flare.Base
         className={classNames(
