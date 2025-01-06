@@ -19,8 +19,8 @@ export function Discover() {
     const simulateLoading = async () => {
       // Simulate a loading time with setTimeout or fetch data here
       await new Promise((resolve) => {
-        setTimeout(resolve, 2000);
-      }); // Simulate 2s loading time
+        setTimeout(resolve, 1000);
+      }); // Simulate 1s loading time
       setLoading(false); // After loading, set loading to false
     };
 
