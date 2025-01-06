@@ -203,6 +203,14 @@ export function DiscoverContent() {
 
   // Fetch Editor Picks Movies
   useEffect(() => {
+    const shuffleArray = (array: any[]) => {
+      for (let i = array.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
+
     const fetchEditorPicksMovies = async () => {
       try {
         const movieDataPromises = editorPicksMovies.map((movie) =>
@@ -213,8 +221,9 @@ export function DiscoverContent() {
         );
 
         const movieData = await Promise.all(movieDataPromises);
+        const shuffledMovieData = shuffleArray(movieData);
         setEditorPicksDataMovies(
-          movieData.map((movie) => ({ ...movie, isTVShow: false })),
+          shuffledMovieData.map((movie) => ({ ...movie, isTVShow: false })),
         );
       } catch (error) {
         console.error("Error fetching editor picks movies:", error);
@@ -226,6 +235,14 @@ export function DiscoverContent() {
 
   // Fetch Editor Picks TV Shows
   useEffect(() => {
+    const shuffleArray = (array: any[]) => {
+      for (let i = array.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
+
     const fetchEditorPicksShows = async () => {
       try {
         const showDataPromises = editorPicksTVShows.map((show) =>
@@ -236,8 +253,9 @@ export function DiscoverContent() {
         );
 
         const showData = await Promise.all(showDataPromises);
+        const shuffledShowData = shuffleArray(showData);
         setEditorPicksDataShows(
-          showData.map((show) => ({ ...show, isTVShow: true })),
+          shuffledShowData.map((show) => ({ ...show, isTVShow: true })),
         );
       } catch (error) {
         console.error("Error fetching editor picks shows:", error);
