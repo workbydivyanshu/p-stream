@@ -1,4 +1,5 @@
-// Based mfs only use only one 500 line file instead of ten 50 line files.
+// Based mfs only use only one 1500 line file instead of ten 50 line files.
+import { t } from "i18next";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +20,7 @@ import { conf } from "@/setup/config";
 
 import { Icon, Icons } from "../../components/Icon";
 
-const editorPicks = [
+const editorPicksMovies = [
   { id: 9342, type: "movie" }, // The Mask of Zorro
   { id: 293, type: "movie" }, // A River Runs Through It
   { id: 370172, type: "movie" }, // No Time To Die
@@ -36,11 +37,13 @@ const editorPicks = [
   { id: 264660, type: "movie" }, // Ex Machina
   { id: 92591, type: "movie" }, // Bernie
   { id: 976893, type: "movie" }, // Perfect Days
-  { id: 71912, type: "show" }, // The Witcher
   { id: 13187, type: "movie" }, // A Charlie Brown Christmas
   { id: 11527, type: "movie" }, // Excalibur
   { id: 120, type: "movie" }, // LOTR: The Fellowship of the Ring
   { id: 157336, type: "movie" }, // Interstellar
+];
+
+const editorPicksTVShows = [
   { id: 456, type: "show" }, // The Simpsons
   { id: 73021, type: "show" }, // Disenchantment
   { id: 1434, type: "show" }, // Family Guy
@@ -52,6 +55,7 @@ const editorPicks = [
   { id: 44217, type: "show" }, // Vikings
   { id: 90228, type: "show" }, // Dune Prophecy
   { id: 13916, type: "show" }, // Death Note
+  { id: 71912, type: "show" }, // The Witcher
 ];
 
 function ScrollToTopButton() {
@@ -177,7 +181,9 @@ export function DiscoverContent() {
   const [editorPicksDataMovies, setEditorPicksDataMovies] = useState<Media[]>(
     [],
   );
-  const [editorPicksDataShows, setEditorPicksDataShows] = useState<Media[]>([]);
+  const [editorPicksDataShows, setEditorPicksDataShows] = useState<TVShow[]>(
+    [],
+  );
 
   // State to track selected category (movies or TV shows)
   const [selectedCategory, setSelectedCategory] = useState("movies");
@@ -195,63 +201,50 @@ export function DiscoverContent() {
     }
   };
 
+  // Fetch Editor Picks Movies
   useEffect(() => {
-    const shuffleArray = (array: any[]) => {
-      for (let i = array.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    };
-
-    const fetchEditorPicks = async () => {
+    const fetchEditorPicksMovies = async () => {
       try {
-        // Shuffle the editorPicks array
-        const shuffledPicks = shuffleArray([...editorPicks]);
-
-        // Separate shuffled picks into movies and TV shows
-        const moviePicks = shuffledPicks.filter(
-          (pick) => pick.type === "movie",
+        const movieDataPromises = editorPicksMovies.map((movie) =>
+          get<any>(`/movie/${movie.id}`, {
+            api_key: conf().TMDB_READ_API_KEY,
+            language: "en-US",
+          }),
         );
-        const showPicks = shuffledPicks.filter((pick) => pick.type === "show");
 
-        // Fetch data for movies
-        const moviePromises = moviePicks.map(async (pick) => {
-          const data = await get<any>(`/movie/${pick.id}`, {
-            api_key: conf().TMDB_READ_API_KEY,
-            language: "en-US",
-          });
-          return {
-            ...data,
-            type: pick.type,
-          };
-        });
-
-        // Fetch data for shows
-        const showPromises = showPicks.map(async (pick) => {
-          const data = await get<any>(`/tv/${pick.id}`, {
-            api_key: conf().TMDB_READ_API_KEY,
-            language: "en-US",
-          });
-          return {
-            ...data,
-            type: pick.type,
-          };
-        });
-
-        // Wait for all promises to resolve
-        const movieResults = await Promise.all(moviePromises);
-        const showResults = await Promise.all(showPromises);
-
-        // Set the state with the fetched data
-        setEditorPicksDataMovies(movieResults);
-        setEditorPicksDataShows(showResults);
+        const movieData = await Promise.all(movieDataPromises);
+        setEditorPicksDataMovies(
+          movieData.map((movie) => ({ ...movie, isTVShow: false })),
+        );
       } catch (error) {
-        console.error("Error fetching editor picks:", error);
+        console.error("Error fetching editor picks movies:", error);
       }
     };
 
-    fetchEditorPicks();
+    fetchEditorPicksMovies();
+  }, []);
+
+  // Fetch Editor Picks TV Shows
+  useEffect(() => {
+    const fetchEditorPicksShows = async () => {
+      try {
+        const showDataPromises = editorPicksTVShows.map((show) =>
+          get<any>(`/tv/${show.id}`, {
+            api_key: conf().TMDB_READ_API_KEY,
+            language: "en-US",
+          }),
+        );
+
+        const showData = await Promise.all(showDataPromises);
+        setEditorPicksDataShows(
+          showData.map((show) => ({ ...show, isTVShow: true })),
+        );
+      } catch (error) {
+        console.error("Error fetching editor picks shows:", error);
+      }
+    };
+
+    fetchEditorPicksShows();
   }, []);
 
   useEffect(() => {
@@ -575,7 +568,7 @@ export function DiscoverContent() {
     }
   }, [movieWidth]);
 
-  function renderMovies(medias: Media[], category: string, isTVShow = false) {
+  function renderMovies(medias: Media[], category: string, isTVShow: boolean) {
     const categorySlug = `${category.toLowerCase().replace(/ /g, "-")}${Math.random()}`; // Convert the category to a slug
     const displayCategory =
       category === "Now Playing"
@@ -1154,6 +1147,7 @@ export function DiscoverContent() {
                     {renderMovies(
                       editorPicksDataMovies,
                       "Editor Picks - Movies",
+                      false,
                     )}
                   </div>
                 </div>
@@ -1161,7 +1155,11 @@ export function DiscoverContent() {
               {editorPicksDataShows.length > 0 && (
                 <div>
                   <div className="mt-8">
-                    {renderMovies(editorPicksDataShows, "Editor Picks - Shows")}
+                    {renderMovies(
+                      editorPicksDataShows,
+                      "Editor Picks - Shows",
+                      true,
+                    )}
                   </div>
                 </div>
               )}
@@ -1213,6 +1211,7 @@ export function DiscoverContent() {
                   renderMovies(
                     providerMovies[selectedProvider.id],
                     `Popular Movies on ${selectedProvider.name}`,
+                    false,
                   )
                 ) : (
                   <p className="text-center text-gray-600">
@@ -1236,6 +1235,7 @@ export function DiscoverContent() {
                   {renderMovies(
                     categoryMovies[category.name] || [],
                     category.name,
+                    false,
                   )}
                 </div>
               ))}
@@ -1245,7 +1245,7 @@ export function DiscoverContent() {
                   id={`carousel-${genre.name.toLowerCase().replace(/ /g, "-")}`}
                   className=""
                 >
-                  {renderMovies(genreMovies[genre.id] || [], genre.name)}
+                  {renderMovies(genreMovies[genre.id] || [], genre.name, false)}
                 </div>
               ))}
             </div>
