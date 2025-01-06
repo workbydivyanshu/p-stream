@@ -41,6 +41,17 @@ const editorPicks = [
   { id: 11527, type: "movie" }, // Excalibur
   { id: 120, type: "movie" }, // LOTR: The Fellowship of the Ring
   { id: 157336, type: "movie" }, // Interstellar
+  { id: 456, type: "show" }, // The Simpsons
+  { id: 73021, type: "show" }, // Disenchantment
+  { id: 1434, type: "show" }, // Family Guy
+  { id: 1695, type: "show" }, // Monk
+  { id: 1408, type: "show" }, // House
+  { id: 93740, type: "show" }, // Foundation
+  { id: 60625, type: "show" }, // Rick and Morty
+  { id: 1396, type: "show" }, // Breaking Bad
+  { id: 44217, type: "show" }, // Vikings
+  { id: 90228, type: "show" }, // Dune Prophecy
+  { id: 13916, type: "show" }, // Death Note
 ];
 
 function ScrollToTopButton() {
@@ -86,7 +97,7 @@ function ScrollToTopButton() {
       <button
         type="button"
         onClick={scrollToTop}
-        className={`relative flex items-center justify-center space-x-2 rounded-full px-4 py-3 text-lg font-semibold text-white bg-pill-background bg-opacity-80 hover:bg-pill-backgroundHover transition-opacity hover:scale-105 transition-transform duration-500 ease-in-out ${
+        className={`relative flex items-center justify-center space-x-2 rounded-full px-4 py-3 text-lg font-semibold text-white bg-pill-background bg-opacity-80 hover:bg-pill-backgroundHover transition-opacity hover:scale-105 duration-500 ease-in-out ${
           isVisible ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         style={{
@@ -163,11 +174,13 @@ export function DiscoverContent() {
     useState<NodeJS.Timeout | null>(null);
   const { isMobile } = useIsMobile();
 
-  const [editorPicksData, setEditorPicksData] = useState<Media[]>([]);
+  const [editorPicksDataMovies, setEditorPicksDataMovies] = useState<Media[]>(
+    [],
+  );
+  const [editorPicksDataShows, setEditorPicksDataShows] = useState<Media[]>([]);
 
   // State to track selected category (movies or TV shows)
   const [selectedCategory, setSelectedCategory] = useState("movies");
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   // Handle category change for both event (from <select>) and string (from custom dropdown)
   const handleCategoryChange = (
@@ -180,11 +193,9 @@ export function DiscoverContent() {
       // Handle the <select> change event
       setSelectedCategory(eventOrValue.target.value);
     }
-    setDropdownOpen(false); // Close dropdown after selection
   };
 
   useEffect(() => {
-    // Function to shuffle array
     const shuffleArray = (array: any[]) => {
       for (let i = array.length - 1; i > 0; i -= 1) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -198,10 +209,15 @@ export function DiscoverContent() {
         // Shuffle the editorPicks array
         const shuffledPicks = shuffleArray([...editorPicks]);
 
-        const promises = shuffledPicks.map(async (pick) => {
-          const endpoint =
-            pick.type === "movie" ? `/movie/${pick.id}` : `/tv/${pick.id}`;
-          const data = await get<any>(endpoint, {
+        // Separate shuffled picks into movies and TV shows
+        const moviePicks = shuffledPicks.filter(
+          (pick) => pick.type === "movie",
+        );
+        const showPicks = shuffledPicks.filter((pick) => pick.type === "show");
+
+        // Fetch data for movies
+        const moviePromises = moviePicks.map(async (pick) => {
+          const data = await get<any>(`/movie/${pick.id}`, {
             api_key: conf().TMDB_READ_API_KEY,
             language: "en-US",
           });
@@ -210,8 +226,26 @@ export function DiscoverContent() {
             type: pick.type,
           };
         });
-        const results = await Promise.all(promises);
-        setEditorPicksData(results);
+
+        // Fetch data for shows
+        const showPromises = showPicks.map(async (pick) => {
+          const data = await get<any>(`/tv/${pick.id}`, {
+            api_key: conf().TMDB_READ_API_KEY,
+            language: "en-US",
+          });
+          return {
+            ...data,
+            type: pick.type,
+          };
+        });
+
+        // Wait for all promises to resolve
+        const movieResults = await Promise.all(moviePromises);
+        const showResults = await Promise.all(showPromises);
+
+        // Set the state with the fetched data
+        setEditorPicksDataMovies(movieResults);
+        setEditorPicksDataShows(showResults);
       } catch (error) {
         console.error("Error fetching editor picks:", error);
       }
@@ -546,17 +580,19 @@ export function DiscoverContent() {
     const displayCategory =
       category === "Now Playing"
         ? "In Cinemas"
-        : category === "Editor Picks" // Check for "Editor Picks" specifically
-          ? category
-          : category === `Popular Movies on ${selectedProvider.name}`
-            ? `Popular Movies on ${selectedProvider.name}`
-            : category === `Popular Shows on ${selectedTVProvider.name}`
-              ? `Popular Shows on ${selectedTVProvider.name}`
-              : category.includes("Movie")
-                ? `${category}s`
-                : isTVShow
-                  ? `${category} Shows`
-                  : `${category} Movies`;
+        : category === "Editor Picks - Movies"
+          ? "Editor Picks - Movies"
+          : category === "Editor Picks - Shows"
+            ? "Editor Picks - Shows"
+            : category === `Popular Movies on ${selectedProvider.name}`
+              ? `Popular Movies on ${selectedProvider.name}`
+              : category === `Popular Shows on ${selectedTVProvider.name}`
+                ? `Popular Shows on ${selectedTVProvider.name}`
+                : category.includes("Movie")
+                  ? `${category}s`
+                  : isTVShow
+                    ? `${category} Shows`
+                    : `${category} Movies`;
 
     // https://tailwindcss.com/docs/border-style
     return (
@@ -592,9 +628,7 @@ export function DiscoverContent() {
                 key={media.id}
                 onClick={() =>
                   navigate(
-                    `/media/tmdb-${isTVShow ? "tv" : "movie"}-${media.id}-${
-                      isTVShow ? media.name : media.title
-                    }`,
+                    `/media/tmdb-${isTVShow ? "tv" : "movie"}-${media.id}-from-discover`,
                   )
                 }
                 className="discover-card max-h-200 text-center relative mt-3 mx-[0.285em] transition-transform duration-[0.45s] hover:scale-105"
@@ -686,9 +720,7 @@ export function DiscoverContent() {
 
         // Schedule navigation after 5 seconds
         const timeoutId = setTimeout(() => {
-          navigate(
-            `/media/tmdb-movie-${selectedMovie.id}-${selectedMovie.title}`,
-          );
+          navigate(`/media/tmdb-movie-${selectedMovie.id}-discover-random`);
         }, 5000);
         setCountdownTimeout(timeoutId);
       }
@@ -948,7 +980,7 @@ export function DiscoverContent() {
           >
             <span className="flex items-center">
               {countdown !== null && countdown > 0 ? (
-                <div className="flex items-center inline-block">
+                <div className="flex items-center">
                   <span>Cancel Countdown</span>
                   <Icon
                     icon={Icons.X}
@@ -956,7 +988,7 @@ export function DiscoverContent() {
                   />
                 </div>
               ) : (
-                <div className="flex items-center inline-block">
+                <div className="flex items-center">
                   <span>Watch Something Random</span>
                   <img
                     src="/lightbar-images/dice.svg"
@@ -980,40 +1012,34 @@ export function DiscoverContent() {
         </div>
       )}
       <div className="mt-8 p-4 w-full max-w-screen-xl mx-auto">
+        {/* Tabs */}
         <div className="relative flex justify-center mb-4">
-          {/* Custom dropdown button */}
-          <button
-            type="button"
-            className="text-2xl font-bold p-2 bg-transparent text-center rounded-full cursor-pointer flex items-center"
-            onClick={() => setDropdownOpen(!isDropdownOpen)}
-          >
-            {selectedCategory === "movies" ? "Movies" : "TV Shows"}
-            <Icon
-              icon={isDropdownOpen ? Icons.CHEVRON_UP : Icons.CHEVRON_DOWN}
-              className="ml-2 text-2xl pt-1"
-            />
-          </button>
-
-          {/* Dropdown options */}
-          {isDropdownOpen && (
-            <ul className="absolute top-full mb-1 rounded-lg bg-dropdown-background py-3 px-5 text-left text-white shadow-md border-2 border-gray-800 focus:outline-none tabbable cursor-pointer z-50">
-              <li
-                className={`cursor-pointer p-2 hover:text-gray-300 ${selectedCategory === "movies" ? "font-bold" : ""}`}
-                onClick={() => handleCategoryChange("movies")}
-              >
-                Movies
-              </li>
-              <li
-                className={`cursor-pointer p-2 hover:text-gray-300 ${selectedCategory === "tvshows" ? "font-bold" : ""}`}
-                onClick={() => handleCategoryChange("tvshows")}
-              >
-                TV Shows
-              </li>
-            </ul>
-          )}
+          <div className="flex space-x-4">
+            <button
+              type="button"
+              className={`text-2xl font-bold p-2 bg-transparent text-center rounded-full cursor-pointer flex items-center transition-transform duration-200 ${selectedCategory === "movies" ? "transform scale-105 text-type-link" : "text-type-secondary"}`}
+              onClick={() => handleCategoryChange("movies")}
+            >
+              Movies
+            </button>
+            <button
+              type="button"
+              className={`text-2xl font-bold p-2 bg-transparent text-center rounded-full cursor-pointer flex items-center transition-transform duration-200 ${selectedCategory === "tvshows" ? "transform scale-105 text-type-link" : "text-type-secondary"}`}
+              onClick={() => handleCategoryChange("tvshows")}
+            >
+              TV Shows
+            </button>
+            <button
+              type="button"
+              className={`text-2xl font-bold p-2 bg-transparent text-center rounded-full cursor-pointer flex items-center transition-transform duration-200 ${selectedCategory === "editorpicks" ? "transform scale-105 text-type-link" : "text-type-secondary"}`}
+              onClick={() => handleCategoryChange("editorpicks")}
+            >
+              Editor Picks
+            </button>
+          </div>
         </div>
 
-        {/* Render Movies */}
+        {/* Render Movies Buttons */}
         {selectedCategory === "movies" && (
           <>
             <div className="flex justify-center overflow-x-auto">
@@ -1060,7 +1086,7 @@ export function DiscoverContent() {
           </>
         )}
 
-        {/* Render Shows */}
+        {/* Render Shows Buttons */}
         {selectedCategory === "tvshows" && (
           <>
             <div className="flex justify-center overflow-x-auto">
@@ -1107,24 +1133,45 @@ export function DiscoverContent() {
           </>
         )}
       </div>
+
       <div className="">
-        <div className="flex items-center mt-5">
-          <Divider marginClass="mr-5" />
-          <h1 className="text-4xl font-bold text-white mx-auto whitespace-nowrap">
-            Editor Picks
-          </h1>
-          <Divider marginClass="ml-5" />
-        </div>
-        {/* Editor Picks Section */}
-        <div className="mt-8">
-          {editorPicksData.length > 0 && (
-            <div className="mt-8">
-              {renderMovies(editorPicksData, "Editor Picks")}
+        {selectedCategory === "editorpicks" && (
+          <div>
+            {/* Header 
+            <div className="flex items-center mt-5">
+              <Divider marginClass="mr-5" />
+              <h1 className="text-4xl font-bold text-white mx-auto whitespace-nowrap">
+                Editor Picks
+              </h1>
+              <Divider marginClass="ml-5" />
             </div>
-          )}
-        </div>
+            */}
+
+            <div className="mt-8">
+              {editorPicksDataMovies.length > 0 && (
+                <div>
+                  <div className="mt-8">
+                    {renderMovies(
+                      editorPicksDataMovies,
+                      "Editor Picks - Movies",
+                    )}
+                  </div>
+                </div>
+              )}
+              {editorPicksDataShows.length > 0 && (
+                <div>
+                  <div className="mt-8">
+                    {renderMovies(editorPicksDataShows, "Editor Picks - Shows")}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {selectedCategory === "movies" && (
           <>
+            {/* Header 
             <div className="flex items-center mt-5 mb-4">
               <Divider marginClass="mr-5" />
               <h1 className="text-4xl font-bold text-white mx-auto">Movies</h1>
@@ -1154,6 +1201,8 @@ export function DiscoverContent() {
                 </div>
               )}
             </div>
+            */}
+
             <div
               key={`carousel-providers-${selectedProvider.id}`}
               id="carousel-providers"
@@ -1205,6 +1254,7 @@ export function DiscoverContent() {
 
         {selectedCategory === "tvshows" && (
           <>
+            {/* Header 
             <div className="flex items-center mt-10 mb-4">
               <Divider marginClass="mr-5" />
               <h1 className="text-4xl font-bold text-white mx-auto">Shows</h1>
@@ -1234,6 +1284,8 @@ export function DiscoverContent() {
                 </div>
               )}
             </div>
+            */}
+
             <div
               key={`carousel-tv-providers-${selectedProvider.id}`}
               id="carousel-tv-providers"
