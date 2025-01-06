@@ -3,10 +3,10 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 
 import { Loading } from "@/components/layout/Loading";
-import DiscoverContent from "@/utils/discoverContent";
+import DiscoverContent from "@/pages/discover/discoverContent";
 
-import { SubPageLayout } from "./layouts/SubPageLayout";
-import { PageTitle } from "./parts/util/PageTitle";
+import { SubPageLayout } from "../layouts/SubPageLayout";
+import { PageTitle } from "../parts/util/PageTitle";
 
 export function Discover() {
   const { t } = useTranslation();

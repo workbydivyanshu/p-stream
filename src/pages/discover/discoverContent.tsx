@@ -6,7 +6,6 @@ import { get } from "@/backend/metadata/tmdb";
 import { Divider } from "@/components/utils/Divider";
 import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { conf } from "@/setup/config";
 import {
   Category,
   Genre,
@@ -15,9 +14,10 @@ import {
   TVShow,
   categories,
   tvCategories,
-} from "@/utils/discover";
+} from "@/pages/discover/common";
+import { conf } from "@/setup/config";
 
-import { Icon, Icons } from "../components/Icon";
+import { Icon, Icons } from "../../components/Icon";
 
 const editorPicks = [
   { id: 9342, type: "movie" }, // The Mask of Zorro

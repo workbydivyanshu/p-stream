@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
+import DiscoverContent from "@/pages/discover/discoverContent";
 import { HomeLayout } from "@/pages/layouts/HomeLayout";
 import { BookmarksPart } from "@/pages/parts/home/BookmarksPart";
 import { HeroPart } from "@/pages/parts/home/HeroPart";
@@ -18,7 +19,6 @@ import { WatchingPart } from "@/pages/parts/home/WatchingPart";
 import { SearchListPart } from "@/pages/parts/search/SearchListPart";
 import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
 import { usePreferencesStore } from "@/stores/preferences";
-import DiscoverContent from "@/utils/discoverContent";
 
 import { Button } from "./About";
 import { PopupModal } from "./parts/home/PopupModal";
