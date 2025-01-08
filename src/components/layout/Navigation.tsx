@@ -101,7 +101,6 @@ export function Navigation(props: NavigationProps) {
               >
                 <IconPatch icon={Icons.DISCORD} clickable downsized />
               </a>
-              {/* 
               <a
                 onClick={() => handleClick("/discover")}
                 rel="noreferrer"
@@ -109,7 +108,6 @@ export function Navigation(props: NavigationProps) {
               >
                 <IconPatch icon={Icons.RISING_STAR} clickable downsized />
               </a>
-              */}
             </div>
             <div className="relative pointer-events-auto">
               <LinksDropdown>
