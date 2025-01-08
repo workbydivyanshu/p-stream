@@ -98,7 +98,7 @@ export function HomePage() {
   });
   */
 
-  // One time notice
+  /* One time notice
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -112,11 +112,13 @@ export function HomePage() {
     setShowModal(false);
     localStorage.setItem("popupDismissed", "true");
   };
+  */
 
-  const { loggedIn } = useAuth();
+  // const { loggedIn } = useAuth(); // Adjust padding for popup show button based on logged in state
 
   return (
     <HomeLayout showBg={showBg}>
+      {/* Popup show button
       <a
         onClick={() => setShowModal(true)}
         className={` text-white tabbable rounded-full z-50 fixed top-5 ${
@@ -130,6 +132,7 @@ export function HomePage() {
           <span className="font-bold select-none">READ</span>
         </IconPill>
       </a>
+      */}
       <div className="mb-16 sm:mb-24">
         <Helmet>
           <style type="text/css">{`
@@ -140,6 +143,7 @@ export function HomePage() {
           <title>{t("global.name")}</title>
         </Helmet>
 
+        {/* Popup
         {showModal && (
           <PopupModal
             styles="max-w-2xl" // max-w-md for short
@@ -233,6 +237,7 @@ export function HomePage() {
             onClose={handleCloseModal}
           />
         )}
+        */}
 
         <HeroPart searchParams={searchParams} setIsSticky={setShowBg} />
       </div>
