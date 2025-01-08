@@ -1061,7 +1061,7 @@ export function DiscoverContent() {
               )}
               <div
                 id="button-carousel-providers"
-                className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth z-40"
+                className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth"
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "transparent transparent",
@@ -1108,7 +1108,7 @@ export function DiscoverContent() {
               )}
               <div
                 id="button-carousel-tv-providers"
-                className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth z-40"
+                className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth"
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "transparent transparent",
@@ -1124,7 +1124,7 @@ export function DiscoverContent() {
                 </div>
               )}
             </div>
-            <div className="flex mb-4 overflow-x-auto">
+            <div className="flex mb-4 overflow-x-auto z-30">
               <div className="">{renderScrollButton("tvshows", "left")}</div>
               <div
                 id="button-carousel-tvshows"
