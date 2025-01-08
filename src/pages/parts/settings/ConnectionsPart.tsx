@@ -157,12 +157,6 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
           <Divider marginClass="my-6 px-8 box-content -mx-8" />
           <p className="text-white font-bold mb-3">
             {t("settings.connections.server.urlLabel")}
-            <p className="font-medium text-type-link">
-              New default server: https://server.fifthwit.tech
-            </p>
-            <p className="font-medium text-type-secondary">
-              Old default server: https://server.vidbinge.com
-            </p>
           </p>
           <AuthInputBox
             onChange={setBackendUrl}
