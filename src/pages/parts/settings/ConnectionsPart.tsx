@@ -9,7 +9,8 @@ import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
 import { Heading1 } from "@/components/utils/Text";
-// import { SetupPart } from "@/pages/parts/settings/SetupPart";
+import { SetupPart } from "@/pages/parts/settings/SetupPart";
+import { useAuthStore } from "@/stores/auth";
 
 interface ProxyEditProps {
   proxyUrls: string[] | null;
@@ -116,6 +117,7 @@ function ProxyEdit({ proxyUrls, setProxyUrls }: ProxyEditProps) {
 
 function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
   const { t } = useTranslation();
+  const user = useAuthStore();
   return (
     <SettingsCard>
       <div className="flex justify-between items-center gap-4">
@@ -130,6 +132,18 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
               </MwLink>
             </Trans>
           </p>
+          {user.account && (
+            <div>
+              <br />
+              <p className="max-w-[20rem] font-medium">
+                <Trans i18nKey="settings.connections.server.migration.description">
+                  <MwLink to="/migration">
+                    {t("settings.connections.server.migration.link")}
+                  </MwLink>
+                </Trans>
+              </p>
+            </div>
+          )}
         </div>
         <div>
           <Toggle
@@ -144,7 +158,11 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
           <p className="text-white font-bold mb-3">
             {t("settings.connections.server.urlLabel")}
           </p>
-          <AuthInputBox onChange={setBackendUrl} value={backendUrl ?? ""} />
+          <AuthInputBox
+            onChange={setBackendUrl}
+            value={backendUrl ?? ""}
+            placeholder="https://"
+          />
         </>
       ) : null}
     </SettingsCard>
@@ -157,7 +175,7 @@ export function ConnectionsPart(props: BackendEditProps & ProxyEditProps) {
     <div>
       <Heading1 border>{t("settings.connections.title")}</Heading1>
       <div className="space-y-6">
-        {/* <SetupPart />  Removed due to NSBX limitations */}
+        <SetupPart /> {/* I was wondering what happened to this badddev >:( */}
         <ProxyEdit
           proxyUrls={props.proxyUrls}
           setProxyUrls={props.setProxyUrls}
