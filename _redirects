@@ -1,0 +1,3 @@
+/media/*  https://meta.pstream.org/media/:splat  200!
+/opensearch.xml  /opensearch.xml  200
+/*  /
