@@ -1,6 +1,21 @@
 {
   "rewrites": [
     {
+      "source": "/opensearch.xml",
+      "destination": "/opensearch.xml"
+    },
+    {
+      "source": "/media/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-rewrite",
+          "value": "true"
+        }
+      ],
+      "destination": "https://meta.pstream.org/media/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }
