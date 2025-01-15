@@ -80,13 +80,7 @@ export function WatchingPart({
   if (sortedProgressItems.length === 0) return null;
 
   return (
-    <div
-      className="relative"
-      style={{ userSelect: "none" }} // Disable text selection
-      onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-        e.preventDefault()
-      } // Prevent right-click context menu
-    >
+    <div className="relative">
       <SectionHeading
         title={t("home.continueWatching.sectionTitle")}
         icon={Icons.CLOCK}
@@ -100,6 +94,10 @@ export function WatchingPart({
       <MediaGrid ref={gridRef}>
         {sortedProgressItems.map((v) => (
           <div
+            style={{ userSelect: "none" }} // Disable text selection
+            onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+              e.preventDefault()
+            } // Prevent right-click context menu
             onTouchStart={handleTouchStart} // Handle touch start
             onTouchEnd={handleTouchEnd} // Handle touch end
             onMouseDown={handleMouseDown} // Handle mouse down

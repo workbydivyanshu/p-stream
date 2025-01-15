@@ -88,17 +88,7 @@ export function BookmarksPart({
   if (items.length === 0) return null;
 
   return (
-    <div
-      className="relative"
-      style={{ userSelect: "none" }} // Disable text selection
-      onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-        e.preventDefault()
-      } // Prevent right-click context menu
-      onTouchStart={handleTouchStart} // Handle touch start
-      onTouchEnd={handleTouchEnd} // Handle touch end
-      onMouseDown={handleMouseDown} // Handle mouse down
-      onMouseUp={handleMouseUp} // Handle mouse up
-    >
+    <div className="relative">
       <SectionHeading
         title={t("home.bookmarks.sectionTitle") || "Bookmarks"}
         icon={Icons.BOOKMARK}
@@ -111,12 +101,23 @@ export function BookmarksPart({
       </SectionHeading>
       <MediaGrid ref={gridRef}>
         {items.map((v) => (
-          <WatchedMediaCard
-            key={v.id}
-            media={v}
-            closable={editing}
-            onClose={() => removeBookmark(v.id)}
-          />
+          <div
+            style={{ userSelect: "none" }} // Disable text selection
+            onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+              e.preventDefault()
+            } // Prevent right-click context menu
+            onTouchStart={handleTouchStart} // Handle touch start
+            onTouchEnd={handleTouchEnd} // Handle touch end
+            onMouseDown={handleMouseDown} // Handle mouse down
+            onMouseUp={handleMouseUp} // Handle mouse up
+          >
+            <WatchedMediaCard
+              key={v.id}
+              media={v}
+              closable={editing}
+              onClose={() => removeBookmark(v.id)}
+            />
+          </div>
         ))}
       </MediaGrid>
     </div>
