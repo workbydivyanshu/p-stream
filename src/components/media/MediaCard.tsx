@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -48,7 +48,12 @@ function MediaCardContent({
   percentage,
   closable,
   onClose,
-}: MediaCardProps) {
+  overlayVisible,
+  setOverlayVisible,
+}: MediaCardProps & {
+  overlayVisible: boolean;
+  setOverlayVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
 
@@ -68,142 +73,255 @@ function MediaCardContent({
     dotListContent.push(t("media.unreleased"));
   }
 
+  const handleMoreInfoClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const searchParam = encodeURIComponent(encodeURI(media.id));
+    const url =
+      media.type === "movie"
+        ? `https://www.themoviedb.org/movie/${searchParam}`
+        : `https://www.themoviedb.org/tv/${searchParam}`;
+
+    window.open(url, "_blank");
+  };
+
+  const handleMouseLeave = () => {
+    setOverlayVisible(false);
+  };
+
   return (
-    <Flare.Base
-      className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
-        canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
-      }`}
-      tabIndex={canLink ? 0 : -1}
-      onKeyUp={(e) => e.key === "Enter" && e.currentTarget.click()}
-    >
-      <Flare.Light
-        flareSize={300}
-        cssColorVar="--colors-mediaCard-hoverAccent"
-        backgroundClass="bg-mediaCard-hoverBackground duration-100"
-        className={classNames({
-          "rounded-xl bg-background-main group-hover:opacity-100": canLink,
-        })}
-      />
-      <Flare.Child
-        className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
-          canLink ? "group-hover:scale-95" : "opacity-60"
-        }`}
-      >
-        <div
-          className={classNames(
-            "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
-            {
-              "group-hover:rounded-lg": canLink,
-            },
-          )}
-          style={{
-            backgroundImage: media.poster ? `url(${media.poster})` : undefined,
-          }}
+    <div>
+      {!overlayVisible ? (
+        <Flare.Base
+          className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
+            canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
+          }`}
+          tabIndex={canLink ? 0 : -1}
+          onKeyUp={(e) => e.key === "Enter" && e.currentTarget.click()}
         >
-          {series ? (
-            <div
-              className={[
-                "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
-              ].join(" ")}
-            >
-              <p
-                className={[
-                  "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
-                  closable ? "" : "group-hover:text-white",
-                ].join(" ")}
-              >
-                {t("media.episodeDisplay", {
-                  season: series.season || 1,
-                  episode: series.episode,
-                })}
-              </p>
-            </div>
-          ) : null}
-
-          {percentage !== undefined ? (
-            <>
-              <div
-                className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                  canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                }`}
-              />
-              <div
-                className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                  canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                }`}
-              />
-              <div className="absolute inset-x-0 bottom-0 p-3">
-                <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
-                  <div
-                    className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
-                    style={{
-                      width: percentageString,
-                    }}
-                  />
-                </div>
-              </div>
-            </>
-          ) : null}
-
-          <div
-            className="absolute bookmark-button"
-            onClick={(e) => e.preventDefault()}
-          >
-            <MediaBookmarkButton media={media} />
-          </div>
-
-          {searchQuery.length > 0 ? (
-            <div className="absolute" onClick={(e) => e.preventDefault()}>
-              <MediaBookmarkButton media={media} />
-            </div>
-          ) : null}
-
-          <div
-            className={`absolute inset-0 flex items-center justify-center bg-mediaCard-badge bg-opacity-80 transition-opacity duration-500 ${
-              closable ? "opacity-100" : "pointer-events-none opacity-0"
+          <Flare.Light
+            flareSize={300}
+            cssColorVar="--colors-mediaCard-hoverAccent"
+            backgroundClass="bg-mediaCard-hoverBackground duration-100"
+            className={classNames({
+              "rounded-xl bg-background-main group-hover:opacity-100": canLink,
+            })}
+          />
+          <Flare.Child
+            className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
+              canLink ? "group-hover:scale-95" : "opacity-60"
             }`}
           >
-            <IconPatch
-              clickable
-              className="text-2xl text-mediaCard-badgeText transition-transform hover:scale-110 duration-500"
-              onClick={() => closable && onClose?.()}
-              icon={Icons.X}
-            />
-          </div>
-        </div>
-        <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-          <span>{media.title}</span>
-        </h1>
-        <div className="media-info-container justify-content-center flex flex-wrap">
-          <DotList className="text-xs" content={dotListContent} />
-          <button
-            className="info-button"
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
+            <div
+              className={classNames(
+                "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
+                {
+                  "group-hover:rounded-lg": canLink,
+                },
+              )}
+              style={{
+                backgroundImage: media.poster
+                  ? `url(${media.poster})`
+                  : undefined,
+              }}
+            >
+              {series ? (
+                <div
+                  className={[
+                    "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
+                  ].join(" ")}
+                >
+                  <p
+                    className={[
+                      "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
+                      closable ? "" : "group-hover:text-white",
+                    ].join(" ")}
+                  >
+                    {t("media.episodeDisplay", {
+                      season: series.season || 1,
+                      episode: series.episode,
+                    })}
+                  </p>
+                </div>
+              ) : null}
 
-              const searchParam = encodeURIComponent(encodeURI(media.id));
-              const url =
-                media.type === "movie"
-                  ? `https://www.themoviedb.org/movie/${searchParam}`
-                  : `https://www.themoviedb.org/tv/${searchParam}`;
+              {percentage !== undefined ? (
+                <>
+                  <div
+                    className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                    }`}
+                  />
+                  <div
+                    className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                    }`}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-3">
+                    <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
+                      <div
+                        className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
+                        style={{
+                          width: percentageString,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : null}
 
-              window.open(url, "_blank");
-            }}
-          >
-            <Icon
-              className="text-xs font-semibold text-type-secondary"
-              icon={Icons.CIRCLE_QUESTION}
+              <div
+                className="absolute bookmark-button"
+                onClick={(e) => e.preventDefault()}
+              >
+                <MediaBookmarkButton media={media} />
+              </div>
+
+              {searchQuery.length > 0 ? (
+                <div className="absolute" onClick={(e) => e.preventDefault()}>
+                  <MediaBookmarkButton media={media} />
+                </div>
+              ) : null}
+
+              <div
+                className={`absolute inset-0 flex items-center justify-center bg-mediaCard-badge bg-opacity-80 transition-opacity duration-500 ${
+                  closable ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+              >
+                <IconPatch
+                  clickable
+                  className="text-2xl text-mediaCard-badgeText transition-transform hover:scale-110 duration-500"
+                  onClick={() => closable && onClose?.()}
+                  icon={Icons.X}
+                />
+              </div>
+            </div>
+            <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
+              <span>{media.title}</span>
+            </h1>
+            <div className="media-info-container justify-content-center flex flex-wrap">
+              <DotList className="text-xs" content={dotListContent} />
+            </div>
+
+            {/* More Info */}
+            <div className="absolute bottom-1 right-2">
+              <button
+                className="media-more-button"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOverlayVisible(!overlayVisible);
+                }}
+              >
+                <Icon
+                  className="text-xs font-semibold text-type-secondary"
+                  icon={Icons.ELLIPSIS}
+                />
+              </button>
+            </div>
+            {/* End Overlay */}
+          </Flare.Child>
+        </Flare.Base>
+      ) : (
+        <div onMouseLeave={handleMouseLeave}>
+          <Flare.Base className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10">
+            <Flare.Light
+              flareSize={300}
+              cssColorVar="--colors-mediaCard-hoverAccent"
+              backgroundClass="bg-mediaCard-hoverBackground duration-100"
+              className={classNames({
+                "rounded-xl bg-background-main group-hover:opacity-100":
+                  canLink,
+              })}
             />
-          </button>
+            <Flare.Child
+              className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
+                canLink ? "group-hover:scale-95" : "opacity-60"
+              }`}
+            >
+              <div
+                className={classNames(
+                  "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
+                  {
+                    "group-hover:rounded-lg": canLink,
+                  },
+                  "blur-sm",
+                )}
+                style={{
+                  backgroundImage: media.poster
+                    ? `url(${media.poster})`
+                    : undefined,
+                }}
+              >
+                {series ? (
+                  <div
+                    className={[
+                      "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
+                    ].join(" ")}
+                  >
+                    <p
+                      className={[
+                        "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
+                        closable ? "" : "group-hover:text-white",
+                      ].join(" ")}
+                    >
+                      {t("media.episodeDisplay", {
+                        season: series.season || 1,
+                        episode: series.episode,
+                      })}
+                    </p>
+                  </div>
+                ) : null}
+
+                {percentage !== undefined ? (
+                  <>
+                    <div
+                      className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                        canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                      }`}
+                    />
+                    <div
+                      className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                        canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                      }`}
+                    />
+                    <div className="absolute inset-x-0 bottom-0 p-3">
+                      <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
+                        <div
+                          className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
+                          style={{
+                            width: percentageString,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+              </div>
+              <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
+                <span>{media.title}</span>
+              </h1>
+              <div className="media-info-container justify-content-center flex flex-wrap">
+                <DotList className="text-xs" content={dotListContent} />
+              </div>
+            </Flare.Child>
+          </Flare.Base>
         </div>
-      </Flare.Child>
-    </Flare.Base>
+      )}
+    </div>
   );
 }
 
 export function MediaCard(props: MediaCardProps) {
-  const content = <MediaCardContent {...props} />;
+  const [overlayVisible, setOverlayVisible] = useState(false);
+
+  const content = (
+    <MediaCardContent
+      {...props}
+      overlayVisible={overlayVisible}
+      setOverlayVisible={setOverlayVisible}
+    />
+  );
 
   const isReleased = useCallback(
     () => checkReleased(props.media),
@@ -227,15 +345,21 @@ export function MediaCard(props: MediaCardProps) {
 
   if (!canLink) return <span>{content}</span>;
   return (
-    <Link
-      to={link}
-      tabIndex={-1}
-      className={classNames(
-        "tabbable",
-        props.closable ? "hover:cursor-default" : "",
+    <div className="relative">
+      {!overlayVisible ? (
+        <Link
+          to={link}
+          tabIndex={-1}
+          className={classNames(
+            "tabbable",
+            props.closable ? "hover:cursor-default" : "",
+          )}
+        >
+          {content}
+        </Link>
+      ) : (
+        <div>{content}</div>
       )}
-    >
-      {content}
-    </Link>
+    </div>
   );
 }
