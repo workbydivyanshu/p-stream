@@ -50,9 +50,13 @@ function MediaCardContent({
   onClose,
   overlayVisible,
   setOverlayVisible,
+  handleMouseEnter,
+  handleMouseLeave,
 }: MediaCardProps & {
   overlayVisible: boolean;
   setOverlayVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  handleMouseEnter: () => void;
+  handleMouseLeave: () => void;
 }) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -85,12 +89,8 @@ function MediaCardContent({
     window.open(url, "_blank");
   };
 
-  const handleMouseLeave = () => {
-    setOverlayVisible(false);
-  };
-
   return (
-    <div>
+    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {!overlayVisible ? (
         <Flare.Base
           className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
@@ -223,90 +223,87 @@ function MediaCardContent({
           </Flare.Child>
         </Flare.Base>
       ) : (
-        <div onMouseLeave={handleMouseLeave}>
-          <Flare.Base className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10">
-            <Flare.Light
-              flareSize={300}
-              cssColorVar="--colors-mediaCard-hoverAccent"
-              backgroundClass="bg-mediaCard-hoverBackground duration-100"
-              className={classNames({
-                "rounded-xl bg-background-main group-hover:opacity-100":
-                  canLink,
-              })}
-            />
-            <Flare.Child
-              className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
-                canLink ? "group-hover:scale-95" : "opacity-60"
-              }`}
+        <Flare.Base className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10">
+          <Flare.Light
+            flareSize={300}
+            cssColorVar="--colors-mediaCard-hoverAccent"
+            backgroundClass="bg-mediaCard-hoverBackground duration-100"
+            className={classNames({
+              "rounded-xl bg-background-main group-hover:opacity-100": canLink,
+            })}
+          />
+          <Flare.Child
+            className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
+              canLink ? "group-hover:scale-95" : "opacity-60"
+            }`}
+          >
+            <div
+              className={classNames(
+                "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
+                {
+                  "group-hover:rounded-lg": canLink,
+                },
+                "blur-sm",
+              )}
+              style={{
+                backgroundImage: media.poster
+                  ? `url(${media.poster})`
+                  : undefined,
+              }}
             >
-              <div
-                className={classNames(
-                  "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
-                  {
-                    "group-hover:rounded-lg": canLink,
-                  },
-                  "blur-sm",
-                )}
-                style={{
-                  backgroundImage: media.poster
-                    ? `url(${media.poster})`
-                    : undefined,
-                }}
-              >
-                {series ? (
-                  <div
+              {series ? (
+                <div
+                  className={[
+                    "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
+                  ].join(" ")}
+                >
+                  <p
                     className={[
-                      "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
+                      "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
+                      closable ? "" : "group-hover:text-white",
                     ].join(" ")}
                   >
-                    <p
-                      className={[
-                        "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
-                        closable ? "" : "group-hover:text-white",
-                      ].join(" ")}
-                    >
-                      {t("media.episodeDisplay", {
-                        season: series.season || 1,
-                        episode: series.episode,
-                      })}
-                    </p>
-                  </div>
-                ) : null}
+                    {t("media.episodeDisplay", {
+                      season: series.season || 1,
+                      episode: series.episode,
+                    })}
+                  </p>
+                </div>
+              ) : null}
 
-                {percentage !== undefined ? (
-                  <>
-                    <div
-                      className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                        canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                      }`}
-                    />
-                    <div
-                      className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                        canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                      }`}
-                    />
-                    <div className="absolute inset-x-0 bottom-0 p-3">
-                      <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
-                        <div
-                          className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
-                          style={{
-                            width: percentageString,
-                          }}
-                        />
-                      </div>
+              {percentage !== undefined ? (
+                <>
+                  <div
+                    className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                    }`}
+                  />
+                  <div
+                    className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                    }`}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-3">
+                    <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
+                      <div
+                        className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
+                        style={{
+                          width: percentageString,
+                        }}
+                      />
                     </div>
-                  </>
-                ) : null}
-              </div>
-              <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-                <span>{media.title}</span>
-              </h1>
-              <div className="media-info-container justify-content-center flex flex-wrap">
-                <DotList className="text-xs" content={dotListContent} />
-              </div>
-            </Flare.Child>
-          </Flare.Base>
-        </div>
+                  </div>
+                </>
+              ) : null}
+            </div>
+            <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
+              <span>{media.title}</span>
+            </h1>
+            <div className="media-info-container justify-content-center flex flex-wrap">
+              <DotList className="text-xs" content={dotListContent} />
+            </div>
+          </Flare.Child>
+        </Flare.Base>
       )}
     </div>
   );
@@ -314,12 +311,29 @@ function MediaCardContent({
 
 export function MediaCard(props: MediaCardProps) {
   const [overlayVisible, setOverlayVisible] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  const handleMouseLeave = () => {
+    const id = setTimeout(() => {
+      setOverlayVisible(false);
+    }, 1500); // 1.5 seconds
+    setTimeoutId(id);
+  };
+
+  const handleMouseEnter = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+  };
 
   const content = (
     <MediaCardContent
       {...props}
       overlayVisible={overlayVisible}
       setOverlayVisible={setOverlayVisible}
+      handleMouseEnter={handleMouseEnter}
+      handleMouseLeave={handleMouseLeave}
     />
   );
 
