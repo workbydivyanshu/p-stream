@@ -42,6 +42,10 @@ function checkReleased(media: MediaItem): boolean {
   return isReleased;
 }
 
+function getBaseUrl(): string {
+  return window.location.origin;
+}
+
 function MediaCardContent({
   media,
   linkable,
@@ -53,11 +57,13 @@ function MediaCardContent({
   setOverlayVisible,
   handleMouseEnter,
   handleMouseLeave,
+  link,
 }: MediaCardProps & {
   overlayVisible: boolean;
   setOverlayVisible: React.Dispatch<React.SetStateAction<boolean>>;
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
+  link: string;
 }) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -71,6 +77,7 @@ function MediaCardContent({
   const [searchQuery] = useSearchQuery();
 
   const [, copyToClipboard] = useCopyToClipboard();
+  const [hasCopied, setHasCopied] = useState(false);
 
   if (media.year) {
     dotListContent.push(media.year.toFixed());
@@ -90,6 +97,13 @@ function MediaCardContent({
         : `https://www.themoviedb.org/tv/${searchParam}`;
 
     window.open(url, "_blank");
+  };
+
+  const handleCopyClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    copyToClipboard(link);
+    setHasCopied(true);
+    setTimeout(() => setHasCopied(false), 2000);
   };
 
   return (
@@ -253,85 +267,50 @@ function MediaCardContent({
                   ? `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${media.poster})`
                   : undefined,
               }}
-            >
-              {series ? (
-                <div
-                  className={[
-                    "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
-                  ].join(" ")}
-                >
-                  <p
-                    className={[
-                      "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
-                      closable ? "" : "group-hover:text-white",
-                    ].join(" ")}
-                  >
-                    {t("media.episodeDisplay", {
-                      season: series.season || 1,
-                      episode: series.episode,
-                    })}
-                  </p>
-                </div>
-              ) : null}
-
-              {percentage !== undefined ? (
-                <>
-                  <div
-                    className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                    }`}
-                  />
-                  <div
-                    className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                    }`}
-                  />
-                  <div className="absolute inset-x-0 bottom-0 p-3">
-                    <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
-                      <div
-                        className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
-                        style={{
-                          width: percentageString,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </>
-              ) : null}
-            </div>
+            />
 
             <div className="absolute inset-0 flex flex-col items-center justify-start gap-y-2 pt-14">
               <button
                 type="button"
                 className={classNames(
-                  "w-[90%] rounded-lg text-center px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button
-                  "text-md text-white mix-blend-screen", // Text
-                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-differenence", // Background
+                  "w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                  "text-md text-white mix-blend-screen flex items-center justify-center", // Centering Content
+                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
                   "border-2 border-gray-400 border-opacity-20", // Border
                 )}
                 onClick={handleMoreInfoClick}
               >
                 More Info
               </button>
-              {/* Add more buttons here */}
+
+              {canLink ? (
+                <button
+                  type="button"
+                  className={classNames(
+                    "w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                    "text-md text-white mix-blend-screen flex items-center justify-center", // Centering Content
+                    "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
+                    "border-2 border-gray-400 border-opacity-20", // Border
+                  )}
+                  onClick={handleCopyClick}
+                >
+                  {hasCopied ? (
+                    <Icon
+                      className="text-md text-white mix-blend-screen"
+                      icon={Icons.CHECKMARK}
+                    />
+                  ) : (
+                    "Copy Share Link"
+                  )}
+                </button>
+              ) : null}
+
               <button
                 type="button"
                 className={classNames(
-                  "w-[90%] rounded-lg text-center px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button
-                  "text-md text-white mix-blend-screen", // Text
-                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-differenence", // Background
-                  "border-2 border-gray-400 border-opacity-20", // Border
-                )}
-                onClick={handleMoreInfoClick}
-              >
-                Copy Share Link
-              </button>
-              <button
-                type="button"
-                className={classNames(
-                  "w-[90%] rounded-lg text-center px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button
-                  "text-md text-white mix-blend-screen", // Text
-                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-differenence", // Background
+                  "w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                  "text-md text-white mix-blend-screen flex items-center justify-center", // Centering Content
+                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
                   "border-2 border-gray-400 border-opacity-20", // Border
                 )}
                 onClick={() => setOverlayVisible(false)}
@@ -359,7 +338,7 @@ export function MediaCard(props: MediaCardProps) {
   const handleMouseLeave = () => {
     const id = setTimeout(() => {
       setOverlayVisible(false);
-    }, 1500); // 1.5 seconds
+    }, 2000); // 2 seconds
     setTimeoutId(id);
   };
 
@@ -370,16 +349,6 @@ export function MediaCard(props: MediaCardProps) {
     }
   };
 
-  const content = (
-    <MediaCardContent
-      {...props}
-      overlayVisible={overlayVisible}
-      setOverlayVisible={setOverlayVisible}
-      handleMouseEnter={handleMouseEnter}
-      handleMouseLeave={handleMouseLeave}
-    />
-  );
-
   const isReleased = useCallback(
     () => checkReleased(props.media),
     [props.media],
@@ -388,7 +357,7 @@ export function MediaCard(props: MediaCardProps) {
   const canLink = props.linkable && !props.closable && isReleased();
 
   let link = canLink
-    ? `/media/${encodeURIComponent(mediaItemToId(props.media))}`
+    ? `${getBaseUrl()}/media/${encodeURIComponent(mediaItemToId(props.media))}`
     : "#";
   if (canLink && props.series) {
     if (props.series.season === 0 && !props.series.episodeId) {
@@ -399,6 +368,17 @@ export function MediaCard(props: MediaCardProps) {
       )}/${encodeURIComponent(props.series.episodeId)}`;
     }
   }
+
+  const content = (
+    <MediaCardContent
+      {...props}
+      overlayVisible={overlayVisible}
+      setOverlayVisible={setOverlayVisible}
+      handleMouseEnter={handleMouseEnter}
+      handleMouseLeave={handleMouseLeave}
+      link={link}
+    />
+  );
 
   if (!canLink) return <span>{content}</span>;
   return (
