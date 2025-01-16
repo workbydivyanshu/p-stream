@@ -41,6 +41,8 @@ const editorPicksMovies = [
   { id: 11527, type: "movie" }, // Excalibur
   { id: 120, type: "movie" }, // LOTR: The Fellowship of the Ring
   { id: 157336, type: "movie" }, // Interstellar
+  { id: 762, type: "movie" }, // Monty Python and the Holy Grail
+  { id: 666243, type: "movie" }, // The Witcher: Nightmare of the Wolf
 ];
 
 const editorPicksTVShows = [
