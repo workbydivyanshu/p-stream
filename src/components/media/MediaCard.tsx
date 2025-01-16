@@ -221,9 +221,9 @@ function MediaCardContent({
             </div>
 
             {/* More Info */}
-            <div className="absolute bottom-1 right-2">
+            <div className="absolute bottom-0 translate-y-1 right-1">
               <button
-                className="media-more-button"
+                className="media-more-button p-2"
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -269,12 +269,12 @@ function MediaCardContent({
               }}
             />
 
-            <div className="absolute inset-0 flex flex-col items-center justify-start gap-y-2 pt-14">
+            <div className="absolute inset-0 flex flex-col items-center justify-start gap-y-2 pt-8 md:pt-12">
               <button
                 type="button"
                 className={classNames(
-                  "w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
-                  "text-md text-white mix-blend-screen flex items-center justify-center", // Centering Content
+                  "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                  "text-md text-white flex items-center justify-center", // Centering Content
                   "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
                   "border-2 border-gray-400 border-opacity-20", // Border
                 )}
@@ -287,8 +287,8 @@ function MediaCardContent({
                 <button
                   type="button"
                   className={classNames(
-                    "w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
-                    "text-md text-white mix-blend-screen flex items-center justify-center", // Centering Content
+                    "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                    "text-md text-white flex items-center justify-center", // Centering Content
                     "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
                     "border-2 border-gray-400 border-opacity-20", // Border
                   )}
@@ -300,7 +300,7 @@ function MediaCardContent({
                       icon={Icons.CHECKMARK}
                     />
                   ) : (
-                    "Copy Share Link"
+                    "Copy Link"
                   )}
                 </button>
               ) : null}
@@ -308,8 +308,8 @@ function MediaCardContent({
               <button
                 type="button"
                 className={classNames(
-                  "w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
-                  "text-md text-white mix-blend-screen flex items-center justify-center", // Centering Content
+                  "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                  "text-md text-white flex items-center justify-center", // Centering Content
                   "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
                   "border-2 border-gray-400 border-opacity-20", // Border
                 )}
