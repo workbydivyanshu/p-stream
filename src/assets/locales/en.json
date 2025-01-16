@@ -407,7 +407,8 @@
           "title": "No stream :("
         },
         "title": "Sources",
-        "unknownOption": "Unknown"
+        "unknownOption": "Unknown",
+        "editOrder": "Edit order"
       },
       "subtitles": {
         "customChoice": "Drop or upload file",

@@ -145,15 +145,19 @@ export function SourceSelectionView({
 
   return (
     <>
-      <Menu.BackLink onClick={() => router.navigate("/")}>
+      <Menu.BackLink
+        onClick={() => router.navigate("/")}
+        rightSide={
+          <button
+            type="button"
+            onClick={() => window.open("/settings#source-order")}
+            className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+          >
+            {t("player.menus.sources.editOrder")}
+          </button>
+        }
+      >
         {t("player.menus.sources.title")}
-        <Button
-          theme="purple"
-          onClick={() => window.open("/settings#source-order")}
-          className="w-half h-8 ml-[95px]"
-        >
-          {t("settings.account.accountDetails.editProfile")}
-        </Button>
       </Menu.BackLink>
       <Menu.Section className="pb-4">
         {sources.map((v) => (
