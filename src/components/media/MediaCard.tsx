@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useCopyToClipboard } from "react-use";
 
 import { mediaItemToId } from "@/backend/metadata/tmdb";
 import { DotList } from "@/components/text/DotList";
@@ -68,6 +69,8 @@ function MediaCardContent({
   const dotListContent = [t(`media.types.${media.type}`)];
 
   const [searchQuery] = useSearchQuery();
+
+  const [, copyToClipboard] = useCopyToClipboard();
 
   if (media.year) {
     dotListContent.push(media.year.toFixed());
@@ -247,7 +250,7 @@ function MediaCardContent({
               )}
               style={{
                 backgroundImage: media.poster
-                  ? `url(${media.poster})`
+                  ? `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${media.poster})`
                   : undefined,
               }}
             >
@@ -295,6 +298,46 @@ function MediaCardContent({
                   </div>
                 </>
               ) : null}
+            </div>
+
+            <div className="absolute inset-0 flex flex-col items-center justify-start gap-y-2 pt-14">
+              <button
+                type="button"
+                className={classNames(
+                  "w-[90%] rounded-lg text-center px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button
+                  "text-md text-white mix-blend-screen", // Text
+                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-differenence", // Background
+                  "border-2 border-gray-400 border-opacity-20", // Border
+                )}
+                onClick={handleMoreInfoClick}
+              >
+                More Info
+              </button>
+              {/* Add more buttons here */}
+              <button
+                type="button"
+                className={classNames(
+                  "w-[90%] rounded-lg text-center px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button
+                  "text-md text-white mix-blend-screen", // Text
+                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-differenence", // Background
+                  "border-2 border-gray-400 border-opacity-20", // Border
+                )}
+                onClick={handleMoreInfoClick}
+              >
+                Copy Share Link
+              </button>
+              <button
+                type="button"
+                className={classNames(
+                  "w-[90%] rounded-lg text-center px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button
+                  "text-md text-white mix-blend-screen", // Text
+                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-differenence", // Background
+                  "border-2 border-gray-400 border-opacity-20", // Border
+                )}
+                onClick={() => setOverlayVisible(false)}
+              >
+                Close
+              </button>
             </div>
             <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
               <span>{media.title}</span>
