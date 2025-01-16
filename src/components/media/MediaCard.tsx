@@ -108,119 +108,185 @@ function MediaCardContent({
 
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      {!overlayVisible ? (
-        <Flare.Base
-          className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
-            canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
+      <Flare.Base
+        className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
+          canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
+        }`}
+        tabIndex={canLink ? 0 : -1}
+        onKeyUp={(e) => e.key === "Enter" && e.currentTarget.click()}
+      >
+        <Flare.Light
+          flareSize={300}
+          cssColorVar="--colors-mediaCard-hoverAccent"
+          backgroundClass="bg-mediaCard-hoverBackground duration-100"
+          className={classNames({
+            "rounded-xl bg-background-main group-hover:opacity-100": canLink,
+          })}
+        />
+        <Flare.Child
+          className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
+            canLink ? "group-hover:scale-95" : "opacity-60"
           }`}
-          tabIndex={canLink ? 0 : -1}
-          onKeyUp={(e) => e.key === "Enter" && e.currentTarget.click()}
         >
-          <Flare.Light
-            flareSize={300}
-            cssColorVar="--colors-mediaCard-hoverAccent"
-            backgroundClass="bg-mediaCard-hoverBackground duration-100"
-            className={classNames({
-              "rounded-xl bg-background-main group-hover:opacity-100": canLink,
-            })}
-          />
-          <Flare.Child
-            className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
-              canLink ? "group-hover:scale-95" : "opacity-60"
-            }`}
+          <div
+            className={classNames(
+              "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
+              {
+                "group-hover:rounded-lg": canLink,
+                "blur-sm": overlayVisible,
+              },
+            )}
+            style={{
+              backgroundImage: media.poster
+                ? overlayVisible
+                  ? `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${media.poster})`
+                  : `url(${media.poster})`
+                : undefined,
+            }}
           >
-            <div
-              className={classNames(
-                "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
-                {
-                  "group-hover:rounded-lg": canLink,
-                },
-              )}
-              style={{
-                backgroundImage: media.poster
-                  ? `url(${media.poster})`
-                  : undefined,
-              }}
-            >
-              {series ? (
-                <div
-                  className={[
-                    "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
-                  ].join(" ")}
-                >
-                  <p
+            {overlayVisible ? (
+              <div>
+                {series ? (
+                  <div
                     className={[
-                      "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
-                      closable ? "" : "group-hover:text-white",
+                      "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
                     ].join(" ")}
                   >
-                    {t("media.episodeDisplay", {
-                      season: series.season || 1,
-                      episode: series.episode,
-                    })}
-                  </p>
-                </div>
-              ) : null}
-
-              {percentage !== undefined ? (
-                <>
-                  <div
-                    className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                    }`}
-                  />
-                  <div
-                    className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
-                      canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
-                    }`}
-                  />
-                  <div className="absolute inset-x-0 bottom-0 p-3">
-                    <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
-                      <div
-                        className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
-                        style={{
-                          width: percentageString,
-                        }}
-                      />
-                    </div>
+                    <p
+                      className={[
+                        "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
+                        closable ? "" : "group-hover:text-white",
+                      ].join(" ")}
+                    >
+                      {t("media.episodeDisplay", {
+                        season: series.season || 1,
+                        episode: series.episode,
+                      })}
+                    </p>
                   </div>
-                </>
-              ) : null}
+                ) : null}
 
-              <div
-                className="absolute bookmark-button"
-                onClick={(e) => e.preventDefault()}
-              >
-                <MediaBookmarkButton media={media} />
+                {percentage !== undefined ? (
+                  <>
+                    <div
+                      className={`absolute inset-x-0 -bottom-px pb-1 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                        canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                      }`}
+                    />
+                    <div
+                      className={`absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-mediaCard-shadow to-transparent transition-colors ${
+                        canLink ? "group-hover:from-mediaCard-hoverShadow" : ""
+                      }`}
+                    />
+                    <div className="absolute inset-x-0 bottom-0 p-3">
+                      <div className="relative h-1 overflow-hidden rounded-full bg-mediaCard-barColor">
+                        <div
+                          className="absolute inset-y-0 left-0 rounded-full bg-mediaCard-barFillColor"
+                          style={{
+                            width: percentageString,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : null}
               </div>
+            ) : null}
 
-              {searchQuery.length > 0 ? (
-                <div className="absolute" onClick={(e) => e.preventDefault()}>
+            {!overlayVisible ? (
+              <div>
+                <div
+                  className="absolute bookmark-button"
+                  onClick={(e) => e.preventDefault()}
+                >
                   <MediaBookmarkButton media={media} />
                 </div>
-              ) : null}
 
-              <div
-                className={`absolute inset-0 flex items-center justify-center bg-mediaCard-badge bg-opacity-80 transition-opacity duration-500 ${
-                  closable ? "opacity-100" : "pointer-events-none opacity-0"
-                }`}
-              >
-                <IconPatch
-                  clickable
-                  className="text-2xl text-mediaCard-badgeText transition-transform hover:scale-110 duration-500"
-                  onClick={() => closable && onClose?.()}
-                  icon={Icons.X}
-                />
+                {searchQuery.length > 0 ? (
+                  <div className="absolute" onClick={(e) => e.preventDefault()}>
+                    <MediaBookmarkButton media={media} />
+                  </div>
+                ) : null}
+
+                <div
+                  className={`absolute inset-0 flex items-center justify-center bg-mediaCard-badge bg-opacity-80 transition-opacity duration-500 ${
+                    closable ? "opacity-100" : "pointer-events-none opacity-0"
+                  }`}
+                >
+                  <IconPatch
+                    clickable
+                    className="text-2xl text-mediaCard-badgeText transition-transform hover:scale-110 duration-500"
+                    onClick={() => closable && onClose?.()}
+                    icon={Icons.X}
+                  />
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {overlayVisible ? (
+            <div>
+              <div className="absolute inset-0 flex flex-col items-center justify-start gap-y-2 pt-8 md:pt-12">
+                <button
+                  type="button"
+                  className={classNames(
+                    "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                    "text-md text-white flex items-center justify-center", // Centering Content
+                    "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
+                    "border-2 border-gray-400 border-opacity-20", // Border
+                  )}
+                  onClick={handleMoreInfoClick}
+                >
+                  More Info
+                </button>
+
+                {canLink ? (
+                  <button
+                    type="button"
+                    className={classNames(
+                      "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                      "text-md text-white flex items-center justify-center", // Centering Content
+                      "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
+                      "border-2 border-gray-400 border-opacity-20", // Border
+                    )}
+                    onClick={handleCopyClick}
+                  >
+                    {hasCopied ? (
+                      <Icon
+                        className="text-md text-white mix-blend-screen"
+                        icon={Icons.CHECKMARK}
+                      />
+                    ) : (
+                      "Copy Link"
+                    )}
+                  </button>
+                ) : null}
+
+                <button
+                  type="button"
+                  className={classNames(
+                    "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
+                    "text-md text-white flex items-center justify-center", // Centering Content
+                    "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
+                    "border-2 border-gray-400 border-opacity-20", // Border
+                  )}
+                  onClick={() => setOverlayVisible(false)}
+                >
+                  Close
+                </button>
               </div>
             </div>
-            <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-              <span>{media.title}</span>
-            </h1>
-            <div className="media-info-container justify-content-center flex flex-wrap">
-              <DotList className="text-xs" content={dotListContent} />
-            </div>
+          ) : null}
 
-            {/* More Info */}
+          <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
+            <span>{media.title}</span>
+          </h1>
+          <div className="media-info-container justify-content-center flex flex-wrap">
+            <DotList className="text-xs" content={dotListContent} />
+          </div>
+
+          {/* More Info */}
+          {!overlayVisible ? (
             <div className="absolute bottom-0 translate-y-1 right-1">
               <button
                 className="media-more-button p-2"
@@ -236,97 +302,10 @@ function MediaCardContent({
                 />
               </button>
             </div>
-            {/* End Overlay */}
-          </Flare.Child>
-        </Flare.Base>
-      ) : (
-        <Flare.Base className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10">
-          <Flare.Light
-            flareSize={300}
-            cssColorVar="--colors-mediaCard-hoverAccent"
-            backgroundClass="bg-mediaCard-hoverBackground duration-100"
-            className={classNames({
-              "rounded-xl bg-background-main group-hover:opacity-100": canLink,
-            })}
-          />
-          <Flare.Child
-            className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
-              canLink ? "group-hover:scale-95" : "opacity-60"
-            }`}
-          >
-            <div
-              className={classNames(
-                "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
-                {
-                  "group-hover:rounded-lg": canLink,
-                },
-                "blur-sm",
-              )}
-              style={{
-                backgroundImage: media.poster
-                  ? `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${media.poster})`
-                  : undefined,
-              }}
-            />
-
-            <div className="absolute inset-0 flex flex-col items-center justify-start gap-y-2 pt-8 md:pt-12">
-              <button
-                type="button"
-                className={classNames(
-                  "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
-                  "text-md text-white flex items-center justify-center", // Centering Content
-                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
-                  "border-2 border-gray-400 border-opacity-20", // Border
-                )}
-                onClick={handleMoreInfoClick}
-              >
-                More Info
-              </button>
-
-              {canLink ? (
-                <button
-                  type="button"
-                  className={classNames(
-                    "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
-                    "text-md text-white flex items-center justify-center", // Centering Content
-                    "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
-                    "border-2 border-gray-400 border-opacity-20", // Border
-                  )}
-                  onClick={handleCopyClick}
-                >
-                  {hasCopied ? (
-                    <Icon
-                      className="text-md text-white mix-blend-screen"
-                      icon={Icons.CHECKMARK}
-                    />
-                  ) : (
-                    "Copy Link"
-                  )}
-                </button>
-              ) : null}
-
-              <button
-                type="button"
-                className={classNames(
-                  "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
-                  "text-md text-white flex items-center justify-center", // Centering Content
-                  "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
-                  "border-2 border-gray-400 border-opacity-20", // Border
-                )}
-                onClick={() => setOverlayVisible(false)}
-              >
-                Close
-              </button>
-            </div>
-            <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-              <span>{media.title}</span>
-            </h1>
-            <div className="media-info-container justify-content-center flex flex-wrap">
-              <DotList className="text-xs" content={dotListContent} />
-            </div>
-          </Flare.Child>
-        </Flare.Base>
-      )}
+          ) : null}
+          {/* End Overlay */}
+        </Flare.Child>
+      </Flare.Base>
     </div>
   );
 }
@@ -395,7 +374,15 @@ export function MediaCard(props: MediaCardProps) {
           {content}
         </Link>
       ) : (
-        <div>{content}</div>
+        <div
+          tabIndex={-1}
+          className={classNames(
+            "tabbable",
+            props.closable ? "hover:cursor-default" : "",
+          )}
+        >
+          {content}
+        </div>
       )}
     </div>
   );
