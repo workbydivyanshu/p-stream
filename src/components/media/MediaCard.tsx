@@ -79,6 +79,10 @@ function MediaCardContent({
   const [, copyToClipboard] = useCopyToClipboard();
   const [hasCopied, setHasCopied] = useState(false);
 
+  if (closable) {
+    setOverlayVisible(false);
+  }
+
   if (media.year) {
     dotListContent.push(media.year.toFixed());
   }
@@ -285,8 +289,7 @@ function MediaCardContent({
             <DotList className="text-xs" content={dotListContent} />
           </div>
 
-          {/* More Info */}
-          {!overlayVisible ? (
+          {!overlayVisible && !closable ? (
             <div className="absolute bottom-0 translate-y-1 right-1">
               <button
                 className="media-more-button p-2"
@@ -303,7 +306,6 @@ function MediaCardContent({
               </button>
             </div>
           ) : null}
-          {/* End Overlay */}
         </Flare.Child>
       </Flare.Base>
     </div>
