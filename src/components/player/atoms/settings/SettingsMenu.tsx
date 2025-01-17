@@ -6,6 +6,7 @@ import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
+import { Paragraph } from "@/components/utils/Text";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { qualityToString } from "@/stores/player/utils/qualities";
@@ -93,8 +94,7 @@ export function SettingsMenu({ id }: { id: string }) {
         >
           {t("player.menus.settings.downloadItem")}
         </Menu.Link>
-        {/*
-      <Menu.Link
+        <Menu.Link
           clickable
           onClick={handleWatchPartyClick}
           rightSide={<Icon className="text-xl" icon={Icons.WATCH_PARTY} />}
@@ -102,7 +102,9 @@ export function SettingsMenu({ id }: { id: string }) {
         >
           {t("Watch Party")}
         </Menu.Link>
-        */}
+        <Paragraph className="text-xs">
+          Watch Party might not be avalible for some sources
+        </Paragraph>
       </Menu.Section>
 
       <Menu.SectionTitle>
