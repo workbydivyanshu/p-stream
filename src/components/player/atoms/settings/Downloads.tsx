@@ -8,6 +8,7 @@ import { OverlayPage } from "@/components/overlays/OverlayPage";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { convertSubtitlesToSrtDataurl } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { Link } from "@/pages/migration/utils";
 import { usePlayerStore } from "@/stores/player/store";
 
 export function useDownloadLink() {
@@ -89,6 +90,16 @@ export function DownloadView({ id }: { id: string }) {
               <Button className="w-full mt-2" theme="purple" href={hlsDownload}>
                 Atempt download
               </Button>
+              <p className="text-xs py-4">
+                Or, go to the{" "}
+                <a
+                  className="text-type-link"
+                  href="https://hls-downloader.pstream.org/"
+                >
+                  hls downloader website
+                </a>{" "}
+                and paste the playlist URL from below.
+              </p>
               <Button
                 className="w-full mt-2"
                 theme="secondary"
