@@ -8,7 +8,6 @@ import { OverlayPage } from "@/components/overlays/OverlayPage";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { convertSubtitlesToSrtDataurl } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
-import { Link } from "@/pages/migration/utils";
 import { usePlayerStore } from "@/stores/player/store";
 
 export function useDownloadLink() {
