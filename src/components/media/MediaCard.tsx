@@ -144,7 +144,7 @@ function MediaCardContent({
                 : undefined,
             }}
           >
-            {overlayVisible ? (
+            {!overlayVisible ? (
               <div>
                 {series ? (
                   <div
