@@ -412,7 +412,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "P-Stream'in DMCA iletişim sayfasına hoş geldiniz! Fikri mülkiyet haklarına saygı duyuyoruz ve telif hakkıyla ilgili endişeleri hızlı bir şekilde ele almak istiyoruz. Telif hakkıyla korunan çalışmanızın platformumuzda uygunsuz şekilde kullanıldığını düşünüyorsanız lütfen aşağıdaki e-postaya ayrıntılı bir DMCA bildirimi gönderin. Lütfen telif hakkıyla korunan materyalin açıklamasını, iletişim bilgilerinizi ve iyi niyet beyanınızı ekleyin. Bu sorunları derhal çözmeye kararlıyız ve ayrıca P-Stream'i yaratıcılığa ve telif haklarına saygılı bir yer olarak tutma konusundaki işbirliğiniz için teşekkür ederiz.",
       "title": "DMCA"
     },
     "loadingApp": "Uygulama yükleniyor",

@@ -399,7 +399,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Vítejte na DMCA kontaktní stránce P-Streamu! Respektujeme práva duševního vlastnictví a chceme rychle řešit jakékoli problémy s autorským právem. Pokud se domníváte, že vaše dílo chráněné autorskými právy bylo na naší platformě neoprávněně použito, zašlete prosím podrobné oznámení DMCA na níže uvedený e-mail. Uveďte prosím popis materiálu chráněného autorským právem, své kontaktní údaje a prohlášení o dobré víře. Jsme odhodláni tyto záležitosti rychle vyřešit a oceňujeme vaši spolupráci při udržování P-Streamu jako místa, které respektuje kreativitu a autorská práva.",
       "title": "DMCA"
     },
     "loadingApp": "Načítání aplikace",

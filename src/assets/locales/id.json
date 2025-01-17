@@ -379,7 +379,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Selamat datang di halaman kontak DMCA P-Stream! Kami menghormati hak kekayaan intelektual dan ingin menangani masalah hak cipta dengan cepat. Jika anda yakin bahwa karya berhak cipta anda telah digunakan secara tidak benar di platform kami, silakan kirim pemberitahuan DMCA secara terperinci ke email di bawah ini. Mohon sertakan deskripsi materi berhak cipta, detail kontak anda, dan pernyataan itikad baik. Kami berkomitmen untuk menyelesaikan masalah ini sesegera mungkin dan kami menghargai kerja sama anda dalam menjaga P-Stream sebagai tempat yang menghormati kreativitas dan hak cipta.",
       "title": "DMCA"
     },
     "loadingApp": "Memuat aplikasi",

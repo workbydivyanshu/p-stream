@@ -404,7 +404,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Witamy na stronie kontaktowej DMCA serwisu P-Stream! Szanujemy prawa własności intelektualnej i chcemy szybko rozwiązywać wszelkie problemy związane z prawami autorskimi. Jeśli uważasz że twoja praca chroniona prawem autorskim została niewłaściwie wykorzystana na naszej platformie, proszę wysłać szczegółowe powiadomienie DMCA na poniższy adres e-mail. Prosimy o dołączenie opisu materiału chronionego prawem autorskim, danych kontaktowych i oświadczenia w dobrej wierze. Zależy nam na szybkim rozwiązywaniu takich spraw i będziemy wdzięczni za współpracę w utrzymaniu P-Stream jako miejsce w którym szanuje się kreatywność i prawa autorskie.",
       "title": "DMCA"
     },
     "loadingApp": "Wczytywanie aplikacji",

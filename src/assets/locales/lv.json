@@ -288,7 +288,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Laipni lūdzam filmu-web Autortiesību kontaktu lapā! Mēs cienām intelektuālā īpašuma tiesības un vēlamies ātri atrisināt visas autortiesību problēmas. Ja uzskatāt, ka jūsu ar autortiesībām aizsargātais darbs ir nepareizi izmantots mūsu platformā, lūdzu, nosūtiet uz tālāk norādīto e-pasta ziņojumu detalizētu Digitālās tūkstošgades autortiesību likuma paziņojumu. Lūdzu, iekļaujiet ar autortiesībām aizsargātā materiāla aprakstu, savu kontaktinformāciju un labas ticības apliecinājumu. Mēs esam apņēmušies ātri atrisināt šīs problēmas un novērtējam jūsu sadarbību, lai saglabātu filmu tīmekli par vietu, kurā tiek ievērotas radošums un autortiesības.",
       "title": "Autortiesību likums"
     },
     "loadingApp": "Notiek aplikācijas ielāde",

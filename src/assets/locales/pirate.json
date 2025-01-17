@@ -397,7 +397,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Ahoy t' P-Stream's DMCA contact page! We respect intellectual property rights 'n wants t' address any copyright concerns swiftly. If ye believe yer copyrighted work has been improperly used on our platform, please send a detailed DMCA notice t' the email below. Please include a description o' the copyrighted material, yer contact details, 'n a statement o' good faith belief. We be committed t' resolvin' these matters promptly 'n appreciate yer cooperation in keepin' P-Stream a galleon that respects creativity 'n copyrights.",
       "title": "DMCA"
     },
     "loadingApp": "Loadin' application",

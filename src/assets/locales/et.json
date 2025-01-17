@@ -412,7 +412,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Tere tulemast P-Streami DMCA kontaktilehele! Me austame intellektuaalomandi õigusi ja soovime kiiresti lahendada kõik autoriõigusega seotud probleemid. Kui usute, et teie autoriõigusega kaitstud tööd on meie platvormil vääralt kasutatud, saatke palun üksikasjalik DMCA-teade alljärgnevale e-posti aadressile. Palun lisage autoriõigusega kaitstud materjali kirjeldus, oma kontaktandmed ja avaldus heauskse veendumuse kohta. Oleme pühendunud nende küsimuste kiirele lahendamisele ja hindame teie koostööd, et P-Stream oleks koht, kus austatakse loovust ja autoriõigusi.",
       "title": "DMCA"
     },
     "loadingApp": "Rakenduse laadimine",

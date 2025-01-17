@@ -471,8 +471,7 @@
   },
   "screens": {
     "dmca": {
-      "title": "DMCA :(",
-      "text": "Velkommen til P-Stream' DMCA-kontaktside. Hvis du mener, at dit ophavsretligt beskyttede arbejde er blevet brugt forkert på vores platform (😢), bedes du sende en detaljeret DMCA-meddelelse til: <bold>{{dmca}}</bold> nedenfor. Inkluder venligst en beskrivelse af det ophavsretligt beskyttede materiale, dine kontaktoplysninger og en erklæring om, at du er i god tro. Vi er forpligtet til at løse disse sager hurtigt og sætter pris på dit samarbejde."
+      "title": "DMCA :("
     },
     "loadingApp": "Indlæser applikation",
     "loadingUser": "Indlæser din profil",

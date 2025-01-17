@@ -412,7 +412,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Willkommen zu P-Streams DMCA-Kontaktseite! Wir respektieren geistiges Eigentum und wollen uns schnell um urheberrechtlichen Anliegen kümmern. Falls du glaubst, dass dein urheberrechtlich geschütztes Werk unsachgemäß auf unserer Plattform verwendet wurde, sende uns bitte eine genaue DMCA-Anfrage an die unten stehende E-Mail. Diese sollte eine Beschreibung des urheberrechtlich geschützten Material, deine Kontaktinformationen sowie einer Erklärung des guten Glaubens beinhalten. Wir sind engagiert diese Anliegen schnell zu lösen und schätzen deine Hilfe dabei P-Stream zu einer Plattform, welche Kreativität und Urheberrechte respektiert.",
       "title": "DMCA"
     },
     "loadingApp": "Die App wird geladen",

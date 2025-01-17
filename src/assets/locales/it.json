@@ -450,7 +450,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Benvenuto nella pagina dei contatti DMCA di P-Stream. Se ritieni che la tua opera protetta da copyright sia stata utilizzata in modo improprio sulla nostra piattaforma (😢), invia una notifica DMCA dettagliata a: <bold>{{dmca}}</bold> di seguito. Si prega di includere una descrizione del materiale protetto da copyright, i dettagli di contatto e una dichiarazione di buona fede. Ci impegniamo a risolvere tempestivamente queste questioni e apprezziamo la tua collaborazione.",
       "title": "DMCA :("
     },
     "loadingApp": "Caricamento dell'applicazione",

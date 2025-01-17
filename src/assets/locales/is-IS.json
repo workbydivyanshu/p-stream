@@ -402,7 +402,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Velkomin á sambands síðu P-Stream! Við virðum hugverkarétt og viljum ræða einhver höfundarréttar áhyggjur fljótt. Ef að þú trúir að höfundarréttur þíns verks hefur verið misnotaður á okkar síðu, vinsamlegast sentu ítarlega DMCA tilkynningu til netfangsing fyrir neðan þennan texta. Vinsamlegast láttu fylgja með lýsingu af höfundaréttavarna efninu, tengiliða upplýsingat þínar, og yfirlýsingu um góða trú. Við erum staðráðin í að leysa þessi mál tafarlaust og þökkum samstarf þitt við að halda P-Stream stað sem virðir sköpunargáfu og höfundarrétt.",
       "title": "DMCA"
     },
     "loadingApp": "Hlaðandi forriti",

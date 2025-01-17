@@ -414,7 +414,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Dobrodošli na P-Streamovi kontaktni strani DMCA! Spoštujemo pravice intelektualne lastnine in želimo hitro odpraviti vse težave v zvezi z avtorskimi pravicami. Če menite, da je bilo vaše avtorsko zaščiteno delo na naši platformi nepravilno uporabljeno, pošljite podrobno obvestilo DMCA na spodnji e-poštni naslov. Vključite opis avtorsko zaščitenega gradiva, svoje kontaktne podatke in izjavo o \"prepričanju v dobri veri\". Zavezani smo k takojšnji rešitvi teh zadev in cenimo vaše sodelovanje pri ohranjanju filmskega spleta, ki spoštuje ustvarjalnost in avtorske pravice.",
       "title": "DMCA"
     },
     "loadingApp": "Nalagam aplikacijo",

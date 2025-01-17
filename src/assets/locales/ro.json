@@ -402,7 +402,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "Bun venit pe pagina de contact DMCA a P-Stream! Respectăm drepturile de proprietate intelectuală și dorim să abordăm rapid orice problemă privind drepturile de autor. Dacă credeți că lucrarea dumneavoastră protejată prin drepturi de autor a fost utilizată necorespunzător pe platforma noastră, vă rugăm să trimiteți o notificare detaliată DMCA la e-mailul de mai jos. Vă rugăm să includeți o descriere a materialului protejat prin drepturi de autor, detaliile dvs. de contact și o declarație de bună credință. Ne angajăm să rezolvăm aceste probleme cu promptitudine și apreciem cooperarea dumneavoastră pentru a menține P-Stream un loc care respectă creativitatea și drepturile de autor.",
       "title": "DMCA"
     },
     "loadingApp": "Se încarcă aplicația",

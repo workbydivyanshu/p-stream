@@ -404,7 +404,6 @@
   },
   "screens": {
     "dmca": {
-      "text": "¡Bienvenido a la página de contacto DMCA de P-Stream! Respetamos los derechos de propiedad intelectual y queremos abordar cualquier problema de derechos de autor de manera rápida. Si cree que su trabajo con derechos de autor se ha utilizado incorrectamente en nuestra plataforma, envíe un aviso DMCA detallado al correo electrónico que se muestra a continuación. Incluya una descripción del material con derechos de autor, sus datos de contacto y una declaración de buena fe. Estamos comprometidos a resolver estos asuntos de manera pronta y agradecemos su cooperación para mantener a P-Stream como un lugar que respeta la creatividad y los derechos de autor.",
       "title": "DMCA"
     },
     "loadingApp": "Cargando la aplicación",
