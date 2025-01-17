@@ -11,6 +11,7 @@ import { useSearchQuery } from "@/hooks/useSearchQuery";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import { MediaBookmarkButton } from "./MediaBookmark";
+import { Button } from "../buttons/Button";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
 
@@ -91,7 +92,9 @@ function MediaCardContent({
     dotListContent.push(t("media.unreleased"));
   }
 
-  const handleMoreInfoClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMoreInfoClick = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
+  ) => {
     e.preventDefault();
 
     const searchParam = encodeURIComponent(encodeURI(media.id));
@@ -103,8 +106,10 @@ function MediaCardContent({
     window.open(url, "_blank");
   };
 
-  const handleCopyClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const handleCopyClick = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
+  ) => {
+    e.preventDefault();
     copyToClipboard(link);
     setHasCopied(true);
     setTimeout(() => setHasCopied(false), 2000);
@@ -231,8 +236,8 @@ function MediaCardContent({
           {overlayVisible ? (
             <div>
               <div className="absolute inset-0 flex flex-col items-center justify-start gap-y-2 pt-8 md:pt-12">
-                <button
-                  type="button"
+                <Button
+                  theme="secondary"
                   className={classNames(
                     "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
                     "text-md text-white flex items-center justify-center", // Centering Content
@@ -242,17 +247,18 @@ function MediaCardContent({
                   onClick={handleMoreInfoClick}
                 >
                   More Info
-                </button>
+                </Button>
 
                 {canLink ? (
-                  <button
-                    type="button"
+                  <Button
+                    theme="secondary"
                     className={classNames(
                       "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
                       "text-md text-white flex items-center justify-center", // Centering Content
                       "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
                       "border-2 border-gray-400 border-opacity-20", // Border
                     )}
+                    href={link}
                     onClick={handleCopyClick}
                   >
                     {hasCopied ? (
@@ -263,11 +269,11 @@ function MediaCardContent({
                     ) : (
                       "Copy Link"
                     )}
-                  </button>
+                  </Button>
                 ) : null}
 
-                <button
-                  type="button"
+                <Button
+                  theme="secondary"
                   className={classNames(
                     "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
                     "text-md text-white flex items-center justify-center", // Centering Content
@@ -277,7 +283,7 @@ function MediaCardContent({
                   onClick={() => setOverlayVisible(false)}
                 >
                   Close
-                </button>
+                </Button>
               </div>
             </div>
           ) : null}
