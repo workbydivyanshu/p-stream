@@ -473,7 +473,7 @@
         "errorNotSupported": "The media or media provider object is not supported."
       },
       "homeButton": "Go home",
-      "text": "There was an error trying to play the media 😖. Please try again!",
+      "text": "There was an error trying to play the media 😖. Please try again or try a different source!",
       "title": "Failed to play video!"
     },
     "scraping": {
