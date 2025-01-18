@@ -75,10 +75,14 @@ function MediaCardContent({
 
   const dotListContent = [t(`media.types.${media.type}`)];
 
+  const altDotListContent = [t(`ID: ${media.id}`)];
+
   const [searchQuery] = useSearchQuery();
 
   const [, copyToClipboard] = useCopyToClipboard();
   const [hasCopied, setHasCopied] = useState(false);
+
+  const [hasCopiedID, setHasCopiedID] = useState(false);
 
   if (closable) {
     setOverlayVisible(false);
@@ -113,6 +117,15 @@ function MediaCardContent({
     copyToClipboard(link);
     setHasCopied(true);
     setTimeout(() => setHasCopied(false), 2000);
+  };
+
+  const handleCopyIDClick = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
+  ) => {
+    e.preventDefault();
+    copyToClipboard(media.id);
+    setHasCopiedID(true);
+    setTimeout(() => setHasCopiedID(false), 2000);
   };
 
   return (
@@ -292,7 +305,27 @@ function MediaCardContent({
             <span>{media.title}</span>
           </h1>
           <div className="media-info-container justify-content-center flex flex-wrap">
-            <DotList className="text-xs" content={dotListContent} />
+            {!overlayVisible ? (
+              <DotList className="text-xs" content={dotListContent} />
+            ) : (
+              <button
+                type="button"
+                onClick={handleCopyIDClick}
+                className="z-50"
+              >
+                {!hasCopiedID ? (
+                  <DotList className="text-xs" content={altDotListContent} />
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <DotList className="text-xs" content={altDotListContent} />
+                    <Icon
+                      className="text-xs text-type-secondary"
+                      icon={Icons.CHECKMARK}
+                    />
+                  </div>
+                )}
+              </button>
+            )}
           </div>
 
           {!overlayVisible && !closable ? (
