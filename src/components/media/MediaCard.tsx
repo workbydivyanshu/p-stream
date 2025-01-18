@@ -254,7 +254,7 @@ function MediaCardContent({
                   className={classNames(
                     "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
                     "text-md text-white flex items-center justify-center", // Centering Content
-                    "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
+                    "bg-buttons-purple bg-opacity-15 hover:bg-buttons-purpleHover hover:bg-opacity-25 backdrop-blur-md", // Background
                     "border-2 border-gray-400 border-opacity-20", // Border
                   )}
                   onClick={handleMoreInfoClick}
@@ -268,7 +268,7 @@ function MediaCardContent({
                     className={classNames(
                       "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
                       "text-md text-white flex items-center justify-center", // Centering Content
-                      "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
+                      "bg-buttons-purple bg-opacity-15 hover:bg-buttons-purpleHover hover:bg-opacity-25 backdrop-blur-md", // Background
                       "border-2 border-gray-400 border-opacity-20", // Border
                     )}
                     href={link}
@@ -290,7 +290,7 @@ function MediaCardContent({
                   className={classNames(
                     "w-[86%] md:w-[90%] h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100", // Button Size & Hover
                     "text-md text-white flex items-center justify-center", // Centering Content
-                    "bg-gray-200 bg-opacity-15 hover:bg-gray-400 hover:bg-opacity-25 backdrop-blur-md bg-blend-difference", // Background
+                    "bg-buttons-purple bg-opacity-15 hover:bg-buttons-purpleHover hover:bg-opacity-25 backdrop-blur-md", // Background
                     "border-2 border-gray-400 border-opacity-20", // Border
                   )}
                   onClick={() => setOverlayVisible(false)}
