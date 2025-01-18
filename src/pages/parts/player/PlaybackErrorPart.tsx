@@ -40,6 +40,14 @@ export function PlaybackErrorPart() {
             {t("errors.showError")}
           </Button>
         </div>
+        <Button
+          theme="secondary"
+          padding="md:px-12 p-2.5"
+          className="mt-6"
+          onClick={() => window.location.reload()}
+        >
+          {t("errors.reloadPage")}
+        </Button>
       </ErrorContainer>
       {/* Error */}
       <ErrorCardInModal
