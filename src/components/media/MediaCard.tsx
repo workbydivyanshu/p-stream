@@ -129,7 +129,11 @@ function MediaCardContent({
   };
 
   return (
-    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div
+      className={classNames("media-card-content", { jiggle: closable })}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <Flare.Base
         className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
           canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
