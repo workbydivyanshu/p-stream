@@ -217,19 +217,24 @@ function MediaCardContent({
 
             {!overlayVisible ? (
               <div>
-                <div
-                  className="absolute bookmark-button"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <MediaBookmarkButton media={media} />
-                </div>
-
-                {searchQuery.length > 0 ? (
-                  <div className="absolute" onClick={(e) => e.preventDefault()}>
-                    <MediaBookmarkButton media={media} />
+                {!closable ? (
+                  <div>
+                    <div
+                      className="absolute bookmark-button"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <MediaBookmarkButton media={media} />
+                    </div>
+                    {searchQuery.length > 0 ? (
+                      <div
+                        className="absolute"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        <MediaBookmarkButton media={media} />
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
-
                 <div
                   className={`absolute inset-0 flex items-center justify-center bg-mediaCard-badge bg-opacity-80 transition-opacity duration-500 ${
                     closable ? "opacity-100" : "pointer-events-none opacity-0"
