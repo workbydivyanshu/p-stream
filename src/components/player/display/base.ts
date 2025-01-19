@@ -149,6 +149,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         throw new Error("HLS not supported. Update your browser. 🤦‍♂️");
       if (!hls) {
         hls = new Hls({
+          lowLatencyMode: true,
+          backBufferLength: 120,
+          autoStartLoad: true,
           maxBufferSize: 500 * 1000 * 1000, // 500 mb of buffering, should load more fragments at once
           fragLoadPolicy: {
             default: {
@@ -168,13 +171,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           },
           renderTextTracksNatively: false,
         });
-        hls.on(Hls.Events.ERROR, (event, data) => {
+        const exceptions = [
+          "Failed to execute 'appendBuffer' on 'SourceBuffer': This SourceBuffer has been removed from the parent media source.",
+        ];
+        hls?.on(Hls.Events.ERROR, (event, data) => {
           console.error("HLS error", data);
           if (
             data.fatal &&
             src?.url === data.frag?.baseurl &&
-            data.error.message !==
-              "Failed to execute 'appendBuffer' on 'SourceBuffer': This SourceBuffer has been removed from the parent media source."
+            !exceptions.includes(data.error.message)
           ) {
             emit("error", {
               message: data.error.message,
