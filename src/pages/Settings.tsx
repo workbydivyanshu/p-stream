@@ -143,6 +143,11 @@ export function SettingsPage() {
   const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
   const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
 
+  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
+  const setenableSourceOrder = usePreferencesStore(
+    (s) => s.setenableSourceOrder,
+  );
+
   const account = useAuthStore((s) => s.account);
   const updateProfile = useAuthStore((s) => s.setAccountProfile);
   const updateDeviceName = useAuthStore((s) => s.updateDeviceName);
@@ -168,6 +173,7 @@ export function SettingsPage() {
     enableAutoplay,
     enableDiscover,
     sourceOrder,
+    enableSourceOrder,
   );
 
   const availableSources = useMemo(() => {
@@ -243,6 +249,7 @@ export function SettingsPage() {
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
     setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
+    setenableSourceOrder(state.enableSourceOrder.state);
 
     if (state.profile.state) {
       updateProfile(state.profile.state);
@@ -275,6 +282,7 @@ export function SettingsPage() {
     updateProfile,
     logout,
     setBackendUrl,
+    setenableSourceOrder,
   ]);
   return (
     <SubPageLayout>
@@ -321,6 +329,8 @@ export function SettingsPage() {
             setEnableDiscover={state.enableDiscover.set}
             sourceOrder={availableSources}
             setSourceOrder={state.sourceOrder.set}
+            enableSourceOrder={state.enableSourceOrder.state}
+            setenableSourceOrder={state.enableSourceOrder.set}
           />
         </div>
         <div id="settings-appearance" className="mt-28">

@@ -25,6 +25,8 @@ export function PreferencesPart(props: {
   setSourceOrder: (v: string[]) => void;
   enableDiscover: boolean;
   setEnableDiscover: (v: boolean) => void;
+  enableSourceOrder: boolean;
+  setenableSourceOrder: (v: boolean) => void;
 }) {
   const { t } = useTranslation();
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
@@ -162,21 +164,38 @@ export function PreferencesPart(props: {
                   ),
                 }}
               />
+              <div
+                onClick={() =>
+                  props.setenableSourceOrder(!props.enableSourceOrder)
+                }
+                className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
+              >
+                <Toggle enabled={props.enableSourceOrder} />
+                <p className="flex-1 text-white font-bold">
+                  {t("settings.preferences.sourceOrderEnableLabel")}
+                </p>
+              </div>
             </div>
 
-            <SortableList
-              items={sourceItems}
-              setItems={(items) =>
-                props.setSourceOrder(items.map((item) => item.id))
-              }
-            />
-            <Button
-              className="max-w-[25rem]"
-              theme="secondary"
-              onClick={() => props.setSourceOrder(allSources.map((s) => s.id))}
-            >
-              {t("settings.reset")}
-            </Button>
+            {props.enableSourceOrder && (
+              <div className="w-full flex flex-col gap-4">
+                <SortableList
+                  items={sourceItems}
+                  setItems={(items) =>
+                    props.setSourceOrder(items.map((item) => item.id))
+                  }
+                />
+                <Button
+                  className="max-w-[25rem]"
+                  theme="secondary"
+                  onClick={() =>
+                    props.setSourceOrder(allSources.map((s) => s.id))
+                  }
+                >
+                  {t("settings.reset")}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
