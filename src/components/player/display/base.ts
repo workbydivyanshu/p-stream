@@ -173,8 +173,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         });
         const exceptions = [
           "Failed to execute 'appendBuffer' on 'SourceBuffer': This SourceBuffer has been removed from the parent media source.",
-          "HTTP Error 404",
-          "HTTP Error 404 Not Found",
         ];
         hls?.on(Hls.Events.ERROR, (event, data) => {
           console.error("HLS error", data);
@@ -189,20 +187,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
               errorName: data.error.name,
               type: "hls",
             });
-          }
-        });
-        const skip404 = ["HTTP Error 404", "HTTP Error 404 Not Found"];
-        hls?.on(Hls.Events.ERROR, (event, data) => {
-          console.error("HLS error", data);
-          if (
-            data.fatal &&
-            src?.url === data.frag?.baseurl &&
-            skip404.includes(data.error.message)
-          ) {
-            // eslint-disable-next-line no-alert
-            alert(
-              "HLS error 404: Part of the video is missing, please try again later or use a different source!",
-            );
           }
         });
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
