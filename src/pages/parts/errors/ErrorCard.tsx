@@ -74,6 +74,7 @@ export function ErrorCard(props: {
       <div className="pointer-events-auto mt-4 h-60 select-text overflow-y-auto whitespace-pre text-left">
         {errorMessage}
       </div>
+      <p className="mt-4 text-sm">Check console for more details</p>
     </div>
   );
 }
