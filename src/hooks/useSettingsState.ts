@@ -108,8 +108,8 @@ export function useSettingsState(
   ] = useDerived(sourceOrder);
   const [
     enableSourceOrderState,
-    setenableSourceOrderState,
-    resetenableSourceOrder,
+    setEnableSourceOrderState,
+    resetEnableSourceOrder,
     enableSourceOrderChanged,
   ] = useDerived(enableSourceOrder);
 
@@ -126,7 +126,7 @@ export function useSettingsState(
     resetEnableAutoplay();
     resetEnableDiscover();
     resetSourceOrder();
-    resetenableSourceOrder();
+    resetEnableSourceOrder();
   }
 
   const changed =
@@ -203,7 +203,7 @@ export function useSettingsState(
     },
     enableSourceOrder: {
       state: enableSourceOrderState,
-      set: setenableSourceOrderState,
+      set: setEnableSourceOrderState,
       changed: enableSourceOrderChanged,
     },
   };

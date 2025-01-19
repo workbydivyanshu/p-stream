@@ -13,7 +13,7 @@ export interface PreferencesStore {
   setEnableAutoplay(v: boolean): void;
   setEnableDiscover(v: boolean): void;
   setSourceOrder(v: string[]): void;
-  setenableSourceOrder(v: boolean): void;
+  setEnableSourceOrder(v: boolean): void;
 }
 
 export const usePreferencesStore = create(
@@ -44,7 +44,7 @@ export const usePreferencesStore = create(
           s.sourceOrder = v;
         });
       },
-      setenableSourceOrder(v) {
+      setEnableSourceOrder(v) {
         set((s) => {
           s.enableSourceOrder = v;
         });

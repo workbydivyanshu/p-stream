@@ -144,8 +144,8 @@ export function SettingsPage() {
   const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
 
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
-  const setenableSourceOrder = usePreferencesStore(
-    (s) => s.setenableSourceOrder,
+  const setEnableSourceOrder = usePreferencesStore(
+    (s) => s.setEnableSourceOrder,
   );
 
   const account = useAuthStore((s) => s.account);
@@ -249,7 +249,7 @@ export function SettingsPage() {
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
     setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
-    setenableSourceOrder(state.enableSourceOrder.state);
+    setEnableSourceOrder(state.enableSourceOrder.state);
 
     if (state.profile.state) {
       updateProfile(state.profile.state);
@@ -282,7 +282,7 @@ export function SettingsPage() {
     updateProfile,
     logout,
     setBackendUrl,
-    setenableSourceOrder,
+    setEnableSourceOrder,
   ]);
   return (
     <SubPageLayout>
