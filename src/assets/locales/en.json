@@ -267,7 +267,7 @@
     "defaultConfirm": {
       "cancel": "Cancel",
       "confirm": "Use default setup",
-      "description": "The default setup does not have the best streams and can be unbearably slow.",
+      "description": "The default setup does not have the best streams. You'll be missing out on the best sources!",
       "title": "Are you sure?"
     },
     "extension": {
@@ -314,7 +314,7 @@
         "extension": {
           "action": "Install extension",
           "description": "Install browser extension and gain access to the best sources, but remember to enable it for this site.",
-          "quality": "Best quality",
+          "quality": "Best quality + More Sources",
           "title": "Browser extension"
         },
         "proxy": {

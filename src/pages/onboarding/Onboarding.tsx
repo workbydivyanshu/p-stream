@@ -3,7 +3,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Stepper } from "@/components/layout/Stepper";
-import { CenterContainer } from "@/components/layout/ThinContainer";
+import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { Heading1, Heading2, Paragraph } from "@/components/utils/Text";
@@ -58,17 +58,20 @@ export function OnboardingPage() {
           </div>
         </ModalCard>
       </Modal>
-      <CenterContainer>
+      <BiggerCenterContainer>
         <Stepper steps={2} current={1} className="mb-12" />
-        <Heading2 className="!mt-0 !text-3xl max-w-[435px]">
+        <Heading2 className="!mt-0 !text-3xl">
           {t("onboarding.start.title")}
         </Heading2>
-        <Paragraph className="max-w-[320px]">
+        <Paragraph className="max-w-[360px]">
           {t("onboarding.start.explainer")}
         </Paragraph>
 
         <div className="w-full flex flex-col md:flex-row gap-3 pb-6">
-          <Card onClick={() => navigate("/onboarding/extension")}>
+          <Card
+            onClick={() => navigate("/onboarding/extension")}
+            className="md:w-1/3 md:h-full"
+          >
             <CardContent
               colorClass="!text-onboarding-best"
               title={t("onboarding.start.options.extension.title")}
@@ -85,7 +88,10 @@ export function OnboardingPage() {
             </span>
             <VerticalLine />
           </div>
-          <Card onClick={() => navigate("/onboarding/proxy")}>
+          <Card
+            onClick={() => navigate("/onboarding/proxy")}
+            className="md:w-1/3"
+          >
             <CardContent
               colorClass="!text-onboarding-good"
               title={t("onboarding.start.options.proxy.title")}
@@ -95,31 +101,36 @@ export function OnboardingPage() {
               <Link>{t("onboarding.start.options.proxy.action")}</Link>
             </CardContent>
           </Card>
-        </div>
-        {noProxies ? null : (
-          <>
-            <div className="w-full flex flex-col md:flex-row">
-              <HorizontalLine className="items-end pb-6" />
-            </div>
-            <Card
-              onClick={
-                isSafari
-                  ? () => completeAndRedirect() // Skip modal on Safari
-                  : skipModal.show // Show modal on other browsers
-              }
-            >
-              <CardContent
-                colorClass="!text-onboarding-bad"
-                title={t("onboarding.defaultConfirm.confirm")}
-                subtitle=""
-                description={t("onboarding.defaultConfirm.description")}
+          {noProxies ? null : (
+            <>
+              <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
+                <VerticalLine className="items-end" />
+                <span className="text-xs uppercase font-bold">
+                  {t("onboarding.start.options.or")}
+                </span>
+                <VerticalLine />
+              </div>
+              <Card
+                onClick={
+                  isSafari
+                    ? () => completeAndRedirect() // Skip modal on Safari
+                    : skipModal.show // Show modal on other browsers
+                }
+                className="md:w-1/3"
               >
-                <Trans i18nKey="onboarding.start.options.default.text" />
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </CenterContainer>
+                <CardContent
+                  colorClass="!text-onboarding-bad"
+                  title={t("onboarding.defaultConfirm.confirm")}
+                  subtitle=""
+                  description={t("onboarding.defaultConfirm.description")}
+                >
+                  <Trans i18nKey="onboarding.start.options.default.text" />
+                </CardContent>
+              </Card>
+            </>
+          )}
+        </div>
+      </BiggerCenterContainer>
     </MinimalPageLayout>
   );
 }
