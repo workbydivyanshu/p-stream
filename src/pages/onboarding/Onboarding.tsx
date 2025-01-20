@@ -31,6 +31,12 @@ export function OnboardingPage() {
   const { t } = useTranslation();
   const noProxies = getProxyUrls().length === 0;
 
+  const isSafari =
+    typeof navigator !== "undefined" &&
+    /Safari/.test(navigator.userAgent) &&
+    !/Chrome/.test(navigator.userAgent) &&
+    !/Edg/.test(navigator.userAgent);
+
   return (
     <MinimalPageLayout>
       <PageTitle subpage k="global.pages.onboarding" />
@@ -95,7 +101,13 @@ export function OnboardingPage() {
             <div className="w-full flex flex-col md:flex-row">
               <HorizontalLine className="items-end pb-6" />
             </div>
-            <Card onClick={skipModal.show}>
+            <Card
+              onClick={
+                isSafari
+                  ? () => completeAndRedirect() // Skip modal on Safari
+                  : skipModal.show // Show modal on other browsers
+              }
+            >
               <CardContent
                 colorClass="!text-onboarding-bad"
                 title={t("onboarding.defaultConfirm.confirm")}
