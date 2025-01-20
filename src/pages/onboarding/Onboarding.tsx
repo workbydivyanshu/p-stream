@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
+import { Icon, Icons } from "@/components/Icon";
 import { Stepper } from "@/components/layout/Stepper";
 import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
@@ -20,6 +22,8 @@ import {
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
+import { PopupModal } from "../parts/home/PopupModal";
+
 export function OnboardingPage() {
   const navigate = useNavigateOnboarding();
   const skipModal = useModal("skip");
@@ -32,6 +36,12 @@ export function OnboardingPage() {
     /Safari/.test(navigator.userAgent) &&
     !/Chrome/.test(navigator.userAgent) &&
     !/Edg/.test(navigator.userAgent);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <MinimalPageLayout>
@@ -54,6 +64,56 @@ export function OnboardingPage() {
           </div>
         </ModalCard>
       </Modal>
+      {showModal && (
+        <PopupModal
+          styles="max-w-2xl" // max-w-md for short max-w-2xl long
+          title="Understanding a setup"
+          message={
+            <div>
+              <p>
+                P-Stream doesn’t host videos. It relies on third-party websites
+                for content, so you need to choose how it connects to those
+                sites.
+                <br />
+                <br />
+                <strong>Your Options:</strong>
+                <br />
+                <strong>1. Extension (Recommended)</strong>
+                <br />
+                The extension gives you access to the most sources. It acts as a
+                local proxy and can handle sites that need special cookies or
+                headers to load.
+                <br />
+                <br />
+                <strong>2. Proxy</strong>
+                <br />
+                The proxy scrapes media from other websites. It bypasses browser
+                restrictions (like CORS) to allow scraping.
+                <br />
+                <br />
+                <strong>3. Default Setup</strong>
+                <br />
+                Uses P-Stream’s built-in proxy. It’s the easiest option but
+                might be slower due to shared bandwidth.
+                <br />
+                <br />
+                If you have more questions on how this works, feel free to ask
+                on the{" "}
+                <a
+                  href="https://discord.com/invite/7z6znYgrTG"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-type-link"
+                >
+                  P-Stream Discord
+                </a>{" "}
+                server!
+              </p>
+            </div>
+          }
+          onClose={handleCloseModal}
+        />
+      )}
       <BiggerCenterContainer>
         <Stepper steps={2} current={1} className="mb-12" />
         <Heading2 className="!mt-0 !text-3xl">
@@ -61,6 +121,13 @@ export function OnboardingPage() {
         </Heading2>
         <Paragraph className="max-w-[360px]">
           {t("onboarding.start.explainer")}
+          <div
+            className="pt-4 flex cursor-pointer items-center text-type-link"
+            onClick={() => setShowModal(true)}
+          >
+            <p>More info</p>
+            <Icon className="pl-2" icon={Icons.CIRCLE_QUESTION} />
+          </div>
         </Paragraph>
 
         {/* Desktop Cards */}
