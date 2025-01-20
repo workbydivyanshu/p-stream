@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -12,17 +11,14 @@ import {
   useNavigateOnboarding,
   useRedirectBack,
 } from "@/pages/onboarding/onboardingHooks";
-import { Card, CardContent, Link } from "@/pages/onboarding/utils";
+import {
+  Card,
+  CardContent,
+  Link,
+  MiniCardContent,
+} from "@/pages/onboarding/utils";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { getProxyUrls } from "@/utils/proxyUrls";
-
-function HorizontalLine(props: { className?: string }) {
-  return (
-    <div className={classNames("w-full grid justify-center", props.className)}>
-      <div className="h-px w-10 bg-onboarding-divider" />
-    </div>
-  );
-}
 
 export function OnboardingPage() {
   const navigate = useNavigateOnboarding();
@@ -67,7 +63,8 @@ export function OnboardingPage() {
           {t("onboarding.start.explainer")}
         </Paragraph>
 
-        <div className="w-full flex flex-col md:flex-row gap-3 pb-6">
+        {/* Desktop Cards */}
+        <div className="hidden md:flex w-full flex-col md:flex-row gap-3 pb-6">
           <Card
             onClick={() => navigate("/onboarding/extension")}
             className="md:w-1/3 md:h-full"
@@ -78,7 +75,9 @@ export function OnboardingPage() {
               subtitle={t("onboarding.start.options.extension.quality")}
               description={t("onboarding.start.options.extension.description")}
             >
-              <Link>{t("onboarding.start.options.extension.action")}</Link>
+              <Link className="!text-onboarding-best">
+                {t("onboarding.start.options.extension.action")}
+              </Link>
             </CardContent>
           </Card>
           <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
@@ -128,6 +127,49 @@ export function OnboardingPage() {
                 </CardContent>
               </Card>
             </>
+          )}
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden flex w-full flex-col md:flex-row gap-3 pb-6">
+          <Card
+            onClick={() => navigate("/onboarding/extension")}
+            className="md:w-1/3 md:h-full"
+          >
+            <MiniCardContent
+              colorClass="!text-onboarding-best"
+              title={t("onboarding.start.options.extension.title")}
+              subtitle={t("onboarding.start.options.extension.quality")}
+              description={t("onboarding.start.options.extension.description")}
+            />
+          </Card>
+          <Card
+            onClick={() => navigate("/onboarding/proxy")}
+            className="md:w-1/3"
+          >
+            <MiniCardContent
+              colorClass="!text-onboarding-good"
+              title={t("onboarding.start.options.proxy.title")}
+              subtitle={t("onboarding.start.options.proxy.quality")}
+              description={t("onboarding.start.options.proxy.description")}
+            />
+          </Card>
+          {noProxies ? null : (
+            <Card
+              onClick={
+                isSafari
+                  ? () => completeAndRedirect() // Skip modal on Safari
+                  : skipModal.show // Show modal on other browsers
+              }
+              className="md:w-1/3"
+            >
+              <MiniCardContent
+                colorClass="!text-onboarding-bad"
+                title={t("onboarding.defaultConfirm.confirm")}
+                subtitle=""
+                description={t("onboarding.defaultConfirm.description")}
+              />
+            </Card>
           )}
         </div>
       </BiggerCenterContainer>
