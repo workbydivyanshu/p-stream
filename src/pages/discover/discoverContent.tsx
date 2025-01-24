@@ -644,7 +644,7 @@ export function DiscoverContent() {
                     `/media/tmdb-${isTVShow ? "tv" : "movie"}-${media.id}-from-discover`,
                   )
                 }
-                className="discover-card max-h-200 text-center relative mt-3 mx-[0.285em] transition-transform duration-[0.45s] hover:scale-105"
+                className="discover-card max-h-200 text-center relative mt-3 mx-[0.2em] md:mx-[0.5em] transition-transform duration-[0.45s] hover:scale-105"
                 style={{ flex: `0 0 ${movieWidth}` }} // Set a fixed width for each movie
               >
                 <Flare.Base className="group cursor-pointer rounded-xl relative p-[0.65em] bg-background-main transition-colors duration-300 bg-transparent">
