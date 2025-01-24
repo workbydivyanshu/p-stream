@@ -19,6 +19,7 @@ import {
 import { conf } from "@/setup/config";
 
 import { Icon, Icons } from "../../components/Icon";
+import "./discover.css";
 
 const editorPicksMovies = [
   { id: 9342, type: "movie" }, // The Mask of Zorro
@@ -609,8 +610,8 @@ export function DiscoverContent() {
 
     // https://tailwindcss.com/docs/border-style
     return (
-      <div className="relative overflow-hidden">
-        <h2 className="mt-2 text-2xl cursor-default font-bold text-white sm:text-3xl md:text-2xl mx-auto pl-5 text-balance">
+      <div className="relative overflow-hidden carousel-container">
+        <h2 className="ml-2 md:ml-8 mt-2 text-2xl cursor-default font-bold text-white md:text-2xl mx-auto pl-5 text-balance">
           {displayCategory}
         </h2>
         <div
@@ -644,7 +645,7 @@ export function DiscoverContent() {
                     `/media/tmdb-${isTVShow ? "tv" : "movie"}-${media.id}-from-discover`,
                   )
                 }
-                className="discover-card max-h-200 text-center relative mt-3 mx-[0.2em] md:mx-[0.5em] transition-transform duration-[0.45s] hover:scale-105"
+                className="max-h-200 text-center relative mt-3 mx-[0.2em] md:mx-[0.5em] transition-transform duration-[0.45s] hover:scale-105"
                 style={{ flex: `0 0 ${movieWidth}` }} // Set a fixed width for each movie
               >
                 <Flare.Base className="group cursor-pointer rounded-xl relative p-[0.65em] bg-background-main transition-colors duration-300 bg-transparent">
@@ -662,8 +663,9 @@ export function DiscoverContent() {
                     }
                     alt={media.poster_path ? "" : "failed to fetch :("}
                     className="rounded-xl relative"
+                    loading="lazy"
                   />
-                  <h1 className="group relative pt-2 pr-1 text-[13.5px] whitespace-normal duration-[0.35s] font-semibold text-white opacity-0 group-hover:opacity-100 flex items-center">
+                  <h1 className="hidden pb-2 md:flex md:pb-0 group relative pt-2 pr-1 text-[13.5px] whitespace-normal duration-[0.35s] font-semibold text-white opacity-0 group-hover:opacity-100 items-center">
                     <span className="flex-1 text-center">
                       {isTVShow
                         ? (media.name?.length ?? 0) > 32
@@ -684,7 +686,7 @@ export function DiscoverContent() {
             <button
               type="button"
               title="Back"
-              className="absolute left-5 top-1/2 transform -translate-y-3/4 z-10"
+              className="absolute left-12 top-1/2 transform -translate-y-3/4 z-10"
               onClick={() => scrollCarousel(categorySlug, "left")}
             >
               <div className="cursor-pointer text-white flex justify-center items-center h-10 w-10 rounded-full bg-search-hoverBackground active:scale-110 transition-[transform,background-color] duration-200">
@@ -694,7 +696,7 @@ export function DiscoverContent() {
             <button
               type="button"
               title="Next"
-              className="absolute right-5 top-1/2 transform -translate-y-3/4 z-10"
+              className="absolute right-12 top-1/2 transform -translate-y-3/4 z-10"
               onClick={() => scrollCarousel(categorySlug, "right")}
             >
               <div className="cursor-pointer text-white flex justify-center items-center h-10 w-10 rounded-full bg-search-hoverBackground active:scale-110 transition-[transform,background-color] duration-200">
@@ -1147,7 +1149,7 @@ export function DiscoverContent() {
         )}
       </div>
 
-      <div className="">
+      <div className="w-full md:w-[90%] max-w-[2400px] mx-auto">
         {selectedCategory === "editorpicks" && (
           <div>
             {/* Header 
@@ -1163,7 +1165,7 @@ export function DiscoverContent() {
             <div className="mt-8">
               {editorPicksDataMovies.length > 0 && (
                 <div>
-                  <div className="mt-8">
+                  <div>
                     {renderMovies(
                       editorPicksDataMovies,
                       "Editor Picks - Movies",
@@ -1174,7 +1176,7 @@ export function DiscoverContent() {
               )}
               {editorPicksDataShows.length > 0 && (
                 <div>
-                  <div className="mt-8">
+                  <div>
                     {renderMovies(
                       editorPicksDataShows,
                       "Editor Picks - Shows",
@@ -1244,13 +1246,12 @@ export function DiscoverContent() {
                 </p>
               )}
             </div>
-            <div className="grid grid-cols-1 gap-0 mt-4">
+            <div className="grid grid-cols-1">
               {" "}
               {categories.map((category) => (
                 <div
                   key={category.name}
                   id={`carousel-${category.name.toLowerCase().replace(/ /g, "-")}`}
-                  className=""
                 >
                   {renderMovies(
                     categoryMovies[category.name] || [],
@@ -1263,7 +1264,6 @@ export function DiscoverContent() {
                 <div
                   key={`${genre.id}|${genre.name}`}
                   id={`carousel-${genre.name.toLowerCase().replace(/ /g, "-")}`}
-                  className=""
                 >
                   {renderMovies(genreMovies[genre.id] || [], genre.name, false)}
                 </div>
@@ -1329,7 +1329,7 @@ export function DiscoverContent() {
                 </p>
               )}
             </div>
-            <div className="grid grid-cols-1 gap-0 mt-4">
+            <div className="grid grid-cols-1">
               {" "}
               {tvCategories.map((category) => (
                 <div
