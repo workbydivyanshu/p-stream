@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import IosPwaLimitations from "@/components/buttons/IosPwaLimitations";
@@ -33,11 +33,11 @@ export function PlayerPart(props: PlayerPartProps) {
   const { isMobile } = useIsMobile();
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { playerMeta: meta } = usePlayerMeta();
+  const display = usePlayerStore((s) => s.display);
 
-  // Detect if running as a PWA on iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isIOSPWA =
-    /iPad|iPhone|iPod/i.test(navigator.userAgent) &&
-    window.matchMedia("(display-mode: standalone)").matches;
+    isIOS && window.matchMedia("(display-mode: standalone)").matches;
 
   // Detect if Shift key is being held
   const [isShifting, setIsShifting] = useState(false);
@@ -53,6 +53,23 @@ export function PlayerPart(props: PlayerPartProps) {
       setIsShifting(false);
     }
   });
+
+  // Fullscreen on rotation horizontal
+  const onRotate = useCallback(() => {
+    if (window.orientation === 90 || window.orientation === -90) {
+      if (!document.fullscreenElement && status === playerStatus.PLAYING) {
+        display?.toggleFullscreen();
+      }
+    } else if (document.fullscreenElement && status === playerStatus.PLAYING) {
+      display?.toggleFullscreen();
+    }
+  }, [display, status]);
+  useEffect(() => {
+    window.addEventListener("orientationchange", onRotate);
+    return () => {
+      window.removeEventListener("orientationchange", onRotate);
+    };
+  }, [onRotate]);
 
   return (
     <Player.Container onLoad={props.onLoad} showingControls={showTargets}>
