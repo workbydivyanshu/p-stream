@@ -9,6 +9,12 @@ const icons = [
   UserIcons.COUCH,
   UserIcons.MOBILE,
   UserIcons.TICKET,
+  UserIcons.SATURN,
+  UserIcons.HEADPHONES,
+  UserIcons.TV,
+  UserIcons.GHOST,
+  UserIcons.COFFEE,
+  UserIcons.FIRE,
 ];
 export const initialIcon = icons[0];
 
@@ -23,7 +29,7 @@ export function IconPicker(props: {
         <p className="font-bold text-white">{props.label}</p>
       ) : null}
 
-      <div className="flex gap-3">
+      <div className="grid grid-cols-6 gap-3">
         {icons.map((icon) => {
           return (
             <button
