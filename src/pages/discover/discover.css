@@ -1,26 +1,19 @@
 .carousel-container {
   position: relative;
-}
-
-.carousel-container::before,
-.carousel-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 80px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.carousel-container::before {
-  left: 0;
-  background: linear-gradient(to right, black, transparent);
-}
-
-.carousel-container::after {
-  right: 0;
-  background: linear-gradient(to left, black, transparent);
+  mask-image: linear-gradient(
+    to right, 
+    rgba(0, 0, 0, 0), /* Left edge */
+    rgba(0, 0, 0, 1) 80px, /* visible after 80px */
+    rgba(0, 0, 0, 1) calc(100% - 80px), /* invisible 80px from right */
+    rgba(0, 0, 0, 0) 100% /* Right edge */
+  );
+  -webkit-mask-image: linear-gradient(
+    to right, 
+    rgba(0, 0, 0, 0), 
+    rgba(0, 0, 0, 1) 80px, 
+    rgba(0, 0, 0, 1) calc(100% - 80px), 
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 @media (max-width: 768px) {
