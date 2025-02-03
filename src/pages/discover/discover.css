@@ -14,13 +14,13 @@
     rgba(0, 0, 0, 1) calc(100% - 80px), 
     rgba(0, 0, 0, 0) 100%
   );
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
-  .carousel-container::before,
-  .carousel-container::after {
-    /* width: 40px; // hidden instead because it might look like there is nothing to scroll*/
-    display: none;
+  .carousel-container {
+    mask-image: none;
+    -webkit-mask-image: none;
   }
 }
 

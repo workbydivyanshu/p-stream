@@ -643,7 +643,7 @@ export function DiscoverContent() {
               );
             })
             .slice(0, 25)
-            .map((media) => (
+            .map((media, index, array) => (
               <a
                 key={media.id}
                 onClick={() =>
@@ -651,8 +651,14 @@ export function DiscoverContent() {
                     `/media/tmdb-${isTVShow ? "tv" : "movie"}-${media.id}-from-discover`,
                   )
                 }
-                className="max-h-200 text-center relative mt-3 mx-[0.2em] md:mx-[0.5em] transition-transform duration-[0.45s] hover:scale-105"
-                style={{ flex: `0 0 ${movieWidth}` }} // Set a fixed width for each movie
+                className={`max-h-200 text-center relative mt-3 transition-transform duration-[0.45s] hover:scale-105 ${
+                  index === 0
+                    ? "md:ml-[6.5rem] mr-[0.2em] md:mr-[0.5em]"
+                    : index === array.length - 1
+                      ? "md:mr-[6.5rem] ml-[0.2em] md:ml-[0.5em]"
+                      : "mx-[0.2em] md:mx-[0.5em]"
+                }`}
+                style={{ flex: `0 0 ${movieWidth}` }}
               >
                 <Flare.Base className="group cursor-pointer rounded-xl relative p-[0.65em] bg-background-main transition-colors duration-300 bg-transparent">
                   <Flare.Light
