@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { get } from "@/backend/metadata/tmdb";
-import { Divider } from "@/components/utils/Divider";
 import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
@@ -44,6 +43,11 @@ const editorPicksMovies = [
   { id: 157336, type: "movie" }, // Interstellar
   { id: 762, type: "movie" }, // Monty Python and the Holy Grail
   { id: 666243, type: "movie" }, // The Witcher: Nightmare of the Wolf
+  { id: 545611, type: "movie" }, // Everything Everywhere All at Once
+  { id: 329, type: "movie" }, // Jurrassic Park
+  { id: 330459, type: "movie" }, // Rogue One: A Star Wars Story
+  { id: 279, type: "movie" }, // Amadeus
+  { id: 823219, type: "movie" }, // Flow
 ];
 
 const editorPicksTVShows = [
@@ -59,6 +63,8 @@ const editorPicksTVShows = [
   { id: 90228, type: "show" }, // Dune Prophecy
   { id: 13916, type: "show" }, // Death Note
   { id: 71912, type: "show" }, // The Witcher
+  { id: 61222, type: "show" }, // Bojack Horseman
+  { id: 93405, type: "show" }, // Squid Game
 ];
 
 function ScrollToTopButton() {
@@ -636,7 +642,7 @@ export function DiscoverContent() {
                 )
               );
             })
-            .slice(0, 20)
+            .slice(0, 25)
             .map((media) => (
               <a
                 key={media.id}
