@@ -9,6 +9,7 @@ import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
 import { Widescreen } from "@/components/player/atoms/Widescreen";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
+import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -54,7 +55,7 @@ export function PlayerPart(props: PlayerPartProps) {
     }
   });
 
-  const skiptime = null;
+  const skiptime = useSkipTime();
 
   return (
     <Player.Container onLoad={props.onLoad} showingControls={showTargets}>
