@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 
 // Thanks Nemo, Custom, and Roomba for this API
-const BASE_URL = "https://febapi.bludclart.com";
+const BASE_URL = "https://fed-api-production.up.railway.app";
 
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
@@ -16,20 +16,16 @@ export function useSkipTime() {
       try {
         const isMovie = meta.type === "movie";
         const apiUrl = isMovie
-          ? `${BASE_URL}/movie/${meta.tmdbId}`
-          : `${BASE_URL}/tv/${meta.tmdbId}/${meta.season?.number}/${meta.episode?.number}`;
+          ? `${BASE_URL}/${meta.tmdbId}`
+          : `${BASE_URL}/${meta.tmdbId}/${meta.season?.number}/${meta.episode?.number}`;
 
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("API request failed");
 
         const data = await response.json();
 
-        if (data?.error) {
-          console.error("API error:", data.error);
-          return;
-        }
+        const skipTime = data.introSkipTime || null;
 
-        const skipTime = data?.streams?.introSkipTime || null;
         setSkiptime(skipTime);
       } catch (error) {
         console.error("Error fetching skip time:", error);
