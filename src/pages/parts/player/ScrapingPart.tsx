@@ -180,3 +180,32 @@ export function ScrapingPartInterruptButton() {
     </div>
   );
 }
+
+const TIPS_LIST = [
+  "Tap the gear icon to switch sources!",
+  "Tap the title to copy the link!",
+  "Hold SHIFT for widescreen instead of fullscreen!",
+  "Some sources work better than others!",
+  "Get the extension for more sources!",
+  "Use arrow keys to skip or change volume!",
+  "Hold bookmarks to edit or delete them!",
+  "Hold SHIFT and tap the title to copy the link with time!",
+  "Set a custom subtitle color!",
+  "Migrate your account to a new backend in settings!",
+  "Join the Discord!",
+];
+
+export function Tips() {
+  const [tip] = useState(() => {
+    const randomIndex = Math.floor(Math.random() * TIPS_LIST.length);
+    return TIPS_LIST[randomIndex];
+  });
+
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="text-type-secondary text-center text-sm text-bold">
+        Tip: {tip}
+      </p>
+    </div>
+  );
+}
