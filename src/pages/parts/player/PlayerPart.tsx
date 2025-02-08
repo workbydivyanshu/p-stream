@@ -2,7 +2,7 @@ import { ReactNode, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import IosPwaLimitations from "@/components/buttons/IosPwaLimitations";
-import { Icon, Icons } from "@/components/Icon";
+import { Icons } from "@/components/Icon";
 import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
 import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
