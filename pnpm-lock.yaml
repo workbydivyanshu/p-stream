@@ -40,8 +40,8 @@ importers:
         specifier: ^0.7.2
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@movie-web/providers':
-        specifier: github:sussy-code/providers
-        version: https://codeload.github.com/sussy-code/providers/tar.gz/b53ad8a399bd342e68c10501b45a6a1f635a5812
+        specifier: github:Pasithea0/smov-providers#production
+        version: https://codeload.github.com/Pasithea0/smov-providers/tar.gz/53433b3dc1a88beadd882e5ed3b0e9ce8e1a013b
       '@noble/hashes':
         specifier: ^1.5.0
         version: 1.5.0
@@ -85,8 +85,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       hls.js:
-        specifier: ^1.5.15
-        version: 1.5.15
+        specifier: ^1.5.18
+        version: 1.5.20
       i18next:
         specifier: ^23.15.1
         version: 23.15.1
@@ -1205,8 +1205,8 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@movie-web/providers@https://codeload.github.com/sussy-code/providers/tar.gz/b53ad8a399bd342e68c10501b45a6a1f635a5812':
-    resolution: {tarball: https://codeload.github.com/sussy-code/providers/tar.gz/b53ad8a399bd342e68c10501b45a6a1f635a5812}
+  '@movie-web/providers@https://codeload.github.com/Pasithea0/smov-providers/tar.gz/53433b3dc1a88beadd882e5ed3b0e9ce8e1a013b':
+    resolution: {tarball: https://codeload.github.com/Pasithea0/smov-providers/tar.gz/53433b3dc1a88beadd882e5ed3b0e9ce8e1a013b}
     version: 2.3.0
 
   '@noble/hashes@1.5.0':
@@ -2482,8 +2482,8 @@ packages:
   hls-parser@0.13.5:
     resolution: {integrity: sha512-UJyTCcNZwOdBmEJo86vViEpgtaUhxrgAsBb65+Lk6fjzyOfIDVF9Y0TyE0KJ2Gc5YHfHx7xevuj/RR0itP3vaA==}
 
-  hls.js@1.5.15:
-    resolution: {integrity: sha512-6cD7xN6bycBHaXz2WyPIaHn/iXFizE5au2yvY5q9aC4wfihxAr16C9fUy4nxh2a3wOw0fEgLRa9dN6wsYjlpNg==}
+  hls.js@1.5.20:
+    resolution: {integrity: sha512-uu0VXUK52JhihhnN/MVVo1lvqNNuhoxkonqgO3IpjvQiGpJBdIXMGkofjQb/j9zvV7a1SW8U9g1FslWx/1HOiQ==}
 
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
@@ -5299,7 +5299,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@movie-web/providers@https://codeload.github.com/sussy-code/providers/tar.gz/b53ad8a399bd342e68c10501b45a6a1f635a5812':
+  '@movie-web/providers@https://codeload.github.com/Pasithea0/smov-providers/tar.gz/53433b3dc1a88beadd882e5ed3b0e9ce8e1a013b':
     dependencies:
       cheerio: 1.0.0-rc.12
       cookie: 0.6.0
@@ -6874,7 +6874,7 @@ snapshots:
 
   hls-parser@0.13.5: {}
 
-  hls.js@1.5.15: {}
+  hls.js@1.5.20: {}
 
   hoist-non-react-statics@3.3.2:
     dependencies:
