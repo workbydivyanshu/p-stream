@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import { Transition } from "@/components/utils/Transition";
@@ -45,6 +45,12 @@ export function SkipIntroButton(props: {
   const time = usePlayerStore((s) => s.progress.time);
   const status = usePlayerStore((s) => s.status);
   const display = usePlayerStore((s) => s.display);
+  const [isReduced, setIsReduced] = useState(false);
+
+  // Update opacity based on video time
+  useEffect(() => {
+    setIsReduced(time >= 10);
+  }, [time]);
 
   const showingState = shouldShowSkipButton(time, props.skipTime);
 
@@ -75,8 +81,9 @@ export function SkipIntroButton(props: {
     >
       <div
         className={classNames([
-          "absolute bottom-0 right-0 transition-[bottom] duration-200 flex items-center space-x-3",
+          "absolute bottom-0 right-0 transition-all duration-500 flex items-center space-x-3",
           bottom,
+          isReduced ? "opacity-30 hover:opacity-100" : "opacity-100",
         ])}
       >
         <Button
