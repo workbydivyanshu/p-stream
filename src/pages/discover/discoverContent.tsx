@@ -65,6 +65,7 @@ const editorPicksTVShows = [
   { id: 71912, type: "show" }, // The Witcher
   { id: 61222, type: "show" }, // Bojack Horseman
   { id: 93405, type: "show" }, // Squid Game
+  { id: 87108, type: "show" }, // Chernobyl
 ];
 
 function ScrollToTopButton() {
