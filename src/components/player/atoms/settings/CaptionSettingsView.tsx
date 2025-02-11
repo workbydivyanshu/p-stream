@@ -264,8 +264,8 @@ export function CaptionSettingsView({
       <Menu.Section className="space-y-6 pb-5">
         <CaptionSetting
           label={t("player.menus.subtitles.settings.delay")}
-          max={10}
-          min={-10}
+          max={20}
+          min={-20}
           onChange={(v) => setDelay(v)}
           value={delay}
           textTransformer={(s) => `${s}s`}
