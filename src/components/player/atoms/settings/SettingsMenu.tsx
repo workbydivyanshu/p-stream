@@ -104,7 +104,7 @@ export function SettingsMenu({ id }: { id: string }) {
           {t("Watch Party")}
         </Menu.Link>
         <Paragraph className="text-xs">
-          Watch Party might not be avalible for some sources
+          Watch Party might not be available for some sources
         </Paragraph>
       </Menu.Section>
 
