@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 
-// Thanks Nemo, Custom, and Roomba for this API
+// Thanks Nemo for this API
 const BASE_URL = "https://fed-api-production.up.railway.app";
 
 export function useSkipTime() {
