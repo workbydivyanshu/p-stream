@@ -186,7 +186,7 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
             <Trans i18nKey="settings.connections.febbox.description">
               Bringing your own UI token allows you to get faster 4K streams. We
               only have a limited number of tokens, so bringing your own helps
-              speed your streams when traffic is high.
+              speed up your streams when traffic is high.
             </Trans>
           </p>
         </div>
