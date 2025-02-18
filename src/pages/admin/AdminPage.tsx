@@ -6,7 +6,6 @@ import { TMDBTestPart } from "@/pages/parts/admin/TMDBTestPart";
 import { WorkerTestPart } from "@/pages/parts/admin/WorkerTestPart";
 
 import { BackendTestPart } from "../parts/admin/BackendTestPart";
-import { FEDAPITestPart } from "../parts/admin/FEDAPITestPart";
 
 export function AdminPage() {
   return (
@@ -19,7 +18,6 @@ export function AdminPage() {
         <BackendTestPart />
         <WorkerTestPart />
         <TMDBTestPart />
-        <FEDAPITestPart />
       </ThinContainer>
     </SubPageLayout>
   );
