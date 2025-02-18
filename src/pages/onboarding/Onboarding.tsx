@@ -71,7 +71,7 @@ export function OptionalDropdown() {
                   1. Go to <MwLink to="https://febbox.com">
                     febbox.com
                   </MwLink>{" "}
-                  and log in with Google
+                  and log in with Google (use a fresh account!)
                   <br />
                   2. Open DevTools or inspect the page
                   <br />
@@ -82,8 +82,8 @@ export function OptionalDropdown() {
                   5. Close the tab, but do NOT logout!
                 </Trans>
               </p>
-              <p className="text-xs mt-2">
-                (This is not a sensitive login cookie or account token)
+              <p className="text-type-danger mt-2">
+                (Do not share this token!)
               </p>
             </div>
 
@@ -97,6 +97,7 @@ export function OptionalDropdown() {
               }}
               value={febboxToken ?? ""}
               placeholder="eyABCdE..."
+              passwordToggleable
             />
           </>
         ) : null}
