@@ -18,6 +18,7 @@ import { Heading3 } from "@/components/utils/Text";
 import { useAuthStore } from "@/stores/auth";
 
 const testUrl = "https://postman-echo.com/get";
+const febboxApiTestUrl = "https://fed-api.up.railway.app/movie/tt15239678";
 
 type Status = "success" | "unset" | "error";
 
@@ -25,6 +26,7 @@ type SetupData = {
   extension: Status;
   proxy: Status;
   defaultProxy: Status;
+  febboxTokenTest: Status;
 };
 
 function testProxy(url: string) {
@@ -39,8 +41,45 @@ function testProxy(url: string) {
   });
 }
 
+async function testFebboxToken(febboxToken: string | null): Promise<Status> {
+  if (!febboxToken) {
+    return "unset";
+  }
+  try {
+    const response = await fetch(febboxApiTestUrl, {
+      headers: {
+        "ui-token": febboxToken,
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Febbox API test failed with status:", response.status);
+      return "error";
+    }
+
+    const data = (await response.json()) as any;
+    if (!data || !data.streams) {
+      console.error("Invalid response format from Febbox API:", data);
+      return "error";
+    }
+
+    const isVIPLink = Object.values(data.streams).some((link: any) => {
+      if (typeof link === "string") {
+        return link.toLowerCase().includes("vip");
+      }
+      return false;
+    });
+
+    return isVIPLink ? "success" : "error";
+  } catch (error: any) {
+    console.error("Error testing Febbox token:", error);
+    return "error";
+  }
+}
+
 function useIsSetup() {
   const proxyUrls = useAuthStore((s) => s.proxySet);
+  const febboxToken = useAuthStore((s) => s.febboxToken);
   const { loading, value } = useAsync(async (): Promise<SetupData> => {
     const extensionStatus: Status = (await isExtensionActive())
       ? "success"
@@ -54,17 +93,29 @@ function useIsSetup() {
         proxyStatus = "error";
       }
     }
+
+    const febboxTokenStatus: Status = await testFebboxToken(febboxToken);
+
     return {
       extension: extensionStatus,
       proxy: proxyStatus,
       defaultProxy: "success",
+      febboxTokenTest: febboxTokenStatus,
     };
-  }, [proxyUrls]);
+  }, [proxyUrls, febboxToken]);
 
   let globalState: Status = "unset";
-  if (value?.extension === "success" || value?.proxy === "success")
+  if (
+    value?.extension === "success" ||
+    value?.proxy === "success" ||
+    value?.febboxTokenTest === "success"
+  )
     globalState = "success";
-  if (value?.proxy === "error" || value?.extension === "error")
+  if (
+    value?.proxy === "error" ||
+    value?.extension === "error" ||
+    value?.febboxTokenTest === "error"
+  )
     globalState = "error";
 
   return {
@@ -191,6 +242,9 @@ export function SetupPart() {
             status={setupStates.defaultProxy}
           >
             {t("settings.connections.setup.items.default")}
+          </SetupCheckList>
+          <SetupCheckList status={setupStates.febboxTokenTest}>
+            Febbox UI token
           </SetupCheckList>
         </div>
         <div className="md:mt-5">
