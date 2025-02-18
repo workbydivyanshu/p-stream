@@ -21,7 +21,6 @@ export function useAuthData() {
   const setAccount = useAuthStore((s) => s.setAccount);
   const removeAccount = useAuthStore((s) => s.removeAccount);
   const setProxySet = useAuthStore((s) => s.setProxySet);
-  const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
   const clearBookmarks = useBookmarkStore((s) => s.clear);
   const clearProgress = useProgressStore((s) => s.clear);
   const setTheme = useThemeStore((s) => s.setTheme);
@@ -86,10 +85,6 @@ export function useAuthData() {
       if (settings.proxyUrls) {
         setProxySet(settings.proxyUrls);
       }
-
-      if (settings.febboxToken) {
-        setFebboxToken(settings.febboxToken);
-      }
     },
     [
       replaceBookmarks,
@@ -98,7 +93,6 @@ export function useAuthData() {
       importSubtitleLanguage,
       setTheme,
       setProxySet,
-      setFebboxToken,
     ],
   );
 

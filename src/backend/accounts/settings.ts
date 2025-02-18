@@ -8,7 +8,6 @@ export interface SettingsInput {
   applicationTheme?: string | null;
   defaultSubtitleLanguage?: string;
   proxyUrls?: string[] | null;
-  febboxToken?: string | null;
 }
 
 export interface SettingsResponse {
@@ -16,7 +15,6 @@ export interface SettingsResponse {
   applicationLanguage?: string | null;
   defaultSubtitleLanguage?: string | null;
   proxyUrls?: string[] | null;
-  febboxToken?: string | null;
 }
 
 export function updateSettings(

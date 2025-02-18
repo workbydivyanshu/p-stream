@@ -80,7 +80,6 @@ export function VerifyPassphrase(props: VerifyPassphraseProps) {
         defaultSubtitleLanguage: defaultSubtitleLanguage ?? undefined,
         applicationTheme: applicationTheme ?? undefined,
         proxyUrls: undefined,
-        febboxToken: undefined,
       });
 
       await restore(account);

@@ -227,7 +227,6 @@ export function SettingsPage() {
           applicationLanguage: state.appLanguage.state,
           applicationTheme: state.theme.state,
           proxyUrls: state.proxyUrls.state?.filter((v) => v !== "") ?? null,
-          febboxToken: state.febboxToken.state,
         });
       }
       if (state.deviceName.changed) {
