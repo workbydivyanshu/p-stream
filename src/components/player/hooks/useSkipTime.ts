@@ -4,23 +4,26 @@ import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 
 // Thanks Nemo, Custom, and Roomba for this API
 const BASE_URL = "https://fed-intro-api.up.railway.app";
+const MAX_RETRIES = 3;
 
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
   const [skiptime, setSkiptime] = useState(0);
 
   useEffect(() => {
-    const fetchSkipTime = async () => {
-      if (!meta?.tmdbId) return;
+    const fetchSkipTime = async (retries = 0): Promise<void> => {
+      if (!meta?.tmdbId || meta.type === "movie") return;
 
       try {
-        const isMovie = meta.type === "movie";
-        const apiUrl = isMovie
-          ? `${BASE_URL}/${meta.tmdbId}`
-          : `${BASE_URL}/${meta.tmdbId}/${meta.season?.number}/${meta.episode?.number}`;
-
+        const apiUrl = `${BASE_URL}/${meta.tmdbId}/${meta.season?.number}/${meta.episode?.number}`;
         const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error("API request failed");
+
+        if (!response.ok) {
+          if (response.status === 500 && retries < MAX_RETRIES) {
+            return fetchSkipTime(retries + 1);
+          }
+          throw new Error("API request failed");
+        }
 
         const data = await response.json();
 
