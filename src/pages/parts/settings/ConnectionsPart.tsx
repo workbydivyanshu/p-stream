@@ -186,7 +186,7 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
           </p>
           <p className="max-w-[30rem] font-medium">
             <Trans i18nKey="settings.connections.febbox.description">
-              Bring your owm Febbox account to get the best streaming with 4K
+              Bring your own Febbox account to get the best streaming with 4K
               quality, Dolby Atmos, and the best (fastest) load times!
             </Trans>
           </p>

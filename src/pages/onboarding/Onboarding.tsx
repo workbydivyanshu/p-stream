@@ -46,7 +46,7 @@ export function OptionalDropdown() {
             </p>
             <p className="max-w-[30rem] font-medium">
               <Trans i18nKey="settings.connections.febbox.description">
-                Bring your owm Febbox account to get the best streaming with 4K
+                Bring your own Febbox account to get the best streaming with 4K
                 quality, Dolby Atmos, and the best (fastest) load times!
               </Trans>
             </p>
@@ -179,7 +179,7 @@ export function OnboardingPage() {
                 <br />
                 <strong>Optional FED API (Febbox) UI token</strong>
                 <br />
-                Bringing your owm Febbox account allows you to unlock FED API,
+                Bringing your own Febbox account allows you to unlock FED API,
                 our best source with 4K quality, Dolby Atmos, the most content,
                 and the best (fastest) load times. This the highly recommended!
                 <br />
