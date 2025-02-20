@@ -42,13 +42,12 @@ export function OptionalDropdown() {
         <div className="flex justify-between items-center gap-4">
           <div className="my-3">
             <p className="text-white font-bold mb-3">
-              Optional: FED API (Febbox) UI token
+              Optional: FED API (Febbox) token
             </p>
             <p className="max-w-[30rem] font-medium">
               <Trans i18nKey="settings.connections.febbox.description">
-                Bringing your own UI token allows you to get faster 4K streams.
-                We only have a limited number of tokens, so bringing your own
-                helps speed up your streams when traffic is high.
+                Bring your owm Febbox account to get the best streaming with 4K
+                quality, Dolby Atmos, and the best (fastest) load times!
               </Trans>
             </p>
           </div>
@@ -180,11 +179,9 @@ export function OnboardingPage() {
                 <br />
                 <strong>Optional FED API (Febbox) UI token</strong>
                 <br />
-                Bringing your own UI token allows you to get faster 4K streams.
-                Each Febbox account has 100gb/mo bandwidth and we only have a
-                limited ammount of accounts. By bringing your own you get that
-                all to yourself! This is not an account token and is only used
-                to get stream links from Febbox&apos;s API.
+                Bringing your owm Febbox account allows you to unlock FED API,
+                our best source with 4K quality, Dolby Atmos, the most content,
+                and the best (fastest) load times. This the highly recommended!
                 <br />
                 <br />
                 If you have more questions on how this works, feel free to ask

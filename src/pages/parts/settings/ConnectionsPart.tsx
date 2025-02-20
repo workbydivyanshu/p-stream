@@ -181,12 +181,13 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
     <SettingsCard>
       <div className="flex justify-between items-center gap-4">
         <div className="my-3">
-          <p className="text-white font-bold mb-3">FED API (Febbox) UI token</p>
+          <p className="text-white font-bold mb-3">
+            Optional: FED API (Febbox) token
+          </p>
           <p className="max-w-[30rem] font-medium">
             <Trans i18nKey="settings.connections.febbox.description">
-              Bringing your own UI token allows you to get faster 4K streams. We
-              only have a limited number of tokens, so bringing your own helps
-              speed up your streams when traffic is high.
+              Bring your owm Febbox account to get the best streaming with 4K
+              quality, Dolby Atmos, and the best (fastest) load times!
             </Trans>
           </p>
         </div>
