@@ -25,85 +25,89 @@ import {
   MiniCardContent,
 } from "@/pages/onboarding/utils";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
+import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
 import { PopupModal } from "../parts/home/PopupModal";
 
-export function OptionalDropdown() {
+export function FEDAPISetup() {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const febboxToken = useAuthStore((s) => s.febboxToken);
   const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
 
-  return (
-    <div className="mt-12">
-      <SettingsCard>
-        <div className="flex justify-between items-center gap-4">
-          <div className="my-3">
-            <p className="text-white font-bold mb-3">
-              Optional: FED API (Febbox) token
-            </p>
-            <p className="max-w-[30rem] font-medium">
-              <Trans i18nKey="settings.connections.febbox.description">
-                Bring your own Febbox account to get the best streaming with 4K
-                quality, Dolby Atmos, and the best (fastest) load times!
-              </Trans>
-            </p>
-          </div>
-          <div>
-            <Toggle
-              onClick={() => setIsExpanded(!isExpanded)}
-              enabled={isExpanded}
-            />
-          </div>
-        </div>
-        {isExpanded ? (
-          <>
-            <Divider marginClass="my-6 px-8 box-content -mx-8" />
-
+  if (conf().ALLOW_FEBBOX_KEY) {
+    return (
+      <div className="mt-12">
+        <SettingsCard>
+          <div className="flex justify-between items-center gap-4">
             <div className="my-3">
+              <p className="text-white font-bold mb-3">
+                Optional: FED API (Febbox) token
+              </p>
               <p className="max-w-[30rem] font-medium">
                 <Trans i18nKey="settings.connections.febbox.description">
-                  To get your UI token:
-                  <br />
-                  1. Go to <MwLink to="https://febbox.com">
-                    febbox.com
-                  </MwLink>{" "}
-                  and log in with Google (use a fresh account!)
-                  <br />
-                  2. Open DevTools or inspect the page
-                  <br />
-                  3. Go to Application tab → Cookies
-                  <br />
-                  4. Copy the &quot;ui&quot; cookie.
-                  <br />
-                  5. Close the tab, but do NOT logout!
+                  Bring your own Febbox account to get the best streaming with
+                  4K quality, Dolby Atmos, and the best (fastest) load times!
                 </Trans>
               </p>
-              <p className="text-type-danger mt-2">
-                (Do not share this token!)
-              </p>
             </div>
+            <div>
+              <Toggle
+                onClick={() => setIsExpanded(!isExpanded)}
+                enabled={isExpanded}
+              />
+            </div>
+          </div>
+          {isExpanded ? (
+            <>
+              <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
-            <Divider marginClass="my-6 px-8 box-content -mx-8" />
-            <p className="text-white font-bold mb-3">
-              {t("settings.connections.febbox.tokenLabel", "Token")}
-            </p>
-            <AuthInputBox
-              onChange={(newToken) => {
-                setFebboxToken(newToken);
-              }}
-              value={febboxToken ?? ""}
-              placeholder="eyABCdE..."
-              passwordToggleable
-            />
-          </>
-        ) : null}
-      </SettingsCard>
-    </div>
-  );
+              <div className="my-3">
+                <p className="max-w-[30rem] font-medium">
+                  <Trans i18nKey="settings.connections.febbox.description">
+                    To get your UI token:
+                    <br />
+                    1. Go to <MwLink to="https://febbox.com">
+                      febbox.com
+                    </MwLink>{" "}
+                    and log in with Google (use a fresh account!)
+                    <br />
+                    2. Open DevTools or inspect the page
+                    <br />
+                    3. Go to Application tab → Cookies
+                    <br />
+                    4. Copy the &quot;ui&quot; cookie.
+                    <br />
+                    5. Close the tab, but do NOT logout!
+                  </Trans>
+                </p>
+                <p className="text-type-danger mt-2">
+                  (Do not share this token!)
+                </p>
+              </div>
+
+              <Divider marginClass="my-6 px-8 box-content -mx-8" />
+              <p className="text-white font-bold mb-3">
+                {t("settings.connections.febbox.tokenLabel", "Token")}
+              </p>
+              <AuthInputBox
+                onChange={(newToken) => {
+                  setFebboxToken(newToken);
+                }}
+                value={febboxToken ?? ""}
+                placeholder="eyABCdE..."
+                passwordToggleable
+              />
+            </>
+          ) : null}
+        </SettingsCard>
+      </div>
+    );
+  }
 }
+
 export function OnboardingPage() {
   const navigate = useNavigateOnboarding();
   const skipModal = useModal("skip");
@@ -177,13 +181,18 @@ export function OnboardingPage() {
                 might be slower due to shared bandwidth.
                 <br />
                 <br />
-                <strong>Optional FED API (Febbox) UI token</strong>
-                <br />
-                Bringing your own Febbox account allows you to unlock FED API,
-                our best source with 4K quality, Dolby Atmos, the most content,
-                and the best (fastest) load times. This the highly recommended!
-                <br />
-                <br />
+                {conf().ALLOW_FEBBOX_KEY && (
+                  <>
+                    <strong>Optional FED API (Febbox) UI token</strong>
+                    <br />
+                    Bringing your own Febbox account allows you to unlock FED
+                    API, our best source with 4K quality, Dolby Atmos, the most
+                    content, and the best (fastest) load times. This the highly
+                    recommended!
+                    <br />
+                    <br />
+                  </>
+                )}
                 If you have more questions on how this works, feel free to ask
                 on the{" "}
                 <a
@@ -327,7 +336,7 @@ export function OnboardingPage() {
           )}
         </div>
 
-        <OptionalDropdown />
+        <FEDAPISetup />
       </BiggerCenterContainer>
     </MinimalPageLayout>
   );

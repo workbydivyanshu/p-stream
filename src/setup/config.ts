@@ -24,6 +24,7 @@ interface Config {
   ONBOARDING_FIREFOX_EXTENSION_INSTALL_LINK: string;
   ONBOARDING_PROXY_INSTALL_LINK: string;
   ALLOW_AUTOPLAY: boolean;
+  ALLOW_FEBBOX_KEY: boolean;
 }
 
 export interface RuntimeConfig {
@@ -44,6 +45,7 @@ export interface RuntimeConfig {
   ONBOARDING_CHROME_EXTENSION_INSTALL_LINK: string | null;
   ONBOARDING_FIREFOX_EXTENSION_INSTALL_LINK: string | null;
   ONBOARDING_PROXY_INSTALL_LINK: string | null;
+  ALLOW_FEBBOX_KEY: boolean;
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -67,6 +69,7 @@ const env: Record<keyof Config, undefined | string> = {
   CDN_REPLACEMENTS: import.meta.env.VITE_CDN_REPLACEMENTS,
   HAS_ONBOARDING: import.meta.env.VITE_HAS_ONBOARDING,
   ALLOW_AUTOPLAY: import.meta.env.VITE_ALLOW_AUTOPLAY,
+  ALLOW_FEBBOX_KEY: import.meta.env.VITE_ALLOW_FEBBOX_KEY,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -127,5 +130,6 @@ export function conf(): RuntimeConfig {
           .filter((s) => s.length > 0),
       )
       .filter((v) => v.length === 2), // The format is <beforeA>:<afterA>,<beforeB>:<afterB>
+    ALLOW_FEBBOX_KEY: getKey("ALLOW_FEBBOX_KEY", "false") === "true",
   };
 }

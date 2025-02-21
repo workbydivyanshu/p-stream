@@ -15,6 +15,7 @@ import {
   StatusCircleProps,
 } from "@/components/player/internals/StatusCircle";
 import { Heading3 } from "@/components/utils/Text";
+import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 
 const testUrl = "https://postman-echo.com/get";
@@ -26,7 +27,7 @@ type SetupData = {
   extension: Status;
   proxy: Status;
   defaultProxy: Status;
-  febboxTokenTest: Status;
+  febboxTokenTest?: Status;
 };
 
 function testProxy(url: string) {
@@ -100,7 +101,9 @@ function useIsSetup() {
       extension: extensionStatus,
       proxy: proxyStatus,
       defaultProxy: "success",
-      febboxTokenTest: febboxTokenStatus,
+      ...(conf().ALLOW_FEBBOX_KEY && {
+        febboxTokenTest: febboxTokenStatus,
+      }),
     };
   }, [proxyUrls, febboxToken]);
 
@@ -243,9 +246,11 @@ export function SetupPart() {
           >
             {t("settings.connections.setup.items.default")}
           </SetupCheckList>
-          <SetupCheckList status={setupStates.febboxTokenTest}>
-            Febbox UI token
-          </SetupCheckList>
+          {conf().ALLOW_FEBBOX_KEY && (
+            <SetupCheckList status={setupStates.febboxTokenTest || "unset"}>
+              Febbox UI token
+            </SetupCheckList>
+          )}
         </div>
         <div className="md:mt-5">
           <Button theme="purple" onClick={() => navigate("/onboarding")}>
