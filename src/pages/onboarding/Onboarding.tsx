@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { stat } from "fs";
+
+import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -9,6 +11,10 @@ import { Stepper } from "@/components/layout/Stepper";
 import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
+import {
+  StatusCircle,
+  StatusCircleProps,
+} from "@/components/player/internals/StatusCircle";
 import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
@@ -30,12 +36,36 @@ import { useAuthStore } from "@/stores/auth";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
 import { PopupModal } from "../parts/home/PopupModal";
+import { Status, testFebboxToken } from "../parts/settings/SetupPart";
+
+async function getFebboxTokenStatus(febboxToken: string | null) {
+  if (febboxToken) {
+    const status: Status = await testFebboxToken(febboxToken);
+    return status;
+  }
+  return "unset";
+}
 
 export function FEDAPISetup() {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const febboxToken = useAuthStore((s) => s.febboxToken);
   const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
+
+  const [status, setStatus] = useState<Status>("unset");
+  const statusMap: Record<Status, StatusCircleProps["type"]> = {
+    error: "error",
+    success: "success",
+    unset: "noresult",
+  };
+
+  useEffect(() => {
+    const checkTokenStatus = async () => {
+      const result = await getFebboxTokenStatus(febboxToken);
+      setStatus(result);
+    };
+    checkTokenStatus();
+  }, [febboxToken]);
 
   if (conf().ALLOW_FEBBOX_KEY) {
     return (
@@ -92,14 +122,21 @@ export function FEDAPISetup() {
               <p className="text-white font-bold mb-3">
                 {t("settings.connections.febbox.tokenLabel", "Token")}
               </p>
-              <AuthInputBox
-                onChange={(newToken) => {
-                  setFebboxToken(newToken);
-                }}
-                value={febboxToken ?? ""}
-                placeholder="eyABCdE..."
-                passwordToggleable
-              />
+              <div className="flex items-center w-full">
+                <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
+                <AuthInputBox
+                  onChange={(newToken) => {
+                    setFebboxToken(newToken);
+                  }}
+                  value={febboxToken ?? ""}
+                  placeholder="eyABCdE..."
+                  passwordToggleable
+                  className="flex-grow"
+                />
+              </div>
+              {status === "error" && (
+                <p className="text-type-danger mt-4">Token was unsuccessful</p>
+              )}
             </>
           ) : null}
         </SettingsCard>

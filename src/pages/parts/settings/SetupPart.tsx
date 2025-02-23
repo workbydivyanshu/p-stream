@@ -21,7 +21,7 @@ import { useAuthStore } from "@/stores/auth";
 const testUrl = "https://postman-echo.com/get";
 const febboxApiTestUrl = "https://fed-api.up.railway.app/movie/tt15239678";
 
-type Status = "success" | "unset" | "error";
+export type Status = "success" | "unset" | "error";
 
 type SetupData = {
   extension: Status;
@@ -42,7 +42,9 @@ function testProxy(url: string) {
   });
 }
 
-async function testFebboxToken(febboxToken: string | null): Promise<Status> {
+export async function testFebboxToken(
+  febboxToken: string | null,
+): Promise<Status> {
   if (!febboxToken) {
     return "unset";
   }
