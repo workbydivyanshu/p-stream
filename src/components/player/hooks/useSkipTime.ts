@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
+import { conf } from "@/setup/config";
 
 // Thanks Nemo, Custom, and Roomba for this API
 const BASE_URL = "https://fed-intro-api.up.railway.app";
@@ -13,6 +14,7 @@ export function useSkipTime() {
   useEffect(() => {
     const fetchSkipTime = async (retries = 0): Promise<void> => {
       if (!meta?.tmdbId || meta.type === "movie") return;
+      if (!conf().ALLOW_FEBBOX_KEY) return;
 
       try {
         const apiUrl = `${BASE_URL}/${meta.tmdbId}/${meta.season?.number}/${meta.episode?.number}`;
