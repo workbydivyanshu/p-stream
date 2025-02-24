@@ -208,7 +208,7 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
                 <Trans i18nKey="settings.connections.febbox.description">
                   To get your UI token:
                   <br />
-                  1. Go to <MwLink to="https://febbox.com">
+                  1. Go to <MwLink url="https://febbox.com">
                     febbox.com
                   </MwLink>{" "}
                   and log in with Google (use a fresh account!)
