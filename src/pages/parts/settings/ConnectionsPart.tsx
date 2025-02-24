@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -177,6 +177,8 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
 
 function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
   const { t } = useTranslation();
+  const [showVideo, setShowVideo] = useState(false);
+
   if (conf().ALLOW_FEBBOX_KEY) {
     return (
       <SettingsCard>
@@ -208,9 +210,35 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
                 <Trans i18nKey="settings.connections.febbox.description">
                   To get your UI token:
                   <br />
-                  1. Go to <MwLink url="https://febbox.com">
-                    febbox.com
-                  </MwLink>{" "}
+                  <div
+                    onClick={() => setShowVideo(!showVideo)}
+                    className="flex items-center justify-between p-1 px-2 my-2 w-fit border border-type-secondary rounded-lg cursor-pointer text-type-secondary hover:text-white transition-colors duration-200"
+                  >
+                    <span className="text-sm">
+                      {showVideo
+                        ? "Hide Video Tutorial"
+                        : "Show Video Tutorial"}
+                    </span>
+                    {showVideo ? (
+                      <Icon icon={Icons.CHEVRON_UP} className="pl-1" />
+                    ) : (
+                      <Icon icon={Icons.CHEVRON_DOWN} className="pl-1" />
+                    )}
+                  </div>
+                  {showVideo && (
+                    <>
+                      <div className="relative pt-[56.25%] mt-2">
+                        <iframe
+                          src="https://player.vimeo.com/video/1059834885?h=c3ab398d42&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                          className="absolute top-0 left-0 w-full h-full border border-type-secondary rounded-lg bg-black"
+                          title="P-Stream FED API Setup Tutorial"
+                        />
+                      </div>
+                      <br />
+                    </>
+                  )}
+                  1. Go to <MwLink url="https://febbox.com">febbox.com</MwLink>{" "}
                   and log in with Google (use a fresh account!)
                   <br />
                   2. Open DevTools or inspect the page
