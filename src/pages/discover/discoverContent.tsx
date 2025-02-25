@@ -624,11 +624,6 @@ export function DiscoverContent() {
         <div
           id={`carousel-${categorySlug}`}
           className="flex whitespace-nowrap pt-0 pb-4 overflow-auto scrollbar rounded-xl overflow-y-hidden"
-          style={{
-            scrollbarWidth: "thin",
-            // scrollbarColor: `${bgColor} transparent`,
-            scrollbarColor: "transparent transparent",
-          }}
           ref={(el) => {
             carouselRefs.current[categorySlug] = el;
           }}
@@ -1079,10 +1074,6 @@ export function DiscoverContent() {
               <div
                 id="button-carousel-providers"
                 className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "transparent transparent",
-                }}
               >
                 <div className="flex space-x-2 py-1">
                   {renderMovieProviderButtons()}
@@ -1099,10 +1090,6 @@ export function DiscoverContent() {
               <div
                 id="button-carousel-movies"
                 className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "transparent transparent",
-                }}
               >
                 <div className="flex space-x-2 py-1">
                   {renderTopMovieButtons()}
@@ -1126,10 +1113,6 @@ export function DiscoverContent() {
               <div
                 id="button-carousel-tv-providers"
                 className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "transparent transparent",
-                }}
               >
                 <div className="flex space-x-2 py-1">
                   {renderTvProviderButtons()}
@@ -1146,10 +1129,6 @@ export function DiscoverContent() {
               <div
                 id="button-carousel-tvshows"
                 className="flex lg:px-4 mb-4 overflow-x-auto scroll-smooth"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "transparent transparent",
-                }}
               >
                 <div className="flex space-x-2 py-1">
                   {renderTopTvButtons()}
@@ -1219,10 +1198,6 @@ export function DiscoverContent() {
               <div
                 id="button-carousel-providers"
                 className="flex mb-4 overflow-x-auto scroll-smooth"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "transparent transparent",
-                }}
               >
                 <div className="flex space-x-2 py-1">
                   {renderMovieProviderButtons()}
@@ -1302,10 +1277,6 @@ export function DiscoverContent() {
               <div
                 id="button-carousel-tv-providers"
                 className="flex mb-0 overflow-x-auto scroll-smooth"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "transparent transparent",
-                }}
               >
                 <div className="flex space-x-2 py-1">
                   {renderTvProviderButtons()}
