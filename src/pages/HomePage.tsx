@@ -3,11 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { To, useNavigate } from "react-router-dom";
 
-import { Icons } from "@/components/Icon";
-import { IconPill } from "@/components/layout/IconPill";
-import { Loading } from "@/components/layout/Loading";
 import { WideContainer } from "@/components/layout/WideContainer";
-import { useAuth } from "@/hooks/auth/useAuth";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
@@ -21,7 +17,6 @@ import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
 import { usePreferencesStore } from "@/stores/preferences";
 
 import { Button } from "./About";
-import { PopupModal } from "./parts/home/PopupModal";
 
 function useSearch(search: string) {
   const [searching, setSearching] = useState<boolean>(false);
@@ -62,22 +57,6 @@ export function HomePage() {
   };
 
   const enableDiscover = usePreferencesStore((state) => state.enableDiscover);
-
-  // State to track whether content is loading or loaded
-  const [loading, setLoading] = useState(true);
-
-  // Simulate loading media cards
-  useEffect(() => {
-    const simulateLoading = async () => {
-      // Simulate a loading time with setTimeout or fetch data here
-      await new Promise((resolve) => {
-        setTimeout(resolve, 2000);
-      }); // Simulate 2s loading time
-      setLoading(false); // After loading, set loading to false
-    };
-
-    simulateLoading();
-  }, []);
 
   /* 
   // Safari Notice
@@ -260,21 +239,9 @@ export function HomePage() {
       </WideContainer>
       {/* Conditional rendering: show loading screen or the content */}
       {enableDiscover ? (
-        loading ? (
-          <div className="flex flex-col justify-center items-center h-64 space-y-4">
-            <Loading />
-            <p className="text-lg font-medium text-gray-400 animate-pulse mt-4">
-              Fetching the latest movies & TV shows...
-            </p>
-            <p className="text-sm text-gray-500">
-              Please wait while we load the best recommendations for you.
-            </p>
-          </div>
-        ) : (
-          <div className="pt-10 px-0 w-full max-w-[100dvw] justify-center items-center">
-            <DiscoverContent />
-          </div>
-        )
+        <div className="pt-10 px-0 w-full max-w-[100dvw] justify-center items-center">
+          <DiscoverContent />
+        </div>
       ) : (
         <div className="flex flex-col justify-center items-center h-40 space-y-4">
           <div className="flex flex-col items-center justify-center">
