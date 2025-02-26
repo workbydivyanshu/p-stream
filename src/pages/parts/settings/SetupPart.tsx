@@ -19,7 +19,7 @@ import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 
 const testUrl = "https://postman-echo.com/get";
-const febboxApiTestUrl = "https://fed-api.up.railway.app/movie/tt15239678";
+const febboxApiTestUrl = "https://fed-api.pstream.org/movie/tt15239678";
 
 export type Status = "success" | "unset" | "error";
 

@@ -4,7 +4,7 @@ import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 
 // Thanks Nemo, Custom, and Roomba for this API
-const BASE_URL = "https://fed-intro-api.up.railway.app";
+const BASE_URL = "https://skip-intro.pstream.org";
 const MAX_RETRIES = 3;
 
 export function useSkipTime() {
