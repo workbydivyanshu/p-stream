@@ -78,6 +78,7 @@ function CircleDropdownLink(props: { icon: Icons; href: string }) {
   return (
     <GoToLink
       href={props.href}
+      onClick={() => window.scrollTo(0, 0)}
       className="tabbable w-11 h-11 rounded-full bg-dropdown-contentBackground text-dropdown-text hover:text-white transition-colors duration-100 flex justify-center items-center"
     >
       <Icon className="text-2xl" icon={props.icon} />
@@ -170,6 +171,10 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               icon={Icons.DISCORD}
             />
             <CircleDropdownLink href="/support" icon={Icons.MAIL} />
+            <CircleDropdownLink
+              href="https://rentry.co/h5mypdfs"
+              icon={Icons.TIP_JAR}
+            />
           </div>
         </div>
       </Transition>
