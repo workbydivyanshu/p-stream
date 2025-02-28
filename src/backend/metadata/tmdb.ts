@@ -162,7 +162,7 @@ function abortOnTimeout(timeout: number): AbortSignal {
 }
 
 export async function get<T>(url: string, params?: object): Promise<T> {
-  const proxy = getProxyUrls()[0];
+  const proxy = getProxyUrls()[0]; // TODO: support multiple proxies and load balance
   const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
   if (!apiKey) throw new Error("TMDB API key not set");
 

@@ -12,11 +12,12 @@ import { Heading1 } from "@/components/utils/Text";
 import { SetupPart } from "@/pages/parts/settings/SetupPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
-import { usePreferencesStore } from "@/stores/preferences";
 
 interface ProxyEditProps {
   proxyUrls: string[] | null;
   setProxyUrls: Dispatch<SetStateAction<string[] | null>>;
+  proxyTmdb: boolean;
+  setProxyTmdb: Dispatch<SetStateAction<boolean>>;
 }
 
 interface BackendEditProps {
@@ -29,10 +30,12 @@ interface FebboxTokenProps {
   setFebboxToken: Dispatch<SetStateAction<string | null>>;
 }
 
-function ProxyEdit({ proxyUrls, setProxyUrls }: ProxyEditProps) {
-  const proxyTmdb = usePreferencesStore((s) => s.proxyTmdb);
-  const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-
+function ProxyEdit({
+  proxyUrls,
+  setProxyUrls,
+  proxyTmdb,
+  setProxyTmdb,
+}: ProxyEditProps) {
   const { t } = useTranslation();
   const add = useCallback(() => {
     setProxyUrls((s) => [...(s ?? []), ""]);
@@ -57,6 +60,13 @@ function ProxyEdit({ proxyUrls, setProxyUrls }: ProxyEditProps) {
     [setProxyUrls],
   );
 
+  const toggleProxyUrls = useCallback(() => {
+    const newValue = proxyUrls === null ? [] : null;
+    setProxyUrls(newValue);
+    // Disable TMDB proxying when proxy workers are disabled
+    if (newValue === null) setProxyTmdb(false);
+  }, [proxyUrls, setProxyUrls, setProxyTmdb]);
+
   return (
     <SettingsCard>
       <div className="flex justify-between items-center gap-4">
@@ -73,10 +83,7 @@ function ProxyEdit({ proxyUrls, setProxyUrls }: ProxyEditProps) {
           </p>
         </div>
         <div>
-          <Toggle
-            onClick={() => setProxyUrls((s) => (s === null ? [] : null))}
-            enabled={proxyUrls !== null}
-          />
+          <Toggle onClick={toggleProxyUrls} enabled={proxyUrls !== null} />
         </div>
       </div>
       {proxyUrls !== null ? (
@@ -119,17 +126,22 @@ function ProxyEdit({ proxyUrls, setProxyUrls }: ProxyEditProps) {
           <Button theme="purple" onClick={add}>
             {t("settings.connections.workers.addButton")}
           </Button>
-          <div className="flex flex-col p-4 *:py-2 w-full">
-            <div className="flex flex-row *:mx-3 w-full justify-between">
-              Proxy TMDB:{" "}
+          <Divider marginClass="my-6 px-8 box-content -mx-8" />
+
+          <div className="flex justify-between items-center gap-4">
+            <div className="my-3">
+              <p className="text-white font-bold mb-3">Proxy TMDB</p>
+              <p className="max-w-[30rem] font-medium">
+                Only needed if you can&apos;t access TheMovieDB directly, such
+                as if your ISP blocks it.
+              </p>
+            </div>
+            <div>
               <Toggle
                 enabled={proxyTmdb}
                 onClick={() => setProxyTmdb(!proxyTmdb)}
               />
             </div>
-            <p className="ml-6 border-l-[1px] pl-3 border-search-placeholder">
-              Only needed if for some reason you are unable to use TMDB
-            </p>
           </div>
         </>
       ) : null}
@@ -302,6 +314,8 @@ export function ConnectionsPart(
         <ProxyEdit
           proxyUrls={props.proxyUrls}
           setProxyUrls={props.setProxyUrls}
+          proxyTmdb={props.proxyTmdb}
+          setProxyTmdb={props.setProxyTmdb}
         />
         <BackendEdit
           backendUrl={props.backendUrl}
