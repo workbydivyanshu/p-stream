@@ -47,6 +47,14 @@ export function LazyMediaCarousel({
 
   const categoryName = category?.name || genre?.name || "";
 
+  // Test intersection observer
+  // useEffect(() => {
+  //   // eslint-disable-next-line no-console
+  //   console.log(
+  //     `Carousel ${categoryName}: ${isIntersecting ? "loaded ✅" : "unloaded ❌"}`,
+  //   );
+  // }, [isIntersecting, categoryName]);
+
   return (
     <div ref={targetRef as React.RefObject<HTMLDivElement>}>
       {isIntersecting ? (
