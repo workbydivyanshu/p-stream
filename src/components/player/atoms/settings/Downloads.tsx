@@ -143,14 +143,6 @@ export function DownloadView({ id }: { id: string }) {
                 <StyleTrans k="player.menus.downloads.disclaimer" />
               </Menu.Paragraph>
 
-              {/* FED API Notice */}
-              <Menu.Paragraph marginClass="my-6">
-                When downloading from Fed API, it’s recommended to set your own
-                token in settings to ensure faster downloads and prevent shared
-                tokens from reaching data limits, which can impact the scraper’s
-                performance for everyone.
-              </Menu.Paragraph>
-
               <Button className="w-full" href={downloadUrl} theme="purple">
                 {t("player.menus.downloads.downloadVideo")}
               </Button>
