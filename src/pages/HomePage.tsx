@@ -231,15 +231,14 @@ export function HomePage() {
             <BookmarksPart onItemsChange={setShowBookmarks} />
           </div>
         )}
-        {!(showBookmarks || showWatching) ? (
+        {!(showBookmarks || showWatching) && !enableDiscover ? (
           <div className="flex flex-col translate-y-[-30px] items-center justify-center">
             <p className="text-[18.5px] pb-3">{emptyText}</p>
           </div>
         ) : null}
       </WideContainer>
-      {/* Conditional rendering: show loading screen or the content */}
       {enableDiscover ? (
-        <div className="pt-10 px-0 w-full max-w-[100dvw] justify-center items-center">
+        <div className="pt-12 w-full max-w-[100dvw] justify-center items-center">
           <DiscoverContent />
         </div>
       ) : (
