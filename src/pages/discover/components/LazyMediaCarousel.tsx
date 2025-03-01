@@ -14,6 +14,8 @@ interface LazyMediaCarouselProps {
   carouselRefs: React.MutableRefObject<{
     [key: string]: HTMLDivElement | null;
   }>;
+  preloadedMedia?: Media[];
+  title?: string;
 }
 
 export function LazyMediaCarousel({
@@ -22,6 +24,8 @@ export function LazyMediaCarousel({
   mediaType,
   isMobile,
   carouselRefs,
+  preloadedMedia,
+  title,
 }: LazyMediaCarouselProps) {
   const [medias, setMedias] = useState<Media[]>([]);
 
@@ -30,22 +34,24 @@ export function LazyMediaCarousel({
     { rootMargin: "200px" }, // Load when within 200px of viewport
   );
 
-  // Use the lazy loading hook to fetch data when visible
+  // Use the lazy loading hook only if we don't have preloaded media
   const { media, isLoading } = useLazyTMDBData(
-    genre || null,
-    category || null,
+    !preloadedMedia ? genre || null : null,
+    !preloadedMedia ? category || null : null,
     mediaType,
     isIntersecting,
   );
 
-  // Update medias when data is loaded
+  // Update medias when data is loaded or preloaded
   useEffect(() => {
-    if (media.length > 0) {
+    if (preloadedMedia) {
+      setMedias(preloadedMedia);
+    } else if (media.length > 0) {
       setMedias(media);
     }
-  }, [media]);
+  }, [media, preloadedMedia]);
 
-  const categoryName = category?.name || genre?.name || "";
+  const categoryName = title || category?.name || genre?.name || "";
 
   // Test intersection observer
   // useEffect(() => {

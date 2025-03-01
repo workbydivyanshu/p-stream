@@ -291,17 +291,17 @@ export function DiscoverContent() {
   const renderEditorPicksContent = () => {
     return (
       <>
-        <MediaCarousel
-          medias={editorPicksMovies}
-          category="Editor Picks Movies"
-          isTVShow={false}
+        <LazyMediaCarousel
+          preloadedMedia={editorPicksMovies}
+          title="Editor Picks Movies"
+          mediaType="movie"
           isMobile={isMobile}
           carouselRefs={carouselRefs}
         />
-        <MediaCarousel
-          medias={editorPicksTVShows}
-          category="Editor Picks Shows"
-          isTVShow
+        <LazyMediaCarousel
+          preloadedMedia={editorPicksTVShows}
+          title="Editor Picks Shows"
+          mediaType="tv"
           isMobile={isMobile}
           carouselRefs={carouselRefs}
         />
