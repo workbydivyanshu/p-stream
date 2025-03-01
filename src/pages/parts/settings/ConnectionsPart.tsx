@@ -133,7 +133,8 @@ function ProxyEdit({
               <p className="text-white font-bold mb-3">Proxy TMDB</p>
               <p className="max-w-[30rem] font-medium">
                 Only needed if you can&apos;t access TheMovieDB directly, such
-                as if your ISP blocks it.
+                as if your ISP blocks it. It is recomended to disable the
+                Discover secton to improve performance with this.
               </p>
             </div>
             <div>

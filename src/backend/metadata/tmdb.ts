@@ -161,8 +161,18 @@ function abortOnTimeout(timeout: number): AbortSignal {
   return controller.signal;
 }
 
+let proxyRotationIndex = 0;
+
+function getNextProxy(proxyUrls: string[]): string | undefined {
+  if (!proxyUrls.length) return undefined;
+  const proxy = proxyUrls[proxyRotationIndex % proxyUrls.length];
+  proxyRotationIndex += 1;
+  return proxy;
+}
+
 export async function get<T>(url: string, params?: object): Promise<T> {
-  const proxy = getProxyUrls()[0]; // TODO: support multiple proxies and load balance
+  const proxyUrls = getProxyUrls();
+  const proxy = getNextProxy(proxyUrls);
   const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
   if (!apiKey) throw new Error("TMDB API key not set");
 
@@ -268,10 +278,15 @@ export function getMediaDetails<
 export function getMediaPoster(posterPath: string | null): string | undefined {
   const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
   const imgUrl = `https://image.tmdb.org/t/p/w342/${posterPath}`;
-  const proxyUrl = getProxyUrls()[0];
-  if (proxyUrl && shouldProxyTmdb) {
-    return `${proxyUrl}/?destination=${imgUrl}`;
+
+  if (shouldProxyTmdb) {
+    const proxyUrls = getProxyUrls();
+    const proxy = getNextProxy(proxyUrls);
+    if (proxy) {
+      return `${proxy}/?destination=${imgUrl}`;
+    }
   }
+
   if (posterPath) return imgUrl;
 }
 
