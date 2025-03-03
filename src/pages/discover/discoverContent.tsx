@@ -293,14 +293,14 @@ export function DiscoverContent() {
       <>
         <LazyMediaCarousel
           preloadedMedia={editorPicksMovies}
-          title="Editor Picks Movies"
+          title="Editor Picks"
           mediaType="movie"
           isMobile={isMobile}
           carouselRefs={carouselRefs}
         />
         <LazyMediaCarousel
           preloadedMedia={editorPicksTVShows}
-          title="Editor Picks Shows"
+          title="Editor Picks"
           mediaType="tv"
           isMobile={isMobile}
           carouselRefs={carouselRefs}
