@@ -275,6 +275,18 @@ export function getMediaDetails<
   throw new Error("Invalid media type");
 }
 
+export function getMediaBackdrop(
+  backdropPath: string | null,
+): string | undefined {
+  const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
+  const imgUrl = `https://image.tmdb.org/t/p/original${backdropPath}`;
+  const proxyUrl = getProxyUrls()[0];
+  if (proxyUrl && shouldProxyTmdb) {
+    return `${proxyUrl}/?destination=${imgUrl}`;
+  }
+  if (backdropPath) return imgUrl;
+}
+
 export function getMediaPoster(posterPath: string | null): string | undefined {
   const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
   const imgUrl = `https://image.tmdb.org/t/p/w342/${posterPath}`;

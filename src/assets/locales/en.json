@@ -612,7 +612,15 @@
         "teal": "Teal",
         "classic": "Classic"
       },
-      "title": "Appearance"
+      "title": "Appearance",
+      "options": {
+        "discover": "Discover section",
+        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
+        "discoverLabel": "Discover section",
+        "hover": "Details popup",
+        "hoverDescription": "Show a popup with details when hovering over a media item. Disabled by default.",
+        "hoverLabel": "Details popup"
+      }
     },
     "connections": {
       "server": {
@@ -668,9 +676,6 @@
       "sourceOrder": "Reordering sources",
       "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
       "title": "Preferences",
-      "discover": "Discover section",
-      "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabling this can increase load times. This setting is enabled by default.",
-      "discoverLabel": "Discover section",
       "sourceOrderEnableLabel": "Custom source order"
     },
     "reset": "Reset",

@@ -23,12 +23,12 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useSettingsState } from "@/hooks/useSettingsState";
 import { AccountActionsPart } from "@/pages/parts/settings/AccountActionsPart";
 import { AccountEditPart } from "@/pages/parts/settings/AccountEditPart";
+import { AppearancePart } from "@/pages/parts/settings/AppearancePart";
 import { CaptionsPart } from "@/pages/parts/settings/CaptionsPart";
 import { ConnectionsPart } from "@/pages/parts/settings/ConnectionsPart";
 import { DeviceListPart } from "@/pages/parts/settings/DeviceListPart";
 import { RegisterCalloutPart } from "@/pages/parts/settings/RegisterCalloutPart";
 import { SidebarPart } from "@/pages/parts/settings/SidebarPart";
-import { ThemePart } from "@/pages/parts/settings/ThemePart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { useLanguageStore } from "@/stores/language";
@@ -146,6 +146,9 @@ export function SettingsPage() {
   const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
   const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
 
+  const enablePopDetails = usePreferencesStore((s) => s.enablePopDetails);
+  const setEnablePopDetails = usePreferencesStore((s) => s.setEnablePopDetails);
+
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
   const setEnableSourceOrder = usePreferencesStore(
     (s) => s.setEnableSourceOrder,
@@ -179,6 +182,7 @@ export function SettingsPage() {
     enableThumbnails,
     enableAutoplay,
     enableDiscover,
+    enablePopDetails,
     sourceOrder,
     enableSourceOrder,
     proxyTmdb,
@@ -253,6 +257,7 @@ export function SettingsPage() {
     setEnableThumbnails(state.enableThumbnails.state);
     setEnableAutoplay(state.enableAutoplay.state);
     setEnableDiscover(state.enableDiscover.state);
+    setEnablePopDetails(state.enablePopDetails.state);
     setSourceOrder(state.sourceOrder.state);
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
@@ -285,6 +290,7 @@ export function SettingsPage() {
     state,
     setEnableAutoplay,
     setEnableDiscover,
+    setEnablePopDetails,
     setSourceOrder,
     setAppLanguage,
     setTheme,
@@ -338,8 +344,6 @@ export function SettingsPage() {
             setEnableThumbnails={state.enableThumbnails.set}
             enableAutoplay={state.enableAutoplay.state}
             setEnableAutoplay={state.enableAutoplay.set}
-            enableDiscover={state.enableDiscover.state}
-            setEnableDiscover={state.enableDiscover.set}
             sourceOrder={availableSources}
             setSourceOrder={state.sourceOrder.set}
             enableSourceOrder={state.enableSourceOrder.state}
@@ -347,10 +351,14 @@ export function SettingsPage() {
           />
         </div>
         <div id="settings-appearance" className="mt-28">
-          <ThemePart
+          <AppearancePart
             active={previewTheme ?? "default"}
             inUse={activeTheme ?? "default"}
             setTheme={setThemeWithPreview}
+            enableDiscover={state.enableDiscover.state}
+            setEnableDiscover={state.enableDiscover.set}
+            enablePopDetails={state.enablePopDetails.state}
+            setEnablePopDetails={state.enablePopDetails.set}
           />
         </div>
         <div id="settings-captions" className="mt-28">

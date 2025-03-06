@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 
+import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
 import { Heading1 } from "@/components/utils/Text";
 
@@ -130,27 +131,77 @@ function ThemePreview(props: {
   );
 }
 
-export function ThemePart(props: {
+export function AppearancePart(props: {
   active: string;
   inUse: string;
   setTheme: (theme: string) => void;
+
+  enableDiscover: boolean;
+  setEnableDiscover: (v: boolean) => void;
+
+  enablePopDetails: boolean;
+  setEnablePopDetails: (v: boolean) => void;
 }) {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className="space-y-12">
       <Heading1 border>{t("settings.appearance.title")}</Heading1>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-6 max-w-[700px]">
-        {availableThemes.map((v) => (
-          <ThemePreview
-            selector={v.selector}
-            active={props.active === v.id}
-            inUse={props.inUse === v.id}
-            name={t(v.key)}
-            key={v.id}
-            onClick={() => props.setTheme(v.id)}
-          />
-        ))}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* First Column - Preferences */}
+        <div className="space-y-8">
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.appearance.options.discover")}
+            </p>
+            <p className="max-w-[25rem] font-medium">
+              {t("settings.appearance.options.discoverDescription")}
+            </p>
+            <div
+              onClick={() => props.setEnableDiscover(!props.enableDiscover)}
+              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
+            >
+              <Toggle enabled={props.enableDiscover} />
+              <p className="flex-1 text-white font-bold">
+                {t("settings.appearance.options.discoverLabel")}
+              </p>
+            </div>
+          </div>
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.appearance.options.hover")}
+            </p>
+            <p className="max-w-[25rem] font-medium">
+              {t("settings.appearance.options.hoverDescription")}
+            </p>
+            <div
+              onClick={() => props.setEnablePopDetails(!props.enablePopDetails)}
+              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
+            >
+              <Toggle enabled={props.enablePopDetails} />
+              <p className="flex-1 text-white font-bold">
+                {t("settings.appearance.options.hoverLabel")}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Second Column - Themes */}
+        <div className="space-y-8">
+          <div className="grid grid-cols-2 gap-4 max-w-[600px]">
+            {availableThemes.map((v) => (
+              <ThemePreview
+                selector={v.selector}
+                active={props.active === v.id}
+                inUse={props.inUse === v.id}
+                name={t(v.key)}
+                key={v.id}
+                onClick={() => props.setTheme(v.id)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

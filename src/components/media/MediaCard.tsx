@@ -1,5 +1,7 @@
+// I'm sorry this is so confusing 😭
+
 import classNames from "classnames";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useCopyToClipboard } from "react-use";
@@ -8,12 +10,14 @@ import { mediaItemToId } from "@/backend/metadata/tmdb";
 import { DotList } from "@/components/text/DotList";
 import { Flare } from "@/components/utils/Flare";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
+import { usePreferencesStore } from "@/stores/preferences";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import { MediaBookmarkButton } from "./MediaBookmark";
 import { Button } from "../buttons/Button";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
+import { InfoPopout } from "./InfoPopout";
 
 export interface MediaCardProps {
   media: MediaItem;
@@ -59,12 +63,14 @@ function MediaCardContent({
   handleMouseEnter,
   handleMouseLeave,
   link,
+  isHoveringCard,
 }: MediaCardProps & {
   overlayVisible: boolean;
   setOverlayVisible: React.Dispatch<React.SetStateAction<boolean>>;
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
   link: string;
+  isHoveringCard: boolean;
 }) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -88,7 +94,7 @@ function MediaCardContent({
     setOverlayVisible(false);
   }
 
-  if (media.year) {
+  if (isReleased() && media.year) {
     dotListContent.push(media.year.toFixed());
   }
 
@@ -151,7 +157,7 @@ function MediaCardContent({
         />
         <Flare.Child
           className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
-            canLink ? "group-hover:scale-95" : "opacity-60"
+            canLink ? (isHoveringCard ? "scale-95" : "") : "opacity-60"
           }`}
         >
           <div
@@ -344,6 +350,7 @@ function MediaCardContent({
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setOverlayVisible(!overlayVisible);
                 }}
               >
@@ -363,20 +370,59 @@ function MediaCardContent({
 export function MediaCard(props: MediaCardProps) {
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [showHoverInfo, setShowHoverInfo] = useState(false);
+  const hoverTimer = useRef<NodeJS.Timeout>();
+  const [isHoveringCard, setIsHoveringCard] = useState(false);
+  const [isHoveringInfo, setIsHoveringInfo] = useState(false);
+  const [isBigScreen, setIsBigScreen] = useState(false);
+  const enablePopDetails = usePreferencesStore((s) => s.enablePopDetails);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsBigScreen(window.innerWidth >= 768); // md breakpoint
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  const handleMouseEnter = () => {
+    setIsHoveringCard(true);
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+    }
+
+    if (isBigScreen && !overlayVisible) {
+      hoverTimer.current = setTimeout(() => {
+        setShowHoverInfo(true);
+      }, 200); // 0.2 second delay
+    }
+  };
 
   const handleMouseLeave = () => {
+    setIsHoveringCard(false);
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+    }
+
+    if (!isHoveringInfo) {
+      setShowHoverInfo(false);
+    }
+
     const id = setTimeout(() => {
       setOverlayVisible(false);
     }, 2000); // 2 seconds
     setTimeoutId(id);
   };
 
-  const handleMouseEnter = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      setTimeoutId(null);
-    }
-  };
+  const shouldShowHoverInfo =
+    showHoverInfo && !overlayVisible && isBigScreen && enablePopDetails;
 
   const isReleased = useCallback(
     () => checkReleased(props.media),
@@ -398,6 +444,17 @@ export function MediaCard(props: MediaCardProps) {
     }
   }
 
+  const hoverMedia = {
+    ...props.media,
+    onHoverInfoEnter: () => setIsHoveringInfo(true),
+    onHoverInfoLeave: () => {
+      setIsHoveringInfo(false);
+      if (!isHoveringCard && !overlayVisible) {
+        setShowHoverInfo(false);
+      }
+    },
+  };
+
   const content = (
     <MediaCardContent
       {...props}
@@ -406,10 +463,17 @@ export function MediaCard(props: MediaCardProps) {
       handleMouseEnter={handleMouseEnter}
       handleMouseLeave={handleMouseLeave}
       link={link}
+      isHoveringCard={isHoveringCard}
     />
   );
 
-  if (!canLink) return <span>{content}</span>;
+  if (!canLink)
+    return (
+      <span className="relative">
+        {content}{" "}
+        <InfoPopout media={hoverMedia} visible={shouldShowHoverInfo} />
+      </span>
+    );
   return (
     <div className="relative">
       {!overlayVisible ? (
@@ -420,6 +484,8 @@ export function MediaCard(props: MediaCardProps) {
             "tabbable",
             props.closable ? "hover:cursor-default" : "",
           )}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           {content}
         </Link>
@@ -430,9 +496,15 @@ export function MediaCard(props: MediaCardProps) {
             "tabbable",
             props.closable ? "hover:cursor-default" : "",
           )}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           {content}
         </div>
+      )}
+
+      {shouldShowHoverInfo && (
+        <InfoPopout media={hoverMedia} visible={shouldShowHoverInfo} />
       )}
     </div>
   );

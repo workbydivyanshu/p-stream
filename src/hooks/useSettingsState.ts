@@ -54,6 +54,7 @@ export function useSettingsState(
   enableThumbnails: boolean,
   enableAutoplay: boolean,
   enableDiscover: boolean,
+  enablePopDetails: boolean,
   sourceOrder: string[],
   enableSourceOrder: boolean,
   proxyTmdb: boolean,
@@ -109,6 +110,12 @@ export function useSettingsState(
     enableDiscoverChanged,
   ] = useDerived(enableDiscover);
   const [
+    enablePopDetailsState,
+    setEnablePopDetailsState,
+    resetEnablePopDetails,
+    enablePopDetailsChanged,
+  ] = useDerived(enablePopDetails);
+  const [
     sourceOrderState,
     setSourceOrderState,
     resetSourceOrder,
@@ -136,6 +143,7 @@ export function useSettingsState(
     resetEnableThumbnails();
     resetEnableAutoplay();
     resetEnableDiscover();
+    resetEnablePopDetails();
     resetSourceOrder();
     resetEnableSourceOrder();
     resetProxyTmdb();
@@ -153,6 +161,7 @@ export function useSettingsState(
     enableThumbnailsChanged ||
     enableAutoplayChanged ||
     enableDiscoverChanged ||
+    enablePopDetailsChanged ||
     sourceOrderChanged ||
     enableSourceOrderChanged ||
     proxyTmdbChanged;
@@ -214,6 +223,11 @@ export function useSettingsState(
       state: enableDiscoverState,
       set: setEnableDiscoverState,
       changed: enableDiscoverChanged,
+    },
+    enablePopDetails: {
+      state: enablePopDetailsState,
+      set: setEnablePopDetailsState,
+      changed: enablePopDetailsChanged,
     },
     sourceOrder: {
       state: sourceOrderState,
