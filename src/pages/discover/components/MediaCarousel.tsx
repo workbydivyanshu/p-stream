@@ -13,6 +13,17 @@ interface MediaCarouselProps {
   }>;
 }
 
+function MediaCardSkeleton() {
+  return (
+    <div className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto">
+      <div className="animate-pulse">
+        <div className="w-full aspect-[2/3] bg-mediaCard-hoverBackground rounded-lg" />
+        <div className="mt-2 h-4 bg-mediaCard-hoverBackground rounded w-3/4" />
+      </div>
+    </div>
+  );
+}
+
 export function MediaCarousel({
   medias,
   category,
@@ -70,6 +81,8 @@ export function MediaCarousel({
     )
     .slice(0, 20);
 
+  const SKELETON_COUNT = 10;
+
   return (
     <>
       <h2 className="ml-2 md:ml-8 mt-2 text-2xl cursor-default font-bold text-white md:text-2xl mx-auto pl-5 text-balance">
@@ -86,33 +99,39 @@ export function MediaCarousel({
         >
           <div className="md:w-12" />
 
-          {filteredMedias.map((media) => (
-            <div
-              onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                e.preventDefault()
-              }
-              key={media.id}
-              className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
-            >
-              <MediaCard
-                linkable
-                key={media.id}
-                media={{
-                  id: media.id.toString(),
-                  title: media.title || media.name || "",
-                  poster: `https://image.tmdb.org/t/p/w342${media.poster_path}`,
-                  type: isTVShow ? "show" : "movie",
-                  year: isTVShow
-                    ? media.first_air_date
-                      ? parseInt(media.first_air_date.split("-")[0], 10)
-                      : undefined
-                    : media.release_date
-                      ? parseInt(media.release_date.split("-")[0], 10)
-                      : undefined,
-                }}
-              />
-            </div>
-          ))}
+          {filteredMedias.length > 0
+            ? filteredMedias.map((media) => (
+                <div
+                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                    e.preventDefault()
+                  }
+                  key={media.id}
+                  className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                >
+                  <MediaCard
+                    linkable
+                    key={media.id}
+                    media={{
+                      id: media.id.toString(),
+                      title: media.title || media.name || "",
+                      poster: `https://image.tmdb.org/t/p/w342${media.poster_path}`,
+                      type: isTVShow ? "show" : "movie",
+                      year: isTVShow
+                        ? media.first_air_date
+                          ? parseInt(media.first_air_date.split("-")[0], 10)
+                          : undefined
+                        : media.release_date
+                          ? parseInt(media.release_date.split("-")[0], 10)
+                          : undefined,
+                    }}
+                  />
+                </div>
+              ))
+            : Array.from({ length: SKELETON_COUNT }).map(() => (
+                <MediaCardSkeleton
+                  key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(7)}`}
+                />
+              ))}
 
           <div className="md:w-12" />
         </div>
