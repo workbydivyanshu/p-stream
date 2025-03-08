@@ -177,7 +177,7 @@ export function AppearancePart(props: {
             </p>
             <div
               onClick={() => props.setEnablePopDetails(!props.enablePopDetails)}
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
+              className="opacity-50 md:opacity-100 bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
             >
               <Toggle enabled={props.enablePopDetails} />
               <p className="flex-1 text-white font-bold">
