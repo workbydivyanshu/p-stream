@@ -422,7 +422,11 @@ export function MediaCard(props: MediaCardProps) {
   };
 
   const shouldShowHoverInfo =
-    showHoverInfo && !overlayVisible && isBigScreen && enablePopDetails;
+    showHoverInfo &&
+    !overlayVisible &&
+    isBigScreen &&
+    enablePopDetails &&
+    !props.closable;
 
   const isReleased = useCallback(
     () => checkReleased(props.media),
