@@ -1,16 +1,12 @@
 import { ReactNode, useState } from "react";
-import { useParams } from "react-router-dom";
 
 import IosPwaLimitations from "@/components/buttons/IosPwaLimitations";
-import { Icons } from "@/components/Icon";
 import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
 import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
 import { Widescreen } from "@/components/player/atoms/Widescreen";
-import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
-import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -25,17 +21,10 @@ export interface PlayerPartProps {
 }
 
 export function PlayerPart(props: PlayerPartProps) {
-  const params = useParams<{
-    media: string;
-    episode?: string;
-    season?: string;
-  }>();
-  const media = params.media;
   const { showTargets, showTouchTargets } = useShouldShowControls();
   const status = usePlayerStore((s) => s.status);
   const { isMobile } = useIsMobile();
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
-  const { playerMeta: meta } = usePlayerMeta();
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isIOSPWA =
@@ -99,24 +88,7 @@ export function PlayerPart(props: PlayerPartProps) {
             <span className="text mx-3 text-type-secondary">/</span>
             <Player.Title />
 
-            <VideoPlayerButton
-              icon={Icons.CIRCLE_QUESTION}
-              iconSizeClass="text-base"
-              onClick={() => {
-                if (!media) return;
-                const id = media
-                  .replace("tmdb-tv-", "")
-                  .replace("tmdb-movie-", "");
-                let url;
-                if (meta?.type === "movie") {
-                  url = `https://www.themoviedb.org/movie/${id}`;
-                } else {
-                  url = `https://www.themoviedb.org/tv/${id}`;
-                }
-                window.open(url, "_blank");
-              }}
-              className="!p-0 !pl-2"
-            />
+            <Player.InfoButton />
 
             <Player.BookmarkButton />
           </div>
