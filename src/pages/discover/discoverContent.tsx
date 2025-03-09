@@ -287,6 +287,18 @@ export function DiscoverContent() {
     }
   };
 
+  const handleCategoryClick = (id: string, name: string) => {
+    const categorySlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const element = document.getElementById(`carousel-${categorySlug}`);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
   // Render Editor Picks content
   const renderEditorPicksContent = () => {
     return (
@@ -444,18 +456,7 @@ export function DiscoverContent() {
                     ? [...categories, ...genres]
                     : [...tvCategories, ...tvGenres]
                 }
-                onCategoryClick={(id, name) => {
-                  const element = document.getElementById(
-                    `carousel-${name.toLowerCase().replace(/ /g, "-")}`,
-                  );
-                  if (element) {
-                    element.scrollIntoView({
-                      behavior: "smooth",
-                      block: "center",
-                      inline: "center",
-                    });
-                  }
-                }}
+                onCategoryClick={handleCategoryClick}
                 categoryType="movies"
                 isMobile={isMobile}
                 showAlwaysScroll

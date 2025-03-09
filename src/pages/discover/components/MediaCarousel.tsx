@@ -31,7 +31,7 @@ export function MediaCarousel({
   isMobile,
   carouselRefs,
 }: MediaCarouselProps) {
-  const categorySlug = `${category.toLowerCase().replace(/ /g, "-")}`;
+  const categorySlug = category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const browser = !!window.chrome;
   let isScrolling = false;
 

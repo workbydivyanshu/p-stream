@@ -52,6 +52,7 @@ export function LazyMediaCarousel({
   }, [media, preloadedMedia]);
 
   const categoryName = title || category?.name || genre?.name || "";
+  const categorySlug = categoryName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   // Test intersection observer
   // useEffect(() => {
@@ -73,12 +74,14 @@ export function LazyMediaCarousel({
         />
       ) : (
         <div className="relative overflow-hidden carousel-container">
-          <h2 className="ml-2 md:ml-8 mt-2 text-2xl cursor-default font-bold text-white md:text-2xl mx-auto pl-5 text-balance">
-            {categoryName} {mediaType === "tv" ? "Shows" : "Movies"}
-          </h2>
-          <div className="flex whitespace-nowrap pt-0 pb-4 overflow-auto scrollbar rounded-xl overflow-y-hidden h-[300px] animate-pulse bg-background-secondary/20">
-            <div className="w-full text-center flex items-center justify-center">
-              {isLoading ? "Loading..." : ""}
+          <div id={`carousel-${categorySlug}`}>
+            <h2 className="ml-2 md:ml-8 mt-2 text-2xl cursor-default font-bold text-white md:text-2xl mx-auto pl-5 text-balance">
+              {categoryName} {mediaType === "tv" ? "Shows" : "Movies"}
+            </h2>
+            <div className="flex whitespace-nowrap pt-0 pb-4 overflow-auto scrollbar rounded-xl overflow-y-hidden h-[300px] animate-pulse bg-background-secondary/20">
+              <div className="w-full text-center flex items-center justify-center">
+                {isLoading ? "Loading..." : ""}
+              </div>
             </div>
           </div>
         </div>
