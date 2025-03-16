@@ -101,13 +101,14 @@ export function NextEpisodeButton(props: {
   const { setDirectMeta } = usePlayerMeta();
   const metaType = usePlayerStore((s) => s.meta?.type);
   const time = usePlayerStore((s) => s.progress.time);
+  const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
+  const enableSkipCredits = usePreferencesStore((s) => s.enableSkipCredits);
   const showingState = shouldShowNextEpisodeButton(time, duration);
   const status = usePlayerStore((s) => s.status);
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,
   );
   const updateItem = useProgressStore((s) => s.updateItem);
-  const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
 
   const isLastEpisode =
     !meta?.episode?.number || !meta?.episodes?.at(-1)?.number
@@ -187,14 +188,25 @@ export function NextEpisodeButton(props: {
   useEffect(() => {
     if (!enableAutoplay || metaType !== "show") return;
     const onePercent = duration / 100;
-    const isEnding = time >= duration - onePercent && duration !== 0;
+
+    // When skipCredits is enabled, use the 99% threshold; otherwise require 100% completion
+    const isEnding = enableSkipCredits
+      ? time >= duration - onePercent && duration !== 0 // 99% completion
+      : time >= duration && duration !== 0; // 100% completion
 
     if (duration === 0) hasAutoplayed.current = false;
     if (isEnding && isAutoplayAllowed() && !hasAutoplayed.current) {
       hasAutoplayed.current = true;
       loadNextEpisode();
     }
-  }, [duration, enableAutoplay, loadNextEpisode, metaType, time]);
+  }, [
+    duration,
+    enableAutoplay,
+    enableSkipCredits,
+    loadNextEpisode,
+    metaType,
+    time,
+  ]);
 
   if (!meta?.episode || !nextEp) return null;
   if (metaType !== "show") return null;

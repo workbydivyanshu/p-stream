@@ -5,6 +5,7 @@ import { immer } from "zustand/middleware/immer";
 export interface PreferencesStore {
   enableThumbnails: boolean;
   enableAutoplay: boolean;
+  enableSkipCredits: boolean;
   enableDiscover: boolean;
   enablePopDetails: boolean;
   sourceOrder: string[];
@@ -13,6 +14,7 @@ export interface PreferencesStore {
 
   setEnableThumbnails(v: boolean): void;
   setEnableAutoplay(v: boolean): void;
+  setEnableSkipCredits(v: boolean): void;
   setEnableDiscover(v: boolean): void;
   setEnablePopDetails(v: boolean): void;
   setSourceOrder(v: string[]): void;
@@ -25,6 +27,7 @@ export const usePreferencesStore = create(
     immer<PreferencesStore>((set) => ({
       enableThumbnails: false,
       enableAutoplay: true,
+      enableSkipCredits: true,
       enableDiscover: true,
       enablePopDetails: false,
       sourceOrder: [],
@@ -38,6 +41,11 @@ export const usePreferencesStore = create(
       setEnableAutoplay(v) {
         set((s) => {
           s.enableAutoplay = v;
+        });
+      },
+      setEnableSkipCredits(v) {
+        set((s) => {
+          s.enableSkipCredits = v;
         });
       },
       setEnableDiscover(v) {

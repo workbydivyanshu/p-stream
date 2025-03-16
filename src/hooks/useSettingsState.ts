@@ -58,6 +58,7 @@ export function useSettingsState(
   sourceOrder: string[],
   enableSourceOrder: boolean,
   proxyTmdb: boolean,
+  enableSkipCredits: boolean,
 ) {
   const [proxyUrlsState, setProxyUrls, resetProxyUrls, proxyUrlsChanged] =
     useDerived(proxyUrls);
@@ -104,6 +105,12 @@ export function useSettingsState(
     enableAutoplayChanged,
   ] = useDerived(enableAutoplay);
   const [
+    enableSkipCreditsState,
+    setEnableSkipCreditsState,
+    resetEnableSkipCredits,
+    enableSkipCreditsChanged,
+  ] = useDerived(enableSkipCredits);
+  const [
     enableDiscoverState,
     setEnableDiscoverState,
     resetEnableDiscover,
@@ -142,6 +149,7 @@ export function useSettingsState(
     resetProfile();
     resetEnableThumbnails();
     resetEnableAutoplay();
+    resetEnableSkipCredits();
     resetEnableDiscover();
     resetEnablePopDetails();
     resetSourceOrder();
@@ -160,6 +168,7 @@ export function useSettingsState(
     profileChanged ||
     enableThumbnailsChanged ||
     enableAutoplayChanged ||
+    enableSkipCreditsChanged ||
     enableDiscoverChanged ||
     enablePopDetailsChanged ||
     sourceOrderChanged ||
@@ -218,6 +227,11 @@ export function useSettingsState(
       state: enableAutoplayState,
       set: setEnableAutoplayState,
       changed: enableAutoplayChanged,
+    },
+    enableSkipCredits: {
+      state: enableSkipCreditsState,
+      set: setEnableSkipCreditsState,
+      changed: enableSkipCreditsChanged,
     },
     enableDiscover: {
       state: enableDiscoverState,

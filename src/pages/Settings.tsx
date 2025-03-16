@@ -140,6 +140,11 @@ export function SettingsPage() {
   const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
 
+  const enableSkipCredits = usePreferencesStore((s) => s.enableSkipCredits);
+  const setEnableSkipCredits = usePreferencesStore(
+    (s) => s.setEnableSkipCredits,
+  );
+
   const sourceOrder = usePreferencesStore((s) => s.sourceOrder);
   const setSourceOrder = usePreferencesStore((s) => s.setSourceOrder);
 
@@ -178,7 +183,7 @@ export function SettingsPage() {
     proxySet,
     backendUrlSetting,
     febboxToken,
-    account?.profile,
+    account ? account.profile : undefined,
     enableThumbnails,
     enableAutoplay,
     enableDiscover,
@@ -186,6 +191,7 @@ export function SettingsPage() {
     sourceOrder,
     enableSourceOrder,
     proxyTmdb,
+    enableSkipCredits,
   );
 
   const availableSources = useMemo(() => {
@@ -256,6 +262,7 @@ export function SettingsPage() {
 
     setEnableThumbnails(state.enableThumbnails.state);
     setEnableAutoplay(state.enableAutoplay.state);
+    setEnableSkipCredits(state.enableSkipCredits.state);
     setEnableDiscover(state.enableDiscover.state);
     setEnablePopDetails(state.enablePopDetails.state);
     setSourceOrder(state.sourceOrder.state);
@@ -289,6 +296,7 @@ export function SettingsPage() {
     setFebboxToken,
     state,
     setEnableAutoplay,
+    setEnableSkipCredits,
     setEnableDiscover,
     setEnablePopDetails,
     setSourceOrder,
@@ -344,6 +352,8 @@ export function SettingsPage() {
             setEnableThumbnails={state.enableThumbnails.set}
             enableAutoplay={state.enableAutoplay.state}
             setEnableAutoplay={state.enableAutoplay.set}
+            enableSkipCredits={state.enableSkipCredits.state}
+            setEnableSkipCredits={state.enableSkipCredits.set}
             sourceOrder={availableSources}
             setSourceOrder={state.sourceOrder.set}
             enableSourceOrder={state.enableSourceOrder.state}
