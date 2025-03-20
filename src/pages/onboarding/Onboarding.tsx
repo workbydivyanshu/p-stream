@@ -49,6 +49,8 @@ export function FEDAPISetup() {
   const [isExpanded, setIsExpanded] = useState(false);
   const febboxToken = useAuthStore((s) => s.febboxToken);
   const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
+  const febboxTokenShared = useAuthStore((s) => s.febboxTokenShared);
+  const setFebboxTokenShared = useAuthStore((s) => s.setFebboxTokenShared);
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -164,6 +166,27 @@ export function FEDAPISetup() {
               {status === "error" && (
                 <p className="text-type-danger mt-4">Token was unsuccessful</p>
               )}
+
+              <div className="mt-6 flex items-center">
+                <input
+                  type="checkbox"
+                  id="share-token-consent"
+                  checked={febboxTokenShared}
+                  onChange={(e) => setFebboxTokenShared(e.target.checked)}
+                  className="mr-3 mt-0.5 w-4 h-4 accent-buttons-secondary"
+                />
+                <label
+                  htmlFor="share-token-consent"
+                  className="text-type-seccondary cursor-pointer"
+                >
+                  Support FED API by sharing your token?
+                </label>
+              </div>
+              <p className="text-type-secondary text-xs mt-2">
+                If you chose to share your token, it allows anyone to use FED
+                API without bringing their own token! You token is kept private
+                and encrypted.
+              </p>
             </>
           ) : null}
         </SettingsCard>
@@ -219,9 +242,9 @@ export function OnboardingPage() {
           message={
             <div>
               <p>
-                P-Stream doesn’t host videos. It relies on third-party websites
-                for content, so you need to choose how it connects to those
-                sites.
+                P-Stream doesn&apos;t host videos. It relies on third-party
+                websites for content, so you need to choose how it connects to
+                those sites.
                 <br />
                 <br />
                 <strong>Your Options:</strong>
@@ -241,8 +264,8 @@ export function OnboardingPage() {
                 <br />
                 <strong>3. Default Setup</strong>
                 <br />
-                Uses P-Stream’s built-in proxy. It’s the easiest option but
-                might be slower due to shared bandwidth.
+                Uses P-Stream&apos;s built-in proxy. It&apos;s the easiest
+                option but might be slower due to shared bandwidth.
                 <br />
                 <br />
                 {conf().ALLOW_FEBBOX_KEY && (

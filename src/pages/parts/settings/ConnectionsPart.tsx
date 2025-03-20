@@ -207,6 +207,8 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
 function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
   const { t } = useTranslation();
   const [showVideo, setShowVideo] = useState(false);
+  const febboxTokenShared = useAuthStore((s) => s.febboxTokenShared);
+  const setFebboxTokenShared = useAuthStore((s) => s.setFebboxTokenShared);
 
   if (conf().ALLOW_FEBBOX_KEY) {
     return (
@@ -296,6 +298,27 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
               placeholder="eyABCdE..."
               passwordToggleable
             />
+
+            <div className="mt-6 flex items-center">
+              <input
+                type="checkbox"
+                id="share-token-consent"
+                checked={febboxTokenShared}
+                onChange={(e) => setFebboxTokenShared(e.target.checked)}
+                className="mr-3 mt-0.5 w-4 h-4 accent-buttons-secondary"
+              />
+              <label
+                htmlFor="share-token-consent"
+                className="text-type-seccondary cursor-pointer"
+              >
+                Support FED API by sharing your token?
+              </label>
+            </div>
+            <p className="text-type-secondary text-xs mt-2">
+              If you chose to share your token, it allows anyone to use FED API
+              without bringing their own token! You token is kept private and
+              encrypted.
+            </p>
           </>
         ) : null}
       </SettingsCard>
