@@ -9,6 +9,7 @@ import { HeroTitle } from "@/components/text/HeroTitle";
 import { useIsTV } from "@/hooks/useIsTv";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
+import { conf } from "@/setup/config";
 import { useBannerSize } from "@/stores/banner";
 
 export interface HeroPartProps {
@@ -99,6 +100,27 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
           </Sticky>
         </div>
       </div>
+
+      {/* Optional ad */}
+      {conf().SHOW_AD ? (
+        <div className="-mb-20 w-[16rem] mx-auto">
+          {conf().AD_CONTENT_URL.length !== 0 ? (
+            <a href={conf().AD_CONTENT_URL[0]}>
+              <img src={conf().AD_CONTENT_URL[1]} alt="ad for zaccounts" />
+            </a>
+          ) : null}
+          <p className="text-xs text-type-dimmed text-center pt-2">
+            <a
+              href="https://discord.gg/mcjnJK98Gd"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Your ad here (づ ᴗ _ᴗ)づ♡
+            </a>
+          </p>
+        </div>
+      ) : null}
+      {/* End of ad */}
     </ThinContainer>
   );
 }

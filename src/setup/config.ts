@@ -25,6 +25,8 @@ interface Config {
   ONBOARDING_PROXY_INSTALL_LINK: string;
   ALLOW_AUTOPLAY: boolean;
   ALLOW_FEBBOX_KEY: boolean;
+  SHOW_AD: boolean;
+  AD_CONTENT_URL: string;
 }
 
 export interface RuntimeConfig {
@@ -46,6 +48,8 @@ export interface RuntimeConfig {
   ONBOARDING_FIREFOX_EXTENSION_INSTALL_LINK: string | null;
   ONBOARDING_PROXY_INSTALL_LINK: string | null;
   ALLOW_FEBBOX_KEY: boolean;
+  SHOW_AD: boolean;
+  AD_CONTENT_URL: string[];
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -70,6 +74,8 @@ const env: Record<keyof Config, undefined | string> = {
   HAS_ONBOARDING: import.meta.env.VITE_HAS_ONBOARDING,
   ALLOW_AUTOPLAY: import.meta.env.VITE_ALLOW_AUTOPLAY,
   ALLOW_FEBBOX_KEY: import.meta.env.VITE_ALLOW_FEBBOX_KEY,
+  SHOW_AD: import.meta.env.VITE_SHOW_AD,
+  AD_CONTENT_URL: import.meta.env.VITE_AD_CONTENT_URL,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -131,5 +137,10 @@ export function conf(): RuntimeConfig {
       )
       .filter((v) => v.length === 2), // The format is <beforeA>:<afterA>,<beforeB>:<afterB>
     ALLOW_FEBBOX_KEY: getKey("ALLOW_FEBBOX_KEY", "false") === "true",
+    SHOW_AD: getKey("SHOW_AD", "false") === "true",
+    AD_CONTENT_URL: getKey("AD_CONTENT_URL", "")
+      .split(",")
+      .map((v) => v.trim())
+      .filter((v) => v.length > 0),
   };
 }
