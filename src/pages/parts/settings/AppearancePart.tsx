@@ -12,6 +12,11 @@ const availableThemes = [
     key: "settings.appearance.themes.default",
   },
   {
+    id: "classic",
+    selector: "theme-classic",
+    key: "settings.appearance.themes.classic",
+  },
+  {
     id: "blue",
     selector: "theme-blue",
     key: "settings.appearance.themes.blue",
@@ -32,9 +37,19 @@ const availableThemes = [
     key: "settings.appearance.themes.gray",
   },
   {
-    id: "classic",
-    selector: "theme-classic",
-    key: "settings.appearance.themes.classic",
+    id: "green",
+    selector: "theme-green",
+    key: "settings.appearance.themes.green",
+  },
+  {
+    id: "mocha",
+    selector: "theme-mocha",
+    key: "settings.appearance.themes.mocha",
+  },
+  {
+    id: "pink",
+    selector: "theme-pink",
+    key: "settings.appearance.themes.pink",
   },
 ];
 

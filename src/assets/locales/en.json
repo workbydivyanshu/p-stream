@@ -610,7 +610,10 @@
         "gray": "Gray",
         "red": "Red",
         "teal": "Teal",
-        "classic": "Classic"
+        "classic": "Classic",
+        "green": "Green",
+        "mocha": "Mocha",
+        "pink": "Pink"
       },
       "title": "Appearance",
       "options": {
