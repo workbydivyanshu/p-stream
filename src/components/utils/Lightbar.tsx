@@ -321,14 +321,15 @@ function ParticlesCanvas() {
             image: "/lightbar-images/wine.png",
             sizeRange: [15, 35] as [number, number],
           },
-          {
-            image: "/lightbar-images/cigarette.png",
-            sizeRange: [10, 38] as [number, number],
-          },
-          {
-            image: "/lightbar-images/cigarette2.png",
-            sizeRange: [15, 35] as [number, number],
-          },
+          // Stop smoking 🗣️
+          // {
+          //   image: "/lightbar-images/cigarette.png",
+          //   sizeRange: [10, 38] as [number, number],
+          // },
+          // {
+          //   image: "/lightbar-images/cigarette2.png",
+          //   sizeRange: [15, 35] as [number, number],
+          // },
         ];
         imageParticleCount = particleCount / 11;
         break;
