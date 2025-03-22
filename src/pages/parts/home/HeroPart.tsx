@@ -103,7 +103,7 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
 
       {/* Optional ad */}
       {conf().SHOW_AD ? (
-        <div className="-mb-20 w-[16rem] mx-auto">
+        <div className="-mb-10 md:-mb-20 w-[16rem] mx-auto">
           {conf().AD_CONTENT_URL.length !== 0 ? (
             <a href={conf().AD_CONTENT_URL[0]}>
               <img src={conf().AD_CONTENT_URL[1]} alt="ad for zaccounts" />
