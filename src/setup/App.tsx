@@ -24,6 +24,7 @@ import { JipPage } from "@/pages/Jip";
 import { LoginPage } from "@/pages/Login";
 import { MigrationPage } from "@/pages/migration/Migration";
 import { MigrationDirectPage } from "@/pages/migration/MigrationDirect";
+import { MigrationDownloadPage } from "@/pages/migration/MigrationDownload";
 import { OnboardingPage } from "@/pages/onboarding/Onboarding";
 import { OnboardingExtensionPage } from "@/pages/onboarding/OnboardingExtension";
 import { OnboardingProxyPage } from "@/pages/onboarding/OnboardingProxy";
@@ -151,11 +152,13 @@ function App() {
           />
           <Route path="/onboarding/proxy" element={<OnboardingProxyPage />} />
 
-          <Route path="/migration" element={<MigrationDirectPage />} />
-          {/* Migration pages - awaiting import and export fixes
+          {/* Migration pages - awaiting import and export fixes */}
           <Route path="/migration" element={<MigrationPage />} />
           <Route path="/migration/direct" element={<MigrationDirectPage />} />
-          */}
+          <Route
+            path="/migration/download"
+            element={<MigrationDownloadPage />}
+          />
 
           <Route path="/dmca" element={<DmcaPage />} />
           {/* Support page */}

@@ -1,9 +1,10 @@
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { Icons } from "@/components/Icon";
+import { Button } from "@/components/buttons/Button";
+import { Icon, Icons } from "@/components/Icon";
 import { Stepper } from "@/components/layout/Stepper";
-import { CenterContainer } from "@/components/layout/ThinContainer";
+import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
 import { Heading2, Paragraph } from "@/components/utils/Text";
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
@@ -17,17 +18,20 @@ export function MigrationPage() {
   return (
     <MinimalPageLayout>
       <PageTitle subpage k="global.pages.migration" />
-      <CenterContainer>
+      <BiggerCenterContainer>
         <Stepper steps={2} current={1} className="mb-12" />
-        <Heading2 className="!mt-0 !text-3xl max-w-[435px]">
+        <Heading2 className="!mt-0 !text-3xl">
           {t("migration.start.title")}
         </Heading2>
-        <Paragraph className="max-w-[320px]">
+        <Paragraph className="max-w-[360px]">
           {t("migration.start.explainer")}
         </Paragraph>
 
         <div className="w-full flex flex-col md:flex-row gap-3">
-          <Card onClick={() => navigate("/migration/direct")}>
+          <Card
+            onClick={() => navigate("/migration/direct")}
+            className="flex-1"
+          >
             <CardContent
               colorClass="!text-onboarding-best"
               title={t("migration.start.options.direct.title")}
@@ -47,7 +51,10 @@ export function MigrationPage() {
             </span>
             <VerticalLine />
           </div>
-          <Card onClick={() => navigate("/migration/download")}>
+          <Card
+            onClick={() => navigate("/migration/download")}
+            className="flex-1"
+          >
             <CardContent
               colorClass="!text-migration-good"
               title={t("migration.start.options.download.title")}
@@ -59,7 +66,7 @@ export function MigrationPage() {
             </CardContent>
           </Card>
         </div>
-      </CenterContainer>
+      </BiggerCenterContainer>
     </MinimalPageLayout>
   );
 }
