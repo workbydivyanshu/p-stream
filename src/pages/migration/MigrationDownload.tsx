@@ -25,7 +25,6 @@ export function MigrationDownloadPage() {
 
   const handleDownload = useCallback(() => {
     try {
-      // Create a data object containing user's account data, bookmarks, and progress
       const exportData = {
         account: {
           profile: user.account?.profile,
@@ -43,7 +42,6 @@ export function MigrationDownloadPage() {
       // Create filename with current date
       const exportFileDefaultName = `mw-account-data-${new Date().toISOString().split("T")[0]}.json`;
 
-      // Create a temporary link element and click it to trigger download
       const linkElement = document.createElement("a");
       linkElement.setAttribute("href", dataUri);
       linkElement.setAttribute("download", exportFileDefaultName);
