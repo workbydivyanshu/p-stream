@@ -216,6 +216,12 @@
           "title": "Download data",
           "quality": "More technical",
           "action": "Download data"
+        },
+        "upload": {
+          "title": "Upload Data",
+          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+          "quality": "Restore from backup",
+          "action": "Upload Data"
         }
       }
     },
@@ -240,8 +246,7 @@
       "title": "Download data",
       "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
       "items": {
-        "description": "This will download your data including:",
-        "profile": "Profile information",
+        "description": "Download includes:",
         "bookmarks": "Bookmarked media",
         "progress": "Watch progress"
       },
@@ -253,6 +258,32 @@
         "download": "Download data",
         "home": "Go home",
         "login": "Continue to login"
+      }
+    },
+    "upload": {
+      "title": "Upload data",
+      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "status": {
+        "processing": "Processing data...",
+        "error": "Failed to upload your data. 😿",
+        "success": "Your data has been uploaded successfully! 🎉"
+      },
+      "file": {
+        "description": "Select the file you want to upload",
+        "select": "Select file",
+        "change": "Change file",
+        "name": "File name"
+      },
+      "dataPreview": "Preview:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress"
+      },
+      "exportedOn": "Exported on",
+      "button": {
+        "import": "Import data",
+        "success": "Import complete",
+        "home": "Continue to home"
       }
     },
     "back": "Go back"

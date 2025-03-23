@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
+import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Stepper } from "@/components/layout/Stepper";
 import { CenterContainer } from "@/components/layout/ThinContainer";
 import { Divider } from "@/components/utils/Divider";
-import { Heading2, Paragraph } from "@/components/utils/Text";
+import { Heading2, Heading3, Paragraph } from "@/components/utils/Text";
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { useAuthStore } from "@/stores/auth";
@@ -40,7 +41,7 @@ export function MigrationDownloadPage() {
       const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
 
       // Create filename with current date
-      const exportFileDefaultName = `p-stream-data-${new Date().toISOString().split("T")[0]}.json`;
+      const exportFileDefaultName = `mw-account-data-${new Date().toISOString().split("T")[0]}.json`;
 
       // Create a temporary link element and click it to trigger download
       const linkElement = document.createElement("a");
@@ -71,24 +72,36 @@ export function MigrationDownloadPage() {
               </Paragraph>
               <SettingsCard>
                 <div className="flex justify-between items-center">
-                  <p className="font-bold text-white">
-                    {t("migration.download.title")}
-                  </p>
+                  <Heading3 className="!my-0 !text-type-secondary">
+                    {t("migration.download.items.description")}{" "}
+                  </Heading3>
                 </div>
                 <Divider marginClass="my-6 px-8 box-content -mx-8" />
-                <div className="text-white mb-4">
-                  <p>{t("migration.download.items.description")}</p>
-                  <ul className="list-disc ml-6 mt-2">
-                    <li>{t("migration.download.items.profile")}</li>
-                    <li>
-                      {t("migration.download.items.bookmarks")} (
-                      {Object.keys(bookmarks).length} items)
-                    </li>
-                    <li>
-                      {t("migration.download.items.progress")} (
-                      {Object.keys(progress).length} items)
-                    </li>
-                  </ul>
+
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="p-4 bg-background rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <Icon icon={Icons.BOOKMARK} className="text-xl" />
+                      <span className="font-medium">
+                        {t("migration.download.items.bookmarks")}
+                      </span>
+                    </div>
+                    <div className="text-xl font-bold mt-2">
+                      {Object.keys(bookmarks).length}
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-background rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <Icon icon={Icons.CLOCK} className="text-xl" />
+                      <span className="font-medium">
+                        {t("migration.download.items.progress")}
+                      </span>
+                    </div>
+                    <div className="text-xl font-bold mt-2">
+                      {Object.keys(progress).length}
+                    </div>
+                  </div>
                 </div>
               </SettingsCard>
             </div>

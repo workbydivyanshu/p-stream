@@ -25,6 +25,7 @@ import { LoginPage } from "@/pages/Login";
 import { MigrationPage } from "@/pages/migration/Migration";
 import { MigrationDirectPage } from "@/pages/migration/MigrationDirect";
 import { MigrationDownloadPage } from "@/pages/migration/MigrationDownload";
+import { MigrationUploadPage } from "@/pages/migration/MigrationUpload";
 import { OnboardingPage } from "@/pages/onboarding/Onboarding";
 import { OnboardingExtensionPage } from "@/pages/onboarding/OnboardingExtension";
 import { OnboardingProxyPage } from "@/pages/onboarding/OnboardingProxy";
@@ -159,6 +160,7 @@ function App() {
             path="/migration/download"
             element={<MigrationDownloadPage />}
           />
+          <Route path="/migration/upload" element={<MigrationUploadPage />} />
 
           <Route path="/dmca" element={<DmcaPage />} />
           {/* Support page */}

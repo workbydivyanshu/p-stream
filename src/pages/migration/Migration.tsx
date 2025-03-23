@@ -1,8 +1,7 @@
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/buttons/Button";
-import { Icon, Icons } from "@/components/Icon";
+import { Icons } from "@/components/Icon";
 import { Stepper } from "@/components/layout/Stepper";
 import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
@@ -63,6 +62,27 @@ export function MigrationPage() {
               icon={Icons.FILE_ARROW_DOWN}
             >
               <Link>{t("migration.start.options.download.action")}</Link>
+            </CardContent>
+          </Card>
+          <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
+            <VerticalLine className="items-end" />
+            <span className="text-xs uppercase font-bold">
+              {t("migration.start.options.or")}
+            </span>
+            <VerticalLine />
+          </div>
+          <Card
+            onClick={() => navigate("/migration/upload")}
+            className="flex-1"
+          >
+            <CardContent
+              colorClass="!text-migration-good"
+              title={t("migration.start.options.upload.title")}
+              subtitle={t("migration.start.options.upload.quality")}
+              description={t("migration.start.options.upload.description")}
+              icon={Icons.CLOUD_ARROW_UP}
+            >
+              <Link>{t("migration.start.options.upload.action")}</Link>
             </CardContent>
           </Card>
         </div>
