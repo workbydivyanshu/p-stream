@@ -27,6 +27,10 @@ export function MigrationDirectPage() {
   const updateBackendUrl = useAuthStore((state) => state.setBackendUrl);
 
   const handleMigration = useCallback(async () => {
+    if (status === "processing") {
+      return;
+    }
+
     if (!backendUrl) {
       // eslint-disable-next-line no-alert
       alert("Please provide a Backend URL.");
@@ -38,7 +42,6 @@ export function MigrationDirectPage() {
       const account = await migrate(backendUrl);
       if (account) {
         setStatus("success");
-        await logout();
         updateBackendUrl(backendUrl);
       } else {
         setStatus("error");
@@ -47,11 +50,13 @@ export function MigrationDirectPage() {
       console.error("Error during migration:", error);
       setStatus("error");
     }
-  }, [backendUrl, migrate, updateBackendUrl, logout]);
+  }, [backendUrl, migrate, updateBackendUrl, status]);
 
   const continueButton = () => {
     if (status === "success") {
-      navigate("/login");
+      logout().then(() => {
+        navigate("/login");
+      });
     }
   };
 
@@ -89,7 +94,11 @@ export function MigrationDirectPage() {
 
               <div className="text-center">
                 {status !== "success" && (
-                  <Button theme="purple" onClick={handleMigration}>
+                  <Button
+                    theme="purple"
+                    onClick={handleMigration}
+                    disabled={status === "processing"}
+                  >
                     {status === "processing"
                       ? t("migration.direct.button.processing")
                       : t("migration.direct.button.migrate")}
