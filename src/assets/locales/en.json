@@ -282,6 +282,7 @@
       "exportedOn": "Exported on",
       "button": {
         "import": "Import data",
+        "processing": "Processing...",
         "success": "Import complete",
         "home": "Continue to home"
       }

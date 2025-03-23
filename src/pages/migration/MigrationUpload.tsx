@@ -9,6 +9,7 @@ import { Stepper } from "@/components/layout/Stepper";
 import { CenterContainer } from "@/components/layout/ThinContainer";
 import { Divider } from "@/components/utils/Divider";
 import { Heading2, Paragraph } from "@/components/utils/Text";
+import { useAuth } from "@/hooks/auth/useAuth";
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { useAuthStore } from "@/stores/auth";
@@ -33,6 +34,7 @@ export function MigrationUploadPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore();
+  const { importData } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceProgress = useProgressStore((s) => s.replaceItems);
@@ -132,7 +134,13 @@ export function MigrationUploadPage() {
   };
 
   const handleImport = useCallback(() => {
-    if (!uploadedData) return;
+    if (status === "processing") {
+      return;
+    }
+
+    if (!uploadedData || !user.account) return;
+
+    setStatus("processing");
 
     if (uploadedData.bookmarks) {
       replaceBookmarks(uploadedData.bookmarks);
@@ -142,10 +150,26 @@ export function MigrationUploadPage() {
       replaceProgress(uploadedData.progress);
     }
 
-    // If user profile data is available in the uploaded data, we could update that too
-
-    setStatus("success");
-  }, [replaceBookmarks, replaceProgress, uploadedData]);
+    importData(
+      user.account,
+      uploadedData.progress || {},
+      uploadedData.bookmarks || {},
+    )
+      .then(() => {
+        setStatus("success");
+      })
+      .catch((error) => {
+        console.error("Error importing data:", error);
+        setStatus("error");
+      });
+  }, [
+    replaceBookmarks,
+    replaceProgress,
+    uploadedData,
+    user.account,
+    importData,
+    status,
+  ]);
 
   return (
     <MinimalPageLayout>
@@ -206,7 +230,7 @@ export function MigrationUploadPage() {
 
                 {status === "processing" && (
                   <div className="flex items-center gap-2 text-sm text-green-400">
-                    <Icon icon={Icons.CLOCK} className="animate-spin pr-2" />
+                    <Icon icon={Icons.CLOCK} className="pr-2" />
                     {t("migration.upload.status.processing")}
                   </div>
                 )}
@@ -269,9 +293,12 @@ export function MigrationUploadPage() {
                       className="w-full max-w-xs"
                       theme="purple"
                       padding="md:px-12 p-2.5"
+                      disabled={status === "processing"}
                     >
                       <Icon icon={Icons.CLOUD_ARROW_UP} className="pr-2" />
-                      {t("migration.upload.button.import")}
+                      {status === "processing"
+                        ? t("migration.upload.button.processing")
+                        : t("migration.upload.button.import")}
                     </Button>
                   )}
                 </div>
