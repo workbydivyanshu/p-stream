@@ -3,6 +3,7 @@ import Sticky from "react-sticky-el";
 import { useWindowSize } from "react-use";
 
 import { SearchBarInput } from "@/components/form/SearchBar";
+import { Icon, Icons } from "@/components/Icon";
 import { ThinContainer } from "@/components/layout/ThinContainer";
 import { useSlashFocus } from "@/components/player/hooks/useSlashFocus";
 import { HeroTitle } from "@/components/text/HeroTitle";
@@ -33,6 +34,9 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
   const { t: randomT } = useRandomTranslation();
   const [search, setSearch, setSearchUnFocus] = searchParams;
   const [, setShowBg] = useState(false);
+  const [isAdDismissed, setIsAdDismissed] = useState(() => {
+    return localStorage.getItem("adDismissed") === "true";
+  });
   const bannerSize = useBannerSize();
   const stickStateChanged = useCallback(
     (isFixed: boolean) => {
@@ -57,6 +61,11 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
   const adjustedOffset = isLandscape
     ? -40 // landscape
     : 0; // portrait
+
+  const dismissAd = useCallback(() => {
+    setIsAdDismissed(true);
+    localStorage.setItem("adDismissed", "true");
+  }, []);
 
   useEffect(() => {
     if (windowWidth > 1280) {
@@ -102,12 +111,25 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
       </div>
 
       {/* Optional ad */}
-      {conf().SHOW_AD ? (
-        <div className="-mb-10 md:-mb-20 w-[16rem] mx-auto">
+      {conf().SHOW_AD && !isAdDismissed ? (
+        <div className="-mb-10 md:-mb-20 w-[16rem] mx-auto relative group">
           {conf().AD_CONTENT_URL.length !== 0 ? (
-            <a href={conf().AD_CONTENT_URL[0]}>
-              <img src={conf().AD_CONTENT_URL[1]} alt="ad for zaccounts" />
-            </a>
+            <div>
+              <button
+                onClick={dismissAd}
+                type="button"
+                className="absolute -top-2 -right-2 w-6 h-6 bg-mediaCard-hoverBackground rounded-full flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                aria-label="Dismiss ad"
+              >
+                <Icon
+                  className="text-xs font-semibold text-type-secondary"
+                  icon={Icons.X}
+                />
+              </button>
+              <a href={conf().AD_CONTENT_URL[0]}>
+                <img src={conf().AD_CONTENT_URL[1]} alt="ad for zaccounts" />
+              </a>
+            </div>
           ) : null}
           <p className="text-xs text-type-dimmed text-center pt-2">
             <a
