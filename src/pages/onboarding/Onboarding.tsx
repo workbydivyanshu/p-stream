@@ -179,13 +179,13 @@ export function FEDAPISetup() {
                   htmlFor="share-token-consent"
                   className="text-type-seccondary cursor-pointer"
                 >
-                  Support FED API by sharing your token?
+                  Support FED API by contributing your token?
                 </label>
               </div>
               <p className="text-type-secondary text-xs mt-2">
-                If you chose to share your token, it allows anyone to use FED
-                API without bringing their own token! You token is kept private
-                and encrypted.
+                If you chose to contribute your token, it allows anyone to use
+                FED API without bringing their own token! You token is kept
+                private and encrypted.
               </p>
             </>
           ) : null}
