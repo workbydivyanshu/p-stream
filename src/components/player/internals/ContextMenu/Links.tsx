@@ -34,7 +34,29 @@ export function BackLink(props: {
   onClick?: () => void;
   children: React.ReactNode;
   rightSide?: React.ReactNode;
+  side?: "left" | "right";
 }) {
+  const { side = "left" } = props;
+
+  if (side === "right") {
+    return (
+      <Title
+        rightSide={
+          <button
+            type="button"
+            className="p-2 rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+            onClick={props.onClick}
+          >
+            <Icon className="text-xl" icon={Icons.ARROW_RIGHT} />
+          </button>
+        }
+      >
+        <button type="button" onClick={props.onClick}>
+          <span className="line-clamp-1 break-all">{props.children}</span>
+        </button>
+      </Title>
+    );
+  }
   return (
     <Title rightSide={props.rightSide}>
       <button
