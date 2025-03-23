@@ -120,12 +120,15 @@ export function MigrationDirectPage() {
                   >
                     {t("migration.direct.button.login")}
                   </Button>
-                  <p className="text-green-600 mt-4">
-                    {t("migration.direct.status.success")}
-                  </p>
                 </div>
               )}
-
+            </div>
+            <div className="flex justify-center">
+              {status === "success" && (
+                <p className="text-green-600 mt-4">
+                  {t("migration.direct.status.success")}
+                </p>
+              )}
               {status === "error" && (
                 <p className="text-red-600 mt-4">
                   {t("migration.direct.status.error")}
