@@ -30,12 +30,30 @@ function getTimeOfDay(date: Date): "night" | "morning" | "day" | "420" | "69" {
   return "night";
 }
 
+function getCookie(name: string): string | null {
+  const cookies = document.cookie.split(";");
+  for (let i = 0; i < cookies.length; i += 1) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(`${name}=`)) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+}
+
+function setCookie(name: string, value: string, expiryDays: number): void {
+  const date = new Date();
+  date.setTime(date.getTime() + expiryDays * 24 * 60 * 60 * 1000);
+  const expires = `expires=${date.toUTCString()}`;
+  document.cookie = `${name}=${value};${expires};path=/`;
+}
+
 export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
   const { t: randomT } = useRandomTranslation();
   const [search, setSearch, setSearchUnFocus] = searchParams;
   const [, setShowBg] = useState(false);
   const [isAdDismissed, setIsAdDismissed] = useState(() => {
-    return localStorage.getItem("adDismissed") === "true";
+    return getCookie("adDismissed") === "true";
   });
   const bannerSize = useBannerSize();
   const stickStateChanged = useCallback(
@@ -64,7 +82,7 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
 
   const dismissAd = useCallback(() => {
     setIsAdDismissed(true);
-    localStorage.setItem("adDismissed", "true");
+    setCookie("adDismissed", "true", 2); // Expires after 2 days
   }, []);
 
   useEffect(() => {
@@ -127,7 +145,7 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
                 />
               </button>
               <a href={conf().AD_CONTENT_URL[0]}>
-                <img src={conf().AD_CONTENT_URL[1]} alt="ad for zaccounts" />
+                <img src={conf().AD_CONTENT_URL[1]} alt="ad banner" />
               </a>
             </div>
           ) : null}
