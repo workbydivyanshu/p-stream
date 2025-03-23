@@ -76,7 +76,7 @@ export function MigrationDownloadPage() {
                 </div>
                 <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div className="p-4 bg-background rounded-lg">
                     <div className="flex items-center gap-2">
                       <Icon icon={Icons.BOOKMARK} className="text-xl" />
