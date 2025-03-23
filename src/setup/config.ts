@@ -27,6 +27,7 @@ interface Config {
   ALLOW_FEBBOX_KEY: boolean;
   SHOW_AD: boolean;
   AD_CONTENT_URL: string;
+  TRACK_SCRIPT: string;
 }
 
 export interface RuntimeConfig {
@@ -50,6 +51,7 @@ export interface RuntimeConfig {
   ALLOW_FEBBOX_KEY: boolean;
   SHOW_AD: boolean;
   AD_CONTENT_URL: string[];
+  TRACK_SCRIPT: string | null;
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -76,6 +78,7 @@ const env: Record<keyof Config, undefined | string> = {
   ALLOW_FEBBOX_KEY: import.meta.env.VITE_ALLOW_FEBBOX_KEY,
   SHOW_AD: import.meta.env.VITE_SHOW_AD,
   AD_CONTENT_URL: import.meta.env.VITE_AD_CONTENT_URL,
+  TRACK_SCRIPT: import.meta.env.VITE_TRACK_SCRIPT,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -142,5 +145,6 @@ export function conf(): RuntimeConfig {
       .split(",")
       .map((v) => v.trim())
       .filter((v) => v.length > 0),
+    TRACK_SCRIPT: getKey("TRACK_SCRIPT"),
   };
 }
