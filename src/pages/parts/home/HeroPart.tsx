@@ -130,26 +130,26 @@ export function HeroPart({ setIsSticky, searchParams }: HeroPartProps) {
 
       {/* Optional ad */}
       {conf().SHOW_AD && !isAdDismissed ? (
-        <div className="-mb-10 md:-mb-20 w-[16rem] mx-auto relative group">
+        <div className="-mb-10 md:-mb-20 w-fit max-w-[16rem] mx-auto relative group pb-4">
+          <button
+            onClick={dismissAd}
+            type="button"
+            className="absolute -top-2 -right-2 w-6 h-6 bg-mediaCard-hoverBackground rounded-full flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            aria-label="Dismiss ad"
+          >
+            <Icon
+              className="text-xs font-semibold text-type-secondary"
+              icon={Icons.X}
+            />
+          </button>
           {conf().AD_CONTENT_URL.length !== 0 ? (
             <div>
-              <button
-                onClick={dismissAd}
-                type="button"
-                className="absolute -top-2 -right-2 w-6 h-6 bg-mediaCard-hoverBackground rounded-full flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                aria-label="Dismiss ad"
-              >
-                <Icon
-                  className="text-xs font-semibold text-type-secondary"
-                  icon={Icons.X}
-                />
-              </button>
               <a href={conf().AD_CONTENT_URL[0]}>
                 <img src={conf().AD_CONTENT_URL[1]} alt="ad banner" />
               </a>
             </div>
           ) : null}
-          <p className="text-xs text-type-dimmed text-center pt-2">
+          <p className="text-xs text-type-dimmed text-center pt-2 mx-4">
             <a
               href="https://discord.gg/mcjnJK98Gd"
               target="_blank"
