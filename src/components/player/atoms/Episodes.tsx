@@ -289,7 +289,9 @@ function EpisodesView({
                         </span>
                         {!isAired && (
                           <span className="text-video-context-type-main/70 text-sm">
-                            (Unreleased)
+                            {ep.air_date
+                              ? `(Airs - ${new Date(ep.air_date).toLocaleDateString()})`
+                              : "(Unreleased)"}
                           </span>
                         )}
                       </div>
@@ -355,7 +357,9 @@ function EpisodesView({
                         </span>
                         {!isAired && (
                           <span className="text-video-context-type-main/70 text-sm">
-                            (Unreleased)
+                            {ep.air_date
+                              ? `(Airs - ${new Date(ep.air_date).toLocaleDateString()})`
+                              : "(Unreleased)"}
                           </span>
                         )}
                       </div>
