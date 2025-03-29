@@ -8,7 +8,12 @@ import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Stepper } from "@/components/layout/Stepper";
 import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
-import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
+import {
+  FancyModal,
+  Modal,
+  ModalCard,
+  useModal,
+} from "@/components/overlays/Modal";
 import {
   StatusCircle,
   StatusCircleProps,
@@ -33,7 +38,6 @@ import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
-import { PopupModal } from "../parts/home/PopupModal";
 import { Status, testFebboxToken } from "../parts/settings/SetupPart";
 
 async function getFebboxTokenStatus(febboxToken: string | null) {
@@ -179,6 +183,7 @@ export function FEDAPISetup() {
 export function OnboardingPage() {
   const navigate = useNavigateOnboarding();
   const skipModal = useModal("skip");
+  const infoModal = useModal("info");
   const { completeAndRedirect } = useRedirectBack();
   const { t } = useTranslation();
   const noProxies = getProxyUrls().length === 0;
@@ -188,12 +193,6 @@ export function OnboardingPage() {
     /Safari/.test(navigator.userAgent) &&
     !/Chrome/.test(navigator.userAgent) &&
     !/Edg/.test(navigator.userAgent);
-
-  const [showModal, setShowModal] = useState(false);
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
 
   return (
     <MinimalPageLayout>
@@ -216,68 +215,59 @@ export function OnboardingPage() {
           </div>
         </ModalCard>
       </Modal>
-      {showModal && (
-        <PopupModal
-          styles="max-w-2xl" // max-w-md for short max-w-2xl long
-          title="Understanding a setup"
-          message={
-            <div>
-              <p>
-                P-Stream doesn&apos;t host videos. It relies on third-party
-                websites for content, so you need to choose how it connects to
-                those sites.
+      <FancyModal id={infoModal.id} title="Understanding a setup" size="xl">
+        <div>
+          <p>
+            P-Stream doesn&apos;t host videos. It relies on third-party websites
+            for content, so you need to choose how it connects to those sites.
+            <br />
+            <br />
+            <strong>Your Options:</strong>
+            <br />
+            <strong>1. Extension (Recommended)</strong>
+            <br />
+            The extension gives you access to the most sources. It acts as a
+            local proxy and can handle sites that need special cookies or
+            headers to load.
+            <br />
+            <br />
+            <strong>2. Proxy</strong>
+            <br />
+            The proxy scrapes media from other websites. It bypasses browser
+            restrictions (like CORS) to allow scraping.
+            <br />
+            <br />
+            <strong>3. Default Setup</strong>
+            <br />
+            Uses P-Stream&apos;s built-in proxy. It&apos;s the easiest option
+            but might be slower due to shared bandwidth.
+            <br />
+            <br />
+            {conf().ALLOW_FEBBOX_KEY && (
+              <>
+                <strong>Optional FED API (Febbox) UI token</strong>
+                <br />
+                Bringing your own Febbox account allows you to unlock FED API,
+                our best source with 4K quality, Dolby Atmos, the most content,
+                and the best (fastest) load times. This the highly recommended!
                 <br />
                 <br />
-                <strong>Your Options:</strong>
-                <br />
-                <strong>1. Extension (Recommended)</strong>
-                <br />
-                The extension gives you access to the most sources. It acts as a
-                local proxy and can handle sites that need special cookies or
-                headers to load.
-                <br />
-                <br />
-                <strong>2. Proxy</strong>
-                <br />
-                The proxy scrapes media from other websites. It bypasses browser
-                restrictions (like CORS) to allow scraping.
-                <br />
-                <br />
-                <strong>3. Default Setup</strong>
-                <br />
-                Uses P-Stream&apos;s built-in proxy. It&apos;s the easiest
-                option but might be slower due to shared bandwidth.
-                <br />
-                <br />
-                {conf().ALLOW_FEBBOX_KEY && (
-                  <>
-                    <strong>Optional FED API (Febbox) UI token</strong>
-                    <br />
-                    Bringing your own Febbox account allows you to unlock FED
-                    API, our best source with 4K quality, Dolby Atmos, the most
-                    content, and the best (fastest) load times. This the highly
-                    recommended!
-                    <br />
-                    <br />
-                  </>
-                )}
-                If you have more questions on how this works, feel free to ask
-                on the{" "}
-                <a
-                  href="https://discord.com/invite/7z6znYgrTG"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-type-link"
-                >
-                  P-Stream Discord
-                </a>{" "}
-                server!
-              </p>
-            </div>
-          }
-          onClose={handleCloseModal}
-        />
-      )}
+              </>
+            )}
+            If you have more questions on how this works, feel free to ask on
+            the{" "}
+            <a
+              href="https://discord.com/invite/7z6znYgrTG"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-type-link"
+            >
+              P-Stream Discord
+            </a>{" "}
+            server!
+          </p>
+        </div>
+      </FancyModal>
       <BiggerCenterContainer>
         <Stepper steps={2} current={1} className="mb-12" />
         <Heading2 className="!mt-0 !text-3xl">
@@ -287,7 +277,7 @@ export function OnboardingPage() {
           {t("onboarding.start.explainer")}
           <div
             className="pt-4 flex cursor-pointer items-center text-type-link"
-            onClick={() => setShowModal(true)}
+            onClick={() => infoModal.show()}
           >
             <p>More info</p>
             <Icon className="pl-2" icon={Icons.CIRCLE_QUESTION} />
