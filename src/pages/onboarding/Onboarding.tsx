@@ -164,7 +164,10 @@ export function FEDAPISetup() {
                 />
               </div>
               {status === "error" && (
-                <p className="text-type-danger mt-4">Token was unsuccessful</p>
+                <p className="text-type-danger mt-4">
+                  Failed to fetch a &quot;VIP&quot; stream. Token is invalid or
+                  API is down
+                </p>
               )}
 
               <div className="mt-6 flex items-center">
@@ -184,8 +187,8 @@ export function FEDAPISetup() {
               </div>
               <p className="text-type-secondary text-xs mt-2">
                 If you chose to contribute your token, it allows anyone to use
-                FED API without bringing their own token! You token is kept
-                private and encrypted.
+                FED API (Shared) without bringing their own token! You token is
+                kept private and encrypted.
               </p>
             </>
           ) : null}

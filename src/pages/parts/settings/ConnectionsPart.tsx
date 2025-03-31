@@ -316,8 +316,8 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
             </div>
             <p className="text-type-secondary text-xs mt-2">
               If you chose to contribute your token, it allows anyone to use FED
-              API without bringing their own token! You token is kept private
-              and encrypted.
+              API (Shared) without bringing their own token! You token is kept
+              private and encrypted.
             </p>
           </>
         ) : null}
