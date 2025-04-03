@@ -1,15 +1,29 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
+import {
+  StatusCircle,
+  StatusCircleProps,
+} from "@/components/player/internals/StatusCircle";
 import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
 import { Heading1 } from "@/components/utils/Text";
-import { SetupPart } from "@/pages/parts/settings/SetupPart";
+import {
+  SetupPart,
+  Status,
+  testFebboxToken,
+} from "@/pages/parts/settings/SetupPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 
@@ -204,11 +218,34 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
   );
 }
 
+async function getFebboxTokenStatus(febboxToken: string | null) {
+  if (febboxToken) {
+    const status: Status = await testFebboxToken(febboxToken);
+    return status;
+  }
+  return "unset";
+}
+
 function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
   const { t } = useTranslation();
   const [showVideo, setShowVideo] = useState(false);
   const febboxTokenShared = useAuthStore((s) => s.febboxTokenShared);
   const setFebboxTokenShared = useAuthStore((s) => s.setFebboxTokenShared);
+
+  const [status, setStatus] = useState<Status>("unset");
+  const statusMap: Record<Status, StatusCircleProps["type"]> = {
+    error: "error",
+    success: "success",
+    unset: "noresult",
+  };
+
+  useEffect(() => {
+    const checkTokenStatus = async () => {
+      const result = await getFebboxTokenStatus(febboxToken);
+      setStatus(result);
+    };
+    checkTokenStatus();
+  }, [febboxToken]);
 
   if (conf().ALLOW_FEBBOX_KEY) {
     return (
@@ -290,14 +327,24 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
             <p className="text-white font-bold mb-3">
               {t("settings.connections.febbox.tokenLabel", "Token")}
             </p>
-            <AuthInputBox
-              onChange={(newToken) => {
-                setFebboxToken(newToken);
-              }}
-              value={febboxToken ?? ""}
-              placeholder="eyABCdE..."
-              passwordToggleable
-            />
+            <div className="flex items-center w-full">
+              <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
+              <AuthInputBox
+                onChange={(newToken) => {
+                  setFebboxToken(newToken);
+                }}
+                value={febboxToken ?? ""}
+                placeholder="eyABCdE..."
+                passwordToggleable
+                className="flex-grow"
+              />
+            </div>
+            {status === "error" && (
+              <p className="text-type-danger mt-4">
+                Failed to fetch a &quot;VIP&quot; stream. Token is invalid or
+                API is down
+              </p>
+            )}
 
             <div className="mt-6 flex items-center">
               <input
