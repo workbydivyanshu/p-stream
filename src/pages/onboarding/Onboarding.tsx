@@ -49,8 +49,6 @@ export function FEDAPISetup() {
   const [isExpanded, setIsExpanded] = useState(false);
   const febboxToken = useAuthStore((s) => s.febboxToken);
   const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
-  const febboxTokenShared = useAuthStore((s) => s.febboxTokenShared);
-  const setFebboxTokenShared = useAuthStore((s) => s.setFebboxTokenShared);
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -169,27 +167,6 @@ export function FEDAPISetup() {
                   API is down
                 </p>
               )}
-
-              <div className="mt-6 flex items-center">
-                <input
-                  type="checkbox"
-                  id="share-token-consent"
-                  checked={febboxTokenShared}
-                  onChange={(e) => setFebboxTokenShared(e.target.checked)}
-                  className="mr-3 mt-0.5 w-4 h-4 accent-buttons-secondary"
-                />
-                <label
-                  htmlFor="share-token-consent"
-                  className="text-type-seccondary cursor-pointer"
-                >
-                  Support FED API by contributing your token?
-                </label>
-              </div>
-              <p className="text-type-secondary text-xs mt-2">
-                If you chose to contribute your token, it allows anyone to use
-                FED API (Shared) without bringing their own token! You token is
-                kept private and encrypted.
-              </p>
             </>
           ) : null}
         </SettingsCard>

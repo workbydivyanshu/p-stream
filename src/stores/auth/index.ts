@@ -23,7 +23,6 @@ interface AuthStore {
   backendUrl: null | string;
   proxySet: null | string[];
   febboxToken: null | string;
-  febboxTokenShared: boolean;
   removeAccount(): void;
   setAccount(acc: AccountWithToken): void;
   updateDeviceName(deviceName: string): void;
@@ -32,7 +31,6 @@ interface AuthStore {
   setBackendUrl(url: null | string): void;
   setProxySet(urls: null | string[]): void;
   setFebboxToken(token: null | string): void;
-  setFebboxTokenShared(shared: boolean): void;
 }
 
 export const useAuthStore = create(
@@ -42,7 +40,6 @@ export const useAuthStore = create(
       backendUrl: null,
       proxySet: null,
       febboxToken: null,
-      febboxTokenShared: false,
       setAccount(acc) {
         set((s) => {
           s.account = acc;
@@ -73,16 +70,6 @@ export const useAuthStore = create(
           } else {
             localStorage.setItem("febbox_ui_token", token);
           }
-        } catch (e) {
-          console.warn("Failed to access localStorage:", e);
-        }
-      },
-      setFebboxTokenShared(shared) {
-        set((s) => {
-          s.febboxTokenShared = shared;
-        });
-        try {
-          localStorage.setItem("share-token", shared ? "true" : "false");
         } catch (e) {
           console.warn("Failed to access localStorage:", e);
         }
@@ -122,19 +109,6 @@ export const useAuthStore = create(
             console.warn("LocalStorage access failed during migration:", e);
           }
         }
-        if (persistedState.febboxTokenShared === undefined) {
-          try {
-            const shareToken = localStorage.getItem("share-token");
-            if (shareToken) {
-              persistedState.febboxTokenShared = shareToken === "true";
-            } else {
-              persistedState.febboxTokenShared = false;
-            }
-          } catch (e) {
-            console.warn("LocalStorage access failed during migration:", e);
-            persistedState.febboxTokenShared = false;
-          }
-        }
         return persistedState;
       },
       onRehydrateStorage: () => (state) => {
@@ -144,19 +118,6 @@ export const useAuthStore = create(
             localStorage.setItem("febbox_ui_token", state.febboxToken);
           } catch (e) {
             console.warn("Failed to sync token to localStorage:", e);
-          }
-        }
-        if (state) {
-          try {
-            localStorage.setItem(
-              "share-token",
-              state.febboxTokenShared ? "true" : "false",
-            );
-          } catch (e) {
-            console.warn(
-              "Failed to sync token sharing preference to localStorage:",
-              e,
-            );
           }
         }
       },
