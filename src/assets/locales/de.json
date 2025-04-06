@@ -661,7 +661,6 @@
         },
         "direct": {
             "title": "direkte Übertragung",
-            "loginRequired": "Sie müssen angemeldet sein, um Ihre Daten zu übertragen! Bitte gehen Sie zurück und melden Sie sich an, um fortzufahren.",
             "status": {
                 "error": "Fehlgeschlagen übertragen ihrer Daten 😿",
                 "success": "Ihre Daten wurden erfolgreich übertragen!🎉"
