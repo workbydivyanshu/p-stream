@@ -107,7 +107,7 @@
             "dmca": "DMCA",
             "login": "लॉग इन",
             "onboarding": "स्थापित करना",
-            "pagetitle": "{{title}} - मूवी-वेब",
+            "pagetitle": "{{title}} - P-Stream",
             "register": "नया खाता बनायें",
             "settings": "सेटिंग्स",
             "migration": "खाता स्थानांतरित करें",
@@ -568,7 +568,7 @@
                 "label": "कस्टम सर्वर",
                 "urlLabel": "कस्टम सर्वर यूआरएल",
                 "migration": {
-                    "description": "<0>मेरा डेटा</0> नए सर्वर पर स्थानांतरित करें. ",
+                    "description": "<0>मेरा डेटा</0> नए सर्वर पर स्थानांतरित करें।",
                     "link": "मेरा डेटा माइग्रेट करें"
                 }
             },
@@ -676,7 +676,7 @@
         },
         "randomMovie": {
             "cancel": "उलटी गिनती रद्द करें",
-            "countdown": "{{उलटी गिनती}}",
+            "countdown": "{{countdown}}s",
             "in": "अंदर",
             "nowPlaying": "अब खेल रहे हैं",
             "button": "कुछ यादृच्छिक देखो"

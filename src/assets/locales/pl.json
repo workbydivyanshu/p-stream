@@ -174,15 +174,28 @@
                 "extra": [
                     "Zmęczony? Słyszałem że „Egzorcysta” jest dobry."
                 ]
+            },
+            "69": {
+                "default": "Masz ochotę na coś pikantnego?",
+                "extra": [
+                    "Wesołego dnia 69!"
+                ]
+            },
+            "420": {
+                "extra": [
+                    "Wesołego 420!"
+                ],
+                "default": "Dziś jest 20 kwietnia, co chciałbyś obejrzeć?"
             }
         }
     },
     "media": {
-        "episodeDisplay": "S{{season}} E{{episode}}",
+        "episodeDisplay": "S{{season}} O{{episode}}",
         "types": {
             "movie": "Film",
             "show": "Serial"
-        }
+        },
+        "unreleased": "Niewydane"
     },
     "navigation": {
         "banner": {
@@ -575,5 +588,51 @@
             "title": "Napisy"
         },
         "unsaved": "Masz niezapisane zmiany"
+    },
+    "migration": {
+        "start": {
+            "options": {
+                "download": {
+                    "description": "Ta opcja pozwala na pobranie swoich danych bezpośrednio na urządzenie. Możesz je przenieść na nowy serwer lub zachować na dysku jako kopię zapasową.",
+                    "title": "Pobierz dane",
+                    "action": "Pobierz dane"
+                },
+                "or": "lub",
+                "direct": {
+                    "description": "Ta opcja przeniesie twoje dane bezpośrednio na nowy serwer. <br /><br />To najszybsza możliwa opcja, która pozwoli Ci zachować swoją frazę hasła!",
+                    "title": "Bezpośrednia migracja",
+                    "quality": "Najłatwiejsza i najszybsza",
+                    "action": "Przenieś dane"
+                },
+                "upload": {
+                    "title": "Prześlij dane",
+                    "description": "Prześlij wcześniej eksportowany plik z danymi aby przywrócić swoje zakładki i postęp na tym koncie.",
+                    "quality": "Przywróć z kopii zapasowej",
+                    "action": "Prześlij dane"
+                }
+            },
+            "explainer": "Jeżeli chciałbyś zmigrować swoje dane lub wykonać ich kopię zapasową, wykorzystaj funkcje dostępne poniżej. Pozwolą Ci one przenieść swoje dane na inny serwer.",
+            "title": "Migruj swoje dane"
+        },
+        "direct": {
+            "status": {
+                "error": "Wystąpił błąd podczas migracji twoich danych.",
+                "success": "Twoje dane zostały zmigrowane!"
+            },
+            "title": "Bezpośrednia migracja",
+            "description": "Wprowadź adres URL serwera do którego chcesz przenieść swoje dane. Ta opcja zachowa twoją frazę hasła!",
+            "backendLabel": "URL serwera docelowego",
+            "recaptchaLabel": "Weryfikacja ReCaptcha (opcjonalna)",
+            "toggleLable": "Potrzebujesz ReCaptchy?",
+            "button": {
+                "migrate": "Migruj",
+                "processing": "Przetwarzanie...",
+                "home": "Wróć na stronę główną"
+            }
+        },
+        "loginRequired": "Musisz być zalogowany, aby zmigrować swoje dane! Zaloguj się, aby kontynuować.",
+        "download": {
+            "title": "Pobierz dane"
+        }
     }
 }

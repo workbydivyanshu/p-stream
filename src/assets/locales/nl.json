@@ -14,7 +14,15 @@
             "body": "Onze zoekresultaten worden aangestuurd door The Movie Database (TMDB) en worden weergegeven ongeacht of onze bronnen de inhoud daadwerkelijk hebben.",
             "title": "De zoekresultaten tonen de show of film, waarom kan ik hem niet afspelen?"
         },
-        "title": "Over P-Stream"
+        "title": "Over P-Stream",
+        "q4": {
+            "body": "Alle data worden gesynchroniseerd met de community backend. Iedereen kan deze ook vrij gebruiken.",
+            "title": "Hoe zit het met mijn gegevens en dergelijke?"
+        },
+        "q5": {
+            "body": "P-Stream heeft een Discord server die je bovenaan in deze pagina kunt vinden!",
+            "title": "Hoe kan ik meer te weten komen?"
+        }
     },
     "actions": {
         "copied": "Gekopieerd",
@@ -87,7 +95,8 @@
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
-            "github": "Github"
+            "github": "Github",
+            "twitter": "Twitter / X"
         },
         "tagline": "Bekijk je favoriete shows en films met deze open source streaming app."
     },
@@ -100,7 +109,11 @@
             "onboarding": "Instellen",
             "pagetitle": "{{title}} - P-Stream",
             "register": "Registreren",
-            "settings": "Instellingen"
+            "settings": "Instellingen",
+            "discover": "Ondek",
+            "support": "Steun",
+            "migration": "Account migreren",
+            "jip": "Jipy"
         }
     },
     "home": {
@@ -124,10 +137,26 @@
                     "Wat wil je verkennen?",
                     "Wat staat er op jouw kijklijst?",
                     "Wat is jouw favoriete film?",
-                    "Wat is jouw favoriete serie?"
+                    "Wat is jouw favoriete serie?",
+                    "Wat staat er vandaag op jouw kijklijst?",
+                    "Hoe was je dag?",
+                    "Mijn fout, de site werkt nooit...",
+                    "Is P-Stream niet gewoon de beste?",
+                    ">ᴗ<"
                 ]
             },
-            "sectionTitle": "Zoekresultaten"
+            "sectionTitle": "Zoekresultaten",
+            "empty": {
+                "default": "Welkom, hier vindt je de media om te bekijken!",
+                "extra": [
+                    "Hier is niks :(",
+                    "Zo leeg...",
+                    "Wat een leegte.",
+                    "Hallo nieuwe gebruiker :3"
+                ]
+            },
+            "discoverMore": "Ondek meer",
+            "discover": "Ondek"
         },
         "titles": {
             "day": {
@@ -146,6 +175,18 @@
                 "default": "Wat wil je vanavond bekijken?",
                 "extra": [
                     "Moe? Ik hoor dat The Exorcist goed is."
+                ]
+            },
+            "420": {
+                "default": "Wat wil je deze 4/20 bekijken?",
+                "extra": [
+                    "Happy 4/20 🥳"
+                ]
+            },
+            "69": {
+                "default": "Zin in iets pittigs?",
+                "extra": [
+                    "Gelukkige 69e dag 😘!"
                 ]
             }
         }
@@ -556,5 +597,11 @@
             "title": "Ondertiteling"
         },
         "unsaved": "U heeft niet-opgeslagen wijzigingen"
+    },
+    "migration": {
+        "loginRequired": "U moet ingelogd zijn om uw data te migreren! Ga terug en log in om verder te gaan.",
+        "start": {
+            "title": "Migreer uw gegevens"
+        }
     }
 }
