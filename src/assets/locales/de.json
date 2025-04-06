@@ -655,6 +655,9 @@
                     "title": "Daten Downloaden",
                     "quality": "Technischer",
                     "action": "Daten downloaden"
+                },
+                "upload": {
+                    "title": "Daten hochladen"
                 }
             },
             "explainer": "Wenn Sie Ihre Daten übertragen oder sichern möchten, können Sie dies mit den folgenden Optionen tun. So bleiben Ihre Daten beim Wechsel des Backend-Servers erhalten."
@@ -670,7 +673,8 @@
                 "processing": "Verarbeitet...",
                 "login": "Weiter zum login"
             }
-        }
+        },
+        "loginRequired": "Du musst eingeloggt sein, um deine Daten zu migrieren! Bitte gehen sie zurück und loggen sie sich ein um fortzufahren."
     },
     "downtimeNotice": {
         "badge": "Fehler",

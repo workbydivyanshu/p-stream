@@ -14,7 +14,14 @@
             "body": "Nasze wyniki wyszukiwania pochodzą z TMDB i są wyświetlane niezależnie od tego, czy nasze źródła faktycznie posiadają daną treść.",
             "title": "W wyniku wyszukiwania wyświetlany jest serial lub film. Dlaczego nie mogę go odtworzyć?"
         },
-        "title": "O P-Stream"
+        "title": "O P-Stream",
+        "q5": {
+            "title": "Jak mogę dowiedzieć się więcej?",
+            "body": "P-Stream ma swój serwer Discord, który znajdziesz w nagłówku strony!"
+        },
+        "q4": {
+            "title": "Co z moimi danymi?"
+        }
     },
     "actions": {
         "copied": "Skopiowano",
@@ -87,7 +94,8 @@
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
-            "github": "GitHub"
+            "github": "GitHub",
+            "twitter": "Twitter"
         },
         "tagline": "Oglądaj swoje ulubione seriale i filmy za pomocą tej aplikacji streamingowej typu open source."
     },
@@ -100,7 +108,10 @@
             "onboarding": "Konfiguracja",
             "pagetitle": "{{title}} - P-Stream",
             "register": "Zarejestruj się",
-            "settings": "Ustawienia"
+            "settings": "Ustawienia",
+            "discover": "Odkrywaj",
+            "support": "Wsparcie",
+            "migration": "Migruj konto"
         }
     },
     "home": {
@@ -124,10 +135,26 @@
                     "Co chcesz odkryć?",
                     "Co znajduje się na Twojej liście do obejrzenia?",
                     "Jaki jest twój ulubiony film?",
-                    "Jaki jest twój ulubiony serial?"
+                    "P-Stream to najlepsza strona!",
+                    "Co chcesz dzisiaj zobaczyć?",
+                    "Jak minął Ci dzień?",
+                    null,
+                    "Czy P-Stream nie jest najlepszy?",
+                    ">ᴗ<"
                 ]
             },
-            "sectionTitle": "Wyniki wyszukiwania"
+            "sectionTitle": "Wyniki wyszukiwania",
+            "empty": {
+                "default": "Cześć, znajdź coś do obejrzenia!",
+                "extra": [
+                    "Nic tu nie ma :(",
+                    "Tak pusto...",
+                    "Taka pustka.",
+                    "Cześć, nowy użytkowniku! :3"
+                ]
+            },
+            "discoverMore": "Odkrywaj więcej",
+            "discover": "Odkrywaj"
         },
         "titles": {
             "day": {
