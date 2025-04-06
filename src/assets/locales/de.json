@@ -606,7 +606,6 @@
             "autoplayLabel": "Automatische Wiedergabe",
             "skipCredits": "Abspann überspringen",
             "skipCreditsDescription": "Wenn aktiviert, wird die nächste Episode automatisch abgespielt, wenn 99 % der Episode abgeschlossen sind, um den Abspann zu überspringen. Wenn deaktiviert, wird gewartet, bis die Episode vollständig abgeschlossen ist.",
-            "skipCreditsLabel": "",
             "sourceOrder": "Quellen neu anordnen",
             "sourceOrderEnableLabel": "Benutzerdefinierte Quellreihenfolge",
             "autoplay": "Automatische Wiedergabe",
