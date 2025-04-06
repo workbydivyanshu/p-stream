@@ -14,7 +14,15 @@
             "body": "Unsere Suchergebnisse werden von The Movie Database (TMDB) bereitgestellt und, egal ob unsere Videoquellen über dieses Video verfügen, angezeigt.",
             "title": "Die Suche zeigt eine Serie oder einen Film an, warum kann ich den dann nicht abspielen?"
         },
-        "title": "Über P-Stream"
+        "title": "Über P-Stream",
+        "q4": {
+            "title": "Was ist mit meinen Daten und dem ganzen Zeug?",
+            "body": "Alle Daten werden mit dem Community-Backend synchronisiert, jeder kann dies ebenfalls nutzen."
+        },
+        "q5": {
+            "title": "Wie kann ich mehr herausfinden?",
+            "body": "P-Stream hat einen Discord-Server, der oben auf der Seite gefunden werden kann!"
+        }
     },
     "actions": {
         "copied": "Kopiert",
@@ -87,7 +95,8 @@
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
-            "github": "GitHub"
+            "github": "GitHub",
+            "twitter": "Twitter"
         },
         "tagline": "Schau deine Lieblingsserien und Filme mit dieser quelloffenen Streaming App."
     },
@@ -100,7 +109,11 @@
             "onboarding": "Einrichtung",
             "pagetitle": "{{title}} - P-Stream",
             "register": "Registrieren",
-            "settings": "Einstellungen"
+            "settings": "Einstellungen",
+            "discover": "Entdecken",
+            "support": "Unterstützung",
+            "migration": "Konto übertragen",
+            "jip": "Jip"
         }
     },
     "home": {
@@ -124,10 +137,25 @@
                     "Was möchtest du entdecken?",
                     "Was ist auf deiner Merkliste?",
                     "Was ist dein Lieblingsfilm?",
-                    "Was ist deine Lieblingsserie?"
+                    "Was ist deine Lieblingsserie?",
+                    "Was willst du heute schauen?",
+                    "Wie war dein Tag?",
+                    "Mein Fehler die Seite funktioniert nie...",
+                    "Ist P-Stream nicht das beste?"
                 ]
             },
-            "sectionTitle": "Suchergebnisse"
+            "sectionTitle": "Suchergebnisse",
+            "empty": {
+                "default": "Willkommen, hier finden Sie Medien zum Anschauen!",
+                "extra": [
+                    "Hier ist nichts :(",
+                    "so leer...",
+                    "So eine Leere.",
+                    "Hallo neuer Benutzer :3"
+                ]
+            },
+            "discoverMore": "Entdecke mehr",
+            "discover": "Entdecken"
         },
         "titles": {
             "day": {
@@ -147,6 +175,9 @@
                 "extra": [
                     "Müde? Ich hab gehört The Exorcist soll gut sein."
                 ]
+            },
+            "69": {
+                "default": "Lust auf etwas scharfes?"
             }
         }
     },
@@ -167,14 +198,16 @@
             "logout": "Abmelden",
             "register": "Mit der Cloud synchronisieren",
             "settings": "Einstellungen",
-            "support": "Support"
+            "support": "Support",
+            "discover": "Entdecken"
         }
     },
     "notFound": {
         "badge": "Nicht gefunden",
         "goHome": "Zurück zur Startseite",
         "message": "Wir haben überall gesucht: Unter den Eimern, im Schrank, hinter dem Proxy. Wir konnten die gesuchte Seite nicht finden.",
-        "title": "Diese Seite wurde nicht gefunden"
+        "title": "Diese Seite wurde nicht gefunden",
+        "reloadButton": "Versuchs nochmal"
     },
     "onboarding": {
         "defaultConfirm": {
@@ -234,7 +267,8 @@
                     "description": "Richte in nur 5 Minuten einen Proxy ein und erhalte Zugriff auf großartige Quellen.",
                     "quality": "Gute Qualität",
                     "title": "Eigene Proxy"
-                }
+                },
+                "or": "oder"
             },
             "title": "Lass uns mit der Einrichtung von P-Stream starten"
         }
@@ -281,7 +315,8 @@
                 "loadingError": "Fehler beim Laden der Sitzung",
                 "loadingList": "Wird geladen...",
                 "loadingTitle": "Wird geladen...",
-                "unairedEpisodes": "Eine oder mehrere Episoden dieser Staffel wurden deaktiviert, weil sie noch nicht ausgestrahlt wurden."
+                "unairedEpisodes": "Eine oder mehrere Episoden dieser Staffel wurden deaktiviert, weil sie noch nicht ausgestrahlt wurden.",
+                "seasons": "Staffeln"
             },
             "playback": {
                 "speedLabel": "Wiedergabegeschwindigkeit",
@@ -318,7 +353,8 @@
                     "title": "Kein Stream"
                 },
                 "title": "Quellen",
-                "unknownOption": "Unbekannt"
+                "unknownOption": "Unbekannt",
+                "editOrder": "Bestellung bearbeiten"
             },
             "subtitles": {
                 "customChoice": "Untertiteldatei auswählen oder hier ablegen",
@@ -331,7 +367,11 @@
                     "fixCapitals": "Großschreibung korrigieren"
                 },
                 "title": "Untertitel",
-                "unknownLanguage": "Unbekannt"
+                "unknownLanguage": "Unbekannt",
+                "OpenSubtitlesChoice": "offene Untertitel",
+                "notFound": "Keine der verfügbaren Optionen entspricht Ihrer Anfrage",
+                "SourceChoice": "Quellenangaben",
+                "empty": "Es sind hierfür keine Untertitel verfügbar."
             }
         },
         "metadata": {
@@ -364,7 +404,9 @@
             }
         },
         "nextEpisode": {
-            "next": "Nächste Folge"
+            "next": "Nächste Folge",
+            "replay": "Wiederholung",
+            "nextSeason": "nächste Staffel"
         },
         "playbackError": {
             "badge": "Wiedergabefehler",
@@ -397,7 +439,8 @@
                 "detailsButton": "Details anzeigen",
                 "homeButton": "Zurück zur Startseite",
                 "text": "Wir haben alle Anbieter durchsucht, konnten aber nicht das Video finden nach dem du suchst! Wir stellen keine eigenen Videos bereit und haben keine Kontrolle darüber, was verfügbar ist. Bitte klicke auf \"Details anzeigen\" für mehr Details.",
-                "title": "Wir konnten das nicht finden"
+                "title": "Wir konnten das nicht finden",
+                "discoverButton": "Endecke mehr"
             }
         },
         "time": {
@@ -423,7 +466,8 @@
             "logout": "Abmelden",
             "reset": "Eigenen Server zurücksetzen",
             "text": "Beim Laden deines Profils ist ein Fehler aufgetreten",
-            "textWithReset": "Beim Laden deines Profils von deinem Server ist ein Fehler aufgetreten, zurück zum Standard-Server wechseln?"
+            "textWithReset": "Beim Laden deines Profils von deinem Server ist ein Fehler aufgetreten, zurück zum Standard-Server wechseln?",
+            "reload": "Neu laden"
         },
         "migration": {
             "failed": "Beim Migrieren deiner Daten ist ein Fehler aufgetreten.",
@@ -472,7 +516,11 @@
                 "text": "Teilen deinen Fortschritt zwischen Geräten und halte sie synchronisiert.",
                 "title": "Mit der Cloud synchronisieren"
             },
-            "title": "Konto"
+            "title": "Konto",
+            "admin": {
+                "title": "Admin-Bereich",
+                "text": "Nutzen Sie Tools zum Testen des P-Stream-Zustands."
+            }
         },
         "appearance": {
             "activeTheme": "Aktiv",
@@ -481,15 +529,30 @@
                 "default": "Standard",
                 "gray": "Grau",
                 "red": "Rot",
-                "teal": "Türkis"
+                "teal": "Türkis",
+                "green": "Grün",
+                "mocha": "Mokka",
+                "pink": "Pink",
+                "classic": "Klassik"
             },
-            "title": "Aussehen"
+            "title": "Aussehen",
+            "options": {
+                "discoverLabel": "Abschnitt „Entdecken“",
+                "hover": "Details-Popup",
+                "hoverDescription": "Beim Bewegen des Mauszeigers über ein Medienelement wird ein Popup mit Details angezeigt. Standardmäßig deaktiviert. (Nur auf dem Desktop verfügbar)",
+                "hoverLabel": "Details-Popup",
+                "discover": "Abschnitt „Entdecken“",
+                "discoverDescription": "Zeigen Sie den Abschnitt „Entdecken“ auf der Startseite unter Ihren mit Lesezeichen versehenen Medien an. Standardmäßig aktiviert."
+            }
         },
         "connections": {
             "server": {
                 "description": "Falls du dich mit einem anderen Server verbinden willst, um deine Daten zu speichern. Aktiviere dies und gebe die URL an. <0>Anweisungen.</0>",
                 "label": "Eigener Server",
-                "urlLabel": "Eigene Server-URL"
+                "urlLabel": "Eigene Server-URL",
+                "migration": {
+                    "link": "übertrage meine Daten"
+                }
             },
             "setup": {
                 "doSetup": "Einrichten",
@@ -529,7 +592,16 @@
             "thumbnail": "Miniaturansichten generieren",
             "thumbnailDescription": "Meistens haben Videos keine Miniaturansicht. Du kannst diese Einstellung anmachen, um sie automatisch zu generieren, aber sie können dein Video langsamer machen.",
             "thumbnailLabel": "Miniaturansichten generieren",
-            "title": "Einstellungen"
+            "title": "Einstellungen",
+            "autoplayLabel": "Automatische Wiedergabe",
+            "skipCredits": "Abspann überspringen",
+            "skipCreditsDescription": "Wenn aktiviert, wird die nächste Episode automatisch abgespielt, wenn 99 % der Episode abgeschlossen sind, um den Abspann zu überspringen. Wenn deaktiviert, wird gewartet, bis die Episode vollständig abgeschlossen ist.",
+            "skipCreditsLabel": "",
+            "sourceOrder": "Quellen neu anordnen",
+            "sourceOrderEnableLabel": "Benutzerdefinierte Quellreihenfolge",
+            "autoplay": "Automatische Wiedergabe",
+            "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt. Kann von Benutzern mit der Browsererweiterung, einem benutzerdefinierten Proxy oder mit der Standardkonfiguration aktiviert werden, sofern der Host dies zulässt.",
+            "sourceOrderDescription": "Per Drag & Drop können Sie Quellen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der die Quellen für die Medien, die Sie ansehen möchten, geprüft werden. Ist eine Quelle ausgegraut, bedeutet dies, dass die <bold>Erweiterung</bold> für diese Quelle erforderlich ist. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten geeignet)</strong>"
         },
         "reset": "Zurücksetzen",
         "save": "Speichern",
@@ -553,8 +625,71 @@
             "colorLabel": "Farbe",
             "previewQuote": "Das Gras wächst nicht schneller, wenn man daran zieht.",
             "textSizeLabel": "Schriftgröße",
-            "title": "Untertitel"
+            "title": "Untertitel",
+            "textBoldLabel": "Fettgedruckter Text"
         },
         "unsaved": "Du hast ungespeicherte Änderungen"
+    },
+    "migration": {
+        "start": {
+            "title": "übertrage deine Daten",
+            "options": {
+                "or": "oder",
+                "direct": {
+                    "title": "direkt übertragen",
+                    "quality": "Leichtestes und schnellstes",
+                    "action": "Daten übertragen",
+                    "description": "Dadurch werden Ihre Daten direkt auf den neuen Server übertragen. Dies ist die schnellste option. <br /><br /> dieser Option können Sie Ihre Passphrase beibehalten!"
+                },
+                "download": {
+                    "description": "Dadurch werden Ihre Daten auf Ihr Gerät heruntergeladen. Sie können sie dann auf den neuen Server hochladen oder zur sicheren Aufbewahrung behalten.",
+                    "title": "Daten Downloaden",
+                    "quality": "Technischer",
+                    "action": "Daten downloaden"
+                }
+            },
+            "explainer": "Wenn Sie Ihre Daten übertragen oder sichern möchten, können Sie dies mit den folgenden Optionen tun. So bleiben Ihre Daten beim Wechsel des Backend-Servers erhalten."
+        },
+        "direct": {
+            "title": "direkte Übertragung",
+            "loginRequired": "Sie müssen angemeldet sein, um Ihre Daten zu übertragen! Bitte gehen Sie zurück und melden Sie sich an, um fortzufahren.",
+            "status": {
+                "error": "Fehlgeschlagen übertragen ihrer Daten 😿",
+                "success": "Ihre Daten wurden erfolgreich übertragen!🎉"
+            },
+            "button": {
+                "migrate": "übertragen",
+                "processing": "Verarbeitet...",
+                "login": "Weiter zum login"
+            }
+        }
+    },
+    "downtimeNotice": {
+        "badge": "Fehler",
+        "title": "Probleme mit dem Anbieter",
+        "message": "P-Stream hat erneut Probleme mit einigen Anbietern. Wenn Sie eine Sendung nicht finden oder abspielen können, ändern Sie bitte die Quelle. Dieser Fehler wird voraussichtlich für die unten angegebene Zeit bestehen bleiben."
+    },
+    "support": {
+        "title": "Unterstützung",
+        "q1": {
+            "body": "Nun, Sie können dem offiziellen <0>P-Stream-Discord</0> beitreten und dort Fragen stellen oder Sie können eine E-Mail an den unten auf dieser Seite angegebenen mail senden.",
+            "title": "Wo bekomme ich Hilfe?"
+        },
+        "q2": {
+            "title": "Wo kann ich einen error oder Fehler reklamieren?",
+            "body": "Wir haben einen <0>GitHub</0>, auf dem Sie in unserem Repository ein detailliertes Problem melden können. Zusätzlich können Sie, wenn Sie möchten, einen Pull Request erstellen, um das Problem selbst zu beheben."
+        },
+        "text": "P-Stream ist so benutzerfreundlich wie möglich gestaltet. Dennoch gibt es immer wieder Fragen und Probleme. Diese Seite soll helfen, diese Mängel zu beheben"
+    },
+    "jip": {
+        "q1": {
+            "title": "Wo kann ich Hilfe bekommen?",
+            "body": "Nun, Sie können dem offiziellen <0>P-Stream-Discord</0> beitreten und dort Fragen stellen oder Sie können eine E-Mail an den unten auf dieser Seite angegebenen mail senden."
+        },
+        "q2": {
+            "title": "Wie kann ich einen Fehler oder ein Problem melden?",
+            "body": "Wir haben einen <0>GitHub</0>, auf dem Sie in unserem Repository ein detailliertes Problem melden können. Zusätzlich können Sie, wenn Sie möchten, einen Pull Request erstellen, um das Problem selbst zu beheben."
+        },
+        "text": "P-Stream ist nicht von einer Kokosnusspalme gefallen, es wurde größtenteils von einer einzigen Person (und zwar einer sehr epischen) gemacht."
     }
 }
