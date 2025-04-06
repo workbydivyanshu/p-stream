@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { MediaCard } from "@/components/media/MediaCard";
 import { Media } from "@/pages/discover/common";
 
@@ -31,6 +33,7 @@ export function MediaCarousel({
   isMobile,
   carouselRefs,
 }: MediaCarouselProps) {
+  const { t } = useTranslation();
   const categorySlug = category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const browser = !!window.chrome;
   let isScrolling = false;
@@ -57,18 +60,30 @@ export function MediaCarousel({
     categoryName: string,
     isTVShowCondition: boolean,
   ): string {
-    switch (categoryName) {
-      case "Now Playing":
-        return "In Cinemas";
-      case categoryName.match(/^Popular (Movies|Shows) on .+/)?.input:
-        return categoryName;
-      default:
-        return categoryName.endsWith("Movie")
-          ? `${categoryName}s`
-          : isTVShowCondition
-            ? `${categoryName} Shows`
-            : `${categoryName} Movies`;
+    const providerMatch = categoryName.match(
+      /^Popular (Movies|Shows) on (.+)$/,
+    );
+    if (providerMatch) {
+      const type = providerMatch[1].toLowerCase();
+      const provider = providerMatch[2];
+      return t("discover.carousel.title.popularOn", {
+        type:
+          type === "movies" ? t("media.types.movie") : t("media.types.show"),
+        provider,
+      });
     }
+
+    if (categoryName === "Now Playing") {
+      return t("discover.carousel.title.inCinemas");
+    }
+
+    if (categoryName === "Editor Picks") {
+      return t("discover.carousel.title.editorPicks");
+    }
+
+    return isTVShowCondition
+      ? t("discover.carousel.title.tvshows", { category: categoryName })
+      : t("discover.carousel.title.movies", { category: categoryName });
   }
 
   const displayCategory = getDisplayCategory(category, isTVShow);

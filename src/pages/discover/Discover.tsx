@@ -36,10 +36,10 @@ export function Discover() {
             backgroundImage: `linear-gradient(to right, rgba(var(--colors-buttons-purpleHover)), rgba(var(--colors-progress-filled)))`,
           }}
         >
-          {t("global.pages.discover")} Movies & TV
+          {t("discover.page.title")}
         </h1>
         <p className="relative text-lg mt-4 text-gray-400 z-10">
-          Explore the latest hits and timeless classics.
+          {t("discover.page.subtitle")}
         </p>
       </div>
 

@@ -767,5 +767,44 @@
       "textBoldLabel": "Bold text"
     },
     "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
+  },
+  "discover": {
+    "tabs": {
+      "movies": "Movies",
+      "tvshows": "TV Shows",
+      "editorpicks": "Editor Picks"
+    },
+    "carousel": {
+      "title": {
+        "movies": "{{category}} Movies",
+        "tvshows": "{{category}} Shows",
+        "inCinemas": "In Cinemas",
+        "popularOn": "Popular {{type}} on {{provider}}",
+        "editorPicks": "Editor Picks"
+      }
+    },
+    "providers": {
+      "netflix": "Netflix",
+      "appleTv": "Apple TV+",
+      "amazonPrime": "Amazon Prime Video",
+      "hulu": "Hulu",
+      "max": "Max",
+      "paramountPlus": "Paramount Plus",
+      "disneyPlus": "Disney Plus",
+      "shudder": "Shudder",
+      "fubuTV": "fubuTV"
+    },
+    "randomMovie": {
+      "button": "Watch Something Random",
+      "cancel": "Cancel Countdown",
+      "countdown": "{{countdown}}s",
+      "nowPlaying": "Now Playing",
+      "in": "in"
+    },
+    "page": {
+      "title": "Discover Movies & TV",
+      "subtitle": "Explore the latest hits and timeless classics."
+    },
+    "scrollToTop": "Back to top"
   }
 }

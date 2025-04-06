@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { get } from "@/backend/metadata/tmdb";
@@ -120,6 +121,7 @@ export function DiscoverContent() {
   //   tvCategories,
   //   "tv",
   // );
+  const { t } = useTranslation();
 
   // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
@@ -425,11 +427,7 @@ export function DiscoverContent() {
                 }`}
                 onClick={() => handleCategoryChange(category)}
               >
-                {category === "movies"
-                  ? "Movies"
-                  : category === "tvshows"
-                    ? "TV Shows"
-                    : "Editor Picks"}
+                {t(`discover.tabs.${category}`)}
               </button>
             ))}
           </div>

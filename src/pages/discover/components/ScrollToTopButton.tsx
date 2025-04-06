@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
 
 export function ScrollToTopButton() {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -46,7 +48,7 @@ export function ScrollToTopButton() {
         }}
       >
         <Icon icon={Icons.CHEVRON_UP} className="text-2xl z-10" />
-        <span className="z-10">Back to top</span>
+        <span className="z-10">{t("discover.scrollToTop")}</span>
       </button>
     </div>
   );

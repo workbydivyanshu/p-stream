@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
 
@@ -13,6 +14,8 @@ export function RandomMovieButton({
   onClick,
   randomMovieTitle,
 }: RandomMovieButtonProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full max-w-screen-xl mx-auto px-4">
       <div className="flex items-center justify-center">
@@ -24,7 +27,7 @@ export function RandomMovieButton({
           <span className="flex items-center">
             {countdown !== null && countdown > 0 ? (
               <div className="flex items-center">
-                <span>Cancel Countdown</span>
+                <span>{t("discover.randomMovie.cancel")}</span>
                 <Icon
                   icon={Icons.X}
                   className="text-2xl ml-[4.5px] mb-[-0.7px]"
@@ -32,7 +35,7 @@ export function RandomMovieButton({
               </div>
             ) : (
               <div className="flex items-center">
-                <span>Watch Something Random</span>
+                <span>{t("discover.randomMovie.button")}</span>
                 <img
                   src="/lightbar-images/dice.svg"
                   alt="Dice"
@@ -48,8 +51,10 @@ export function RandomMovieButton({
       {randomMovieTitle && countdown !== null && (
         <div className="mt-4 mb-4 text-center">
           <p>
-            Now Playing <span className="font-bold">{randomMovieTitle}</span> in{" "}
-            {countdown}
+            {t("discover.randomMovie.nowPlaying")}{" "}
+            <span className="font-bold">{randomMovieTitle}</span>{" "}
+            {t("discover.randomMovie.in")}{" "}
+            {t("discover.randomMovie.countdown", { countdown })}
           </p>
         </div>
       )}
