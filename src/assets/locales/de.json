@@ -141,7 +141,8 @@
                     "Was willst du heute schauen?",
                     "Wie war dein Tag?",
                     "Mein Fehler die Seite funktioniert nie...",
-                    "Ist P-Stream nicht das beste?"
+                    "Ist P-Stream nicht das beste?",
+                    ">ᴗ<"
                 ]
             },
             "sectionTitle": "Suchergebnisse",
@@ -177,7 +178,16 @@
                 ]
             },
             "69": {
-                "default": "Lust auf etwas scharfes?"
+                "default": "Lust auf etwas scharfes?",
+                "extra": [
+                    "Schönen 69. Tag 😘!"
+                ]
+            },
+            "420": {
+                "default": "Was möchten Sie am 4/20 sehen?",
+                "extra": [
+                    "Schönen 4/20 🥳!"
+                ]
             }
         }
     },
@@ -690,6 +700,7 @@
             "title": "Wie kann ich einen Fehler oder ein Problem melden?",
             "body": "Wir haben einen <0>GitHub</0>, auf dem Sie in unserem Repository ein detailliertes Problem melden können. Zusätzlich können Sie, wenn Sie möchten, einen Pull Request erstellen, um das Problem selbst zu beheben."
         },
-        "text": "P-Stream ist nicht von einer Kokosnusspalme gefallen, es wurde größtenteils von einer einzigen Person (und zwar einer sehr epischen) gemacht."
+        "text": "P-Stream ist nicht von einer Kokosnusspalme gefallen, es wurde größtenteils von einer einzigen Person (und zwar einer sehr epischen) gemacht.",
+        "title": "Jip"
     }
 }
