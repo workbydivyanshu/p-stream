@@ -277,7 +277,6 @@
             }
         },
         "nextEpisode": {
-            "cancel": "Meow",
             "next": "Next meow"
         },
         "playbackError": {
@@ -322,7 +321,6 @@
     },
     "screens": {
         "dmca": {
-            "text": "Very long and boring meow.",
             "title": "Meow"
         },
         "loadingApp": "Loading meow",

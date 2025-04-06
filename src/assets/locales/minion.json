@@ -277,7 +277,6 @@
             }
         },
         "nextEpisode": {
-            "cancel": "Banana",
             "next": "Next banana"
         },
         "playbackError": {
@@ -322,7 +321,6 @@
     },
     "screens": {
         "dmca": {
-            "text": "Very long and boring banana.",
             "title": "Banana"
         },
         "loadingApp": "Loading banana",
