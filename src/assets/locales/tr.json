@@ -14,7 +14,15 @@
             "body": "Arama sonuçlarımız The Movie Database (TMDB) tarafından desteklenmektedir ve kaynaklarımızın içeriğe gerçekten sahip olup olmadığına bakılmaksızın görüntülenir.",
             "title": "Arama sonuçları diziyi veya filmi gösteriyor, neden oynatamıyorum?"
         },
-        "title": "P-Stream hakkında"
+        "title": "P-Stream hakkında",
+        "q4": {
+            "body": "Tüm veriler topluluk sunucusuyla senkronize edilir, isteyen herkes bunu kullanmakta özgürdür.",
+            "title": "Peki ya benim verileri ve bilgilerim?"
+        },
+        "q5": {
+            "body": "P-Stream’in bir Discord sunucusu var, sayfanın en üst kısmına bak!",
+            "title": "Daha fazlasını nasıl bulabilirim?"
+        }
     },
     "actions": {
         "copied": "Kopyalandı",
@@ -87,7 +95,8 @@
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
-            "github": "GitHub"
+            "github": "GitHub",
+            "twitter": "Twitter"
         },
         "tagline": "Bu açık kaynaklı akış uygulamasıyla en sevdiğiniz dizileri ve filmleri izleyin."
     },
@@ -100,7 +109,11 @@
             "onboarding": "Kur",
             "pagetitle": "{{title}} - P-Stream",
             "register": "Kayıt ol",
-            "settings": "Ayarlar"
+            "settings": "Ayarlar",
+            "discover": "Keşfet",
+            "support": "Destek",
+            "migration": "Hesap Taşıma",
+            "jip": "Jip"
         }
     },
     "home": {
@@ -124,10 +137,26 @@
                     "Ne keşfetmek istiyorsunuz?",
                     "İzleme listenizde neler var?",
                     "Favori filmin ne?",
-                    "En sevdiğiniz dizi ne?"
+                    "En sevdiğiniz dizi ne?",
+                    "Bugün izleme listende neler var?",
+                    "Günün nasıldı?",
+                    "Benim hatam, site hiç çalışmıyor zaten...",
+                    "P-Stream en iyisi değil mi ya?",
+                    ">ᴗ<"
                 ]
             },
-            "sectionTitle": "Arama sonuçları"
+            "sectionTitle": "Arama sonuçları",
+            "empty": {
+                "default": "Hoş geldin, burada izlenecek içerikler bulabilirsin!",
+                "extra": [
+                    "Burada hiçbir şey yok :(",
+                    "Öyle boş ki...",
+                    "Böyle bir boşluk.",
+                    "Selam yeni kullanıcı :3"
+                ]
+            },
+            "discoverMore": "Daha fazlasını keşfet",
+            "discover": "Keşfet"
         },
         "titles": {
             "day": {
@@ -146,6 +175,18 @@
                 "default": "Bu akşam ne izlemek istersiniz?",
                 "extra": [
                     "Yoruldun mu? The Exorcist'e iyi diyorlar."
+                ]
+            },
+            "420": {
+                "default": "Bu 4/20’de ne izlemek istersin?",
+                "extra": [
+                    "Mutlu 4/20 🥳!"
+                ]
+            },
+            "69": {
+                "default": "Baharatlı bir şeyler denemeye ne dersin?",
+                "extra": [
+                    "Mutlu 69 günü 😘!"
                 ]
             }
         }
@@ -556,5 +597,20 @@
             "title": "Altyazılar"
         },
         "unsaved": "Kaydedilmemiş değişiklikleriniz mevcut"
+    },
+    "migration": {
+        "loginRequired": "Verilerinizi taşıyabilmek için giriş yapmanız gerekmektedir! Devam edebilmek için lütfen geri dönüp giriş yapın.",
+        "start": {
+            "explainer": "Verilerinizi taşımak veya yedeklemek isterseniz, aşağıdaki seçenekleri kullanabilirsiniz. Bu, arka plan sunucularını değiştirdiğinizde verilerinizi korumanızı sağlar.",
+            "title": "Verilerini taşı",
+            "options": {
+                "or": "ya da",
+                "direct": {
+                    "description": "Bu, verilerinizi doğrudan yeni sunucuya taşıyacaktır. Bu en hızlı seçenektir. <br /><br />Bu seçenek, şifrenizi aynı tutmanıza olanak tanır!",
+                    "title": "Doğrudan taşıma",
+                    "quality": "En kolay ve hızlı"
+                }
+            }
+        }
     }
 }

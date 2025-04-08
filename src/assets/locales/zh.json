@@ -334,7 +334,7 @@
             "quality": {
                 "automaticLabel": "自动质量",
                 "hint": "您可以尝试<0>切换片源</0>以获取不同的质量选项。",
-                "iosNoQuality": "由于 Apple 的（common IOS L）限制，iOS 上无法为该片源提供质量选择。您可以尝试<0>切换到另一个片源</0>，以获得不同的质量选项。",
+                "iosNoQuality": "由于 Apple 的（common IOS L）限制，iOS 上无法为该片源提供质量选择。您可以尝试<0>切换到另一个片源</0>，以获得不同的画质选项。",
                 "title": "画质"
             },
             "settings": {
@@ -567,7 +567,7 @@
                 "label": "自定义服务器",
                 "urlLabel": "自定义服务器 URL",
                 "migration": {
-                    "description": "<0>迁移我的数据</0> 到新的后端服务器。 ",
+                    "description": "<0>迁移我的数据</0> 到新的后端服务器。",
                     "link": "迁移我的数据"
                 }
             },
@@ -748,7 +748,7 @@
                 "bookmarks": "收藏的媒体",
                 "progress": "观看进度"
             },
-            "exportedOn": "导出的账户",
+            "exportedOn": "被导出的账户",
             "button": {
                 "import": "导入数据",
                 "processing": "处理中…",

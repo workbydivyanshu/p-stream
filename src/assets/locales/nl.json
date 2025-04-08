@@ -162,13 +162,13 @@
             "day": {
                 "default": "Wat wil je vanmiddag kijken?",
                 "extra": [
-                    "Voel je je avontuurlijk? Dan is Jurassic Park misschien wel de perfecte keuze."
+                    "Lang leven P-Stream!"
                 ]
             },
             "morning": {
                 "default": "Waar wil je deze ochtend naar kijken?",
                 "extra": [
-                    "Ik hoor dat Before Sunrise goed is"
+                    "Lang leven P-Stream!"
                 ]
             },
             "night": {
@@ -601,7 +601,28 @@
     "migration": {
         "loginRequired": "U moet ingelogd zijn om uw data te migreren! Ga terug en log in om verder te gaan.",
         "start": {
-            "title": "Migreer uw gegevens"
+            "title": "Migreer uw gegevens",
+            "explainer": "Als je je gegevens wilt migreren of back-uppen, kun je dat doen met de onderstaande opties. Zo kunt u uw gegevens behouden wanneer u van backendserver wisselt.",
+            "options": {
+                "direct": {
+                    "description": "Hiermee worden je gegevens direct naar de nieuwe server gemigreerd. Dit is de snelste optie.  <br /><br />Met deze optie kun je je wachtwoordzin hetzelfde houden!",
+                    "action": "Gegevens overdragen",
+                    "title": "Rechtstreekse migratie",
+                    "quality": "Gemakkelijkst en het snelst"
+                },
+                "or": "Of",
+                "download": {
+                    "description": "Hierdoor worden je gegevens gedownload naar je apparaat. Je kunt ze dan uploaden naar de nieuwe server of ze gewoon bewaren.",
+                    "title": "Download gegevens",
+                    "quality": "Meer technisch",
+                    "action": "Download data"
+                },
+                "upload": {
+                    "title": "Upload data",
+                    "description": "Upload uw eerder geëxporteerde gegevensbestand om uw bladwijzers en voortgang op dit account te herstellen.",
+                    "quality": "Herstellen vanaf back-up"
+                }
+            }
         }
     }
 }
