@@ -71,6 +71,10 @@ const EDITOR_PICKS_MOVIES = [
   { id: 330459, type: "movie" }, // Rogue One: A Star Wars Story
   { id: 279, type: "movie" }, // Amadeus
   { id: 823219, type: "movie" }, // Flow
+  { id: 22, type: "movie" }, // Pirates of the Caribbean: The Curse of the Black Pearl
+  { id: 18971, type: "movie" }, // Rosencrantz and Guildenstern Are Dead
+  { id: 26388, type: "movie" }, // Buried
+  { id: 152601, type: "movie" }, // Her
 ];
 
 const EDITOR_PICKS_TV_SHOWS = [
@@ -89,6 +93,7 @@ const EDITOR_PICKS_TV_SHOWS = [
   { id: 61222, type: "show" }, // Bojack Horseman
   { id: 93405, type: "show" }, // Squid Game
   { id: 87108, type: "show" }, // Chernobyl
+  { id: 105248, type: "show" }, // Cyberpunk: Edgerunners
 ];
 
 export function DiscoverContent() {
