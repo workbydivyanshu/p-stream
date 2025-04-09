@@ -290,9 +290,17 @@ export function DiscoverContent() {
   };
 
   const handleCategoryClick = (id: string, name: string) => {
-    const categorySlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const element = document.getElementById(`carousel-${categorySlug}`);
+    // Try both movie and tv versions of the category slug
+    const categorySlugBase = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const movieElement = document.getElementById(
+      `carousel-${categorySlugBase}-movie`,
+    );
+    const tvElement = document.getElementById(
+      `carousel-${categorySlugBase}-tv`,
+    );
 
+    // Scroll to the first element that exists
+    const element = movieElement || tvElement;
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",

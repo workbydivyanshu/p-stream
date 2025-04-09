@@ -52,7 +52,7 @@ export function LazyMediaCarousel({
   }, [media, preloadedMedia]);
 
   const categoryName = title || category?.name || genre?.name || "";
-  const categorySlug = categoryName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const categorySlug = `${categoryName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${mediaType}`;
 
   // Test intersection observer
   // useEffect(() => {

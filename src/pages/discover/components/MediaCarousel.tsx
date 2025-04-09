@@ -34,7 +34,7 @@ export function MediaCarousel({
   carouselRefs,
 }: MediaCarouselProps) {
   const { t } = useTranslation();
-  const categorySlug = category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const categorySlug = `${category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${isTVShow ? "tv" : "movie"}`;
   const browser = !!window.chrome;
   let isScrolling = false;
 
