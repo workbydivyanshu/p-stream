@@ -657,7 +657,10 @@
                     "action": "Daten downloaden"
                 },
                 "upload": {
-                    "title": "Daten hochladen"
+                    "title": "Daten hochladen",
+                    "description": "Lade deine zuletzt übertragenen Daten hoch um deine Lesezeichen und deinen Fortschritt auf diesem Account zu speichern.",
+                    "quality": "Wiederherstellen aus der Sicherung",
+                    "action": "Daten Hochladen"
                 }
             },
             "explainer": "Wenn Sie Ihre Daten übertragen oder sichern möchten, können Sie dies mit den folgenden Optionen tun. So bleiben Ihre Daten beim Wechsel des Backend-Servers erhalten."
@@ -671,10 +674,28 @@
             "button": {
                 "migrate": "übertragen",
                 "processing": "Verarbeitet...",
-                "login": "Weiter zum login"
-            }
+                "login": "Weiter zum login",
+                "home": "Gehe zur Startseite"
+            },
+            "description": "Geben Sie die Ziel Backend URL ein, um Ihre aktuellen Kontodaten in ein neues Backend zu migrieren. Ihre Passphrase bleibt dabei unverändert!",
+            "backendLabel": "Ziel-Backend-URL",
+            "recaptchaLabel": "ReCaptcha-Schlüssel (optional)",
+            "toggleLable": "Benötigt ReCaptcha?"
         },
-        "loginRequired": "Du musst eingeloggt sein, um deine Daten zu migrieren! Bitte gehen sie zurück und loggen sie sich ein um fortzufahren."
+        "loginRequired": "Du musst eingeloggt sein, um deine Daten zu migrieren! Bitte gehen sie zurück und loggen sie sich ein um fortzufahren.",
+        "download": {
+            "status": {
+                "error": "Das Herunterladen Ihrer Daten ist fehlgeschlagen. 😿",
+                "success": "Ihre Daten wurden erfolgreich heruntergeladen! 🎉"
+            },
+            "title": "Daten herunterladen",
+            "description": "Dadurch werden Ihre Daten auf Ihr Gerät heruntergeladen. Sie können sie dann auf den neuen Server hochladen oder zur sicheren Aufbewahrung behalten.",
+            "items": {
+                "description": "Der Download beinhaltet:",
+                "bookmarks": "Mit Lesezeichen versehene Medien",
+                "progress": "Beobachten Sie den Fortschritt"
+            }
+        }
     },
     "downtimeNotice": {
         "badge": "Fehler",
