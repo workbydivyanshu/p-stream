@@ -112,7 +112,8 @@
             "settings": "Cài đặt",
             "migration": "Chuyển tài khoản",
             "discover": "Khám phá",
-            "support": "Hỗ trợ khách hàng"
+            "support": "Hỗ trợ khách hàng",
+            "jip": "Jip"
         }
     },
     "home": {
@@ -131,7 +132,10 @@
             "loading": "Đang tải...",
             "noResults": "Chúng tôi không thể tìm thấy gì!",
             "placeholder": {
-                "default": "Bạn muốn xem gì?"
+                "default": "Bạn muốn xem gì?",
+                "extra": [
+                    "Bạn đang muốn làm gì?"
+                ]
             },
             "sectionTitle": "Kết quả tìm kiếm"
         },

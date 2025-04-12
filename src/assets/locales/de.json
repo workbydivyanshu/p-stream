@@ -675,7 +675,7 @@
                 "migrate": "übertragen",
                 "processing": "Verarbeitet...",
                 "login": "Weiter zum login",
-                "home": "Gehe zur Startseite"
+                "home": "Zur Startseite"
             },
             "description": "Geben Sie die Ziel Backend URL ein, um Ihre aktuellen Kontodaten in ein neues Backend zu migrieren. Ihre Passphrase bleibt dabei unverändert!",
             "backendLabel": "Ziel-Backend-URL",
@@ -688,19 +688,31 @@
                 "error": "Das Herunterladen Ihrer Daten ist fehlgeschlagen. 😿",
                 "success": "Ihre Daten wurden erfolgreich heruntergeladen! 🎉"
             },
-            "title": "Daten herunterladen",
+            "title": "Daten downloaden",
             "description": "Dadurch werden Ihre Daten auf Ihr Gerät heruntergeladen. Sie können sie dann auf den neuen Server hochladen oder zur sicheren Aufbewahrung behalten.",
             "items": {
                 "description": "Der Download beinhaltet:",
                 "bookmarks": "Mit Lesezeichen versehene Medien",
                 "progress": "Beobachten Sie den Fortschritt"
+            },
+            "button": {
+                "download": "Daten downloaden",
+                "home": "Zur Startseite",
+                "login": "Weiter zum login"
             }
-        }
+        },
+        "upload": {
+            "button": {
+                "processing": "Verarbeitet..."
+            }
+        },
+        "back": "Zurück gehen"
     },
     "downtimeNotice": {
         "badge": "Fehler",
         "title": "Probleme mit dem Anbieter",
-        "message": "P-Stream hat erneut Probleme mit einigen Anbietern. Wenn Sie eine Sendung nicht finden oder abspielen können, ändern Sie bitte die Quelle. Dieser Fehler wird voraussichtlich für die unten angegebene Zeit bestehen bleiben."
+        "message": "P-Stream hat erneut Probleme mit einigen Anbietern. Wenn Sie eine Sendung nicht finden oder abspielen können, ändern Sie bitte die Quelle. Dieser Fehler wird voraussichtlich für die unten angegebene Zeit bestehen bleiben.",
+        "goHome": "Zur Startseite"
     },
     "support": {
         "title": "Unterstützung",

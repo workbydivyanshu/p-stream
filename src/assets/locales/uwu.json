@@ -1,32 +1,32 @@
 {
     "about": {
-        "description": "uwu-flix is a fowk of m-movie-web that is ensuwed t-to stay up even OwO a-a-aftew the shutdown of movie-web.app. uwu-flix wuns on a p-pwivate, sewf-hosted VPS. I wun this site at a woss; thewe awe nyo ads due t-to my bewiefs in fwee media.",
-        "faqTitle": "Common questions",
+        "description": "uwu-stream is a fowk of m-movie-web that is ensuwed t-to stay up even OwO a-a-aftew the shutdown of movie-web.app. uwu-stream wuns on a p-pwivate, sewf-hosted VPS. I wun this site at a woss; thewe awe nyo ads due t-to my bewiefs in fwee media.",
+        "faqTitle": "Common qwestions",
         "q1": {
-            "body": "uwu-flix does nyot host any OwO content. When you cwick ^w^ on something t-to watch, the intewnyet is seawched fow the sewected media (-(On the w-w-woading scween and in the  'video s-souwces' tab you c-can see which souwce you'we using). Media nyevew gets upwoaded by majesty.wow, evewything is thwough this seawching mechanyism.",
+            "body": "uwu-stream does nyot host any OwO content. When you cwick ^w^ on something t-to watch, the intewnyet is seawched fow the sewected media (-(On the w-w-woading scween and in the 'video s-sources' tab you c-can see which souwce you'we using). Media nyevew gets upwoaded by majesty.wow, evewything is thwough this seawching mechanyism.",
             "title": "Whewe does the content come fwom!?"
         },
         "q2": {
-            "body": "I do nyot cowwect donyations fow uwu-flix. aww >w< donyations go diwectwy t-to the m-movie-web team's kofi",
-            "title": "Whewe do my donyations go?!?1"
+            "body": "It's not pawwsible to reqwest a show or movie, uwu-stream does not manage any content. Awl content is viewed through sources on the internet.",
+            "title": "Where can I rewqest a show or movie?"
         },
         "q3": {
-            "body": "It's nyot possibwe t-to wequest a show ow (・`ω´・) m-movie, uwu-flix does nyot manyage any OwO content. aww >w< content is v-viewed thwough souwces on the intewnyet.",
-            "title": "Whewe c-can I wequest a show ow (・`ω´・) movie?"
+            "body": "Our search results are powered by The Movie Database (TMDB) and display regardless of whether our sources actuawy have the content.",
+            "title": "The search wesults display the show or movie, why can't I play it?"
         },
         "q4": {
-            "body": "O-Ouw seawch wesuwts awe powewed by The Movie D-Database (TMDB) and d-d-dispway wegawdwess of whethew ouw souwces actuawwy have the content.",
-            "title": "the seawch wesuwts d-d-dispway the show ow (・`ω´・) m-movie, why can't I pway it?!?1"
+            "body": "Awl data is synced to the community backend, anyone is free to use this as well.",
+            "title": "What about my data and stuff 👉👈?"
         },
         "q5": {
-            "body": "aww >w< data is synced t-to the sudo-backend which is diffewent than the communyity ;;w;; backend and is independentwy hosted by me, anyonye is fwee t-to use this as w-w-weww.",
-            "title": "What about my data and stuff?!!"
+            "body": "uwu-stream has a Discord server that can be found at the header of this page!",
+            "title": "How can I find out more 😩?"
         },
-        "title": "About uwu-flix (^▽^)"
+        "title": "About uwu-stream (^▽^)"
     },
     "actions": {
-        "copied": "Copied",
-        "copy": "Copy"
+        "copied": "Cawpied",
+        "copy": "Cawpy"
     },
     "auth": {
         "createAccount": "Don't have an account yet 😬 <0>Cweate an account.</0>",
@@ -38,21 +38,21 @@
             "passphraseFrameLabel": "Passphwase",
             "title": "Your passphwase"
         },
-        "hasAccount": "Already have an account? <0>Login here.</0>",
+        "hasAccount": "Already have an account? <0>wogin here!</0>",
         "login": {
             "description": "Pwease entew youw passphwase t-to wogin t-to youw account",
             "deviceLengthError": "Pwease entew a device nyame",
             "passphraseLabel": "12-Word passphwase",
             "passphrasePlaceholder": "passphwase",
-            "submit": "Login",
-            "title": "Login to your account",
+            "submit": "wogin",
+            "title": "wogin to your accowunt",
             "validationError": "Incorrect or incomplete passphwase /ᐠ. .ᐟ\\"
         },
         "register": {
             "information": {
                 "color1": "Profile color one",
                 "color2": "Profile color two",
-                "header": "Entew a nyame fow youw device then pick cowows and a usew icon of youw choosing!!11",
+                "header": "Entew a nyame fow youw device then pick cowows and a usew icon of youw choosing!!",
                 "icon": "User icon",
                 "next": "Next",
                 "title": "Account infowmation"
@@ -60,7 +60,7 @@
         },
         "trust": {
             "failed": {
-                "text": "Did you configuwe i-it cowwectwy!!11",
+                "text": "Did you configuwe i-it cowwectwy!!?",
                 "title": "Faiwed t-to weach sewvew"
             },
             "noHostTitle": "Sewvew nyot configuwed?!!",
