@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 
-// Thanks Nemo, Custom, and Roomba for this API
+// Thanks Nemo for this API
 const BASE_URL = "https://skip-intro.pstream.org";
 const MAX_RETRIES = 3;
 
@@ -29,9 +29,14 @@ export function useSkipTime() {
 
         const data = await response.json();
 
-        const skipTime = data.introSkipTime
-          ? parseInt(data.introSkipTime.replace("s", ""), 10)
-          : null;
+        const parseSkipTime = (timeStr: string | undefined): number | null => {
+          if (!timeStr || typeof timeStr !== "string") return null;
+          const match = timeStr.match(/^(\d+)s$/);
+          if (!match) return null;
+          return parseInt(match[1], 10);
+        };
+
+        const skipTime = parseSkipTime(data.introSkipTime);
 
         // eslint-disable-next-line no-console
         console.log("Skip time:", skipTime);
