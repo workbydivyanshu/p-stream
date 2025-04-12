@@ -4,7 +4,7 @@ import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 
 // Thanks Nemo for this API
-const BASE_URL = "https://skip-intro.pstream.org";
+const BASE_URL = "https://skips.pstream.org";
 const MAX_RETRIES = 3;
 
 export function useSkipTime() {
