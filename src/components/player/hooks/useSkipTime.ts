@@ -13,11 +13,11 @@ export function useSkipTime() {
 
   useEffect(() => {
     const fetchSkipTime = async (retries = 0): Promise<void> => {
-      if (!meta?.tmdbId || meta.type === "movie") return;
+      if (!meta?.imdbId || meta.type === "movie") return;
       if (!conf().ALLOW_FEBBOX_KEY) return;
 
       try {
-        const apiUrl = `${BASE_URL}/${meta.tmdbId}/${meta.season?.number}/${meta.episode?.number}`;
+        const apiUrl = `${BASE_URL}/${meta.imdbId}/${meta.season?.number}/${meta.episode?.number}`;
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
@@ -43,7 +43,13 @@ export function useSkipTime() {
     };
 
     fetchSkipTime();
-  }, [meta?.tmdbId, meta?.type, meta?.season?.number, meta?.episode?.number]);
+  }, [
+    meta?.tmdbId,
+    meta?.imdbId,
+    meta?.type,
+    meta?.season?.number,
+    meta?.episode?.number,
+  ]);
 
   return skiptime;
 }
