@@ -35,6 +35,7 @@ const levelConversionMap: Record<number, SourceQuality> = {
   1080: "1080",
   720: "720",
   480: "480",
+  2160: "4k",
 };
 
 function hlsLevelToQuality(level?: Level): SourceQuality | null {
