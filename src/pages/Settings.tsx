@@ -9,7 +9,7 @@ import {
   encryptData,
 } from "@/backend/accounts/crypto";
 import { getSessions, updateSession } from "@/backend/accounts/sessions";
-import { updateSettings } from "@/backend/accounts/settings";
+import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
 import { getAllProviders } from "@/backend/providers/providers";
 import { Button } from "@/components/buttons/Button";
@@ -175,6 +175,18 @@ export function SettingsPage() {
   const { logout } = useAuth();
   const user = useAuthStore();
 
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (account && backendUrl) {
+        const settings = await getSettings(backendUrl, account);
+        if (settings.febboxKey) {
+          setFebboxToken(settings.febboxKey);
+        }
+      }
+    };
+    loadSettings();
+  }, [account, backendUrl, setFebboxToken]);
+
   const state = useSettingsState(
     activeTheme,
     appLanguage,
@@ -241,6 +253,7 @@ export function SettingsPage() {
           applicationLanguage: state.appLanguage.state,
           applicationTheme: state.theme.state,
           proxyUrls: state.proxyUrls.state?.filter((v) => v !== "") ?? null,
+          febboxKey: state.febboxToken.state,
         });
       }
       if (state.deviceName.changed) {

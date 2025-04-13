@@ -28,6 +28,7 @@ export function useAuthData() {
   const importSubtitleLanguage = useSubtitleStore(
     (s) => s.importSubtitleLanguage,
   );
+  const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
 
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceItems = useProgressStore((s) => s.replaceItems);
@@ -57,7 +58,8 @@ export function useAuthData() {
     removeAccount();
     clearBookmarks();
     clearProgress();
-  }, [removeAccount, clearBookmarks, clearProgress]);
+    setFebboxToken(null);
+  }, [removeAccount, clearBookmarks, clearProgress, setFebboxToken]);
 
   const syncData = useCallback(
     async (
