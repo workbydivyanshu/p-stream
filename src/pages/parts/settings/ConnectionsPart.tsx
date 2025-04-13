@@ -57,11 +57,10 @@ function ProxyEdit({
 
   const changeItem = useCallback(
     (index: number, val: string) => {
-      const cleanedUrl = val.replace(/\/+$/, "");
       setProxyUrls((s) => [
         ...(s ?? []).map((v, i) => {
           if (i !== index) return v;
-          return cleanedUrl;
+          return val;
         }),
       ]);
     },
