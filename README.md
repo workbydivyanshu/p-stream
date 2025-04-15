@@ -42,11 +42,11 @@ To update a P-Stream instance you can type the below commands into a terminal at
 ```bash
 git remote add upstream https://github.com/p-stream/p-stream.git
 git fetch upstream # Grab the contents of the new remote source
-git checkout <YOUR_MAIN_BRANCH>  # Most likely this would be `origin/main`
-git merge upstream/main
+git checkout <YOUR_MAIN_BRANCH>  # Most likely this would be `origin/production`
+git merge upstream/production
 # * Fix any conflicts present during merge *
 git add .  # Add all changes made during merge and conflict fixing
-git commit -m "Update p-stream instance (merge upstream/main)"
+git commit -m "Update p-stream instance (merge upstream/production)"
 git push  # Push to YOUR repository
 ```
 
