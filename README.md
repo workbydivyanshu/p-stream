@@ -11,7 +11,7 @@
 | Proxy          | [simple-proxy](https://docs.pstream.org/proxy)              | [source code](https://github.com/p-stream/sudo-proxy)  |             
 | Backend        | [backend](https://server.fifthwit.net)                    | [source code](https://github.com/p-stream/backend)     |
 | Frontend       | [P-Stream](https://docs.pstream.org/instances)                | [source code](https://github.com/p-stream/p-stream)        |
-| Weblate        | [sudo-weblate](https://weblate.pstream.org)         | |
+| Weblate        | [weblate](https://weblate.pstream.org)         | |
 
 ***I provide these if you are not able to host yourself, though I do encourage hosting the frontend.***
 
