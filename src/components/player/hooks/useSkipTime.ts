@@ -3,6 +3,17 @@ import { useEffect, useState } from "react";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 
+const getUserToken = (): string | null => {
+  try {
+    return typeof window !== "undefined"
+      ? window.localStorage.getItem("febbox_ui_token")
+      : null;
+  } catch (e) {
+    console.warn("Unable to access localStorage:", e);
+    return null;
+  }
+};
+
 // Thanks Nemo for this API
 const BASE_URL = "https://skips.pstream.org";
 const MAX_RETRIES = 3;
@@ -15,6 +26,7 @@ export function useSkipTime() {
     const fetchSkipTime = async (retries = 0): Promise<void> => {
       if (!meta?.imdbId || meta.type === "movie") return;
       if (!conf().ALLOW_FEBBOX_KEY) return;
+      if (!getUserToken()) return;
 
       try {
         const apiUrl = `${BASE_URL}/${meta.imdbId}/${meta.season?.number}/${meta.episode?.number}`;
