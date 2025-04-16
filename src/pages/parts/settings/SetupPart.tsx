@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import classNames from "classnames";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,6 +21,14 @@ import { useAuthStore } from "@/stores/auth";
 
 const testUrl = "https://postman-echo.com/get";
 const febboxApiTestUrl = "https://fed-api.pstream.org/movie/tt15239678";
+
+const sleep = (ms: number): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+};
 
 export type Status = "success" | "unset" | "error";
 
@@ -48,36 +57,80 @@ export async function testFebboxToken(
   if (!febboxToken) {
     return "unset";
   }
-  try {
-    const response = await fetch(febboxApiTestUrl, {
-      headers: {
-        "ui-token": febboxToken,
-      },
-    });
 
-    if (!response.ok) {
-      console.error("Febbox API test failed with status:", response.status);
-      return "error";
-    }
+  let attempts = 0;
+  const maxAttempts = 3;
 
-    const data = (await response.json()) as any;
-    if (!data || !data.streams) {
-      console.error("Invalid response format from Febbox API:", data);
-      return "error";
-    }
+  while (attempts < maxAttempts) {
+    console.log(
+      `Attempt ${attempts + 1} of ${maxAttempts} to check Febbox token`,
+    );
+    try {
+      const response = await fetch(febboxApiTestUrl, {
+        headers: {
+          "ui-token": febboxToken,
+        },
+      });
 
-    const isVIPLink = Object.values(data.streams).some((link: any) => {
-      if (typeof link === "string") {
-        return link.toLowerCase().includes("vip");
+      if (!response.ok) {
+        console.error("Febbox API test failed with status:", response.status);
+        attempts += 1;
+        if (attempts === maxAttempts) {
+          console.log("Max attempts reached, returning error");
+          return "error";
+        }
+        console.log("Retrying after failed response...");
+        await sleep(3000);
+        continue;
       }
-      return false;
-    });
 
-    return isVIPLink ? "success" : "error";
-  } catch (error: any) {
-    console.error("Error testing Febbox token:", error);
-    return "error";
+      const data = (await response.json()) as any;
+      if (!data || !data.streams) {
+        console.error("Invalid response format from Febbox API:", data);
+        attempts += 1;
+        if (attempts === maxAttempts) {
+          console.log("Max attempts reached, returning error");
+          return "error";
+        }
+        console.log("Retrying after invalid response format...");
+        await sleep(3000);
+        continue;
+      }
+
+      const isVIPLink = Object.values(data.streams).some((link: any) => {
+        if (typeof link === "string") {
+          return link.toLowerCase().includes("vip");
+        }
+        return false;
+      });
+
+      if (isVIPLink) {
+        console.log("VIP link found, returning success");
+        return "success";
+      }
+
+      console.log("No VIP link found in attempt", attempts + 1);
+      attempts += 1;
+      if (attempts === maxAttempts) {
+        console.log("Max attempts reached, returning error");
+        return "error";
+      }
+      console.log("Retrying after no VIP link found...");
+      await sleep(3000);
+    } catch (error: any) {
+      console.error("Error testing Febbox token:", error);
+      attempts += 1;
+      if (attempts === maxAttempts) {
+        console.log("Max attempts reached, returning error");
+        return "error";
+      }
+      console.log("Retrying after error...");
+      await sleep(3000);
+    }
   }
+
+  console.log("All attempts exhausted, returning error");
+  return "error";
 }
 
 function useIsSetup() {
