@@ -79,7 +79,8 @@ export function FEDAPISetup() {
               <p className="max-w-[30rem] font-medium">
                 <Trans i18nKey="settings.connections.febbox.description">
                   Bring your own Febbox account to get the best streaming with
-                  4K quality, Dolby Atmos, and the best (fastest) load times!
+                  4K quality, Dolby Atmos, skip intro and the best (fastest)
+                  load times!
                 </Trans>
               </p>
             </div>
@@ -164,7 +165,7 @@ export function FEDAPISetup() {
               {status === "error" && (
                 <p className="text-type-danger mt-4">
                   Failed to fetch a &quot;VIP&quot; stream. Token is invalid or
-                  API is down
+                  API is down!
                 </p>
               )}
             </>
