@@ -548,9 +548,6 @@
             "title": "Aussehen",
             "options": {
                 "discoverLabel": "Abschnitt „Entdecken“",
-                "hover": "Details-Popup",
-                "hoverDescription": "Beim Bewegen des Mauszeigers über ein Medienelement wird ein Popup mit Details angezeigt. Standardmäßig deaktiviert. (Nur auf dem Desktop verfügbar)",
-                "hoverLabel": "Details-Popup",
                 "discover": "Abschnitt „Entdecken“",
                 "discoverDescription": "Zeigen Sie den Abschnitt „Entdecken“ auf der Startseite unter Ihren mit Lesezeichen versehenen Medien an. Standardmäßig aktiviert."
             }

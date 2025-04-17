@@ -555,9 +555,6 @@
             "options": {
                 "discover": "“探索”部分",
                 "discoverDescription": "在主页上书签媒体下方显示“探索”部分。默认已启用。",
-                "hover": "详情弹窗",
-                "hoverDescription": "将鼠标悬停在媒体项目上时，弹出一个显示详细信息的弹窗。默认已禁用。(仅适用于桌面端）",
-                "hoverLabel": "详情弹窗",
                 "discoverLabel": "“探索”部分"
             }
         },
