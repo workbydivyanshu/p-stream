@@ -63,6 +63,7 @@ export function OpenSubtitlesCaptionView({
                 : undefined
             }
             onClick={() => startDownload(v.id)}
+            flag
           >
             {v.languageName}
           </CaptionOption>

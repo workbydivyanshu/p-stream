@@ -467,6 +467,7 @@
                 "customChoice": "Drop or upload file",
                 "customizeLabel": "Customize",
                 "offChoice": "Off",
+                "onChoice": "On",
                 "SourceChoice": "Source Captions",
                 "OpenSubtitlesChoice": "OpenSubtitles",
                 "settings": {

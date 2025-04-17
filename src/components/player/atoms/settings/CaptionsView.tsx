@@ -22,6 +22,7 @@ export function CaptionOption(props: {
   loading?: boolean;
   onClick?: () => void;
   error?: React.ReactNode;
+  flag?: boolean;
 }) {
   return (
     <SelectableLink
@@ -34,9 +35,11 @@ export function CaptionOption(props: {
         data-active-link={props.selected ? true : undefined}
         className="flex items-center"
       >
-        <span data-code={props.countryCode} className="mr-3 inline-flex">
-          <FlagIcon langCode={props.countryCode} />
-        </span>
+        {props.flag ? (
+          <span data-code={props.countryCode} className="mr-3 inline-flex">
+            <FlagIcon langCode={props.countryCode} />
+          </span>
+        ) : null}
         <span>{props.children}</span>
       </span>
     </SelectableLink>
@@ -92,7 +95,7 @@ export function CaptionsView({
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
-  const { disable } = useCaptions();
+  const { disable, toggleLastUsed } = useCaptions();
   const [dragging, setDragging] = useState(false);
   const setCaption = usePlayerStore((s) => s.setCaption);
   const selectedCaptionLanguage = usePlayerStore(
@@ -191,6 +194,12 @@ export function CaptionsView({
             selected={!selectedCaptionId}
           >
             {t("player.menus.subtitles.offChoice")}
+          </CaptionOption>
+          <CaptionOption
+            onClick={() => toggleLastUsed().catch(() => {})}
+            selected={!!selectedCaptionId}
+          >
+            {t("player.menus.subtitles.onChoice")}
           </CaptionOption>
           <CustomCaptionOption />
           <Menu.ChevronLink

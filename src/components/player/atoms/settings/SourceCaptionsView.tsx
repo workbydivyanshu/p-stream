@@ -95,6 +95,7 @@ export function SourceCaptionsView({
                 : undefined
             }
             onClick={() => startDownload(v.id)}
+            flag
           >
             {v.languageName}
           </CaptionOption>
