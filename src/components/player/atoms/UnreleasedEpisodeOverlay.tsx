@@ -37,7 +37,10 @@ export function UnreleasedEpisodeOverlay() {
         <Flare.Child className="grid grid-cols-[auto,1fr] gap-3 pointer-events-auto relative transition-transform">
           <Icon className="text-2xl" icon={Icons.FILM} />
           <div className="w-full flex items-center justify-between">
-            <span className="text-sm">{t("media.unreleased")}</span>
+            <span className="text-sm">
+              {t("media.unreleased")} -{" "}
+              {new Date(meta.episode.air_date).toLocaleDateString()}
+            </span>
           </div>
         </Flare.Child>
       </Flare.Base>
