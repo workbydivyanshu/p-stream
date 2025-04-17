@@ -163,26 +163,20 @@ export function PlayerPart(props: PlayerPartProps) {
           <div />
           <div className="flex justify-center space-x-3">
             {/* Disable PiP for iOS PWA */}
-            {!isIOSPWA &&
-              (status === playerStatus.PLAYING ? <Player.Pip /> : null)}
+            {!isIOSPWA && status === playerStatus.PLAYING && <Player.Pip />}
             <Player.Episodes />
+            {status === playerStatus.PLAYING ? (
+              <div className="hidden ssm:block">
+                <Player.Captions />
+              </div>
+            ) : null}
             <Player.Settings />
-            {/* Expand button for iOS PWA only */}
-            {isIOSPWA && status === playerStatus.PLAYING && <Widescreen />}
+            {isIOSPWA && <IosPwaLimitations />}
           </div>
           <div>
-            {/* Disable for iOS PWA */}
-            {!isIOSPWA && (
-              <div>
-                <Player.Fullscreen />
-              </div>
-            )}
-            {/* Add info for iOS PWA */}
-            {isIOSPWA && (
-              <div>
-                <IosPwaLimitations />
-              </div>
-            )}
+            {/* iOS PWA */}
+            {!isIOSPWA && <Player.Fullscreen />}
+            {isIOSPWA && status === playerStatus.PLAYING && <Widescreen />}
           </div>
         </div>
       </Player.BottomControls>

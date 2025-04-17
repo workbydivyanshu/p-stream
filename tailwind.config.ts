@@ -11,6 +11,7 @@ const config: Config = {
     extend: {
       /* breakpoints */
       screens: {
+        xs: "350px",
         ssm: "400px",
         '2xl': '1921px', // Custom breakpoint for screens at least 1920px wide
         '3xl': '2650px', // Custom breakpoint for screens at least 2650px wide
