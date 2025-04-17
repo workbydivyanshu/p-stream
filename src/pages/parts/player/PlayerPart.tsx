@@ -4,6 +4,7 @@ import IosPwaLimitations from "@/components/buttons/IosPwaLimitations";
 import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
 import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
+import { UnreleasedEpisodeOverlay } from "@/components/player/atoms/UnreleasedEpisodeOverlay";
 import { Widescreen } from "@/components/player/atoms/Widescreen";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
@@ -183,6 +184,7 @@ export function PlayerPart(props: PlayerPartProps) {
 
       <Player.VolumeChangedPopout />
       <Player.SubtitleDelayPopout />
+      <UnreleasedEpisodeOverlay />
 
       <Player.NextEpisodeButton
         controlsShowing={showTargets}
