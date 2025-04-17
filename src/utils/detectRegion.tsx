@@ -15,7 +15,8 @@ interface RegionStore {
   setRegion: (region: Region) => void;
 }
 
-const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
+// const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
+const THIRTY_MINUTES_MS = 30 * 60 * 1000;
 
 export const useRegionStore = create<RegionStore>()(
   persist(
@@ -50,7 +51,7 @@ export async function detectRegion(): Promise<Region> {
   if (
     store.region &&
     store.lastChecked &&
-    Date.now() - store.lastChecked < TEN_DAYS_MS
+    Date.now() - store.lastChecked < THIRTY_MINUTES_MS
   ) {
     return store.region;
   }
