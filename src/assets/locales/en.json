@@ -678,9 +678,9 @@
                 "discover": "Discover section",
                 "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
                 "discoverLabel": "Discover section",
-                "hover": "Details popup",
-                "hoverDescription": "Show a popup with details when hovering over a media item. Disabled by default. (Only available on desktop)",
-                "hoverLabel": "Details popup"
+                "modal": "Details modal",
+                "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
+                "modalLabel": "Details modal"
             }
         },
         "connections": {

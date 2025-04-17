@@ -15,8 +15,10 @@ const LONG_PRESS_DURATION = 500; // 0.5 seconds
 
 export function WatchingPart({
   onItemsChange,
+  onShowDetails,
 }: {
   onItemsChange: (hasItems: boolean) => void;
+  onShowDetails?: (media: MediaItem) => void;
 }) {
   const { t } = useTranslation();
   const progressItems = useProgressStore((s) => s.items);
@@ -94,20 +96,21 @@ export function WatchingPart({
       <MediaGrid ref={gridRef}>
         {sortedProgressItems.map((v) => (
           <div
-            style={{ userSelect: "none" }} // Disable text selection
+            key={v.id}
+            style={{ userSelect: "none" }}
             onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
               e.preventDefault()
-            } // Prevent right-click context menu
-            onTouchStart={handleTouchStart} // Handle touch start
-            onTouchEnd={handleTouchEnd} // Handle touch end
-            onMouseDown={handleMouseDown} // Handle mouse down
-            onMouseUp={handleMouseUp} // Handle mouse up
+            }
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
           >
             <WatchedMediaCard
-              key={v.id}
               media={v}
               closable={editing}
               onClose={() => removeItem(v.id)}
+              onShowDetails={onShowDetails}
             />
           </div>
         ))}

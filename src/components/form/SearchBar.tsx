@@ -1,5 +1,5 @@
 import c from "classnames";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 
 import { Flare } from "@/components/utils/Flare";
 

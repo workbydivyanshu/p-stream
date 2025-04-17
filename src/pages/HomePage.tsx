@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { To, useNavigate } from "react-router-dom";
 
 import { WideContainer } from "@/components/layout/WideContainer";
+import { DetailsModal } from "@/components/overlays/DetailsModal";
+import { useModal } from "@/components/overlays/Modal";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
@@ -15,6 +17,7 @@ import { WatchingPart } from "@/pages/parts/home/WatchingPart";
 import { SearchListPart } from "@/pages/parts/search/SearchListPart";
 import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
 import { usePreferencesStore } from "@/stores/preferences";
+import { MediaItem } from "@/utils/mediaTypes";
 
 import { Button } from "./About";
 
@@ -50,7 +53,9 @@ export function HomePage() {
   const s = useSearch(search);
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [showWatching, setShowWatching] = useState(false);
-  // const modal = useModal("notice");
+  const [detailsData, setDetailsData] = useState<any>();
+  // const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const detailsModal = useModal("details");
 
   const handleClick = (path: To) => {
     window.scrollTo(0, 0);
@@ -58,6 +63,14 @@ export function HomePage() {
   };
 
   const enableDiscover = usePreferencesStore((state) => state.enableDiscover);
+
+  const handleShowDetails = async (media: MediaItem) => {
+    setDetailsData({
+      id: Number(media.id),
+      type: media.type === "movie" ? "movie" : "show",
+    });
+    detailsModal.show();
+  };
 
   // const { loggedIn } = useAuth(); // Adjust padding for popup show button based on logged in state
 
@@ -184,11 +197,20 @@ export function HomePage() {
         {s.loading ? (
           <SearchLoadingPart />
         ) : s.searching ? (
-          <SearchListPart searchQuery={search} />
+          <SearchListPart
+            searchQuery={search}
+            onShowDetails={handleShowDetails}
+          />
         ) : (
           <div className="flex flex-col gap-8">
-            <WatchingPart onItemsChange={setShowWatching} />
-            <BookmarksPart onItemsChange={setShowBookmarks} />
+            <WatchingPart
+              onItemsChange={setShowWatching}
+              onShowDetails={handleShowDetails}
+            />
+            <BookmarksPart
+              onItemsChange={setShowBookmarks}
+              onShowDetails={handleShowDetails}
+            />
           </div>
         )}
         {!(showBookmarks || showWatching) && !enableDiscover ? (
@@ -213,6 +235,8 @@ export function HomePage() {
           </div>
         </div>
       )}
+
+      {detailsData && <DetailsModal id="details" data={detailsData} />}
     </HomeLayout>
   );
 }

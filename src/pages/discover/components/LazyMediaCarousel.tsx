@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Category, Genre, Media } from "@/pages/discover/common";
 import { useIntersectionObserver } from "@/pages/discover/hooks/useIntersectionObserver";
 import { useLazyTMDBData } from "@/pages/discover/hooks/useTMDBData";
+import { MediaItem } from "@/utils/mediaTypes";
 
 import { MediaCarousel } from "./MediaCarousel";
 
@@ -16,6 +17,7 @@ interface LazyMediaCarouselProps {
   }>;
   preloadedMedia?: Media[];
   title?: string;
+  onShowDetails?: (media: MediaItem) => void;
 }
 
 export function LazyMediaCarousel({
@@ -26,6 +28,7 @@ export function LazyMediaCarousel({
   carouselRefs,
   preloadedMedia,
   title,
+  onShowDetails,
 }: LazyMediaCarouselProps) {
   const [medias, setMedias] = useState<Media[]>([]);
 
@@ -71,6 +74,7 @@ export function LazyMediaCarousel({
           isTVShow={mediaType === "tv"}
           isMobile={isMobile}
           carouselRefs={carouselRefs}
+          onShowDetails={onShowDetails}
         />
       ) : (
         <div className="relative overflow-hidden carousel-container">

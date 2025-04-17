@@ -38,10 +38,17 @@ export function MediaBookmarkButton({ media }: MediaBookmarkProps) {
     media.year === undefined ? "hover:opacity-100" : "hover:opacity-95";
 
   return (
-    <IconPatch
-      onClick={toggleBookmark}
-      icon={isBookmarked ? Icons.BOOKMARK : Icons.BOOKMARK_OUTLINE}
-      className={`${buttonOpacityClass} p-2 opacity-75 transition-opacity transition-transform duration-300 hover:scale-110 hover:cursor-pointer`}
-    />
+    <div
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleBookmark();
+      }}
+    >
+      <IconPatch
+        icon={isBookmarked ? Icons.BOOKMARK : Icons.BOOKMARK_OUTLINE}
+        className={`${buttonOpacityClass} p-2 opacity-75 transition-opacity transition-transform duration-300 hover:scale-110 hover:cursor-pointer`}
+      />
+    </div>
   );
 }

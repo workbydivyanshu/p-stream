@@ -151,8 +151,10 @@ export function SettingsPage() {
   const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
   const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
 
-  const enablePopDetails = usePreferencesStore((s) => s.enablePopDetails);
-  const setEnablePopDetails = usePreferencesStore((s) => s.setEnablePopDetails);
+  const enableDetailsModal = usePreferencesStore((s) => s.enableDetailsModal);
+  const setEnableDetailsModal = usePreferencesStore(
+    (s) => s.setEnableDetailsModal,
+  );
 
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
   const setEnableSourceOrder = usePreferencesStore(
@@ -199,7 +201,7 @@ export function SettingsPage() {
     enableThumbnails,
     enableAutoplay,
     enableDiscover,
-    enablePopDetails,
+    enableDetailsModal,
     sourceOrder,
     enableSourceOrder,
     proxyTmdb,
@@ -277,7 +279,7 @@ export function SettingsPage() {
     setEnableAutoplay(state.enableAutoplay.state);
     setEnableSkipCredits(state.enableSkipCredits.state);
     setEnableDiscover(state.enableDiscover.state);
-    setEnablePopDetails(state.enablePopDetails.state);
+    setEnableDetailsModal(state.enableDetailsModal.state);
     setSourceOrder(state.sourceOrder.state);
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
@@ -311,7 +313,7 @@ export function SettingsPage() {
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableDiscover,
-    setEnablePopDetails,
+    setEnableDetailsModal,
     setSourceOrder,
     setAppLanguage,
     setTheme,
@@ -380,8 +382,8 @@ export function SettingsPage() {
             setTheme={setThemeWithPreview}
             enableDiscover={state.enableDiscover.state}
             setEnableDiscover={state.enableDiscover.set}
-            enablePopDetails={state.enablePopDetails.state}
-            setEnablePopDetails={state.enablePopDetails.set}
+            enableDetailsModal={state.enableDetailsModal.state}
+            setEnableDetailsModal={state.enableDetailsModal.set}
           />
         </div>
         <div id="settings-captions" className="mt-28">

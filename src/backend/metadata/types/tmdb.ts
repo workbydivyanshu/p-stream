@@ -130,6 +130,27 @@ export interface TMDBShowData {
   external_ids: {
     imdb_id: string | null;
   };
+  credits?: {
+    cast: Array<{
+      id: number;
+      name: string;
+      character: string;
+      profile_path: string | null;
+    }>;
+    crew: Array<{
+      id: number;
+      name: string;
+      job: string;
+      department: string;
+      profile_path: string | null;
+    }>;
+  };
+  content_ratings?: {
+    results: Array<{
+      iso_3166_1: string;
+      rating: string;
+    }>;
+  };
 }
 
 export interface TMDBMovieData {
@@ -180,6 +201,30 @@ export interface TMDBMovieData {
   vote_count: number;
   external_ids: {
     imdb_id: string | null;
+  };
+  credits?: {
+    cast: Array<{
+      id: number;
+      name: string;
+      character: string;
+      profile_path: string | null;
+    }>;
+    crew: Array<{
+      id: number;
+      name: string;
+      job: string;
+      department: string;
+      profile_path: string | null;
+    }>;
+  };
+  release_dates?: {
+    results: Array<{
+      iso_3166_1: string;
+      release_dates: Array<{
+        certification: string;
+        release_date: string;
+      }>;
+    }>;
   };
 }
 

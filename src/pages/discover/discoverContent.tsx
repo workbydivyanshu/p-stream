@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { get } from "@/backend/metadata/tmdb";
+import { DetailsModal } from "@/components/overlays/DetailsModal";
+import { useModal } from "@/components/overlays/Modal";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   Genre,
@@ -11,6 +13,7 @@ import {
   tvCategories,
 } from "@/pages/discover/common";
 import { conf } from "@/setup/config";
+import { MediaItem } from "@/utils/mediaTypes";
 
 import "./discover.css";
 import { CategoryButtons } from "./components/CategoryButtons";
@@ -113,6 +116,8 @@ export function DiscoverContent() {
   const [providerTVShows, setProviderTVShows] = useState<any[]>([]);
   const [editorPicksMovies, setEditorPicksMovies] = useState<Movie[]>([]);
   const [editorPicksTVShows, setEditorPicksTVShows] = useState<any[]>([]);
+  const [detailsData, setDetailsData] = useState<any>();
+  const detailsModal = useModal("discover-details");
 
   // Refs
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -314,6 +319,14 @@ export function DiscoverContent() {
     }
   };
 
+  const handleShowDetails = async (media: MediaItem) => {
+    setDetailsData({
+      id: Number(media.id),
+      type: media.type === "movie" ? "movie" : "show",
+    });
+    detailsModal.show();
+  };
+
   // Render Editor Picks content
   const renderEditorPicksContent = () => {
     return (
@@ -324,6 +337,7 @@ export function DiscoverContent() {
           mediaType="movie"
           isMobile={isMobile}
           carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
         />
         <LazyMediaCarousel
           preloadedMedia={editorPicksTVShows}
@@ -331,6 +345,7 @@ export function DiscoverContent() {
           mediaType="tv"
           isMobile={isMobile}
           carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
         />
       </>
     );
@@ -348,6 +363,7 @@ export function DiscoverContent() {
             isTVShow={false}
             isMobile={isMobile}
             carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
           />
         )}
 
@@ -359,6 +375,7 @@ export function DiscoverContent() {
             mediaType="movie"
             isMobile={isMobile}
             carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
           />
         ))}
 
@@ -370,6 +387,7 @@ export function DiscoverContent() {
             mediaType="movie"
             isMobile={isMobile}
             carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
           />
         ))}
       </>
@@ -388,6 +406,7 @@ export function DiscoverContent() {
             isTVShow
             isMobile={isMobile}
             carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
           />
         )}
 
@@ -399,6 +418,7 @@ export function DiscoverContent() {
             mediaType="tv"
             isMobile={isMobile}
             carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
           />
         ))}
 
@@ -410,6 +430,7 @@ export function DiscoverContent() {
             mediaType="tv"
             isMobile={isMobile}
             carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
           />
         ))}
       </>
@@ -496,6 +517,8 @@ export function DiscoverContent() {
       </div>
 
       <ScrollToTopButton />
+
+      {detailsData && <DetailsModal id="discover-details" data={detailsData} />}
     </div>
   );
 }

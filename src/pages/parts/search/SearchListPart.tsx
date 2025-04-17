@@ -57,7 +57,13 @@ function SearchSuffix(props: { failed?: boolean; results?: number }) {
   );
 }
 
-export function SearchListPart({ searchQuery }: { searchQuery: string }) {
+export function SearchListPart({
+  searchQuery,
+  onShowDetails,
+}: {
+  searchQuery: string;
+  onShowDetails?: (media: MediaItem) => void;
+}) {
   const { t } = useTranslation();
 
   const [results, setResults] = useState<MediaItem[]>([]);
@@ -87,7 +93,11 @@ export function SearchListPart({ searchQuery }: { searchQuery: string }) {
           />
           <MediaGrid>
             {results.map((v) => (
-              <WatchedMediaCard key={v.id.toString()} media={v} />
+              <WatchedMediaCard
+                key={v.id.toString()}
+                media={v}
+                onShowDetails={onShowDetails}
+              />
             ))}
           </MediaGrid>
         </div>

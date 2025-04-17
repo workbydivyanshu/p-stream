@@ -7,7 +7,7 @@ export interface PreferencesStore {
   enableAutoplay: boolean;
   enableSkipCredits: boolean;
   enableDiscover: boolean;
-  enablePopDetails: boolean;
+  enableDetailsModal: boolean;
   sourceOrder: string[];
   enableSourceOrder: boolean;
   proxyTmdb: boolean;
@@ -16,7 +16,7 @@ export interface PreferencesStore {
   setEnableAutoplay(v: boolean): void;
   setEnableSkipCredits(v: boolean): void;
   setEnableDiscover(v: boolean): void;
-  setEnablePopDetails(v: boolean): void;
+  setEnableDetailsModal(v: boolean): void;
   setSourceOrder(v: string[]): void;
   setEnableSourceOrder(v: boolean): void;
   setProxyTmdb(v: boolean): void;
@@ -29,7 +29,7 @@ export const usePreferencesStore = create(
       enableAutoplay: true,
       enableSkipCredits: true,
       enableDiscover: true,
-      enablePopDetails: false,
+      enableDetailsModal: false,
       sourceOrder: [],
       enableSourceOrder: false,
       proxyTmdb: false,
@@ -53,9 +53,9 @@ export const usePreferencesStore = create(
           s.enableDiscover = v;
         });
       },
-      setEnablePopDetails(v) {
+      setEnableDetailsModal(v) {
         set((s) => {
-          s.enablePopDetails = v;
+          s.enableDetailsModal = v;
         });
       },
       setSourceOrder(v) {

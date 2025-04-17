@@ -23,6 +23,7 @@ export interface PlayerMetaEpisode {
   number: number;
   tmdbId: string;
   title: string;
+  air_date?: string;
 }
 
 export interface PlayerMeta {
