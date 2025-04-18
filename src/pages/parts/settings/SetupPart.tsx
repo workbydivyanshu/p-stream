@@ -52,7 +52,7 @@ const getBaseUrl = (): string => {
 const BASE_URL = getBaseUrl();
 
 const testUrl = "https://postman-echo.com/get";
-const febboxApiTestUrl = `${BASE_URL}/movie/tt0325980`;
+const febboxApiTestUrl = `${BASE_URL}/movie/tt13654226`;
 
 const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => {
