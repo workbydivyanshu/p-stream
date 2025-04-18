@@ -36,6 +36,9 @@ export function RegionSelectorPart() {
             direction="up"
           />
         </div>
+        <p className="max-w-[30rem] text-type-danger">
+          Use with caution. Changing the region could reset your token!
+        </p>
       </Box>
     </>
   );

@@ -16,10 +16,6 @@ interface RegionStore {
   setRegion: (region: Region, userPicked?: boolean) => void;
 }
 
-// const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-// const THIRTY_MINUTES_MS = 30 * 60 * 1000;
-
 export const useRegionStore = create<RegionStore>()(
   persist(
     (set) => ({
@@ -27,10 +23,11 @@ export const useRegionStore = create<RegionStore>()(
       lastChecked: null,
       userPicked: false,
       setRegion: (region, userPicked = false) =>
-        set({ region, lastChecked: Date.now(), userPicked }),
+        set({ region, lastChecked: Math.floor(Date.now() / 1000), userPicked }),
     }),
     {
       name: "__MW::region",
+      version: 2,
     },
   ),
 );
@@ -42,10 +39,85 @@ function determineRegion(data: {
 }): Region {
   const { latitude, longitude, country_code: country } = data;
 
-  if (country === "US") return longitude < -100 ? "us-west" : "us-east";
-  if (latitude < 0) return "south-america";
-  if (longitude > 60) return "asia";
-  if (longitude > -10) return "europe";
+  // US regions
+  if (country === "US") {
+    // For Alaska and Hawaii, default to US West
+    if (latitude > 50 || latitude < 20) {
+      return "us-west";
+    }
+
+    // For continental US, use longitude boundary
+    return longitude < -110 ? "us-west" : "us-east";
+  }
+
+  // South America
+  if (
+    country === "AR" ||
+    country === "BO" ||
+    country === "BR" ||
+    country === "CL" ||
+    country === "CO" ||
+    country === "EC" ||
+    country === "GY" ||
+    country === "PE" ||
+    country === "PY" ||
+    country === "SR" ||
+    country === "UY" ||
+    country === "VE"
+  ) {
+    return "south-america";
+  }
+
+  // Asia
+  if (
+    longitude > 60 &&
+    (country === "CN" ||
+      country === "JP" ||
+      country === "KR" ||
+      country === "IN" ||
+      country === "ID" ||
+      country === "TH" ||
+      country === "VN" ||
+      country === "PH" ||
+      country === "MY" ||
+      country === "SG" ||
+      country === "TW" ||
+      country === "HK")
+  ) {
+    return "asia";
+  }
+
+  // Europe
+  if (
+    longitude > -10 &&
+    (country === "GB" ||
+      country === "FR" ||
+      country === "DE" ||
+      country === "IT" ||
+      country === "ES" ||
+      country === "NL" ||
+      country === "BE" ||
+      country === "CH" ||
+      country === "AT" ||
+      country === "SE" ||
+      country === "NO" ||
+      country === "DK" ||
+      country === "FI" ||
+      country === "PL" ||
+      country === "CZ" ||
+      country === "SK" ||
+      country === "HU" ||
+      country === "RO" ||
+      country === "BG" ||
+      country === "GR" ||
+      country === "PT" ||
+      country === "IE" ||
+      country === "IS")
+  ) {
+    return "europe";
+  }
+
+  // Default to US East for other regions
   return "us-east";
 }
 
@@ -61,7 +133,7 @@ export async function detectRegion(): Promise<Region> {
   if (
     store.region &&
     store.lastChecked &&
-    Date.now() - store.lastChecked < ONE_DAY_MS
+    Math.floor(Date.now() / 1000) - store.lastChecked < 86400 // 1 day in seconds
   ) {
     return store.region;
   }
