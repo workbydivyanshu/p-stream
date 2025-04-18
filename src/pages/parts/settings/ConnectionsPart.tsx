@@ -9,7 +9,6 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
-import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import {
@@ -27,7 +26,6 @@ import {
 } from "@/pages/parts/settings/SetupPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
-import { Region, useRegionStore } from "@/utils/detectRegion";
 
 interface ProxyEditProps {
   proxyUrls: string[] | null;
@@ -231,7 +229,6 @@ async function getFebboxTokenStatus(febboxToken: string | null) {
 function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
   const { t } = useTranslation();
   const [showVideo, setShowVideo] = useState(false);
-  const { region, setRegion } = useRegionStore();
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -239,14 +236,6 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
     success: "success",
     unset: "noresult",
   };
-
-  const regionOptions = [
-    { id: "us-east", name: "US East" },
-    { id: "us-west", name: "US West" },
-    { id: "south-america", name: "South America" },
-    { id: "asia", name: "Asia" },
-    { id: "europe", name: "Europe" },
-  ];
 
   useEffect(() => {
     const checkTokenStatus = async () => {
@@ -348,19 +337,6 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
                 passwordToggleable
                 className="flex-grow"
               />
-              <div className="ml-4 w-40">
-                <Dropdown
-                  options={regionOptions}
-                  selectedItem={{
-                    id: region || "us-east",
-                    name:
-                      regionOptions.find((r) => r.id === region)?.name ||
-                      "US East",
-                  }}
-                  setSelectedItem={(item) => setRegion(item.id as Region, true)}
-                  direction="up"
-                />
-              </div>
             </div>
             {status === "error" && (
               <p className="text-type-danger mt-4">

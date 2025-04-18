@@ -1,0 +1,42 @@
+import { Dropdown } from "@/components/form/Dropdown";
+import { Box } from "@/components/layout/Box";
+import { Heading2 } from "@/components/utils/Text";
+import { Region, useRegionStore } from "@/utils/detectRegion";
+
+export function RegionSelectorPart() {
+  const { region, setRegion } = useRegionStore();
+
+  const regionOptions = [
+    { id: "us-east", name: "US East" },
+    { id: "us-west", name: "US West" },
+    { id: "south-america", name: "South America" },
+    { id: "asia", name: "Asia" },
+    { id: "europe", name: "Europe" },
+  ];
+
+  return (
+    <>
+      <Heading2 className="mb-8 mt-12">Region Selector</Heading2>
+      <Box>
+        <div className="flex items-center">
+          <div className="flex-1">
+            <p className="max-w-[20rem] font-medium">
+              Manually select your preferred region for FED API. This will
+              override automatic region detection.
+            </p>
+          </div>
+          <Dropdown
+            options={regionOptions}
+            selectedItem={{
+              id: region || "us-east",
+              name:
+                regionOptions.find((r) => r.id === region)?.name || "US East",
+            }}
+            setSelectedItem={(item) => setRegion(item.id as Region, true)}
+            direction="up"
+          />
+        </div>
+      </Box>
+    </>
+  );
+}
