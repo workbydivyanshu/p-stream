@@ -95,7 +95,7 @@ export async function detectRegion(): Promise<Region> {
   if (
     store.region &&
     store.lastChecked &&
-    Math.floor(Date.now() / 1000) - store.lastChecked < 86400 // 1 day in seconds
+    Math.floor(Date.now() / 1000) - store.lastChecked < 2592000 // 30 days in seconds
   ) {
     return store.region;
   }
