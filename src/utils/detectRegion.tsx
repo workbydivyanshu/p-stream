@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 export type Region =
   | "us-east"
   | "us-west"
-  | "south-america"
+  | "south"
   | "asia"
   | "europe"
   | "unknown";
@@ -27,98 +27,60 @@ export const useRegionStore = create<RegionStore>()(
     }),
     {
       name: "__MW::region",
-      version: 2,
+      version: 3,
     },
   ),
 );
+
+// Coordinates for each proxy server region
+const regionCoordinates = [
+  { region: "us-east" as Region, lat: 39.9612, lon: -82.9988 }, // Ohio, US
+  { region: "us-west" as Region, lat: 37.7749, lon: -122.4194 }, // California, US
+  { region: "south" as Region, lat: -23.5505, lon: -46.6333 }, // São Paulo, BR
+  { region: "asia" as Region, lat: 1.3521, lon: 103.8198 }, // Singapore
+  { region: "europe" as Region, lat: 51.5074, lon: -0.1278 }, // London, UK
+];
+
+// Haversine formula
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
+  const R = 6371e3; // Earth radius in meters
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
 
 function determineRegion(data: {
   latitude: number;
   longitude: number;
   country_code: string;
 }): Region {
-  const { latitude, longitude, country_code: country } = data;
+  const { latitude, longitude } = data;
 
-  // US regions
-  if (country === "US") {
-    // For Alaska and Hawaii, default to US West
-    if (latitude > 50 || latitude < 20) {
-      return "us-west";
+  let closestRegion: Region = "unknown";
+  let minDistance = Infinity;
+
+  for (const { region, lat, lon } of regionCoordinates) {
+    const distance = calculateDistance(latitude, longitude, lat, lon);
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestRegion = region;
     }
-
-    // For continental US, use longitude boundary
-    return longitude < -110 ? "us-west" : "us-east";
   }
 
-  // South America
-  if (
-    country === "AR" ||
-    country === "BO" ||
-    country === "BR" ||
-    country === "CL" ||
-    country === "CO" ||
-    country === "EC" ||
-    country === "GY" ||
-    country === "PE" ||
-    country === "PY" ||
-    country === "SR" ||
-    country === "UY" ||
-    country === "VE"
-  ) {
-    return "south-america";
-  }
-
-  // Asia
-  if (
-    longitude > 60 &&
-    (country === "CN" ||
-      country === "JP" ||
-      country === "KR" ||
-      country === "IN" ||
-      country === "ID" ||
-      country === "TH" ||
-      country === "VN" ||
-      country === "PH" ||
-      country === "MY" ||
-      country === "SG" ||
-      country === "TW" ||
-      country === "HK")
-  ) {
-    return "asia";
-  }
-
-  // Europe
-  if (
-    longitude > -10 &&
-    (country === "GB" ||
-      country === "FR" ||
-      country === "DE" ||
-      country === "IT" ||
-      country === "ES" ||
-      country === "NL" ||
-      country === "BE" ||
-      country === "CH" ||
-      country === "AT" ||
-      country === "SE" ||
-      country === "NO" ||
-      country === "DK" ||
-      country === "FI" ||
-      country === "PL" ||
-      country === "CZ" ||
-      country === "SK" ||
-      country === "HU" ||
-      country === "RO" ||
-      country === "BG" ||
-      country === "GR" ||
-      country === "PT" ||
-      country === "IE" ||
-      country === "IS")
-  ) {
-    return "europe";
-  }
-
-  // Default to US East for other regions
-  return "us-east";
+  return closestRegion;
 }
 
 export async function detectRegion(): Promise<Region> {
@@ -142,9 +104,16 @@ export async function detectRegion(): Promise<Region> {
     const response = await fetch("https://ipapi.co/json/");
     const data = await response.json();
 
+    if (
+      typeof data.latitude !== "number" ||
+      typeof data.longitude !== "number"
+    ) {
+      return "unknown";
+    }
+
     const detectedRegion = determineRegion(data);
     if (!store.userPicked) {
-      store.setRegion(detectedRegion); // Only update if not user picked
+      store.setRegion(detectedRegion);
     }
     return detectedRegion;
   } catch (error) {

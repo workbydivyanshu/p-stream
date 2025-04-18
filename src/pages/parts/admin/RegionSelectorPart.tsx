@@ -9,9 +9,9 @@ export function RegionSelectorPart() {
   const regionOptions = [
     { id: "us-east", name: "US East" },
     { id: "us-west", name: "US West" },
-    { id: "south-america", name: "South America" },
-    { id: "asia", name: "Asia" },
-    { id: "europe", name: "Europe" },
+    { id: "south", name: "US Middle" },
+    { id: "asia", name: "Asia Pacific" },
+    { id: "europe", name: "Europe Central" },
   ];
 
   return (
@@ -30,7 +30,8 @@ export function RegionSelectorPart() {
             selectedItem={{
               id: region || "us-east",
               name:
-                regionOptions.find((r) => r.id === region)?.name || "US East",
+                regionOptions.find((r) => r.id === region)?.name ||
+                "Unknown (US East)",
             }}
             setSelectedItem={(item) => setRegion(item.id as Region, true)}
             direction="up"
