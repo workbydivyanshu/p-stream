@@ -65,7 +65,6 @@ function calculateDistance(
 function determineRegion(data: {
   latitude: number;
   longitude: number;
-  country_code: string;
 }): Region {
   const { latitude, longitude } = data;
 
@@ -116,7 +115,6 @@ export async function detectRegion(): Promise<Region> {
         const detectedRegion = determineRegion({
           latitude,
           longitude,
-          country_code: backupData.country,
         });
         if (!store.userPicked) {
           store.setRegion(detectedRegion);
