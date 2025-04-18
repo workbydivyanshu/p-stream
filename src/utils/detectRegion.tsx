@@ -108,6 +108,22 @@ export async function detectRegion(): Promise<Region> {
       typeof data.latitude !== "number" ||
       typeof data.longitude !== "number"
     ) {
+      const backupResponse = await fetch("https://ipinfo.io/json");
+      const backupData = await backupResponse.json();
+
+      if (backupData.loc) {
+        const [latitude, longitude] = backupData.loc.split(",").map(Number);
+        const detectedRegion = determineRegion({
+          latitude,
+          longitude,
+          country_code: backupData.country,
+        });
+        if (!store.userPicked) {
+          store.setRegion(detectedRegion);
+        }
+        return detectedRegion;
+      }
+
       return "unknown";
     }
 
