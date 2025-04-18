@@ -1,9 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { Region, getRegion, updateRegion } from "@/backend/accounts/region";
-import { conf } from "@/setup/config";
-import { useAuthStore } from "@/stores/auth";
+export type Region =
+  | "us-east"
+  | "us-west"
+  | "south"
+  | "asia"
+  | "europe"
+  | "unknown";
 
 interface RegionStore {
   region: Region | null;
@@ -18,33 +22,12 @@ export const useRegionStore = create<RegionStore>()(
       region: null,
       lastChecked: null,
       userPicked: false,
-      setRegion: async (region, userPicked = false) => {
-        const url = conf().BACKEND_URL;
-        const account = useAuthStore.getState().account;
-
-        if (url && account) {
-          try {
-            const response = await updateRegion(
-              url,
-              account,
-              region,
-              userPicked,
-            );
-            set({
-              region: response.region,
-              lastChecked: response.lastChecked,
-              userPicked: response.userPicked,
-            });
-          } catch (error) {
-            console.error("Failed to update region:", error);
-          }
-        } else {
-          set({
-            region,
-            lastChecked: Math.floor(Date.now() / 1000),
-            userPicked,
-          });
-        }
+      setRegion: (region, userPicked = false) => {
+        set({
+          region,
+          lastChecked: Math.floor(Date.now() / 1000),
+          userPicked,
+        });
       },
     }),
     {
@@ -106,16 +89,11 @@ function determineRegion(data: {
 
 // 1. Check if user manually picked a region (highest priority)
 // 2. Check if we need to refresh the region
-// 3. If refresh needed:
-//    a. Try to get fresh region from backend
-//    b. If backend region is fresh, use it
-//    c. If backend region is expired or unavailable, fall back to IP detection
+// 3. If refresh needed, fall back to IP detection
 // 4. If no refresh needed, use existing region
 
 export async function detectRegion(): Promise<Region> {
   const store = useRegionStore.getState();
-  const url = conf().BACKEND_URL;
-  const account = useAuthStore.getState().account;
 
   // If user picked a region, always return that
   if (store.userPicked && store.region) {
@@ -133,25 +111,6 @@ export async function detectRegion(): Promise<Region> {
   }
 
   try {
-    // Try to get fresh region from backend first
-    if (url && account) {
-      try {
-        const response = await getRegion(url, account);
-        // Only update if the backend has a fresh region
-        if (
-          response.lastChecked &&
-          Math.floor(Date.now() / 1000) - response.lastChecked < 2592000
-        ) {
-          if (!store.userPicked) {
-            store.setRegion(response.region, response.userPicked);
-          }
-          return response.region;
-        }
-      } catch (error) {
-        console.warn("Failed to get region from backend:", error);
-      }
-    }
-
     // Fallback to IP-based detection
     const response = await fetch("https://ipapi.co/json/");
     const data = await response.json();
