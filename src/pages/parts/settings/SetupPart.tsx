@@ -51,10 +51,7 @@ const getBaseUrl = async (): Promise<string> => {
   }
 };
 
-const BASE_URL = await getBaseUrl();
-
 const testUrl = "https://postman-echo.com/get";
-const febboxApiTestUrl = `${BASE_URL}/movie/tt13654226`;
 
 const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => {
@@ -88,6 +85,9 @@ function testProxy(url: string) {
 export async function testFebboxToken(
   febboxToken: string | null,
 ): Promise<Status> {
+  const BASE_URL = await getBaseUrl();
+  const febboxApiTestUrl = `${BASE_URL}/movie/tt13654226`;
+
   if (!febboxToken) {
     return "unset";
   }
