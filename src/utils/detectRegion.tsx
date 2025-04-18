@@ -12,18 +12,22 @@ export type Region =
 interface RegionStore {
   region: Region | null;
   lastChecked: number | null;
-  setRegion: (region: Region) => void;
+  userPicked: boolean;
+  setRegion: (region: Region, userPicked?: boolean) => void;
 }
 
 // const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
-const THIRTY_MINUTES_MS = 30 * 60 * 1000;
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+// const THIRTY_MINUTES_MS = 30 * 60 * 1000;
 
 export const useRegionStore = create<RegionStore>()(
   persist(
     (set) => ({
       region: null,
       lastChecked: null,
-      setRegion: (region) => set({ region, lastChecked: Date.now() }),
+      userPicked: false,
+      setRegion: (region, userPicked = false) =>
+        set({ region, lastChecked: Date.now(), userPicked }),
     }),
     {
       name: "__MW::region",
@@ -48,10 +52,16 @@ function determineRegion(data: {
 export async function detectRegion(): Promise<Region> {
   const store = useRegionStore.getState();
 
+  // If user picked a region, always return that
+  if (store.userPicked && store.region) {
+    return store.region;
+  }
+
+  // If we have a recent detection, return that
   if (
     store.region &&
     store.lastChecked &&
-    Date.now() - store.lastChecked < THIRTY_MINUTES_MS
+    Date.now() - store.lastChecked < ONE_DAY_MS
   ) {
     return store.region;
   }
@@ -61,7 +71,9 @@ export async function detectRegion(): Promise<Region> {
     const data = await response.json();
 
     const detectedRegion = determineRegion(data);
-    store.setRegion(detectedRegion); // Persist the detected region
+    if (!store.userPicked) {
+      store.setRegion(detectedRegion); // Only update if not user picked
+    }
     return detectedRegion;
   } catch (error) {
     console.warn("Failed to detect region:", error);

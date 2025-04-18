@@ -13,9 +13,12 @@ interface DropdownProps {
   selectedItem: OptionItem;
   setSelectedItem: (value: OptionItem) => void;
   options: Array<OptionItem>;
+  direction?: "up" | "down";
 }
 
 export function Dropdown(props: DropdownProps) {
+  const { direction = "down" } = props;
+
   return (
     <div className="relative my-4 max-w-[25rem]">
       <Listbox value={props.selectedItem} onChange={props.setSelectedItem}>
@@ -31,7 +34,7 @@ export function Dropdown(props: DropdownProps) {
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <Icon
                   icon={Icons.UP_DOWN_ARROW}
-                  className="transform transition-transform text-xl text-dropdown-secondary"
+                  className={`transform transition-transform text-xl text-dropdown-secondary ${direction === "up" ? "rotate-180" : ""}`}
                 />
               </span>
             </Listbox.Button>
@@ -41,7 +44,9 @@ export function Dropdown(props: DropdownProps) {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute left-0 right-0 top-10 z-[100] mt-4 max-h-60 overflow-auto rounded-md bg-dropdown-background py-1 text-white shadow-lg ring-1 ring-black ring-opacity-5 scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary focus:outline-none sm:top-10">
+              <Listbox.Options
+                className={`absolute left-0 right-0 z-[100] mt-4 max-h-60 overflow-auto rounded-md bg-dropdown-background py-1 text-white shadow-lg ring-1 ring-black ring-opacity-5 scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary focus:outline-none ${direction === "up" ? "bottom-full mb-4" : "top-full"}`}
+              >
                 {props.options.map((opt) => (
                   <Listbox.Option
                     className={({ active }) =>
