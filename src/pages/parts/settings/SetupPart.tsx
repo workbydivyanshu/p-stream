@@ -19,7 +19,7 @@ import { Heading3 } from "@/components/utils/Text";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 
-const getRegion = (): string | null => {
+const getRegion = async (): Promise<string | null> => {
   if (typeof window === "undefined") return null;
   try {
     const regionData = window.localStorage.getItem("__MW::region");
@@ -31,25 +31,27 @@ const getRegion = (): string | null => {
   }
 };
 
-const getBaseUrl = (): string => {
-  const region = getRegion();
+const getBaseUrl = async (): Promise<string> => {
+  const region = await getRegion();
   switch (region) {
     case "us-east":
       return "https://fed-api-east.pstream.org";
     case "us-west":
       return "https://fed-api-west.pstream.org";
-    case "south-america":
+    case "south":
       return "https://fed-api-south.pstream.org";
     case "asia":
       return "https://fed-api-asia.pstream.org";
     case "europe":
       return "https://fed-api-europe.pstream.org";
-    default:
+    case "unknown":
       return "https://fed-api-east.pstream.org";
+    default:
+      return "";
   }
 };
 
-const BASE_URL = getBaseUrl();
+const BASE_URL = await getBaseUrl();
 
 const testUrl = "https://postman-echo.com/get";
 const febboxApiTestUrl = `${BASE_URL}/movie/tt13654226`;

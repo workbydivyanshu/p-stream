@@ -1,10 +1,14 @@
+import { useState } from "react";
+
+import { Region } from "@/backend/accounts/region";
 import { Dropdown } from "@/components/form/Dropdown";
 import { Box } from "@/components/layout/Box";
 import { Heading2 } from "@/components/utils/Text";
-import { Region, useRegionStore } from "@/utils/detectRegion";
+import { useRegionStore } from "@/utils/detectRegion";
 
 export function RegionSelectorPart() {
   const { region, setRegion } = useRegionStore();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const regionOptions = [
     { id: "us-east", name: "US East (Ohio)" },
@@ -13,6 +17,17 @@ export function RegionSelectorPart() {
     { id: "asia", name: "Asia Pacific (Sydney)" },
     { id: "europe", name: "Europe Central (London)" },
   ];
+
+  const handleRegionChange = async (item: { id: string; name: string }) => {
+    setIsUpdating(true);
+    try {
+      await setRegion(item.id as Region, true);
+    } catch (error) {
+      console.error("Failed to update region:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   return (
     <>
@@ -33,7 +48,7 @@ export function RegionSelectorPart() {
                 regionOptions.find((r) => r.id === region)?.name ||
                 "Unknown (US East)",
             }}
-            setSelectedItem={(item) => setRegion(item.id as Region, true)}
+            setSelectedItem={handleRegionChange}
             direction="up"
           />
         </div>
