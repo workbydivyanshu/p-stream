@@ -27,17 +27,17 @@ export const useRegionStore = create<RegionStore>()(
     }),
     {
       name: "__MW::region",
-      version: 3,
+      version: 4,
     },
   ),
 );
 
 // Coordinates for each proxy server region
 const regionCoordinates = [
-  { region: "us-east" as Region, lat: 39.9612, lon: -82.9988 }, // Ohio, US
+  { region: "us-east" as Region, lat: 40.4173, lon: -82.9071 }, // Ohio, US
   { region: "us-west" as Region, lat: 37.7749, lon: -122.4194 }, // California, US
   { region: "south" as Region, lat: -23.5505, lon: -46.6333 }, // São Paulo, BR
-  { region: "asia" as Region, lat: 1.3521, lon: 103.8198 }, // Singapore
+  { region: "asia" as Region, lat: -33.8688, lon: 151.2093 }, // Sydney, Australia
   { region: "europe" as Region, lat: 51.5074, lon: -0.1278 }, // London, UK
 ];
 

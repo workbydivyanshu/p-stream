@@ -7,11 +7,11 @@ export function RegionSelectorPart() {
   const { region, setRegion } = useRegionStore();
 
   const regionOptions = [
-    { id: "us-east", name: "US East" },
-    { id: "us-west", name: "US West" },
-    { id: "south", name: "US Middle" },
-    { id: "asia", name: "Asia Pacific" },
-    { id: "europe", name: "Europe Central" },
+    { id: "us-east", name: "US East (Ohio)" },
+    { id: "us-west", name: "US West (California)" },
+    { id: "south", name: "South America (São Paulo)" },
+    { id: "asia", name: "Asia Pacific (Sydney)" },
+    { id: "europe", name: "Europe Central (London)" },
   ];
 
   return (
