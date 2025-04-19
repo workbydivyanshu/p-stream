@@ -64,15 +64,6 @@ export const useAuthStore = create(
         set((s) => {
           s.febboxToken = token;
         });
-        try {
-          if (token === null) {
-            localStorage.removeItem("febbox_ui_token");
-          } else {
-            localStorage.setItem("febbox_ui_token", token);
-          }
-        } catch (e) {
-          console.warn("Failed to access localStorage:", e);
-        }
       },
       setAccountProfile(profile) {
         set((s) => {
@@ -99,28 +90,6 @@ export const useAuthStore = create(
     })),
     {
       name: "__MW::auth",
-      migrate: (persistedState: any) => {
-        // Migration from localStorage to Zustand store
-        if (!persistedState.febboxToken) {
-          try {
-            const storedToken = localStorage.getItem("febbox_ui_token");
-            if (storedToken) persistedState.febboxToken = storedToken;
-          } catch (e) {
-            console.warn("LocalStorage access failed during migration:", e);
-          }
-        }
-        return persistedState;
-      },
-      onRehydrateStorage: () => (state) => {
-        // After store rehydration
-        if (state?.febboxToken) {
-          try {
-            localStorage.setItem("febbox_ui_token", state.febboxToken);
-          } catch (e) {
-            console.warn("Failed to sync token to localStorage:", e);
-          }
-        }
-      },
     },
   ),
 );
