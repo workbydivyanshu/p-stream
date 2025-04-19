@@ -318,7 +318,8 @@
                 "SourceChoice": "Ψάξε για υπότιτλους",
                 "OpenSubtitlesChoice": "OpenSubtitles",
                 "notFound": "Καμία από τις διαθέσιμες επιλογές σου , δεν ταιριάζουν με την αναζήτηση σου",
-                "scrapeButton": "Βρες υπότιτλους"
+                "scrapeButton": "Βρες υπότιτλους",
+                "onChoice": "Ενεργοποιημένο"
             }
         },
         "metadata": {
