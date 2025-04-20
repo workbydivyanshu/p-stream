@@ -308,14 +308,14 @@
                 "onIos": {
                     "1": "כדי להוריד ב-iOS, לחץ על כפתור ההורדה ולאחר מכן, בדף החדש, לחץ על <bold><ios_share /></bold> ולאחר מכן על <bold>שמור לקבצים <ios_files /></bold>.",
                     "shortTitle": "הורדה / iOS",
-                    "title": "מוריד ב-iOS"
+                    "title": "הורדה באייפון"
                 },
                 "onPc": {
                     "1": "במחשב, לחץ על כפתור ההורדה ולאחר מכן, בדף החדש, לחץ לחיצה ימנית על הסרטון ובחר <bold>שמור סרטון בשם</bold>",
                     "shortTitle": "הורדה / PC",
                     "title": "הורדה במחשב"
                 },
-                "title": "הורד",
+                "title": "הורדת המדיה",
                 "copyHlsPlaylist": "העתק קישור לפלייליסט HLS"
             },
             "episodes": {
@@ -340,7 +340,7 @@
             },
             "settings": {
                 "downloadItem": "הורד",
-                "enableSubtitles": "אפשר כתוביות",
+                "enableSubtitles": "כתוביות",
                 "experienceSection": "חווית צפייה",
                 "playbackItem": "הגדרות ניגון",
                 "qualityItem": "איכות",
@@ -377,7 +377,7 @@
                 },
                 "title": "כתוביות",
                 "unknownLanguage": "לא ידוע",
-                "onChoice": "על",
+                "onChoice": "דלוק",
                 "dropSubtitleFile": "תשים קובץ כתוביות כאן! >_<",
                 "SourceChoice": "כתוביות מקור",
                 "OpenSubtitlesChoice": "OpenSubtitles",
