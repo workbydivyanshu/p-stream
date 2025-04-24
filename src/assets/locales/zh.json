@@ -141,7 +141,8 @@
                     "您今天的片单上有什么？",
                     "今天过得怎么样？",
                     "是我的错，网站总是无法正常运行…",
-                    "P-Stream 不就是最棒的吗？"
+                    "P-Stream 不就是最棒的吗？",
+                    ">ᴗ<"
                 ]
             },
             "sectionTitle": "搜索结果",
@@ -381,7 +382,8 @@
                 "SourceChoice": "来自片源的字幕",
                 "OpenSubtitlesChoice": "OpenSubtitles",
                 "empty": "没有提供的字幕。",
-                "notFound": "没有一个可用选项符合您的查询"
+                "notFound": "没有一个可用选项符合您的查询",
+                "onChoice": "打开"
             }
         },
         "metadata": {
@@ -555,7 +557,10 @@
             "options": {
                 "discover": "“探索”部分",
                 "discoverDescription": "在主页上书签媒体下方显示“探索”部分。默认已启用。",
-                "discoverLabel": "“探索”部分"
+                "discoverLabel": "“探索”部分",
+                "modal": "详细信息",
+                "modalDescription": "点击媒体卡片时显示详细信息模式，而不是转到观看页面。预告片需要代理或扩展。默认已禁用。",
+                "modalLabel": "详细信息"
             }
         },
         "connections": {
