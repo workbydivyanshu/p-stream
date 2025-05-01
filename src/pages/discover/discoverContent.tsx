@@ -15,7 +15,6 @@ import {
 import { conf } from "@/setup/config";
 import { MediaItem } from "@/utils/mediaTypes";
 
-import "./discover.css";
 import { CategoryButtons } from "./components/CategoryButtons";
 import { LazyMediaCarousel } from "./components/LazyMediaCarousel";
 import { LazyTabContent } from "./components/LazyTabContent";

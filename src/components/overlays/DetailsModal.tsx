@@ -582,7 +582,7 @@ function DetailsContent({
 
               <div
                 ref={carouselRef}
-                className="flex overflow-x-auto space-x-4 pb-4 pt-2 lg:px-12 scrollbar-hide"
+                className="flex overflow-x-auto space-x-4 pb-4 pt-2 lg:px-12 scrollbar-hide carousel-container"
                 style={{
                   scrollbarWidth: "none",
                   msOverflowStyle: "none",
