@@ -766,7 +766,10 @@
             "previewQuote": "Convinced life is meaningless, I lack the courage of my conviction.",
             "textSizeLabel": "Text size",
             "title": "Subtitles",
-            "textBoldLabel": "Bold text"
+            "textBoldLabel": "Bold text",
+            "verticalPositionLabel": "Vertical position",
+            "default": "Default",
+            "low": "Low"
         },
         "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
     },

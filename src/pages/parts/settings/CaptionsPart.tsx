@@ -53,7 +53,12 @@ export function CaptionPreview(props: {
             <Icon icon={props.fullscreen ? Icons.X : Icons.EXPAND} />
           </button>
 
-          <div className="text-white pointer-events-none absolute flex w-full flex-col items-center transition-[bottom] bottom-0 p-4">
+          <div
+            className="text-white pointer-events-none absolute flex w-full flex-col items-center transition-[bottom] p-4"
+            style={{
+              bottom: `${props.styling.verticalPosition * 4}px`,
+            }}
+          >
             <div
               className={
                 props.fullscreen ? "" : "transform origin-bottom text-[0.5rem]"
@@ -98,6 +103,7 @@ export function CaptionsPart(props: {
       size: 1,
       backgroundBlur: 0.5,
       bold: false,
+      verticalPosition: 3,
     });
   };
 
@@ -145,6 +151,47 @@ export function CaptionsPart(props: {
             }
             value={props.styling.size * 100}
           />
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.verticalPositionLabel")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center space-x-2">
+              <button
+                type="button"
+                className={classNames(
+                  "px-3 py-1 rounded transition-colors duration-100",
+                  props.styling.verticalPosition === 3
+                    ? "bg-video-context-buttonFocus"
+                    : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                )}
+                onClick={() =>
+                  handleStylingChange({
+                    ...props.styling,
+                    verticalPosition: 3,
+                  })
+                }
+              >
+                {t("settings.subtitles.default")}
+              </button>
+              <button
+                type="button"
+                className={classNames(
+                  "px-3 py-1 rounded transition-colors duration-100",
+                  props.styling.verticalPosition === 1
+                    ? "bg-video-context-buttonFocus"
+                    : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                )}
+                onClick={() =>
+                  handleStylingChange({
+                    ...props.styling,
+                    verticalPosition: 1,
+                  })
+                }
+              >
+                {t("settings.subtitles.low")}
+              </button>
+            </div>
+          </div>
           <div className="flex justify-between items-center">
             <Menu.FieldTitle>
               {t("settings.subtitles.textBoldLabel")}

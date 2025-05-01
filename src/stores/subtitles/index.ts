@@ -28,6 +28,11 @@ export interface SubtitleStyling {
    * bold, boolean
    */
   bold: boolean;
+
+  /**
+   * vertical position percentage, ranges between 1 and 3 (rem)
+   */
+  verticalPosition: number;
 }
 
 export interface SubtitleStore {
@@ -70,6 +75,7 @@ export const useSubtitleStore = create(
         size: 1,
         backgroundBlur: 0.5,
         bold: false,
+        verticalPosition: 3,
       },
       showDelayIndicator: false,
       resetSubtitleSpecificSettings() {
@@ -95,6 +101,11 @@ export const useSubtitleStore = create(
           if (newStyling.size !== undefined)
             s.styling.size = Math.min(10, Math.max(0.01, newStyling.size));
           if (newStyling.bold !== undefined) s.styling.bold = newStyling.bold;
+          if (newStyling.verticalPosition !== undefined)
+            s.styling.verticalPosition = Math.min(
+              100,
+              Math.max(0, newStyling.verticalPosition),
+            );
         });
       },
       resetStyling() {
@@ -105,6 +116,7 @@ export const useSubtitleStore = create(
             size: 1,
             backgroundBlur: 0.5,
             bold: false,
+            verticalPosition: 3,
           };
         });
       },

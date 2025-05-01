@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { useMemo } from "react";
 
 import {
@@ -123,6 +122,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const display = usePlayerStore((s) => s.display);
   const isCasting = display?.getType() === "casting";
+  const styling = useSubtitleStore((s) => s.styling);
 
   if (captionAsTrack || !caption || isCasting) return null;
 
@@ -133,10 +133,12 @@ export function SubtitleView(props: { controlsShown: boolean }) {
       show
     >
       <div
-        className={classNames([
-          "text-white absolute flex w-full flex-col items-center transition-[bottom]",
-          props.controlsShown ? "bottom-24" : "bottom-12",
-        ])}
+        className="text-white absolute flex w-full flex-col items-center transition-[bottom]"
+        style={{
+          bottom: props.controlsShown
+            ? "6rem"
+            : `${styling.verticalPosition}rem`,
+        }}
       >
         <SubtitleRenderer />
       </div>

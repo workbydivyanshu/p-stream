@@ -327,6 +327,47 @@ export function CaptionSettingsView({
         />
         <div className="flex justify-between items-center">
           <Menu.FieldTitle>
+            {t("settings.subtitles.verticalPositionLabel")}
+          </Menu.FieldTitle>
+          <div className="flex justify-center items-center space-x-2">
+            <button
+              type="button"
+              className={classNames(
+                "px-3 py-1 rounded transition-colors duration-100",
+                styling.verticalPosition === 3
+                  ? "bg-video-context-buttonFocus"
+                  : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+              )}
+              onClick={() =>
+                handleStylingChange({
+                  ...styling,
+                  verticalPosition: 3,
+                })
+              }
+            >
+              {t("settings.subtitles.default")}
+            </button>
+            <button
+              type="button"
+              className={classNames(
+                "px-3 py-1 rounded transition-colors duration-100",
+                styling.verticalPosition === 1
+                  ? "bg-video-context-buttonFocus"
+                  : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+              )}
+              onClick={() =>
+                handleStylingChange({
+                  ...styling,
+                  verticalPosition: 1,
+                })
+              }
+            >
+              {t("settings.subtitles.low")}
+            </button>
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <Menu.FieldTitle>
             {t("settings.subtitles.colorLabel")}
           </Menu.FieldTitle>
           <div className="flex justify-center items-center space-x-2">
