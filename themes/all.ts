@@ -6,6 +6,7 @@ import classic from "./list/classic";
 import green from "./list/green";
 import mocha from "./list/mocha";
 import pink from "./list/pink";
+import ember from "./list/ember";
 
 export const allThemes = [
   teal,
@@ -15,5 +16,6 @@ export const allThemes = [
   classic,
   green,
   mocha,
-  pink
+  pink,
+  ember
 ]

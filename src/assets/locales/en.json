@@ -672,7 +672,8 @@
                 "classic": "Classic",
                 "green": "Green",
                 "mocha": "Mocha",
-                "pink": "Pink"
+                "pink": "Pink",
+                "ember": "Ember"
             },
             "title": "Appearance",
             "options": {

@@ -51,6 +51,11 @@ const availableThemes = [
     selector: "theme-pink",
     key: "settings.appearance.themes.pink",
   },
+  {
+    id: "ember",
+    selector: "theme-ember",
+    key: "settings.appearance.themes.ember",
+  },
 ];
 
 function ThemePreview(props: {
