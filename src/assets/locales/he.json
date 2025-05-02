@@ -379,8 +379,8 @@
                 "unknownLanguage": "לא ידוע",
                 "onChoice": "דלוק",
                 "dropSubtitleFile": "תשים קובץ כתוביות כאן! >_<",
-                "SourceChoice": "כתוביות מקור",
-                "OpenSubtitlesChoice": "OpenSubtitles",
+                "SourceChoice": "כתוביות מהקובץ",
+                "OpenSubtitlesChoice": "כתוביות מהרשת",
                 "scrapeButton": "למצוא כתוביות",
                 "empty": "לא נמצאו כתוביות.",
                 "notFound": "אף אחת מהאפשרויות הזמינות לא תואמת את השאילתה שלך"
@@ -645,7 +645,10 @@
             "textSizeLabel": "גודל הטקסט",
             "title": "כתוביות",
             "textBoldLabel": "טקסט מודגש",
-            "backgroundBlurLabel": "טשטוש רקע"
+            "backgroundBlurLabel": "טשטוש רקע",
+            "default": "ברירת מחדל",
+            "low": "נמוך",
+            "verticalPositionLabel": "מיקום אנכי"
         },
         "unsaved": "יש לך שינויים שלא נשמרו"
     },
