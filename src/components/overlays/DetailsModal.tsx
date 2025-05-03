@@ -358,7 +358,6 @@ function DetailsContent({
                 type="button"
                 onClick={togglePlay}
                 className="absolute inset-0 flex items-center justify-center z-10"
-                title="Play"
               >
                 <Icon icon={Icons.PLAY} className="text-white text-4xl" />
               </button>

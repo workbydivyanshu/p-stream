@@ -3,6 +3,41 @@ import { isExtensionActive } from "@/backend/extension/messaging";
 import { proxiedFetch } from "@/backend/helpers/fetch";
 import { makeExtensionFetcher } from "@/backend/providers/fetchers";
 import { useAuthStore } from "@/stores/auth";
+import { useLanguageStore } from "@/stores/language";
+
+import { getTmdbLanguageCode } from "./language";
+
+// IMDb language code mapping (differs from TMDB format)
+// Map from ISO language code to IMDb language parameter
+const imdbLanguageMap: Record<string, string> = {
+  "en-US": "en-US",
+  "es-ES": "es-ES",
+  "fr-FR": "fr-FR",
+  "de-DE": "de-DE",
+  "it-IT": "it-IT",
+  "pt-PT": "pt-PT",
+  "ru-RU": "ru-RU",
+  "ja-JP": "ja-JP",
+  "zh-CN": "zh-CN",
+  "ko-KR": "ko-KR",
+  "ar-SA": "ar-SA",
+  "hi-IN": "hi-IN",
+  "el-GR": "el-GR",
+  // Add more mappings as needed
+};
+
+/**
+ * Convert a TMDB-style language code to an IMDb language code
+ * @param language TMDB-style language code (e.g., "en-US")
+ * @returns IMDb language code or default "en-US"
+ */
+function getImdbLanguageCode(language: string): string {
+  // If we have a direct mapping, use it
+  if (imdbLanguageMap[language]) return imdbLanguageMap[language];
+
+  // Otherwise default to English
+  return "en-US";
+}
 
 interface IMDbMetadata {
   title: string;
@@ -79,6 +114,7 @@ export async function scrapeIMDb(
   imdbId: string,
   season?: number,
   episode?: number,
+  language?: string,
 ): Promise<IMDbMetadata> {
   // Check if we have a proxy or extension
   const hasExtension = await isExtensionActive();
@@ -95,11 +131,24 @@ export async function scrapeIMDb(
     `[IMDb Scraper] Using ${hasExtension ? "browser extension" : "custom proxy"} for requests`,
   );
 
-  // Construct IMDb URL
+  // Get user language if not provided
+  if (!language) {
+    const userLanguage = useLanguageStore.getState().language;
+    language = getTmdbLanguageCode(userLanguage);
+  }
+
+  // Get IMDb language format
+  const imdbLanguage = getImdbLanguageCode(language);
+
+  // Construct IMDb URL with language parameter
   let imdbUrl = `https://www.imdb.com/title/${imdbId}/`;
   if (season && episode) {
     imdbUrl += `episodes?season=${season}`;
   }
+
+  // Add language parameter to URL
+  const separator = imdbUrl.includes("?") ? "&" : "?";
+  imdbUrl += `${separator}locale=${imdbLanguage}`;
 
   // Add random delay to avoid rate limiting
   const delay = Math.floor(Math.random() * (197 - 69) + 69);
@@ -114,6 +163,7 @@ export async function scrapeIMDb(
     const result = await extensionFetcher(imdbUrl, {
       headers: {
         "User-Agent": getRandomUserAgent(),
+        "Accept-Language": imdbLanguage,
       },
       method: "GET",
       query: {},
@@ -124,6 +174,7 @@ export async function scrapeIMDb(
     response = await proxiedFetch<string>(imdbUrl, {
       headers: {
         "User-Agent": getRandomUserAgent(),
+        "Accept-Language": imdbLanguage,
       },
     });
   }
