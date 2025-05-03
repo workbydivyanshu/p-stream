@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { get } from "@/backend/metadata/tmdb";
-import { useLanguageStore } from "@/stores/language";
-import { getTmdbLanguageCode } from "@/utils/language";
 import { Category, Genre, Movie, TVShow } from "@/pages/discover/common";
 import { conf } from "@/setup/config";
+import { useLanguageStore } from "@/stores/language";
+import { getTmdbLanguageCode } from "@/utils/language";
 
 type MediaType = "movie" | "tv";
 

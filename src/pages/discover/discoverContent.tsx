@@ -13,9 +13,9 @@ import {
   tvCategories,
 } from "@/pages/discover/common";
 import { conf } from "@/setup/config";
-import { MediaItem } from "@/utils/mediaTypes";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { MediaItem } from "@/utils/mediaTypes";
 
 import { CategoryButtons } from "./components/CategoryButtons";
 import { LazyMediaCarousel } from "./components/LazyMediaCarousel";
