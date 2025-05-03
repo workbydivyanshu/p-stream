@@ -56,9 +56,35 @@ export function CaptionCue({
     return html;
   }, [text, overrideCasing]);
 
+  const getTextEffectStyles = () => {
+    switch (styling.fontStyle) {
+      case "raised":
+        return {
+          textShadow: "0 2px 0 rgba(0,0,0,0.8), 0 1.5px 1.5px rgba(0,0,0,0.9)",
+        };
+      case "depressed":
+        return {
+          textShadow:
+            "0 -2px 0 rgba(0,0,0,0.8), 0 -1.5px 1.5px rgba(0,0,0,0.9)",
+        };
+      case "uniform":
+        return {
+          textShadow:
+            "1.5px 1.5px 1.5px rgba(0,0,0,0.8), -1.5px -1.5px 1.5px rgba(0,0,0,0.8), 1.5px -1.5px 1.5px rgba(0,0,0,0.8), -1.5px 1.5px 1.5px rgba(0,0,0,0.8)",
+        };
+      case "dropShadow":
+        return { textShadow: "2.5px 2.5px 4.5px rgba(0,0,0,0.9)" };
+      case "none":
+      default:
+        return { textShadow: "0 2px 4px rgba(0,0,0,0.5)" }; // Default is a light drop shadow
+    }
+  };
+
+  const textEffectStyles = getTextEffectStyles();
+
   return (
     <p
-      className="pointer-events-none mb-1 select-none rounded px-4 py-1 text-center leading-normal [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]"
+      className="pointer-events-none mb-1 select-none rounded px-4 py-1 text-center leading-normal"
       style={{
         color: styling.color,
         fontSize: `${(1.5 * styling.size).toFixed(2)}em`,
@@ -68,6 +94,7 @@ export function CaptionCue({
             ? `blur(${Math.floor(styling.backgroundBlur * 64)}px)`
             : "none",
         fontWeight: styling.bold ? "bold" : "normal",
+        ...textEffectStyles,
       }}
     >
       <span

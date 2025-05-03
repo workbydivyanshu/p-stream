@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
+import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import {
   CaptionSetting,
@@ -104,6 +105,7 @@ export function CaptionsPart(props: {
       backgroundBlur: 0.5,
       bold: false,
       verticalPosition: 3,
+      fontStyle: "none",
     });
   };
 
@@ -153,6 +155,104 @@ export function CaptionsPart(props: {
           />
           <div className="flex justify-between items-center">
             <Menu.FieldTitle>
+              {t("settings.subtitles.textStyle.title")}
+            </Menu.FieldTitle>
+            <div className="w-30">
+              <Dropdown
+                options={[
+                  {
+                    id: "default",
+                    name: t("settings.subtitles.textStyle.default"),
+                  },
+                  {
+                    id: "raised",
+                    name: t("settings.subtitles.textStyle.raised"),
+                  },
+                  {
+                    id: "depressed",
+                    name: t("settings.subtitles.textStyle.depressed"),
+                  },
+                  {
+                    id: "uniform",
+                    name: t("settings.subtitles.textStyle.uniform"),
+                  },
+                  {
+                    id: "dropShadow",
+                    name: t("settings.subtitles.textStyle.dropShadow"),
+                  },
+                ]}
+                selectedItem={{
+                  id: props.styling.fontStyle,
+                  name:
+                    t(
+                      `settings.subtitles.textStyle.${props.styling.fontStyle}`,
+                    ) || props.styling.fontStyle,
+                }}
+                setSelectedItem={(item) =>
+                  handleStylingChange({
+                    ...props.styling,
+                    fontStyle: item.id,
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.textBoldLabel")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center">
+              <Toggle
+                enabled={props.styling.bold}
+                onClick={() =>
+                  handleStylingChange({
+                    ...props.styling,
+                    bold: !props.styling.bold,
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.colorLabel")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center space-x-2">
+              {colors.map((v) => (
+                <ColorOption
+                  onClick={() =>
+                    handleStylingChange({
+                      ...props.styling,
+                      color: v,
+                    })
+                  }
+                  color={v}
+                  active={props.styling.color === v}
+                  key={v}
+                />
+              ))}
+              <div className="relative">
+                <input
+                  type="color"
+                  value={props.styling.color}
+                  onChange={(e) => {
+                    const color = e.target.value;
+                    handleStylingChange({ ...props.styling, color });
+                    subtitleStore.updateStyling({
+                      ...props.styling,
+                      color,
+                    });
+                  }}
+                  className="absolute opacity-0 cursor-pointer w-8 h-8"
+                />
+                <div style={{ color: props.styling.color }}>
+                  <Icon icon={Icons.BRUSH} className="text-2xl" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
               {t("settings.subtitles.verticalPositionLabel")}
             </Menu.FieldTitle>
             <div className="flex justify-center items-center space-x-2">
@@ -190,61 +290,6 @@ export function CaptionsPart(props: {
               >
                 {t("settings.subtitles.low")}
               </button>
-            </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <Menu.FieldTitle>
-              {t("settings.subtitles.textBoldLabel")}
-            </Menu.FieldTitle>
-            <div className="flex justify-center items-center">
-              <Toggle
-                enabled={props.styling.bold}
-                onClick={() =>
-                  handleStylingChange({
-                    ...props.styling,
-                    bold: !props.styling.bold,
-                  })
-                }
-              />
-            </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <Menu.FieldTitle>
-              {t("settings.subtitles.colorLabel")}
-            </Menu.FieldTitle>
-            <div className="flex justify-center items-center space-x-2">
-              {colors.map((v) => (
-                <ColorOption
-                  onClick={() =>
-                    handleStylingChange({
-                      ...props.styling,
-                      color: v,
-                    })
-                  }
-                  color={v}
-                  active={props.styling.color === v}
-                  key={v}
-                />
-              ))}
-              {/* Add Color Picker */}
-              <div className="relative">
-                <input
-                  type="color"
-                  value={props.styling.color}
-                  onChange={(e) => {
-                    const color = e.target.value;
-                    handleStylingChange({ ...props.styling, color });
-                    subtitleStore.updateStyling({
-                      ...props.styling,
-                      color,
-                    });
-                  }}
-                  className="absolute opacity-0 cursor-pointer w-8 h-8"
-                />
-                <div style={{ color: props.styling.color }}>
-                  <Icon icon={Icons.BRUSH} className="text-2xl" />
-                </div>
-              </div>
             </div>
           </div>
         </div>

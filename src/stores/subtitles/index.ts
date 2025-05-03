@@ -33,6 +33,12 @@ export interface SubtitleStyling {
    * vertical position percentage, ranges between 1 and 3 (rem)
    */
   verticalPosition: number;
+
+  /**
+   * font style for text rendering
+   * "default" | "raised" | "depressed" | "uniform" | "dropShadow"
+   */
+  fontStyle: string;
 }
 
 export interface SubtitleStore {
@@ -76,6 +82,7 @@ export const useSubtitleStore = create(
         backgroundBlur: 0.5,
         bold: false,
         verticalPosition: 3,
+        fontStyle: "none",
       },
       showDelayIndicator: false,
       resetSubtitleSpecificSettings() {
@@ -106,6 +113,8 @@ export const useSubtitleStore = create(
               100,
               Math.max(0, newStyling.verticalPosition),
             );
+          if (newStyling.fontStyle !== undefined)
+            s.styling.fontStyle = newStyling.fontStyle;
         });
       },
       resetStyling() {
@@ -117,6 +126,7 @@ export const useSubtitleStore = create(
             backgroundBlur: 0.5,
             bold: false,
             verticalPosition: 3,
+            fontStyle: "none",
           };
         });
       },

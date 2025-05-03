@@ -770,7 +770,15 @@
             "textBoldLabel": "Bold text",
             "verticalPositionLabel": "Vertical position",
             "default": "Default",
-            "low": "Low"
+            "low": "Low",
+            "textStyle": {
+                "title": "Text style",
+                "default": "Default",
+                "raised": "Raised",
+                "depressed": "Depressed",
+                "uniform": "Uniform",
+                "dropShadow": "Drop Shadow"
+            }
         },
         "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
     },
