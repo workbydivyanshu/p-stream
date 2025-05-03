@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Toggle } from "@/components/buttons/Toggle";
@@ -164,6 +165,51 @@ export function AppearancePart(props: {
 }) {
   const { t } = useTranslation();
 
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const activeThemeRef = useRef<HTMLDivElement>(null);
+  const [isAtTop, setIsAtTop] = useState(true);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const topSentinelRef = useRef<HTMLDivElement>(null);
+  const bottomSentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === topSentinelRef.current) {
+            setIsAtTop(entry.isIntersecting);
+          }
+          if (entry.target === bottomSentinelRef.current) {
+            setIsAtBottom(entry.isIntersecting);
+          }
+        });
+      },
+      { root: carouselRef.current, threshold: 1 },
+    );
+
+    if (topSentinelRef.current) observer.observe(topSentinelRef.current);
+    if (bottomSentinelRef.current) observer.observe(bottomSentinelRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (activeThemeRef.current && carouselRef.current) {
+      const element = activeThemeRef.current;
+      const container = carouselRef.current;
+
+      const elementRect = element.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      // Center the element in the container
+      container.scrollTop =
+        elementRect.top +
+        container.scrollTop -
+        containerRect.top -
+        (containerRect.height - elementRect.height) / 2;
+    }
+  }, [props.active]);
+
   return (
     <div className="space-y-12">
       <Heading1 border>{t("settings.appearance.title")}</Heading1>
@@ -214,17 +260,34 @@ export function AppearancePart(props: {
 
         {/* Second Column - Themes */}
         <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-4 max-w-[600px]">
+          <div
+            ref={carouselRef}
+            className={classNames(
+              "grid grid-cols-2 gap-4 max-w-[600px] max-h-[28rem] overflow-y-auto",
+              "vertical-carousel-container",
+              {
+                "mask-none": isAtTop && isAtBottom,
+                "mask-image-bottom-only": isAtTop && !isAtBottom,
+                "mask-image-top-only": !isAtTop && isAtBottom,
+              },
+            )}
+          >
+            <div ref={topSentinelRef} className="absolute top-0 h-px" />
             {availableThemes.map((v) => (
-              <ThemePreview
-                selector={v.selector}
-                active={props.active === v.id}
-                inUse={props.inUse === v.id}
-                name={t(v.key)}
+              <div
                 key={v.id}
-                onClick={() => props.setTheme(v.id)}
-              />
+                ref={props.active === v.id ? activeThemeRef : null}
+              >
+                <ThemePreview
+                  selector={v.selector}
+                  active={props.active === v.id}
+                  inUse={props.inUse === v.id}
+                  name={t(v.key)}
+                  onClick={() => props.setTheme(v.id)}
+                />
+              </div>
             ))}
+            <div ref={bottomSentinelRef} className="absolute bottom-0 h-px" />
           </div>
         </div>
       </div>
