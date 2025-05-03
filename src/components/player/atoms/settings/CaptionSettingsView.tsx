@@ -250,7 +250,7 @@ export function CaptionSettingsView({
       size: 1,
       backgroundBlur: 0.5,
       bold: false,
-      fontStyle: "none",
+      fontStyle: "default",
     });
   };
 

@@ -105,7 +105,7 @@ export function CaptionsPart(props: {
       backgroundBlur: 0.5,
       bold: false,
       verticalPosition: 3,
-      fontStyle: "none",
+      fontStyle: "default",
     });
   };
 
