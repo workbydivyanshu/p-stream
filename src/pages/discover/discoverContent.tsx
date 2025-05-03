@@ -14,6 +14,8 @@ import {
 } from "@/pages/discover/common";
 import { conf } from "@/setup/config";
 import { MediaItem } from "@/utils/mediaTypes";
+import { useLanguageStore } from "@/stores/language";
+import { getTmdbLanguageCode } from "@/utils/language";
 
 import { CategoryButtons } from "./components/CategoryButtons";
 import { LazyMediaCarousel } from "./components/LazyMediaCarousel";
@@ -132,6 +134,9 @@ export function DiscoverContent() {
   // );
   const { t } = useTranslation();
 
+  const userLanguage = useLanguageStore.getState().language;
+  const formattedLanguage = getTmdbLanguageCode(userLanguage);
+
   // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
   const isTVShowsTab = selectedCategory === "tvshows";
@@ -145,7 +150,7 @@ export function DiscoverContent() {
       try {
         const data = await get<any>("/genre/tv/list", {
           api_key: conf().TMDB_READ_API_KEY,
-          language: "en-US",
+          language: formattedLanguage,
         });
         // Fetch only the first 10 TV show genres
         setTVGenres(data.genres.slice(0, 10));
@@ -155,7 +160,7 @@ export function DiscoverContent() {
     };
 
     fetchTVGenres();
-  }, [isTVShowsTab]);
+  }, [isTVShowsTab, formattedLanguage]);
 
   // Fetch Movie genres
   useEffect(() => {
@@ -165,7 +170,7 @@ export function DiscoverContent() {
       try {
         const data = await get<any>("/genre/movie/list", {
           api_key: conf().TMDB_READ_API_KEY,
-          language: "en-US",
+          language: formattedLanguage,
         });
 
         // Fetch only the first 12 genres
@@ -176,7 +181,7 @@ export function DiscoverContent() {
     };
 
     fetchGenres();
-  }, [isMoviesTab]);
+  }, [isMoviesTab, formattedLanguage]);
 
   // Fetch Editor Picks Movies
   useEffect(() => {
@@ -187,7 +192,7 @@ export function DiscoverContent() {
         const moviePromises = EDITOR_PICKS_MOVIES.map((item) =>
           get<any>(`/movie/${item.id}`, {
             api_key: conf().TMDB_READ_API_KEY,
-            language: "en-US",
+            language: formattedLanguage,
             append_to_response: "videos,images",
           }),
         );
@@ -202,7 +207,7 @@ export function DiscoverContent() {
     };
 
     fetchEditorPicksMovies();
-  }, [isEditorPicksTab]);
+  }, [isEditorPicksTab, formattedLanguage]);
 
   // Fetch Editor Picks TV Shows
   useEffect(() => {
@@ -213,7 +218,7 @@ export function DiscoverContent() {
         const tvShowPromises = EDITOR_PICKS_TV_SHOWS.map((item) =>
           get<any>(`/tv/${item.id}`, {
             api_key: conf().TMDB_READ_API_KEY,
-            language: "en-US",
+            language: formattedLanguage,
             append_to_response: "videos,images",
           }),
         );
@@ -228,7 +233,7 @@ export function DiscoverContent() {
     };
 
     fetchEditorPicksTVShows();
-  }, [isEditorPicksTab]);
+  }, [isEditorPicksTab, formattedLanguage]);
 
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -290,7 +295,7 @@ export function DiscoverContent() {
         api_key: conf().TMDB_READ_API_KEY,
         with_watch_providers: id,
         watch_region: "US",
-        language: "en-US",
+        language: formattedLanguage,
       });
       setData(data.results);
     } catch (error) {

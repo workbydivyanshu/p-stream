@@ -1,7 +1,9 @@
 import slugify from "slugify";
 
 import { conf } from "@/setup/config";
+import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
+import { getTmdbLanguageCode } from "@/utils/language";
 import { MediaItem } from "@/utils/mediaTypes";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
@@ -176,12 +178,20 @@ export async function get<T>(url: string, params?: object): Promise<T> {
   const proxyUrls = getProxyUrls();
   const proxy = getNextProxy(proxyUrls);
   const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
+  const userLanguage = useLanguageStore.getState().language;
+  const formattedLanguage = getTmdbLanguageCode(userLanguage);
+
   if (!apiKey) throw new Error("TMDB API key not set");
 
   // directly writing parameters, otherwise it will start the first parameter in the proxied request as "&" instead of "?" because it doesnt understand its proxied
   const fullUrl = new URL(tmdbBaseUrl1 + url);
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
+  const allParams = {
+    ...params,
+    language: formattedLanguage,
+  };
+
+  if (allParams) {
+    Object.entries(allParams).forEach(([key, value]) => {
       fullUrl.searchParams.append(key, String(value));
     });
   }
@@ -205,18 +215,14 @@ export async function get<T>(url: string, params?: object): Promise<T> {
     return await mwFetch<T>(encodeURI(url), {
       headers: tmdbHeaders,
       baseURL: tmdbBaseUrl1,
-      params: {
-        ...params,
-      },
+      params: allParams,
       signal: abortOnTimeout(5000),
     });
   } catch (err) {
     return mwFetch<T>(encodeURI(url), {
       headers: tmdbHeaders,
       baseURL: tmdbBaseUrl2,
-      params: {
-        ...params,
-      },
+      params: allParams,
       signal: abortOnTimeout(30000),
     });
   }
@@ -228,7 +234,6 @@ export async function multiSearch(
   const data = await get<TMDBSearchResult>("search/multi", {
     query,
     include_adult: false,
-    language: "en-US",
     page: 1,
   });
   // filter out results that aren't movies or shows

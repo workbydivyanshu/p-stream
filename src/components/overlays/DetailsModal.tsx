@@ -13,9 +13,11 @@ import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { hasAired } from "@/components/player/utils/aired";
 import { useBookmarkStore } from "@/stores/bookmarks";
+import { useLanguageStore } from "@/stores/language";
 import { useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { scrapeIMDb } from "@/utils/imdbScraper";
+import { getTmdbLanguageCode } from "@/utils/language";
 
 import { useModal } from "./Modal";
 import { OverlayPortal } from "./OverlayDisplay";
@@ -199,7 +201,17 @@ function DetailsContent({
 
       setIsLoadingImdb(true);
       try {
-        const imdbMetadata = await scrapeIMDb(data.imdbId);
+        // Get the user's selected language and format it properly
+        const userLanguage = useLanguageStore.getState().language;
+        const formattedLanguage = getTmdbLanguageCode(userLanguage);
+
+        // Pass the language to the scrapeIMDb function
+        const imdbMetadata = await scrapeIMDb(
+          data.imdbId,
+          undefined,
+          undefined,
+          formattedLanguage,
+        );
         setImdbData(imdbMetadata);
       } catch (error) {
         console.error("Failed to fetch IMDb data:", error);

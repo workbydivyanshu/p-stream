@@ -224,3 +224,35 @@ export function getLocaleInfo(locale: string): LocaleInfo | null {
     nativeName: output.nativeName[0] ?? undefined,
   };
 }
+
+/**
+ * Converts a language code to a TMDB-compatible format (ISO 639-1 with region)
+ * @param language The language code to convert
+ * @returns A TMDB-compatible language code (e.g., "en-US", "el-GR")
+ */
+export function getTmdbLanguageCode(language: string): string {
+  // Handle empty or undefined
+  if (!language) return "en-US";
+
+  // If it already has a region code (e.g., "en-US"), use it directly
+  if (language.includes("-")) return language;
+
+  // Handle special/custom languages by defaulting to English
+  if (language.length > 2 || Object.keys(extraLanguages).includes(language))
+    return "en-US";
+
+  // For standard language codes, find the appropriate region from the existing defaultLanguageCodes array
+  const defaultCode = defaultLanguageCodes.find((code) =>
+    code.startsWith(`${language}-`),
+  );
+
+  if (defaultCode) return defaultCode;
+
+  // If we can't find a good match, create a standard format like "fr-FR" from "fr"
+  if (language.length === 2) {
+    return `${language}-${language.toUpperCase()}`;
+  }
+
+  // Last resort fallback
+  return "en-US";
+}

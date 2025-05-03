@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { get } from "@/backend/metadata/tmdb";
+import { useLanguageStore } from "@/stores/language";
+import { getTmdbLanguageCode } from "@/utils/language";
 import { Category, Genre, Movie, TVShow } from "@/pages/discover/common";
 import { conf } from "@/setup/config";
 
@@ -19,6 +21,8 @@ export function useTMDBData(
     [categoryName: string]: Movie[] | TVShow[];
   }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const userLanguage = useLanguageStore.getState().language;
+  const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
   // Unified fetch function
   const fetchMedia = useCallback(
@@ -29,7 +33,7 @@ export function useTMDBData(
         for (let page = 1; page <= 2; page += 1) {
           const data = await get<any>(endpoint, {
             api_key: conf().TMDB_READ_API_KEY,
-            language: "en-US",
+            language: formattedLanguage,
             page: page.toString(),
             ...(isGenre ? { with_genres: key } : {}),
           });
@@ -51,7 +55,7 @@ export function useTMDBData(
         return [];
       }
     },
-    [mediaType],
+    [mediaType, formattedLanguage],
   );
 
   // Fetch media for each genre
@@ -104,6 +108,8 @@ export function useLazyTMDBData(
 ) {
   const [media, setMedia] = useState<Movie[] | TVShow[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const userLanguage = useLanguageStore.getState().language;
+  const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
   const fetchMedia = useCallback(
     async (endpoint: string, key: string, isGenre: boolean) => {
@@ -113,7 +119,7 @@ export function useLazyTMDBData(
         // Only fetch one page for better performance
         const data = await get<any>(endpoint, {
           api_key: conf().TMDB_READ_API_KEY,
-          language: "en-US",
+          language: formattedLanguage,
           page: "1",
           ...(isGenre ? { with_genres: key } : {}),
         });
@@ -130,7 +136,7 @@ export function useLazyTMDBData(
         return [];
       }
     },
-    [mediaType],
+    [mediaType, formattedLanguage],
   );
 
   useEffect(() => {
