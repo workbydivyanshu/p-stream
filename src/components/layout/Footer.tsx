@@ -77,7 +77,7 @@ export function Footer() {
             {t("footer.links.discord")}
           </FooterLink>
           <FooterLink href="https://rentry.co/h5mypdfs" icon={Icons.TIP_JAR}>
-            Support us
+            {t("footer.links.funding")}
           </FooterLink>
           <div className="inline md:hidden">
             <Dmca />

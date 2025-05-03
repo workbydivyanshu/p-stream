@@ -101,10 +101,10 @@ export function SettingsMenu({ id }: { id: string }) {
           rightSide={<Icon className="text-xl" icon={Icons.WATCH_PARTY} />}
           className={downloadable ? "opacity-100" : "opacity-50"}
         >
-          {t("Watch Party")}
+          {t("player.menus.watchparty.watchpartyItem")}
         </Menu.Link>
         <Paragraph className="text-xs">
-          Watch Party might not be available for some sources
+          {t("player.menus.watchparty.notice")}
         </Paragraph>
       </Menu.Section>
 

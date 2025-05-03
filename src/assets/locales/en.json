@@ -96,7 +96,8 @@
             "discord": "Discord",
             "dmca": "DMCA",
             "github": "GitHub",
-            "twitter": "Twitter"
+            "twitter": "Twitter",
+            "funding": "Support us"
         },
         "tagline": "Watch your favorite shows and movies for free with no ads ever! (っ'ヮ'c)"
     },
@@ -359,6 +360,25 @@
         },
         "start": {
             "explainer": "To get the best streams possible, you will need to choose which streaming method you want to use.",
+            "moreInfo": {
+                "button": "More info",
+                "title": "Understanding a setup",
+                "explainer": {
+                    "intro": "P-Stream doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
+                    "options": "Your Options:",
+                    "extension": "1. Extension (Recommended)",
+                    "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
+                    "proxy": "2. Proxy",
+                    "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
+                    "default": "3. Default Setup",
+                    "defaultDescription": "Uses P-Stream's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
+                    "fedapi": {
+                        "fedapi": "Optional FED API (Febbox) UI token",
+                        "fedapiDescription": "Bringing your own Febbox account allows you to unlock FED API, our best source with 4K quality, Dolby Atmos, the most content, and the best (fastest) load times. This the highly recommended!"
+                    },
+                    "outro": "If you have more questions on how this works, feel free to ask on the <0>P-Stream Discord</0> server!"
+                }
+            },
             "options": {
                 "or": "or",
                 "default": {
@@ -481,6 +501,10 @@
                 "scrapeButton": "Scrape subtitles",
                 "empty": "There are no provided subtitles for this.",
                 "notFound": "None of the available options match your query"
+            },
+            "watchparty": {
+                "watchpartyItem": "Watch Party",
+                "notice": "Watch Party might not be available for some sources"
             }
         },
         "metadata": {
@@ -693,7 +717,8 @@
                 "migration": {
                     "description": "<0>Migrate my data</0> to a new server.",
                     "link": "Migrate my data"
-                }
+                },
+                "documentation": "Backend documentation"
             },
             "setup": {
                 "doSetup": "Do setup",
@@ -721,10 +746,15 @@
             "workers": {
                 "addButton": "Add new worker",
                 "description": "To make the application function, all traffic is routed through proxies. Enable this if you want to bring your own workers. <0>Instructions.</0>",
+                "documentation": "Proxy documentation",
                 "emptyState": "No workers yet (｡•́︿•̀｡), add one below",
                 "label": "Use custom proxy workers",
                 "urlLabel": "Worker URLs",
-                "urlPlaceholder": "https://"
+                "urlPlaceholder": "https://",
+                "proxyTMDB": {
+                    "title": "Proxy TMDB",
+                    "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover secton to improve performance with this."
+                }
             }
         },
         "preferences": {
@@ -820,5 +850,28 @@
             "subtitle": "Explore the latest hits and timeless classics."
         },
         "scrollToTop": "Back to top"
+    },
+    "fedapi": {
+        "onboarding": {
+            "title": "Optional: FED API (Febbox) token",
+            "description": "Bring your own Febbox account to get the best streaming with 4K quality, Dolby Atmos, skip intro and the best (fastest) load times!"
+        },
+        "setup": {
+            "title": "To get your UI token:",
+            "showVideo": "Show Video Tutorial",
+            "hideVideo": "Hide Video Tutorial",
+            "step": {
+                "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
+                "2": "2. Open DevTools or inspect the page",
+                "3": "3. Go to Application tab → Cookies",
+                "4": "4. Copy the 'ui' cookie.",
+                "5": "5. Close the tab, but do NOT logout!",
+                "warning": "(Do not share this token!)"
+            }
+        },
+        "status": {
+            "success": "success",
+            "failure": "Failed to fetch a &quot;VIP&quot; stream. Token is invalid or API is down!"
+        }
     }
 }
