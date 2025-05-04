@@ -39,6 +39,7 @@ const MOVIE_PROVIDERS = [
 const TV_PROVIDERS = [
   { name: "Netflix", id: "8" },
   { name: "Apple TV+", id: "350" },
+  { name: "Amazon Prime Video", id: "10" },
   { name: "Paramount Plus", id: "531" },
   { name: "Hulu", id: "15" },
   { name: "Max", id: "1899" },
