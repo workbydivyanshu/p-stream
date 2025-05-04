@@ -36,58 +36,58 @@ const tokens = {
     },
   },
   blue: {
-    c50: "hsla(240, 80%, 82%, 1)", // Not currently used
-    c100: "hsla(240, 40%, 64%, 1)", // Not currently used
-    c200: "hsla(240, 33%, 52%, 1)", // Theme primary color, pill highlight, global accent A
-    c300: "hsla(240, 40%, 39%, 1)", // Global accent B
-    c400: "hsla(240, 46%, 30%, 1)", // Light bar color
-    c500: "hsla(240, 45%, 22%, 1)", // Background accent B
-    c600: "hsla(240, 42%, 18%, 1)", // Not currently used
-    c700: "hsla(240, 40%, 15%, 1)", // Not currently used
-    c800: "hsla(240, 33%, 9%, 1)", // Not currently used
-    c900: "hsla(240, 25%, 6%, 1)", // Not currently used
+    c50: "hsla(113, 31%, 64%, 1)",
+    c100: "hsla(116, 22%, 51%, 1)",
+    c200: "hsla(121, 23%, 40%, 1)",
+    c300: "hsla(123, 27%, 32%, 1)",
+    c400: "hsla(123, 28%, 25%, 1)",
+    c500: "hsla(124, 30%, 20%, 1)",
+    c600: "hsla(128, 32%, 15%, 1)",
+    c700: "hsla(126, 32%, 12%, 1)",
+    c800: "hsla(124, 32%, 9%, 1)",
+    c900: "hsla(120, 33%, 6%, 1)"
   },
   purple: {
-    c50: "hsla(280, 100%, 83%, 1)", // Link hover, settings tabs titles/text
-    c100: "hsla(270, 100%, 75%, 1)", // Link, logo text, video player audio set
-    c200: "hsla(270, 79%, 64%, 1)", // Progress filled, video player scraping loading, video player context accent
-    c300: "hsla(270, 61%, 55%, 1)", // Toggle button, onboarding bar filled
-    c400: "hsla(270, 59%, 47%, 1)", // Large card icon
-    c500: "hsla(270, 52%, 34%, 1)", // Background accent A
-    c600: "hsla(270, 52%, 26%, 1)", // Not currently used
-    c700: "hsla(270, 50%, 19%, 1)", // Not currently used
-    c800: "hsla(270, 48%, 14%, 1)", // Not currently used
-    c900: "hsla(270, 40%, 9%, 1)", // Not currently used
+    c50: "hsla(116, 24%, 53%, 1)",
+    c100: "hsla(115, 26%, 40%, 1)",
+    c200: "hsla(119, 28%, 33%, 1)",
+    c300: "hsla(119, 31%, 26%, 1)",
+    c400: "hsla(120, 32%, 22%, 1)",
+    c500: "hsla(122, 34%, 18%, 1)",
+    c600: "hsla(118, 37%, 14%, 1)",
+    c700: "hsla(120, 37%, 11%, 1)",
+    c800: "hsla(120, 38%, 8%, 1)",
+    c900: "hsla(120, 41%, 5%, 1)"
   },
   ash: {
-    c50: "hsla(210, 11%, 55%, 1)", // Authentication copy text hover, progress background, progress preloaded
-    c100: "hsla(210, 15%, 42%, 1)", // Secondary text, badge text, video player scraping no result
-    c200: "hsla(210, 17%, 33%, 1)", // Media card bar color, video player button background
-    c300: "hsla(210, 29%, 24%, 1)", // Cancel button hover, utils divider
-    c400: "hsla(210, 35%, 19%, 1)", // Card border and background, dropdown border, onboarding bar, edit badge hover, sidebar type
-    c500: "hsla(210, 35%, 17%, 1)", // Toggle disabled, cancel button, modal background, search hover background, media card shadow, settings save bar, errors card, about circle, edit badge background, video player button focus, video player flag background, video player input background, video player button over input hover
-    c600: "hsla(210, 32%, 14%, 1)", // Background secondary, dropdown alt background, dropdown border, onboarding card border
-    c700: "hsla(210, 35%, 12%, 1)", // Secondary button, media card badge, onboarding card hover, video player context card border, video player context buttons list, video player close hover
-    c800: "hsla(210, 33%, 9%, 1)", // Background main, settings sidebar badge, errors border
-    c900: "hsla(210, 25%, 7%, 1)", // Media card hover shadow, settings sidebar active link, video player context background
+    c50: "hsla(144, 11%, 47%, 1)",
+    c100: "hsla(145, 12%, 38%, 1)",
+    c200: "hsla(146, 13%, 31%, 1)",
+    c300: "hsla(147, 15%, 24%, 1)",
+    c400: "hsla(142, 16%, 20%, 1)",
+    c500: "hsla(146, 18%, 15%, 1)",
+    c600: "hsla(145, 20%, 12%, 1)",
+    c700: "hsla(140, 19%, 9%, 1)",
+    c800: "hsla(130, 18%, 7%, 1)",
+    c900: "hsla(120, 18%, 4%, 1)"
   },
   shade: {
-    c25: "hsla(240, 33%, 53%, 1)", // Media card hover accent
-    c50: "hsla(240, 17%, 48%, 1)", // Theme secondary color, text, dimmed text
-    c100: "hsla(240, 20%, 40%, 1)", // Search placeholder and icon, dropdown secondary text
-    c200: "hsla(240, 20%, 31%, 1)", // Pill background hover, onboarding divider
-    c300: "hsla(240, 22%, 25%, 1)", // Pill background, authentication border, onboarding card
-    c400: "hsla(240, 25%, 21%, 1)", // Background secondary hover, dropdown border, onboarding bar, onboarding divider
-    c500: "hsla(240, 26%, 16%, 1)", // Search background, search focus, dropdown hover background, dropdown content background, authentication input background hover, authentication word background
-    c600: "hsla(240, 31%, 12%, 1)", // Modal background, dropdown background, onboarding card border
-    c700: "hsla(240, 29%, 10%, 1)", // Dropdown alt background
-    c800: "hsla(240, 30%, 8%, 1)", // Background main, settings save bar, onboarding card
-    c900: "hsla(240, 29%, 5%, 1)", // Media card hover shadow
+    c25: "hsla(120, 27%, 40%, 1)",
+    c50: "hsla(120, 26%, 34%, 1)",
+    c100: "hsla(120, 25%, 28%, 1)",
+    c200: "hsla(120, 25%, 23%, 1)",
+    c300: "hsla(120, 26%, 19%, 1)",
+    c400: "hsla(120, 27%, 15%, 1)",
+    c500: "hsla(120, 28%, 11%, 1)",
+    c600: "hsla(120, 29%, 9%, 1)",
+    c700: "hsla(120, 29%, 7%, 1)",
+    c800: "hsla(120, 39%, 5%, 1)",
+    c900: "hsla(120, 33%, 2%, 1)"
   },
 }
 
 export default createTheme({
-  name: "classic",
+  name: "forest",
   extend: {
     colors: {
       themePreview: {
@@ -113,7 +113,7 @@ export default createTheme({
 
       // light bar
       lightBar: {
-        light: tokens.blue.c400,
+        light: tokens.blue.c800,
       },
 
       // Buttons

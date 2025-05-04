@@ -1,88 +1,88 @@
 import { createTheme } from "../types";
 
 const tokens = {
-  black: "hsla(0, 0%, 0%, 1)", // General black color
-  white: "hsla(0, 0%, 100%, 1)", // General white color
+  black: "#000000", // General black color
+  white: "#FFFFFF", // General white color
   semantic: {
     red: {
-      c100: "hsla(0, 86%, 69%, 1)", // Error text
-      c200: "hsla(0, 73%, 60%, 1)", // Video player scraping error
-      c300: "hsla(0, 66%, 56%, 1)", // Danger button
-      c400: "hsla(0, 55%, 45%, 1)", // Not currently used
+      c100: "#F46E6E", // Error text
+      c200: "#E44F4F", // Video player scraping error
+      c300: "#D74747", // Danger button
+      c400: "#B43434", // Not currently used
     },
     green: {
-      c100: "hsla(125, 60%, 60%, 1)", // Success text
-      c200: "hsla(125, 49%, 48%, 1)", // Video player scraping success
-      c300: "hsla(125, 54%, 42%, 1)", // Not currently used
-      c400: "hsla(125, 54%, 31%, 1)", // Not currently used
+      c100: "#60D26A", // Success text
+      c200: "#40B44B", // Video player scraping success
+      c300: "#31A33C", // Not currently used
+      c400: "#237A2B", // Not currently used
     },
     silver: {
-      c100: "hsla(0, 0%, 87%, 1)", // Primary button hover
-      c200: "hsla(206, 33%, 78%, 1)", // Not currently used
-      c300: "hsla(206, 19%, 62%, 1)", // Secondary button text
-      c400: "hsla(206, 18%, 46%, 1)", // Main text in video player context
+      c100: "#DEDEDE", // Primary button hover
+      c200: "#B6CAD7", // Not currently used
+      c300: "#8EA3B0", // Secondary button text
+      c400: "#617A8A", // Main text in video player context
     },
     yellow: {
-      c100: "hsla(56, 100%, 80%, 1)", // Best onboarding highlight
-      c200: "hsla(56, 96%, 68%, 1)", // Dropdown highlight hover
-      c300: "hsla(56, 55%, 56%, 1)", // Not currently used
-      c400: "hsla(56, 38%, 48%, 1)", // Dropdown highlight
+      c100: "#FFF599", // Best onboarding highlight
+      c200: "#FCEC61", // Dropdown highlight hover
+      c300: "#D8C947", // Not currently used
+      c400: "#AFA349", // Dropdown highlight
     },
     rose: {
-      c100: "hsla(348, 68%, 55%, 1)", // Authentication error text
-      c200: "hsla(348, 55%, 35%, 1)", // Danger button hover
-      c300: "hsla(348, 57%, 32%, 1)", // Danger button
-      c400: "hsla(348, 60%, 27%, 1)", // Not currently used
+      c100: "#DB3D61", // Authentication error text
+      c200: "#8A293B", // Danger button hover
+      c300: "#812435", // Danger button
+      c400: "#701B2B", // Not currently used
     },
   },
   blue: {
-    c50: "hsla(240, 80%, 82%, 1)", // Not currently used
-    c100: "hsla(240, 40%, 64%, 1)", // Not currently used
-    c200: "hsla(240, 33%, 52%, 1)", // Theme primary color, pill highlight, global accent A
-    c300: "hsla(240, 40%, 39%, 1)", // Global accent B
-    c400: "hsla(240, 46%, 30%, 1)", // Light bar color
-    c500: "hsla(240, 45%, 22%, 1)", // Background accent B
-    c600: "hsla(240, 42%, 18%, 1)", // Not currently used
-    c700: "hsla(240, 40%, 15%, 1)", // Not currently used
-    c800: "hsla(240, 33%, 9%, 1)", // Not currently used
-    c900: "hsla(240, 25%, 6%, 1)", // Not currently used
+    c50: "#ADADF5", // Not currently used
+    c100: "#7979CC", // Not currently used
+    c200: "#5D5DAE", // Theme primary color, pill highlight, global accent A
+    c300: "#3B3B8C", // Global accent B
+    c400: "#2A2A71", // Light bar color
+    c500: "#1F1F50", // Background accent B
+    c600: "#1B1B41", // Not currently used
+    c700: "#171736", // Not currently used
+    c800: "#101020", // Not currently used
+    c900: "#0B0B13", // Not currently used
   },
   purple: {
-    c50: "hsla(280, 100%, 83%, 1)", // Link hover, settings tabs titles/text
-    c100: "hsla(270, 100%, 75%, 1)", // Link, logo text, video player audio set
-    c200: "hsla(270, 79%, 64%, 1)", // Progress filled, video player scraping loading, video player context accent
-    c300: "hsla(270, 61%, 55%, 1)", // Toggle button, onboarding bar filled
-    c400: "hsla(270, 59%, 47%, 1)", // Large card icon
-    c500: "hsla(270, 52%, 34%, 1)", // Background accent A
-    c600: "hsla(270, 52%, 26%, 1)", // Not currently used
-    c700: "hsla(270, 50%, 19%, 1)", // Not currently used
-    c800: "hsla(270, 48%, 14%, 1)", // Not currently used
-    c900: "hsla(270, 40%, 9%, 1)", // Not currently used
+    c50: "#D5AAFF", // Link hover, settings tabs titles/text
+    c100: "#C082FF", // Link, logo text, video player audio set
+    c200: "#A359EC", // Progress filled, video player scraping loading, video player context accent
+    c300: "#8D44D6", // Toggle button, onboarding bar filled
+    c400: "#7831BF", // Large card icon
+    c500: "#572887", // Background accent A
+    c600: "#411F64", // Not currently used
+    c700: "#31184A", // Not currently used
+    c800: "#221134", // Not currently used
+    c900: "#160B22", // Not currently used
   },
   ash: {
-    c50: "hsla(210, 11%, 55%, 1)", // Authentication copy text hover, progress background, progress preloaded
-    c100: "hsla(210, 15%, 42%, 1)", // Secondary text, badge text, video player scraping no result
-    c200: "hsla(210, 17%, 33%, 1)", // Media card bar color, video player button background
-    c300: "hsla(210, 29%, 24%, 1)", // Cancel button hover, utils divider
-    c400: "hsla(210, 35%, 19%, 1)", // Card border and background, dropdown border, onboarding bar, edit badge hover, sidebar type
-    c500: "hsla(210, 35%, 17%, 1)", // Toggle disabled, cancel button, modal background, search hover background, media card shadow, settings save bar, errors card, about circle, edit badge background, video player button focus, video player flag background, video player input background, video player button over input hover
-    c600: "hsla(210, 32%, 14%, 1)", // Background secondary, dropdown alt background, dropdown border, onboarding card border
-    c700: "hsla(210, 35%, 12%, 1)", // Secondary button, media card badge, onboarding card hover, video player context card border, video player context buttons list, video player close hover
-    c800: "hsla(210, 33%, 9%, 1)", // Background main, settings sidebar badge, errors border
-    c900: "hsla(210, 25%, 7%, 1)", // Media card hover shadow, settings sidebar active link, video player context background
+    c50: "#7F8D9B", // Authentication copy text hover, progress background, progress preloaded
+    c100: "#5B6B7B", // Secondary text, badge text, video player scraping no result
+    c200: "#445464", // Media card bar color, video player button background
+    c300: "#2B3D4E", // Cancel button hover, utils divider
+    c400: "#203242", // Card border and background, dropdown border, onboarding bar, edit badge hover, sidebar type
+    c500: "#1C2C3C", // Toggle disabled, cancel button, modal background, search hover background, media card shadow, settings save bar, errors card, about circle, edit badge background, video player button focus, video player flag background, video player input background, video player button over input hover
+    c600: "#172532", // Background secondary, dropdown alt background, dropdown border, onboarding card border
+    c700: "#131E29", // Secondary button, media card badge, onboarding card hover, video player context card border, video player context buttons list, video player close hover
+    c800: "#101820", // Background main, settings sidebar badge, errors border
+    c900: "#0C1216", // Media card hover shadow, settings sidebar active link, video player context background
   },
   shade: {
-    c25: "hsla(240, 33%, 53%, 1)", // Media card hover accent
-    c50: "hsla(240, 17%, 48%, 1)", // Theme secondary color, text, dimmed text
-    c100: "hsla(240, 20%, 40%, 1)", // Search placeholder and icon, dropdown secondary text
-    c200: "hsla(240, 20%, 31%, 1)", // Pill background hover, onboarding divider
-    c300: "hsla(240, 22%, 25%, 1)", // Pill background, authentication border, onboarding card
-    c400: "hsla(240, 25%, 21%, 1)", // Background secondary hover, dropdown border, onboarding bar, onboarding divider
-    c500: "hsla(240, 26%, 16%, 1)", // Search background, search focus, dropdown hover background, dropdown content background, authentication input background hover, authentication word background
-    c600: "hsla(240, 31%, 12%, 1)", // Modal background, dropdown background, onboarding card border
-    c700: "hsla(240, 29%, 10%, 1)", // Dropdown alt background
-    c800: "hsla(240, 30%, 8%, 1)", // Background main, settings save bar, onboarding card
-    c900: "hsla(240, 29%, 5%, 1)", // Media card hover shadow
+    c25: "#5d5db3", // Media card hover accent
+    c50: "#676790", // Theme secondary color, text, dimmed text
+    c100: "#52527A", // Search placeholder and icon, dropdown secondary text
+    c200: "#3F3F60", // Pill background hover, onboarding divider
+    c300: "#32324F", // Pill background, authentication border, onboarding card
+    c400: "#272741", // Background secondary hover, dropdown border, onboarding bar, onboarding divider
+    c500: "#1E1E32", // Search background, search focus, dropdown hover background, dropdown content background, authentication input background hover, authentication word background
+    c600: "#171728", // Modal background, dropdown background, onboarding card border
+    c700: "#131322", // Dropdown alt background
+    c800: "#0F0F1B", // Background main, settings save bar, onboarding card
+    c900: "#0A0A12", // Media card hover shadow
   },
 }
 

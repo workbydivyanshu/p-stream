@@ -36,28 +36,28 @@ const tokens = {
     },
   },
   blue: {
-    c50: "hsla(240, 80%, 82%, 1)", // Not currently used
-    c100: "hsla(240, 40%, 64%, 1)", // Not currently used
-    c200: "hsla(240, 33%, 52%, 1)", // Theme primary color, pill highlight, global accent A
-    c300: "hsla(240, 40%, 39%, 1)", // Global accent B
-    c400: "hsla(240, 46%, 30%, 1)", // Light bar color
-    c500: "hsla(240, 45%, 22%, 1)", // Background accent B
-    c600: "hsla(240, 42%, 18%, 1)", // Not currently used
-    c700: "hsla(240, 40%, 15%, 1)", // Not currently used
-    c800: "hsla(240, 33%, 9%, 1)", // Not currently used
-    c900: "hsla(240, 25%, 6%, 1)", // Not currently used
+    c50: "hsla(220, 80%, 80%, 1)",
+    c100: "hsla(220, 60%, 65%, 1)",
+    c200: "hsla(220, 50%, 50%, 1)",
+    c300: "hsla(220, 55%, 40%, 1)",
+    c400: "hsla(220, 60%, 30%, 1)",
+    c500: "hsla(220, 55%, 22%, 1)",
+    c600: "hsla(220, 50%, 18%, 1)",
+    c700: "hsla(220, 45%, 14%, 1)",
+    c800: "hsla(220, 35%, 10%, 1)",
+    c900: "hsla(220, 30%, 7%, 1)",
   },
   purple: {
-    c50: "hsla(280, 100%, 83%, 1)", // Link hover, settings tabs titles/text
-    c100: "hsla(270, 100%, 75%, 1)", // Link, logo text, video player audio set
-    c200: "hsla(270, 79%, 64%, 1)", // Progress filled, video player scraping loading, video player context accent
-    c300: "hsla(270, 61%, 55%, 1)", // Toggle button, onboarding bar filled
-    c400: "hsla(270, 59%, 47%, 1)", // Large card icon
-    c500: "hsla(270, 52%, 34%, 1)", // Background accent A
-    c600: "hsla(270, 52%, 26%, 1)", // Not currently used
-    c700: "hsla(270, 50%, 19%, 1)", // Not currently used
-    c800: "hsla(270, 48%, 14%, 1)", // Not currently used
-    c900: "hsla(270, 40%, 9%, 1)", // Not currently used
+    c50: "hsla(48, 100%, 75%, 1)",
+    c100: "hsla(48, 95%, 65%, 1)",
+    c200: "hsla(46, 90%, 55%, 1)",
+    c300: "hsla(44, 85%, 45%, 1)",
+    c400: "hsla(42, 80%, 35%, 1)",
+    c500: "hsla(40, 75%, 28%, 1)",
+    c600: "hsla(38, 70%, 22%, 1)",
+    c700: "hsla(36, 60%, 18%, 1)",
+    c800: "hsla(34, 50%, 14%, 1)",
+    c900: "hsla(32, 40%, 10%, 1)",
   },
   ash: {
     c50: "hsla(210, 11%, 55%, 1)", // Authentication copy text hover, progress background, progress preloaded
@@ -87,12 +87,12 @@ const tokens = {
 }
 
 export default createTheme({
-  name: "classic",
+  name: "wolverine",
   extend: {
     colors: {
       themePreview: {
         primary: tokens.blue.c200,
-        secondary: tokens.shade.c50,
+        secondary: tokens.purple.c300,
         ghost: tokens.white,
       },
 

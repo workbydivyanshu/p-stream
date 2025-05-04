@@ -21,17 +21,17 @@ const tokens = {
     },
   },
   purple: {
-    c50: "#8E2020",
-    c100: "#CF1F1F",
-    c200: "#CF1F1F",
-    c300: "#CF1F1F",
-    c400: "#CF1F1F",
-    c500: "#CF1F1F",
-    c600: "#b30000",
-    c700: "#8a0000",
-    c800: "#660000",
-    c900: "#400000",
-    c1000: "#180101FF",
+    c50: "#E0AC0DFF",
+    c100: "#CF9F11FF",
+    c200: "#CF9F11FF",
+    c300: "#CF9F11FF",
+    c400: "#E0AC0DFF",
+    c500: "#C5A00AFF",
+    c600: "#C5A00AFF",
+    c700: "#aa9500",
+    c800: "#7f6f00",
+    c900: "#4d4700",
+    c1000: "#201A03FF",
   },
   shade: {
     c50: "#7c7c7c",
@@ -72,7 +72,7 @@ const tokens = {
 }
 
 export default createTheme({
-  name: "ember",
+  name: "spark",
   extend: {
     colors: {
       themePreview: {

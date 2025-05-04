@@ -43,6 +43,11 @@ const availableThemes = [
     key: "settings.appearance.themes.green",
   },
   {
+    id: "forest",
+    selector: "theme-forest",
+    key: "settings.appearance.themes.forest",
+  },
+  {
     id: "mocha",
     selector: "theme-mocha",
     key: "settings.appearance.themes.mocha",
@@ -53,9 +58,49 @@ const availableThemes = [
     key: "settings.appearance.themes.pink",
   },
   {
+    id: "noir",
+    selector: "theme-noir",
+    key: "settings.appearance.themes.noir",
+  },
+  {
     id: "ember",
     selector: "theme-ember",
     key: "settings.appearance.themes.ember",
+  },
+  {
+    id: "acid",
+    selector: "theme-acid",
+    key: "settings.appearance.themes.acid",
+  },
+  {
+    id: "spark",
+    selector: "theme-spark",
+    key: "settings.appearance.themes.spark",
+  },
+  {
+    id: "grape",
+    selector: "theme-grape",
+    key: "settings.appearance.themes.grape",
+  },
+  {
+    id: "spiderman",
+    selector: "theme-spiderman",
+    key: "settings.appearance.themes.spiderman",
+  },
+  {
+    id: "wolverine",
+    selector: "theme-wolverine",
+    key: "settings.appearance.themes.wolverine",
+  },
+  {
+    id: "hulk",
+    selector: "theme-hulk",
+    key: "settings.appearance.themes.hulk",
+  },
+  {
+    id: "popsicle",
+    selector: "theme-popsicle",
+    key: "settings.appearance.themes.popsicle",
   },
 ];
 

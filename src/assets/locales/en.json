@@ -697,7 +697,16 @@
                 "green": "Green",
                 "mocha": "Mocha",
                 "pink": "Pink",
-                "ember": "Ember"
+                "noir": "Noir",
+                "ember": "Ember",
+                "acid": "Acid",
+                "spark": "Spark",
+                "grape": "Grape",
+                "spiderman": "Spiderman",
+                "forest": "Forest",
+                "wolverine": "Wolverine",
+                "popsicle": "Popsicle",
+                "hulk": "Hulk"
             },
             "title": "Appearance",
             "options": {

@@ -21,17 +21,16 @@ const tokens = {
     },
   },
   purple: {
-    c50: "#8E2020",
-    c100: "#CF1F1F",
-    c200: "#CF1F1F",
-    c300: "#CF1F1F",
-    c400: "#CF1F1F",
-    c500: "#CF1F1F",
-    c600: "#b30000",
-    c700: "#8a0000",
-    c800: "#660000",
-    c900: "#400000",
-    c1000: "#180101FF",
+    c50: "#575757FF",
+    c100: "#575757FF",
+    c200: "#575757FF",
+    c300: "#575757FF",
+    c400: "#575757FF",
+    c500: "#575757FF",
+    c600: "#2c2c2c",
+    c700: "#202020",
+    c800: "#151515",
+    c900: "#0a0a0a"
   },
   shade: {
     c50: "#7c7c7c",
@@ -72,12 +71,12 @@ const tokens = {
 }
 
 export default createTheme({
-  name: "ember",
+  name: "noir",
   extend: {
     colors: {
       themePreview: {
         primary: tokens.black.c80,
-        secondary: tokens.purple.c50,
+        secondary: tokens.black.c100
       },
 
       pill: {
@@ -93,7 +92,7 @@ export default createTheme({
       },
 
       lightBar: {
-        light: tokens.purple.c1000,
+        light: tokens.shade.c900,
       },
 
       buttons: {

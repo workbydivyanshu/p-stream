@@ -21,17 +21,17 @@ const tokens = {
     },
   },
   purple: {
-    c50: "#8E2020",
-    c100: "#CF1F1F",
-    c200: "#CF1F1F",
-    c300: "#CF1F1F",
-    c400: "#CF1F1F",
-    c500: "#CF1F1F",
-    c600: "#b30000",
-    c700: "#8a0000",
-    c800: "#660000",
-    c900: "#400000",
-    c1000: "#180101FF",
+    c50: "#1f6e1f",
+    c100: "#1f8f1f",
+    c200: "#1fa11f",
+    c300: "#1fb31f",
+    c400: "#1fc41f",
+    c500: "#1fd61f",
+    c600: "#1aa31a",
+    c700: "#157f15",
+    c800: "#106010",
+    c900: "#0b3f0b",
+    c1000: "#021902FF",
   },
   shade: {
     c50: "#7c7c7c",
@@ -72,7 +72,7 @@ const tokens = {
 }
 
 export default createTheme({
-  name: "ember",
+  name: "acid",
   extend: {
     colors: {
       themePreview: {
