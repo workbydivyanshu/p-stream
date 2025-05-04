@@ -267,7 +267,7 @@ function MediaCardContent({
                     if (onShowDetails) onShowDetails(media);
                   }}
                 >
-                  More Info
+                  {t("home.mediaCard.moreInfo")}
                 </Button>
 
                 {canLink ? (
@@ -288,7 +288,7 @@ function MediaCardContent({
                         icon={Icons.CHECKMARK}
                       />
                     ) : (
-                      "Copy Link"
+                      t("home.mediaCard.copyLink")
                     )}
                   </Button>
                 ) : null}
@@ -303,7 +303,7 @@ function MediaCardContent({
                   )}
                   onClick={() => setOverlayVisible(false)}
                 >
-                  Close
+                  {t("home.mediaCard.close")}
                 </Button>
               </div>
             </div>

@@ -244,7 +244,8 @@ function EpisodesView({
                           )}
                         >
                           <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-50">
-                            E{ep.number}
+                            {t("media.episodeShort")}
+                            {ep.number}
                           </span>
                           <span className="line-clamp-1 break-all">
                             {ep.title}
@@ -290,8 +291,8 @@ function EpisodesView({
                         {!isAired && (
                           <span className="text-video-context-type-main/70 text-sm">
                             {ep.air_date
-                              ? `(Airs - ${new Date(ep.air_date).toLocaleDateString()})`
-                              : "(Unreleased)"}
+                              ? `(${t("details.airs")} - ${new Date(ep.air_date).toLocaleDateString()})`
+                              : `(${t("media.unreleased")})`}
                           </span>
                         )}
                       </div>
@@ -358,8 +359,8 @@ function EpisodesView({
                         {!isAired && (
                           <span className="text-video-context-type-main/70 text-sm">
                             {ep.air_date
-                              ? `(Airs - ${new Date(ep.air_date).toLocaleDateString()})`
-                              : "(Unreleased)"}
+                              ? `(${t("details.airs")} - ${new Date(ep.air_date).toLocaleDateString()})`
+                              : `(${t("media.unreleased")})`}
                           </span>
                         )}
                       </div>

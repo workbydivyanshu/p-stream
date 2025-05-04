@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { t } from "i18next";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -412,7 +413,7 @@ function DetailsContent({
             >
               <Icon icon={Icons.PLAY} className="text-white" />
               <span className="text-white text-sm pr-1">
-                {showProgress ? "Resume" : "Play"}
+                {showProgress ? t("details.resume") : t("details.play")}
               </span>
             </Button>
           )}
@@ -427,7 +428,6 @@ function DetailsContent({
                 type="button"
                 onClick={toggleBookmark}
                 className="p-2 pt-3 hover:scale-110 transition-transform"
-                title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
               >
                 <Icon
                   icon={isBookmarked ? Icons.BOOKMARK : Icons.BOOKMARK_OUTLINE}
@@ -462,13 +462,17 @@ function DetailsContent({
             <div className="space-y-4 mb-6">
               {data.director && (
                 <div className="text-xs">
-                  <span className="font-medium text-white/80">Director:</span>{" "}
+                  <span className="font-medium text-white/80">
+                    {t("details.director")}
+                  </span>{" "}
                   <span className="text-white/70">{data.director}</span>
                 </div>
               )}
               {data.actors && data.actors.length > 0 && (
                 <div className="text-xs">
-                  <span className="font-medium text-white/80">Cast:</span>{" "}
+                  <span className="font-medium text-white/80">
+                    {t("details.cast")}
+                  </span>{" "}
                   <span className="text-white/70">
                     {data.actors.join(", ")}
                   </span>
@@ -482,25 +486,28 @@ function DetailsContent({
             <div className="space-y-3 text-xs">
               {data.runtime && (
                 <div className="flex items-center gap-1 text-white/80">
-                  <span className="font-medium">Runtime:</span>{" "}
+                  <span className="font-medium">{t("details.runtime")}</span>{" "}
                   {formatRuntime(data.runtime)}
                 </div>
               )}
               {data.language && (
                 <div className="flex items-center gap-1 text-white/80">
-                  <span className="font-medium">Language:</span>{" "}
+                  <span className="font-medium">{t("details.language")}</span>{" "}
                   {data.language.toUpperCase()}
                 </div>
               )}
               {data.releaseDate && (
                 <div className="flex items-center gap-1 text-white/80">
-                  <span className="font-medium">Release Date:</span>{" "}
+                  <span className="font-medium">
+                    {t("details.releaseDate")}
+                  </span>{" "}
                   {formatDate(data.releaseDate)}
                 </div>
               )}
               {data.rating && (
                 <div className="flex items-center gap-1 text-white/80">
-                  <span className="font-medium">Rating:</span> {data.rating}
+                  <span className="font-medium">{t("details.rating")}</span>{" "}
+                  {data.rating}
                 </div>
               )}
               {data.voteAverage !== undefined &&
@@ -508,7 +515,7 @@ function DetailsContent({
                 data.voteCount > 0 && (
                   <div className="space-y-1">
                     <div className="flex items-center gap-1 text-white/80">
-                      <span className="font-medium">Rating:</span>{" "}
+                      <span className="font-medium">{t("details.rating")}</span>{" "}
                       <span className="text-white/90">
                         {imdbData?.imdb_rating
                           ? `${imdbData.imdb_rating.toFixed(1)}/10 (IMDb)`
@@ -525,7 +532,8 @@ function DetailsContent({
                       />
                     </div>
                     <div className="text-white/60 text-[10px] text-right">
-                      {formatVoteCount(imdbData?.votes || data.voteCount)} votes
+                      {formatVoteCount(imdbData?.votes || data.voteCount)}{" "}
+                      {t("details.votes")}
                     </div>
 
                     {/* External Links */}
@@ -536,7 +544,7 @@ function DetailsContent({
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-8 h-8 rounded-full bg-[#0d253f] flex items-center justify-center transition-transform hover:scale-110"
-                          title="View on TMDB"
+                          title={t("details.tmdb")}
                         >
                           <Icon icon={Icons.TMDB} className="text-white" />
                         </a>
@@ -547,7 +555,7 @@ function DetailsContent({
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center transition-transform hover:scale-110"
-                          title="View on IMDB"
+                          title={t("details.imdb")}
                         >
                           <Icon icon={Icons.IMDB} className="text-black" />
                         </a>
@@ -564,15 +572,17 @@ function DetailsContent({
           <div className="mt-6 md:mt-0">
             {/* Season Selector */}
             <div className="flex justify-between items-center mb-3">
-              <h4 className="text-lg font-semibold text-white">Episodes</h4>
+              <h4 className="text-lg font-semibold text-white">
+                {t("details.episodes")}
+              </h4>
               <Dropdown
                 options={data.seasonData.seasons.map((season) => ({
                   id: season.season_number.toString(),
-                  name: `Season ${season.season_number}`,
+                  name: `${t("details.season")} ${season.season_number}`,
                 }))}
                 selectedItem={{
                   id: selectedSeason.toString(),
-                  name: `Season ${selectedSeason}`,
+                  name: `${t("details.season")} ${selectedSeason}`,
                 }}
                 setSelectedItem={(item) => setSelectedSeason(Number(item.id))}
               />
@@ -647,13 +657,14 @@ function DetailsContent({
                         {/* Episode Number Badge */}
                         <div className="absolute top-2 left-2 flex items-center space-x-2">
                           <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
-                            E{episode.episode_number}
+                            {t("media.episodeShort")}
+                            {episode.episode_number}
                           </span>
                           {!isAired && (
                             <span className="text-video-context-type-main/70 text-sm">
                               {episode.air_date
-                                ? `(Airs - ${new Date(episode.air_date).toLocaleDateString()})`
-                                : "(Unreleased)"}
+                                ? `(${t("details.airs")} - ${new Date(episode.air_date).toLocaleDateString()})`
+                                : `(${t("media.unreleased")})`}
                             </span>
                           )}
                         </div>

@@ -87,17 +87,15 @@ export function DownloadView({ id }: { id: string }) {
                 <StyleTrans k="player.menus.downloads.hlsDisclaimer" />
               </Menu.Paragraph>
               <Button className="w-full mt-2" theme="purple" href={hlsDownload}>
-                Atempt download
+                {t("player.menus.downloads.button")}
               </Button>
               <p className="text-xs py-4">
-                Or, go to the{" "}
-                <a
-                  className="text-type-link"
-                  href="https://hls-downloader.pstream.org/"
-                >
-                  hls downloader website
-                </a>{" "}
-                and paste the playlist URL from below.
+                <Trans i18nKey="player.menus.downloads.hlsDownloader">
+                  <a
+                    className="text-type-link"
+                    href="https://hls-downloader.pstream.org/"
+                  />
+                </Trans>
               </p>
               <Button
                 className="w-full mt-2"

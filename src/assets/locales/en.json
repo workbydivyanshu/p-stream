@@ -159,6 +159,11 @@
             "discoverMore": "Discover more",
             "discover": "Discover"
         },
+        "mediaCard": {
+            "moreInfo": "More Info",
+            "copyLink": "Copy Link",
+            "close": "Close"
+        },
         "titles": {
             "day": {
                 "default": "What would you like to watch this afternoon?",
@@ -198,7 +203,25 @@
         "types": {
             "movie": "Movie",
             "show": "Show"
-        }
+        },
+        "episodeShort": "E",
+        "seasonShort": "S"
+    },
+    "details": {
+        "resume": "Resume",
+        "play": "Play",
+        "director": "Director:",
+        "cast": "Cast:",
+        "runtime": "Runtime:",
+        "languange": "Language:",
+        "releaseDate": "Release Date:",
+        "rating": "Rating:",
+        "votes": "votes",
+        "tmdb": "View on TMDB",
+        "imdb": "View on IMDb",
+        "episodes": "Episodes",
+        "season": "Season",
+        "airs": "Airs"
     },
     "migration": {
         "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
@@ -301,7 +324,8 @@
             "register": "Sync to Cloud",
             "settings": "Settings",
             "support": "Support",
-            "discover": "Discover"
+            "discover": "Discover",
+            "development": "Development"
         }
     },
     "notFound": {
@@ -413,6 +437,8 @@
         },
         "menus": {
             "downloads": {
+                "button": "Atempt download",
+                "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
                 "disclaimer": "Downloads are taken directly from the provider. P-Stream does not have control over how the downloads are provided.",
                 "copyHlsPlaylist": "Copy HLS playlist link",
                 "downloadSubtitle": "Download current subtitle",
@@ -880,7 +906,7 @@
         },
         "status": {
             "success": "success",
-            "failure": "Failed to fetch a &quot;VIP&quot; stream. Token is invalid or API is down!"
+            "failure": "Failed to fetch a 'VIP' stream. Token is invalid or API is down!"
         }
     }
 }
