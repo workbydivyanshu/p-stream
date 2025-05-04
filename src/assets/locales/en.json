@@ -600,6 +600,29 @@
                 "enableExtension": "Enable extension",
                 "title": "Please enable the extension",
                 "text": "You've installed the P-Stream extension. To start using it, you need to enable the extension for this site."
+            },
+            "tips": {
+                "1": "Tap the gear icon to switch sources!",
+                "2": "Tap the title to copy the link!",
+                "3": "Hold SHIFT for widescreen instead of fullscreen!",
+                "4": "Some sources work better than others!",
+                "5": "Get the extension for more sources!",
+                "6": "Hold bookmarks to edit or delete them!",
+                "7": "Hold SHIFT and tap the title to copy the link with time!",
+                "8": "Set a custom subtitle color!",
+                "9": "Migrate your account to a new backend in settings!",
+                "10": "Join the Discord!",
+                "11": "Use [ and ] to adjust subtitle timing!",
+                "12": "Press SPACE or K to play/pause!",
+                "13": "Use LEFT and RIGHT arrow keys to skip 5 seconds!",
+                "14": "Use J and L keys to skip 10 seconds!",
+                "15": "Press F to toggle fullscreen!",
+                "16": "Press M to toggle mute!",
+                "17": "Use UP and DOWN arrows to change volume!",
+                "18": "Press < and > to change playback speed!",
+                "19": "Press . and , to move frame by frame when paused!",
+                "20": "Press C to toggle subtitles!",
+                "21": "Press R to do a barrel roll!"
             }
         },
         "time": {

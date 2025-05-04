@@ -181,34 +181,11 @@ export function ScrapingPartInterruptButton() {
   );
 }
 
-const TIPS_LIST = [
-  "Tap the gear icon to switch sources!",
-  "Tap the title to copy the link!",
-  "Hold SHIFT for widescreen instead of fullscreen!",
-  "Some sources work better than others!",
-  "Get the extension for more sources!",
-  "Hold bookmarks to edit or delete them!",
-  "Hold SHIFT and tap the title to copy the link with time!",
-  "Set a custom subtitle color!",
-  "Migrate your account to a new backend in settings!",
-  "Join the Discord!",
-  "Use [ and ] to adjust subtitle timing!",
-  "Press SPACE or K to play/pause!",
-  "Use LEFT and RIGHT arrow keys to skip 5 seconds!",
-  "Use J and L keys to skip 10 seconds!",
-  "Press F to toggle fullscreen!",
-  "Press M to toggle mute!",
-  "Use UP and DOWN arrows to change volume!",
-  "Press < and > to change playback speed!",
-  "Press . and , to move frame by frame when paused!",
-  "Press C to toggle subtitles!",
-  "Press R to do a barrel roll!",
-];
-
 export function Tips() {
+  const { t } = useTranslation();
   const [tip] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * TIPS_LIST.length);
-    return TIPS_LIST[randomIndex];
+    const randomIndex = Math.floor(Math.random() * 21) + 1;
+    return t(`player.scraping.tips.${randomIndex}`);
   });
 
   return (
