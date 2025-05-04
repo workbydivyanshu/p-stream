@@ -169,28 +169,27 @@ export function AppearancePart(props: {
   const activeThemeRef = useRef<HTMLDivElement>(null);
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
-  const topSentinelRef = useRef<HTMLDivElement>(null);
-  const bottomSentinelRef = useRef<HTMLDivElement>(null);
+
+  const checkScrollPosition = () => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    setIsAtTop(container.scrollTop <= 0);
+    setIsAtBottom(
+      Math.abs(
+        container.scrollHeight - container.scrollTop - container.clientHeight,
+      ) < 2,
+    );
+  };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.target === topSentinelRef.current) {
-            setIsAtTop(entry.isIntersecting);
-          }
-          if (entry.target === bottomSentinelRef.current) {
-            setIsAtBottom(entry.isIntersecting);
-          }
-        });
-      },
-      { root: carouselRef.current, threshold: 1 },
-    );
+    const container = carouselRef.current;
+    if (!container) return;
 
-    if (topSentinelRef.current) observer.observe(topSentinelRef.current);
-    if (bottomSentinelRef.current) observer.observe(bottomSentinelRef.current);
+    container.addEventListener("scroll", checkScrollPosition);
+    checkScrollPosition(); // Check initial position
 
-    return () => observer.disconnect();
+    return () => container.removeEventListener("scroll", checkScrollPosition);
   }, []);
 
   useEffect(() => {
@@ -207,6 +206,8 @@ export function AppearancePart(props: {
         container.scrollTop -
         containerRect.top -
         (containerRect.height - elementRect.height) / 2;
+
+      checkScrollPosition(); // Update masks after scrolling
     }
   }, [props.active]);
 
@@ -263,16 +264,14 @@ export function AppearancePart(props: {
           <div
             ref={carouselRef}
             className={classNames(
-              "grid grid-cols-2 gap-4 max-w-[600px] max-h-[28rem] overflow-y-auto",
+              "grid grid-cols-2 gap-4 max-w-[600px] max-h-[36rem] overflow-y-auto",
               "vertical-carousel-container",
               {
-                "mask-none": isAtTop && isAtBottom,
-                "mask-image-bottom-only": isAtTop && !isAtBottom,
-                "mask-image-top-only": !isAtTop && isAtBottom,
+                "hide-top-gradient": isAtTop,
+                "hide-bottom-gradient": isAtBottom,
               },
             )}
           >
-            <div ref={topSentinelRef} className="absolute top-0 h-px" />
             {availableThemes.map((v) => (
               <div
                 key={v.id}
@@ -287,7 +286,6 @@ export function AppearancePart(props: {
                 />
               </div>
             ))}
-            <div ref={bottomSentinelRef} className="absolute bottom-0 h-px" />
           </div>
         </div>
       </div>
