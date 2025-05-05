@@ -217,7 +217,8 @@
             "register": "Mit der Cloud synchronisieren",
             "settings": "Einstellungen",
             "support": "Support",
-            "discover": "Entdecken"
+            "discover": "Entdecken",
+            "development": "Entwicklung"
         }
     },
     "notFound": {
@@ -288,7 +289,25 @@
                 },
                 "or": "oder"
             },
-            "title": "Lass uns mit der Einrichtung von P-Stream starten"
+            "title": "Lass uns mit der Einrichtung von P-Stream starten",
+            "moreInfo": {
+                "explainer": {
+                    "proxyDescription": "Der Proxy sammelt Medien von anderen Websites. Es umgeht Browser-Beschränkungen (wie CORS), um Scraping zu ermöglichen.",
+                    "intro": "P-Stream hostet keine Videos. Es ist für den Inhalt auf Websites von Drittanbietern angewiesen, sodass Sie festlegen müssen, wie es mit diesen Websites verbunden wird.",
+                    "fedapi": {
+                        "fedapiDescription": "Wenn du ein eigenes Febbox-Konto hast, kannst du die FED-API freischalten. Unsere beste Quelle mit 4K-Qualität, Dolby Atmos, den meisten Inhalten und den besten (schnellsten) Ladezeiten. Dies ist sehr empfehlenswert!",
+                        "fedapi": "Optionale FED API (Febbox) UI Token"
+                    },
+                    "options": "Deine Optionen:",
+                    "extension": "1. Erweiterung (Empfohlen)",
+                    "extensionDescription": "Die Erweiterung gibt mir Zugriff auf weitere Quellen. Er fungiert als lokaler Proxy und kann mit Websites umgehen, die spezielle Cookies oder Headers zum Laden benötigen.",
+                    "proxy": "2. Proxy",
+                    "default": "3. Standard Einstellungen",
+                    "defaultDescription": "Benützt P-Stream's eigener Proxy. Das ist die einfachste Option, kann aber aufgrund der gemeinsam genutzten Bandbreite, langsamer sein.",
+                    "outro": "Wenn du mehr Fragen hast, wie die Seite funktioniert, feel free und frag im <0>P-Stream Discord</0> Server nach!"
+                },
+                "button": "Mehr Info"
+            }
         }
     },
     "overlays": {
@@ -324,7 +343,9 @@
                     "shortTitle": "Download / PC",
                     "title": "Am PC herunterladen"
                 },
-                "title": "Download"
+                "title": "Download",
+                "hlsDownloader": "Oder gehen Sie auf die <0>hls downloader website</0> und füg dort die URL der Wiedergabeliste von unten ein.",
+                "button": "Versuch herunterladen"
             },
             "episodes": {
                 "button": "Folgen",
@@ -389,7 +410,12 @@
                 "OpenSubtitlesChoice": "offene Untertitel",
                 "notFound": "Keine der verfügbaren Optionen entspricht Ihrer Anfrage",
                 "SourceChoice": "Quellenangaben",
-                "empty": "Es sind hierfür keine Untertitel verfügbar."
+                "empty": "Es sind hierfür keine Untertitel verfügbar.",
+                "onChoice": "An"
+            },
+            "watchparty": {
+                "notice": "Watch Party ist möglicherweise für einige Quellen nicht verfügbar",
+                "watchpartyItem": "Watch Party"
             }
         },
         "metadata": {
@@ -459,6 +485,16 @@
                 "text": "Wir haben alle Anbieter durchsucht, konnten aber nicht das Video finden nach dem du suchst! Wir stellen keine eigenen Videos bereit und haben keine Kontrolle darüber, was verfügbar ist. Bitte klicke auf \"Details anzeigen\" für mehr Details.",
                 "title": "Wir konnten das nicht finden",
                 "discoverButton": "Endecke mehr"
+            },
+            "tips": {
+                "1": "Klicke auf das Einstellungs-Icon, um die Quelle zu wechseln!",
+                "2": "Klicke auf den Titel, um den Link zu kopieren!",
+                "7": "Halte SHIFT gedrückt und klick auf den Titel, um den Link mit der Zeitangabe zu kopieren!",
+                "3": "Halte SHIFT für Breitbildschirm anstelle von Vollbildschirm!",
+                "4": "Manche Quellen funktionieren besser als andere!",
+                "5": "Hohle dir die Erweiterung für mehr Quellen!",
+                "6": "Halte das Lesezeichen gedrückt, um sie zu verwalten oder zu löschen!",
+                "8": "Lege eine eigene Untertitelfarbe fest!"
             }
         },
         "time": {
@@ -708,9 +744,29 @@
         },
         "upload": {
             "button": {
-                "processing": "Verarbeitet..."
+                "processing": "Verarbeitet...",
+                "success": "Import Fertig",
+                "import": "Import Dateien",
+                "home": "Gehe zu home"
             },
-            "title": "Daten uploaden"
+            "title": "Daten uploaden",
+            "description": "Laden Sie Ihre zuvor exportierte Datendatei hoch, um Ihre Lesezeichen und Fortschritte in diesem Konto wiederherzustellen.",
+            "status": {
+                "processing": "Daten werden verarbeitet…",
+                "error": "Fehler bei Upload deiner Daten. 😿",
+                "success": "Deine Daten wurden erfolgreich hochgeladen! 🎉"
+            },
+            "file": {
+                "description": "Wähle das File, dass du Uploaden möchtest",
+                "select": "Wähle die Datei",
+                "change": "Datei ändern",
+                "name": "Datei Name"
+            },
+            "dataPreview": "Vorschau:",
+            "items": {
+                "progress": "Fortschritt anschauen"
+            },
+            "exportedOn": "Exportiert auf"
         },
         "back": "Zurück gehen"
     },
