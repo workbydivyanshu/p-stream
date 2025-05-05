@@ -14,7 +14,15 @@
             "body": "Nuestros resultados de búsqueda están alimentados por The Movie Database (TMDB) y se muestran independientemente de si nuestras fuentes realmente tienen el contenido.",
             "title": "Los resultados de búsqueda muestran la serie o película, ¿Por qué no puedo reproducirla?"
         },
-        "title": "Acerca de P-Stream"
+        "title": "Acerca de P-Stream",
+        "q5": {
+            "body": "¡P-Stream tiene un servidor de Discord que se puede encontrar en el encabezado de esta página!",
+            "title": "¿Cómo puedo obtener más información?"
+        },
+        "q4": {
+            "body": "Todos los datos se sincronizan en el servidor de la comunidad, cualquiera es libre de usarlo.",
+            "title": "¿Qué pasa con mis datos y cosas?"
+        }
     },
     "actions": {
         "copied": "Copiado",
@@ -87,7 +95,9 @@
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
-            "github": "GitHub"
+            "github": "GitHub",
+            "twitter": "Twitter",
+            "funding": "Apóyanos"
         },
         "tagline": "Ve tus series y películas favoritas con esta aplicación de transmisión de código abierto."
     },
@@ -100,7 +110,10 @@
             "onboarding": "Configurar",
             "pagetitle": "{{title}} - P-Stream",
             "register": "Registrarse",
-            "settings": "Configuración"
+            "settings": "Configuración",
+            "discover": "Descubrir",
+            "support": "Soporte",
+            "migration": "Migrar Cuenta"
         }
     },
     "home": {
@@ -124,10 +137,25 @@
                     "¿Qué quieres explorar?",
                     "¿Qué hay en tu lista de reproducción?",
                     "¿Cuál es tu película favorita?",
-                    "¿Cuál es tu serie favorita?"
+                    "¿Cuál es tu serie favorita?",
+                    "¿Qué hay en tu lista de seguimiento hoy?",
+                    "¿Cómo estuvo su día?",
+                    "Mala mia este sitio nunca funciona...",
+                    "¿No es P-Stream lo mejor?"
                 ]
             },
-            "sectionTitle": "Resultados de búsqueda"
+            "sectionTitle": "Resultados de búsqueda",
+            "empty": {
+                "default": "¡Bienvenido! ¡Encuentra contenido para ver aquí!",
+                "extra": [
+                    "No hay nada aquí :(",
+                    "Tan vacío...",
+                    "Qué vacío.",
+                    "Hola nuevo usuario :3"
+                ]
+            },
+            "discoverMore": "Descubre más",
+            "discover": "Descubre"
         },
         "titles": {
             "day": {
@@ -147,7 +175,24 @@
                 "extra": [
                     "¿Cansado? Escuché que “El Exorcista” es buena."
                 ]
+            },
+            "420": {
+                "default": "¿Qué te gustaría ver este 4/20?",
+                "extra": [
+                    "¡Feliz 4/20 🥳!"
+                ]
+            },
+            "69": {
+                "default": "¿Te apetece algo picante?",
+                "extra": [
+                    "¡Feliz día 69 😘!"
+                ]
             }
+        },
+        "mediaCard": {
+            "moreInfo": "Más información",
+            "copyLink": "Copiar enlace",
+            "close": "Cerrar"
         }
     },
     "media": {
@@ -155,7 +200,8 @@
         "types": {
             "movie": "Película",
             "show": "Serie"
-        }
+        },
+        "unreleased": "No Estrenado"
     },
     "navigation": {
         "banner": {
@@ -548,5 +594,101 @@
             "title": "Subtítulos"
         },
         "unsaved": "Tienes cambios sin guardar"
+    },
+    "details": {
+        "rating": "Clasificación:",
+        "season": "Temporada",
+        "resume": "Reanudar",
+        "cast": "Elenco:",
+        "runtime": "Tiempo de ejecución:",
+        "languange": "Idioma:",
+        "releaseDate": "Fecha de lanzamiento:",
+        "votes": "votos",
+        "tmdb": "Ver en TMDB",
+        "imdb": "Ver en IMDb",
+        "episodes": "Episodios"
+    },
+    "migration": {
+        "loginRequired": "¡Debes iniciar sesión para migrar tus datos! Vuelve e inicia sesión para continuar.",
+        "start": {
+            "options": {
+                "download": {
+                    "description": "Esto descargará tus datos a tu dispositivo. Podrás subirlos al nuevo servidor o simplemente guardarlos para mayor seguridad.",
+                    "title": "Descargar datos",
+                    "quality": "Mas tecnico",
+                    "action": "Descargar datos"
+                },
+                "or": "o",
+                "direct": {
+                    "description": "Esto migrará tus datos directamente al nuevo servidor. Es la opción más rápida. <br /><br />¡Esta opción te permite mantener tu contraseña!",
+                    "title": "Migración directa",
+                    "quality": "Más fácil y rápida",
+                    "action": "Transferir datos"
+                },
+                "upload": {
+                    "title": "Subir Datos",
+                    "description": "Sube tu archivo de datos previamente exportado para restaurar tus marcadores y progreso en esta cuenta.",
+                    "quality": "Restaurar desde copia de seguridad",
+                    "action": "Subir Datos"
+                }
+            },
+            "explainer": "Si desea migrar o hacer una copia de seguridad de sus datos, puede hacerlo mediante las opciones a continuación. Esto le permitirá conservar sus datos al cambiar de servidor backend.",
+            "title": "Migra tus datos"
+        },
+        "direct": {
+            "button": {
+                "processing": "Procesando...",
+                "migrate": "MIgrar",
+                "home": "Ir al inicio",
+                "login": "Continua a iniciar sesión"
+            },
+            "description": "Introduce la URL del servidor backend para migrar los datos de tu cuenta actual al nuevo backend. ¡Así conservarás tu contraseña!",
+            "backendLabel": "URL del Servidor Backend",
+            "recaptchaLabel": "Clave ReCaptcha (opcional)",
+            "toggleLable": "¿Necesita ReCaptcha?",
+            "status": {
+                "error": "No se pudo migrar tus datos. 😿",
+                "success": "¡Tus datos se han migrado correctamente! 🎉"
+            },
+            "title": "Migración directa"
+        },
+        "download": {
+            "status": {
+                "error": "No se pudo descargar tus datos. 😿",
+                "success": "¡Tus datos se han descargado correctamente! 🎉"
+            },
+            "description": "Esto descargará tus datos a tu dispositivo. Podrás subirlos al nuevo servidor o simplemente guardarlos para mayor seguridad.",
+            "title": "Descargar datos",
+            "items": {
+                "description": "La descarga incluye:",
+                "bookmarks": "Marcadores de contenido",
+                "progress": "Progreso de Visualización"
+            },
+            "button": {
+                "download": "Descargar datos",
+                "home": "Ir al Inicio",
+                "login": "Continua a Iniciar sesión"
+            }
+        },
+        "upload": {
+            "description": "Sube tu archivo de datos previamente exportado para restaurar tus marcadores y progreso en esta cuenta.",
+            "title": "Subir datos",
+            "status": {
+                "processing": "Procesando datos...",
+                "error": "No se pudieron cargar tus datos. 😿",
+                "success": "¡Tus datos se han cargado correctamente! 🎉"
+            },
+            "file": {
+                "description": "Seleccione el archivo que desea subir",
+                "select": "Seleccionar archivo",
+                "change": "Cambiar archivo",
+                "name": "Nombre del archivo"
+            },
+            "dataPreview": "Vista Previa:",
+            "items": {
+                "bookmarks": "Marcadores de contenido",
+                "progress": "Progreso de Visualización"
+            }
+        }
     }
 }

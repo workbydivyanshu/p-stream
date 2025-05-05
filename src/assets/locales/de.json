@@ -96,7 +96,8 @@
             "discord": "Discord",
             "dmca": "DMCA",
             "github": "GitHub",
-            "twitter": "Twitter"
+            "twitter": "Twitter",
+            "funding": "Unterstütze uns"
         },
         "tagline": "Schau deine Lieblingsserien und Filme mit dieser quelloffenen Streaming App."
     },
@@ -189,6 +190,11 @@
                     "Schönen 4/20 🥳!"
                 ]
             }
+        },
+        "mediaCard": {
+            "moreInfo": "Mehr Infos",
+            "copyLink": "Link kopieren",
+            "close": "Schließen"
         }
     },
     "media": {
@@ -197,7 +203,9 @@
             "movie": "Film",
             "show": "Serie"
         },
-        "unreleased": "Unveröffentlicht"
+        "unreleased": "Unveröffentlicht",
+        "episodeShort": "F",
+        "seasonShort": "S"
     },
     "navigation": {
         "banner": {
@@ -701,7 +709,8 @@
         "upload": {
             "button": {
                 "processing": "Verarbeitet..."
-            }
+            },
+            "title": "Daten uploaden"
         },
         "back": "Zurück gehen"
     },
@@ -734,5 +743,20 @@
         },
         "text": "P-Stream ist nicht von einer Kokosnusspalme gefallen, es wurde größtenteils von einer einzigen Person (und zwar einer sehr epischen) gemacht.",
         "title": "Jip"
+    },
+    "details": {
+        "director": "Direktor:",
+        "cast": "Besetzung:",
+        "imdb": "Auf IMDb anzeigen",
+        "resume": "Fortsetzen",
+        "play": "Wiedergeben",
+        "languange": "Sprache:",
+        "releaseDate": "Veröffentlichungsdatum:",
+        "rating": "Bewertung:",
+        "votes": "Stimmen",
+        "tmdb": "Auf TMDB anzeigen",
+        "episodes": "Folgen",
+        "season": "Staffel",
+        "runtime": "Laufzeit"
     }
 }
