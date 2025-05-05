@@ -630,10 +630,10 @@ function DetailsContent({
                       to={getEpisodeUrl(episode)}
                       ref={isActive ? activeEpisodeRef : null}
                       className={classNames(
-                        "flex-shrink-0 w-64 rounded-lg overflow-hidden transition-all duration-200 relative cursor-pointer hover:scale-95",
+                        "flex-shrink-0 w-52 md:w-64 rounded-lg overflow-hidden transition-all duration-200 relative cursor-pointer hover:scale-95",
                         isActive
                           ? "bg-video-context-hoverColor/50 hover:bg-white/5"
-                          : "hover:bg-video-context-hoverColor/50 hover:bg-white/5",
+                          : "hover:bg-white/5",
                         !isAired ? "opacity-50" : "",
                       )}
                     >
