@@ -14,7 +14,15 @@
             "body": "Rezultatele căutării noastre sunt furnizate de The Movie Database (TMDB) și afișați indiferent dacă sursele noastre au de fapt conținutul.",
             "title": "Rezultatele căutării afișează emisiunea sau filmul, de ce nu îl pot reda?"
         },
-        "title": "Despre P-Stream"
+        "title": "Despre P-Stream",
+        "q4": {
+            "body": "Toate datele sunt sincronizate cu serverul comunitar, oricine e liber să-l folosească.",
+            "title": "Ce se întâmplă cu datele mele?"
+        },
+        "q5": {
+            "body": "P-Stream are un server de Discord care poate fi găsit în antetul acestei pagini!",
+            "title": "Cum pot afla mai multe?"
+        }
     },
     "actions": {
         "copied": "Copiat",
@@ -87,7 +95,9 @@
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
-            "github": "GitHub"
+            "github": "GitHub",
+            "funding": "Ajută-ne",
+            "twitter": "Twitter"
         },
         "tagline": "Urmăriți emisiunile și filmele preferate cu această aplicație de streaming open source."
     },
@@ -100,7 +110,10 @@
             "onboarding": "Configurație",
             "pagetitle": "{{title}} - P-Stream",
             "register": "Inregistreaza-te",
-            "settings": "Setări"
+            "settings": "Setări",
+            "discover": "Descoperă",
+            "support": "Ajutor",
+            "migration": "Migrare cont"
         }
     },
     "home": {
@@ -124,10 +137,26 @@
                     "Ce vrei să explorezi?",
                     "Ce e pe lista dvs. de urmărire?",
                     "Care e filmul tău preferat?",
-                    "Care e serialul tău preferat?"
+                    "Care e serialul tău preferat?",
+                    "Ce ai vrea să vizionezi azi?",
+                    "Cum a fost ziua de azi?",
+                    "Vina mea că site-ul nu funcționează niciodată...",
+                    "Nu-i așa că P-Stream e cel mai tare?",
+                    ">ᴗ<"
                 ]
             },
-            "sectionTitle": "Rezultate de căutare"
+            "sectionTitle": "Rezultate de căutare",
+            "empty": {
+                "extra": [
+                    "Nu-i nimic aici :(",
+                    "E așa de gol...",
+                    "Atât de gol...",
+                    "Salut noule utilizator :3"
+                ],
+                "default": "Bine ai venit, găsește conținut de vizionat aici!"
+            },
+            "discoverMore": "Descoperă mai multe",
+            "discover": "Descoperă"
         },
         "titles": {
             "day": {
@@ -147,7 +176,21 @@
                 "extra": [
                     "Obosit? Aud că The Exorcist is good."
                 ]
+            },
+            "420": {
+                "extra": [
+                    "Un 20/4 fericit 🥳!"
+                ],
+                "default": "Ce ai vrea să vizionezi pe data asta de 20/4?"
+            },
+            "69": {
+                "default": "Gata de ceva picant?"
             }
+        },
+        "mediaCard": {
+            "moreInfo": "Mai multe informații",
+            "copyLink": "Copiază link",
+            "close": "Închide"
         }
     },
     "media": {
@@ -155,7 +198,8 @@
         "types": {
             "movie": "Film",
             "show": "Spectacol"
-        }
+        },
+        "unreleased": "Nelansate"
     },
     "navigation": {
         "banner": {
@@ -546,5 +590,12 @@
             "title": "Subtitluri"
         },
         "unsaved": "Aveți modificări nesalvate"
+    },
+    "details": {
+        "resume": "Reia",
+        "play": "Redă",
+        "director": "Director:",
+        "cast": "Distribuție:",
+        "languange": "Limbă:"
     }
 }

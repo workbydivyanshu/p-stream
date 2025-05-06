@@ -18,7 +18,7 @@
             "body": "Alle oplysninger synkroniseres til sudo-backend, som er anderledes end community-backend og hostes selvstændigt af mig, men alle er velkomne til at bruge den."
         },
         "q5": {
-            "body": "P-Stream har en twitter-bruger, som du kan finde i bunden af denne side, samt et link til kildekoden på Github.",
+            "body": "P-Stream har en Discord server, som kan findes på toppen af denne side!",
             "title": "Hvordan kan jeg finde ud af mere?"
         },
         "title": "Om P-Stream (^▽^)",
@@ -636,5 +636,25 @@
             "backgroundBlurLabel": "Sløring af baggrund"
         },
         "unsaved": "Du har ændringer, der ikke er gemt... ฅ^•ﻌ•^ฅ"
+    },
+    "fedapi": {
+        "setup": {
+            "showVideo": "Vis video vejledning",
+            "title": "For at få din Ui-token:"
+        },
+        "onboarding": {
+            "description": "Brug din egen Febbox-konto for at få det bedste streaming med 4k kvalitet, Dolby Atmos, spring intro og de bedste (hurtigste) indlæsningstider!",
+            "title": "Valgfrit: FED API (Fedbox) token"
+        }
+    },
+    "discover": {
+        "scrollToTop": "Tilbage til toppen",
+        "page": {
+            "subtitle": "Udforsk de seneste hits og tidløse klassikere.",
+            "title": "Opdag Film og TV"
+        },
+        "randomMovie": {
+            "in": "i"
+        }
     }
 }

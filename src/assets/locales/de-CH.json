@@ -217,7 +217,8 @@
             "register": "Mit der Cloud synchronisieren",
             "settings": "Einstellungen",
             "support": "Support",
-            "discover": "Entdecken"
+            "discover": "Entdecken",
+            "development": "Entwecklig"
         }
     },
     "notFound": {
@@ -288,7 +289,26 @@
                 },
                 "or": "oder"
             },
-            "title": "Lass uns mit der Einrichtung von P-Stream starten"
+            "title": "Lass uns mit der Einrichtung von P-Stream starten",
+            "moreInfo": {
+                "explainer": {
+                    "default": "3. Standart Istelige",
+                    "extensionDescription": "D’Erweiterig git der Zuegriff uf d’meiste Quellen. Si funktioniert wie en lokale Proxy und cha Site verwände, wo spezielli Cookies oder Header bruuche zum Lade.",
+                    "intro": "P-Stream hostet kei Videos. Es isch uf Drittanbieter-Websites angewiese für d’Inhalt, drum muesch du wähle, wie s sich mit dene Site verbindet.",
+                    "fedapi": {
+                        "fedapiDescription": "Wänn du din eigene Febbox-Account bruchsch, chasch du d’FED-API freischalte, üsi bescht Quelle mit 4K-Qualität, Dolby Atmos, dem meiste Inhalt und de schnellste Ladezyte. Das wird fo üs wermschtens empfohlen!",
+                        "fedapi": "Optionali FED API (Febbox) UI Token"
+                    },
+                    "defaultDescription": "Bruchsch der integrierti P-Stream Proxy. Es isch der eifachscht Option, chönnt aber langsamer si weg der teilte Bandbreite.",
+                    "options": "Dini Optione:",
+                    "extension": "1. Erwiterig (empfohle)",
+                    "proxy": "2. Proxy",
+                    "proxyDescription": "Dr Proxy scrape Medien vo andere Websites. Er umgoh Browser-Einschränkige (wie CORS), um s’Scrape z’ermögliche.",
+                    "outro": "Wenn du meh Froge hesch, wie das funktioniert, chasch gärn uf em <0>P-Stream Discord\\</0>-Server frage!"
+                },
+                "button": "Me Info",
+                "title": "Ein Setup verstehen"
+            }
         }
     },
     "overlays": {
@@ -324,7 +344,9 @@
                     "shortTitle": "Download / PC",
                     "title": "Am PC herunterladen"
                 },
-                "title": "Download"
+                "title": "Download",
+                "button": "Versuech zum abelade",
+                "hlsDownloader": "Oder, goh uf d’<0>HLS Downloader-Website\\</0> und füeg die Playlist-URL vo unten ei."
             },
             "episodes": {
                 "button": "Folgen",
@@ -389,7 +411,13 @@
                 "OpenSubtitlesChoice": "offene Untertitel",
                 "notFound": "Keine der verfügbaren Optionen entspricht Ihrer Anfrage",
                 "SourceChoice": "Quellenangaben",
-                "empty": "Es sind hierfür keine Untertitel verfügbar."
+                "empty": "Es sind hierfür keine Untertitel verfügbar.",
+                "scrapeButton": "Untertitel abschaben",
+                "onChoice": "Auf"
+            },
+            "watchparty": {
+                "watchpartyItem": "Zäme luege",
+                "notice": "Zäme luege esch felecht net för alli Quellene verfüegbar"
             }
         },
         "metadata": {
@@ -459,6 +487,29 @@
                 "text": "Wir haben alle Anbieter durchsucht, konnten aber nicht das Video finden nach dem du suchst! Wir stellen keine eigenen Videos bereit und haben keine Kontrolle darüber, was verfügbar ist. Bitte klicke auf \"Details anzeigen\" für mehr Details.",
                 "title": "Wir konnten das nicht finden",
                 "discoverButton": "Endecke mehr"
+            },
+            "tips": {
+                "7": "Halt SHIFT und klick uf den Titel, um de Link mit der Zeit z'kopiere!",
+                "2": "Klick ufe Titel zom der link z kopiere!",
+                "12": "Dröck SPACE oder K zom abspele/pausiere!",
+                "19": "Drück . ond , um Frame für Frame z'bewege, wenn's pausiert esch!",
+                "3": "Halt SHIFT für Breitbild statt Vollbild!",
+                "4": "Gwössi Quellene fonktioniere besser wie anderi!",
+                "5": "Hol der t Erwiterig för me Quellene!",
+                "6": "Halt Lesezeichä, um sie z'ändere oder z'lösche!",
+                "8": "Wähl en eigeni Ontertetel Farb!",
+                "9": "Migrier dis Konto zonere neue Backend i de Einstellungen!",
+                "10": "Tret em Discord bi!",
+                "11": "Bruch [ und ], om t Untertitel-Ziit z'ändere!",
+                "14": "Benotz J ond L zom 10 sekonde z'Skipe!",
+                "15": "Dröck F, om Vollbeld ei- oder uszschalte!",
+                "16": "Dröck M zom Stomschalte!",
+                "17": "Benotz UP ond DOWN Taschte om t Lutsterchi z ändere!",
+                "18": "Drück < und >, um d'Wiedergabegschwindigkeit z'ändere!",
+                "20": "Dröck C om der Ontertetel i- oder uszschalte!",
+                "21": "Dröck R, om en Barrel Roll z mache!",
+                "1": "Klick uf s'Zahnradsymbol, um die Quellen z'wechse!",
+                "13": "Benotz die LENKI oder RÄCHTI Pfiltaschte om 5 sekomde z Skipe!"
             }
         },
         "time": {
@@ -514,6 +565,11 @@
                     "title": "Alle Sitzungen beenden",
                     "text": "Dies wird dich von allen Geräten abmelden, die mit deinem Konto verbunden sind.",
                     "button": "Von allen Geräten abmelden"
+                },
+                "migration": {
+                    "text": "Migrier dis Konto zu eme neue Server oder lad dini Date abe.",
+                    "title": "Account migriere",
+                    "button": "Migrier de Account"
                 }
             },
             "devices": {
@@ -537,7 +593,8 @@
             "title": "Konto",
             "admin": {
                 "title": "Admin-Bereich",
-                "text": "Nutzen Sie Tools zum Testen des P-Stream-Zustands."
+                "text": "Nutzen Sie Tools zum Testen des P-Stream-Zustands.",
+                "button": "Check es us"
             }
         },
         "appearance": {
@@ -708,9 +765,30 @@
         },
         "upload": {
             "button": {
-                "processing": "Verarbeitet..."
+                "processing": "Verarbeitet...",
+                "import": "Date importiere",
+                "success": "Import abgschlosse",
+                "home": "Gang zo home"
             },
-            "title": "Daten uploaden"
+            "title": "Daten uploaden",
+            "status": {
+                "success": "Dini date si erfolgrich ufe glade worde! 🎉",
+                "processing": "Verarbeitet Date…",
+                "error": "Fehler bem ufelade fo dinere Date. 😿"
+            },
+            "description": "Lade dini vorher exportierte Dateie ufe, um dini Lesezeichä und Fortschritt uf däm Konto wiederherzustelle.",
+            "file": {
+                "description": "Wähl dini Datei us, wodu welsch ufelade",
+                "select": "Wähl en Datei",
+                "change": "Ändere en Datei",
+                "name": "Datei Name"
+            },
+            "dataPreview": "Vorab aluege:",
+            "exportedOn": "Exportiert am",
+            "items": {
+                "bookmarks": "Gebuchmarkte Medien",
+                "progress": "Beobachten Sie den Fortschritt"
+            }
         },
         "back": "Zurück gehen"
     },
@@ -757,6 +835,7 @@
         "tmdb": "Auf TMDB anzeigen",
         "episodes": "Folgen",
         "season": "Staffel",
-        "runtime": "Laufzeit"
+        "runtime": "Laufzeit",
+        "airs": "Luft"
     }
 }

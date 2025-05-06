@@ -494,7 +494,10 @@
                 "4": "Manche Quellen funktionieren besser als andere!",
                 "5": "Hohle dir die Erweiterung für mehr Quellen!",
                 "6": "Halte das Lesezeichen gedrückt, um sie zu verwalten oder zu löschen!",
-                "8": "Lege eine eigene Untertitelfarbe fest!"
+                "8": "Lege eine eigene Untertitelfarbe fest!",
+                "9": "Migriere dein Account zu einer neuen Backend in den Einstellungen!",
+                "10": "Tritt dem Discord bei!",
+                "11": "Verwende Sie [ und ], um das Timing der Untertitel anzupassen!"
             }
         },
         "time": {
