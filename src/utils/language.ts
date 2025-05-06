@@ -23,6 +23,7 @@ const defaultLanguageCodes: string[] = [
   "ca-AD",
   "da-DK",
   "de-DE",
+  "de-CH",
   "el-GR",
   "en-US",
   "es-ES",
