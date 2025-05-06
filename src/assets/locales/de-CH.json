@@ -608,13 +608,26 @@
                 "green": "Grün",
                 "mocha": "Mokka",
                 "pink": "Pink",
-                "classic": "Klassik"
+                "classic": "Klassik",
+                "ember": "Glut",
+                "acid": "Säure",
+                "spark": "Funke",
+                "grape": "Traube",
+                "forest": "Wald",
+                "wolverine": "Wolverine",
+                "popsicle": "Popsicle",
+                "hulk": "Hulk",
+                "spiderman": "Spiderman",
+                "noir": "Noir"
             },
             "title": "Aussehen",
             "options": {
                 "discoverLabel": "Abschnitt „Entdecken“",
                 "discover": "Abschnitt „Entdecken“",
-                "discoverDescription": "Zeigen Sie den Abschnitt „Entdecken“ auf der Startseite unter Ihren mit Lesezeichen versehenen Medien an. Standardmäßig aktiviert."
+                "discoverDescription": "Zeigen Sie den Abschnitt „Entdecken“ auf der Startseite unter Ihren mit Lesezeichen versehenen Medien an. Standardmäßig aktiviert.",
+                "modal": "Details Modal",
+                "modalLabel": "Details modal",
+                "modalDescription": "Zeigt ein Modalfenster mit Details an, wenn Sie auf eine Mediakarte klicken, anstatt zur Watch-Seite zu gelangen. Für den Trailer ist ein Proxy oder eine Erweiterung erforderlich. Standardmässig deaktiviert."
             }
         },
         "connections": {
@@ -623,8 +636,10 @@
                 "label": "Eigener Server",
                 "urlLabel": "Eigene Server-URL",
                 "migration": {
-                    "link": "übertrage meine Daten"
-                }
+                    "link": "übertrage meine Daten",
+                    "description": "<0>Meine Daten migrieren</0> auf einen neuen Server."
+                },
+                "documentation": "Backend-Dokumentation"
             },
             "setup": {
                 "doSetup": "Einrichten",
@@ -655,7 +670,12 @@
                 "emptyState": "Keine Worker vorhanden, füge einen unten hinzu",
                 "label": "Verwenden deinen eigenen Worker-Proxys",
                 "urlLabel": "Worker-URLs",
-                "urlPlaceholder": "https://"
+                "urlPlaceholder": "https://",
+                "proxyTMDB": {
+                    "title": "Proxy TMDB",
+                    "description": "Nur erforderlich, wenn Sie nicht direkt auf TheMovieDB zugreifen können, z. B. wenn Ihr Internetprovider den Zugriff blockiert. Es wird empfohlen, den Bereich \"Entdecken\" zu deaktivieren, um die Performance mit dieser Option zu verbessern."
+                },
+                "documentation": "Proxydokumentation"
             }
         },
         "preferences": {
@@ -672,7 +692,8 @@
             "sourceOrderEnableLabel": "Benutzerdefinierte Quellreihenfolge",
             "autoplay": "Automatische Wiedergabe",
             "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt. Kann von Benutzern mit der Browsererweiterung, einem benutzerdefinierten Proxy oder mit der Standardkonfiguration aktiviert werden, sofern der Host dies zulässt.",
-            "sourceOrderDescription": "Per Drag & Drop können Sie Quellen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der die Quellen für die Medien, die Sie ansehen möchten, geprüft werden. Ist eine Quelle ausgegraut, bedeutet dies, dass die <bold>Erweiterung</bold> für diese Quelle erforderlich ist. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten geeignet)</strong>"
+            "sourceOrderDescription": "Per Drag & Drop können Sie Quellen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der die Quellen für die Medien, die Sie ansehen möchten, geprüft werden. Ist eine Quelle ausgegraut, bedeutet dies, dass die <bold>Erweiterung</bold> für diese Quelle erforderlich ist. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten geeignet)</strong>",
+            "skipCreditsLabel": "Überspringen Sie den Abspann"
         },
         "reset": "Zurücksetzen",
         "save": "Speichern",
@@ -697,7 +718,18 @@
             "previewQuote": "Das Gras wächst nicht schneller, wenn man daran zieht.",
             "textSizeLabel": "Schriftgröße",
             "title": "Untertitel",
-            "textBoldLabel": "Fettgedruckter Text"
+            "textBoldLabel": "Fettgedruckter Text",
+            "default": "Standard",
+            "low": "Niedrig",
+            "textStyle": {
+                "default": "Standard",
+                "raised": "Standard",
+                "uniform": "Uniform",
+                "dropShadow": "Schattenwurf",
+                "title": "Textstil",
+                "depressed": "Deprimiert"
+            },
+            "verticalPositionLabel": "Vertikale Lage"
         },
         "unsaved": "Du hast ungespeicherte Änderungen"
     },
@@ -837,5 +869,67 @@
         "season": "Staffel",
         "runtime": "Laufzeit",
         "airs": "Luft"
+    },
+    "discover": {
+        "page": {
+            "title": "Entdecken Sie Filme & TV",
+            "subtitle": "Erkunden Sie die neuesten Hits und die zeitlosen Klassiker."
+        },
+        "tabs": {
+            "movies": "Filme",
+            "tvshows": "Fernsehserien",
+            "editorpicks": "Redaktionstipps"
+        },
+        "carousel": {
+            "title": {
+                "movies": "{{category}} Filme",
+                "tvshows": "{{category}} Shows",
+                "inCinemas": "Im Kino",
+                "editorPicks": "Redaktionstipps",
+                "popularOn": "Beliebte {{type}} auf {{provider}}"
+            }
+        },
+        "providers": {
+            "netflix": "Netflix",
+            "appleTv": "Apple TV+",
+            "amazonPrime": "Amazon Prime Video",
+            "hulu": "Hulu",
+            "max": "Max",
+            "paramountPlus": "Paramount Plus",
+            "disneyPlus": "Disney Plus",
+            "shudder": "Zittern",
+            "fubuTV": "fubuTV"
+        },
+        "randomMovie": {
+            "button": "Schauen Sie sich etwas Random an",
+            "cancel": "Abbruch Countdown",
+            "countdown": "{{countdown}}s",
+            "nowPlaying": "Aktuell abgespielt",
+            "in": "in"
+        },
+        "scrollToTop": "Zurück nach oben"
+    },
+    "fedapi": {
+        "setup": {
+            "step": {
+                "3": "3. Gehen Sie zur Registerkarte \"Anwendungen\" → \"Cookies\".",
+                "1": "1. Gehen Sie zu <0>febbox.com</0> und melden Sie sich mit Google an (verwenden Sie ein neues Konto!)",
+                "2": "2. Öffnen Sie die Entwicklerwerkzeuge oder inspizieren Sie die Seite",
+                "4": "4. Kopieren Sie das \"ui\"-Cookie.",
+                "5": "5. Schliessen Sie das Tab, melden Sie sich aber NICHT ab!",
+                "warning": "(Teilen Sie dieses Token nicht!)"
+            },
+            "title": "Um Ihr UI-Token zu erhalten:",
+            "showVideo": "Video-Tutorial anzeigen",
+            "hideVideo": "Video-Tutorial ausblenden"
+        },
+        "onboarding": {
+            "title": "Optional: FED-API (Febbox)-Token",
+            "description": "Erstellen Sie ein eigenes Febbox-Konto, um das beste Streaming mit 4K-Qualität, Dolby Atmos, Skip-Intro-Funktion und den schnellsten Ladezeiten zu erhalten!"
+        },
+        "status": {
+            "success": "Erfolg",
+            "failure": "\"VIP\"-Stream konnte nicht geladen werden. Der Token ist ungültig oder die API ist offline!"
+        }
     }
 }
