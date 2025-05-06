@@ -1,10 +1,10 @@
 {
     "about": {
-        "description": "P-Stream ist eine Web-App, welche das Internet nach Streams durchsucht. Das Team versucht einen minimalistischen Ansatz umzusetzen.",
-        "faqTitle": "Häufig gestellte Fragen",
+        "description": "P-Stream isch e Abspaltig vo movie-web und wird sichergstellt, dass es au no lauft, wenn movie-web.app nüm verfügbar isch. P-Stream lauft uf eme private, selbstghostete VPS. Ich betreib die Site mit Verlust – ohni Werbig, will ich a freiji Medie glaub.",
+        "faqTitle": "Hüfig gstelti Froge",
         "q1": {
-            "body": "P-Stream hostet keinen eigenen Inhalt. Wenn du auf etwas zum Anschauen klickst, wird das Internet danach durchsucht (Auf dem Ladebildschirm und im Tab \"Videoquellen\" kannst du einstellen, welche Quellen verwendet werden sollen). P-Stream lädt keine Videos hoch, alleVideos stammen aus der Suche.",
-            "title": "Woher stammen die Videos?"
+            "body": "P-Stream hostet kei Inhalt selber. Wenn du öpis zum Luege aaklicksch, wird s’Internet nach dem usgwählte Medium dürsuecht (uf em Ladebildschirm ond im Tab „Videoquellen“ gsesch, weli Quelle grad brucht wird). Medie wird nie vo P-Stream ufelade – alles lauft über die Suechfunktion.",
+            "title": "Woher stamme die Videos?"
         },
         "q2": {
             "body": "Das Anfragen von Serien oder Filmen ist nicht möglich. P-Stream verwaltet keine Inhalte. Alle Videos stammen vom Quellen aus dem Internet.",
