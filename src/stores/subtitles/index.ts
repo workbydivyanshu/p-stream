@@ -82,7 +82,7 @@ export const useSubtitleStore = create(
         backgroundBlur: 0.5,
         bold: false,
         verticalPosition: 3,
-        fontStyle: "none",
+        fontStyle: "default",
       },
       showDelayIndicator: false,
       resetSubtitleSpecificSettings() {
@@ -126,7 +126,7 @@ export const useSubtitleStore = create(
             backgroundBlur: 0.5,
             bold: false,
             verticalPosition: 3,
-            fontStyle: "none",
+            fontStyle: "default",
           };
         });
       },

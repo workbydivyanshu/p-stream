@@ -74,7 +74,7 @@ export function CaptionCue({
         };
       case "dropShadow":
         return { textShadow: "2.5px 2.5px 4.5px rgba(0,0,0,0.9)" };
-      case "none":
+      case "default":
       default:
         return { textShadow: "0 2px 4px rgba(0,0,0,0.5)" }; // Default is a light drop shadow
     }
@@ -154,13 +154,9 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   if (captionAsTrack || !caption || isCasting) return null;
 
   return (
-    <Transition
-      className="absolute inset-0 pointer-events-none"
-      animation="slide-up"
-      show
-    >
+    <Transition className="pointer-events-none" animation="slide-up" show>
       <div
-        className="text-white absolute flex w-full flex-col items-center transition-[bottom]"
+        className="text-white absolute w-full flex flex-col items-center transition-[bottom]"
         style={{
           bottom: props.controlsShown
             ? "6rem"
