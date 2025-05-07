@@ -56,9 +56,6 @@ export function useSettingsState(
   enableDiscover: boolean,
   enableDetailsModal: boolean,
   sourceOrder: string[],
-  enableSourceOrder: boolean,
-  proxyTmdb: boolean,
-  enableSkipCredits: boolean,
 ) {
   const [proxyUrlsState, setProxyUrls, resetProxyUrls, proxyUrlsChanged] =
     useDerived(proxyUrls);
@@ -128,14 +125,6 @@ export function useSettingsState(
     resetSourceOrder,
     sourceOrderChanged,
   ] = useDerived(sourceOrder);
-  const [
-    enableSourceOrderState,
-    setEnableSourceOrderState,
-    resetEnableSourceOrder,
-    enableSourceOrderChanged,
-  ] = useDerived(enableSourceOrder);
-  const [proxyTmdbState, setProxyTmdbState, resetProxyTmdb, proxyTmdbChanged] =
-    useDerived(proxyTmdb);
 
   function reset() {
     resetTheme();
@@ -153,8 +142,6 @@ export function useSettingsState(
     resetEnableDiscover();
     resetEnableDetailsModal();
     resetSourceOrder();
-    resetEnableSourceOrder();
-    resetProxyTmdb();
   }
 
   const changed =
@@ -168,12 +155,7 @@ export function useSettingsState(
     profileChanged ||
     enableThumbnailsChanged ||
     enableAutoplayChanged ||
-    enableSkipCreditsChanged ||
-    enableDiscoverChanged ||
-    enableDetailsModalChanged ||
-    sourceOrderChanged ||
-    enableSourceOrderChanged ||
-    proxyTmdbChanged;
+    sourceOrderChanged;
 
   return {
     reset,
@@ -247,16 +229,6 @@ export function useSettingsState(
       state: sourceOrderState,
       set: setSourceOrderState,
       changed: sourceOrderChanged,
-    },
-    enableSourceOrder: {
-      state: enableSourceOrderState,
-      set: setEnableSourceOrderState,
-      changed: enableSourceOrderChanged,
-    },
-    proxyTmdb: {
-      state: proxyTmdbState,
-      set: setProxyTmdbState,
-      changed: proxyTmdbChanged,
     },
   };
 }
