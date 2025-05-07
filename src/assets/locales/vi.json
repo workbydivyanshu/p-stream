@@ -33,7 +33,7 @@
         "deviceNameLabel": "Tên thiết bị",
         "deviceNamePlaceholder": "Điện thoại cá nhân",
         "generate": {
-            "description": "Mật ngữ của bạn đóng vai trò là tên người dùng và mật khẩu của bạn. Hãy giữ nó an toàn vì bạn sẽ cần nhập nó để đăng nhập vào tài khoản của bạn",
+            "description": "Mật ngữ đóng vai trò là tên người dùng và mật khẩu của bạn. Hãy giữ nó an toàn vì bạn sẽ cần nó để đăng nhập vào tài khoản của bạn",
             "next": "Tôi đã lưu giữ mật ngữ của mình",
             "passphraseFrameLabel": "Mật ngữ",
             "title": "Mật ngữ của bạn"

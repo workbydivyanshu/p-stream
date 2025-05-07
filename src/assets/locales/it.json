@@ -96,7 +96,8 @@
             "discord": "Discord",
             "dmca": "DMCA",
             "github": "GitHub",
-            "twitter": "Twitter"
+            "twitter": "Twitter",
+            "funding": "Supportaci"
         },
         "tagline": "Guarda i tuoi preferiti programmi televisivi e film gratis senza publicità! (っ'ヮ'c)"
     },
@@ -111,7 +112,8 @@
             "register": "Registrati",
             "settings": "Impostazioni",
             "discover": "Scopri",
-            "support": "Supporto"
+            "support": "Supporto",
+            "migration": "migrare l'account"
         }
     },
     "home": {
@@ -180,7 +182,18 @@
                 "extra": [
                     "Buon 20/4 🥳!"
                 ]
+            },
+            "69": {
+                "extra": [
+                    "Buon 69 giorno😘!"
+                ],
+                "default": "Pronto per qualcosa di piccante?"
             }
+        },
+        "mediaCard": {
+            "moreInfo": "maggiori informazioni",
+            "copyLink": "Copia Link",
+            "close": "Chiudi"
         }
     },
     "media": {
@@ -628,5 +641,40 @@
         "badge": "Problemi",
         "goHome": "Vai alla pagina iniziale",
         "title": "Problemi col fornitore"
+    },
+    "details": {
+        "resume": "Riprendere",
+        "play": "Guardare",
+        "director": "Direttore:",
+        "languange": "Lingua:",
+        "releaseDate": "Data di rilascio:",
+        "imdb": "Guarda su IMDb",
+        "episodes": "Episodi"
+    },
+    "migration": {
+        "start": {
+            "options": {
+                "direct": {
+                    "quality": "Più Semplice e veloce"
+                },
+                "download": {
+                    "title": "Scaricare data"
+                },
+                "upload": {
+                    "title": "Caricare dati",
+                    "action": "Carica dati"
+                }
+            }
+        },
+        "direct": {
+            "toggleLable": "Ti serve il ReCaptcha?",
+            "button": {
+                "home": "Vai a casa",
+                "login": "Continua ad accedere"
+            }
+        },
+        "download": {
+            "title": "Caricare il data"
+        }
     }
 }

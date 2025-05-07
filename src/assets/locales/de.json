@@ -33,7 +33,7 @@
         "deviceNameLabel": "Gerätename",
         "deviceNamePlaceholder": "Handy",
         "generate": {
-            "description": "Deine Passphrase dient als dein Nutzername und Passwort. Speichere sie sicher ab, damit du dich in deinem Konto anmelden kannst",
+            "description": "Deine Passphrase dient als dein Nutzername und Passwort. Speichere sie sicher ab, damit du dich in deinem Konto anmelden kannst. <bold>Verliere deine Passphrase auf keinen Fall!</bold>",
             "next": "Ich habe meine Passphrase gespeichert",
             "passphraseFrameLabel": "Passphrase",
             "title": "Deine Passphrase"
@@ -52,7 +52,7 @@
             "information": {
                 "color1": "Profilfarbe 1",
                 "color2": "Profilfarbe 2",
-                "header": "Gebe einen Namen für dein Gerät ein und wähle ein Symbol",
+                "header": "Gebe einen Namen für dein Gerät ein und wähle Farben und ein Symbol deiner Wahl!",
                 "icon": "Symbol",
                 "next": "Weiter",
                 "title": "Kontoinformationen"
@@ -497,7 +497,11 @@
                 "8": "Lege eine eigene Untertitelfarbe fest!",
                 "9": "Migriere dein Account zu einer neuen Backend in den Einstellungen!",
                 "10": "Tritt dem Discord bei!",
-                "11": "Verwende Sie [ und ], um das Timing der Untertitel anzupassen!"
+                "11": "Verwende Sie [ und ], um das Timing der Untertitel anzupassen!",
+                "12": "Drücke LEERTASTE oder K um Abzuspielen/Pausieren!",
+                "14": "Nutze J und L Tasten, um 10 Sekunden vor-/zurückzuspulen!",
+                "13": "Nutze die LINKS und RECHTS Pfeiltasten, um 5 Sekunden vor-/zurückzuspulen!",
+                "15": "Drücke F um den Vollbildmodus umzuschalten!"
             }
         },
         "time": {
@@ -816,6 +820,6 @@
         "tmdb": "Auf TMDB anzeigen",
         "episodes": "Folgen",
         "season": "Staffel",
-        "runtime": "Laufzeit"
+        "runtime": "Laufzeit:"
     }
 }

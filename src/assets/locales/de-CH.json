@@ -7,296 +7,296 @@
             "title": "Woher stamme die Videos?"
         },
         "q2": {
-            "body": "Das Anfragen von Serien oder Filmen ist nicht möglich. P-Stream verwaltet keine Inhalte. Alle Videos stammen vom Quellen aus dem Internet.",
-            "title": "Wo kann ich eine Serie oder einen Film anfragen?"
+            "body": "Es isch nöd möglich, e Serie oder e Film z'wünsche, will P-Stream kei Inhalt verwaltet. Alles wird über Quellen im Internet agluegt.",
+            "title": "Wo chan ich en Serie oder en Felm afroge?"
         },
         "q3": {
-            "body": "Unsere Suchergebnisse werden von The Movie Database (TMDB) bereitgestellt und, egal ob unsere Videoquellen über dieses Video verfügen, angezeigt.",
-            "title": "Die Suche zeigt eine Serie oder einen Film an, warum kann ich den dann nicht abspielen?"
+            "body": "Üsi Suechergebnis chöme fo The Movie Database (TMDB) ond werde au azeigt, wenn üsi Quellene dä Inhalt vellecht tatsächlech net hend.",
+            "title": "T Suechergäbnis zeige t Serie ond t Felme, wiso chani si net abspele?"
         },
-        "title": "Über P-Stream",
+        "title": "Öber P-Stream (^▽^)",
         "q4": {
-            "title": "Was ist mit meinen Daten und dem ganzen Zeug?",
-            "body": "Alle Daten werden mit dem Community-Backend synchronisiert, jeder kann dies ebenfalls nutzen."
+            "title": "Was esch met mine Date und em Stuff?",
+            "body": "Alli Date werdet met der Community-Backend synchronisiert, ond jede cha die au notze."
         },
         "q5": {
-            "title": "Wie kann ich mehr herausfinden?",
-            "body": "P-Stream hat einen Discord-Server, der oben auf der Seite gefunden werden kann!"
+            "title": "Wie chani me usefende?",
+            "body": "P-Stream het en Discord server, me fendet en zoberscht of de Website!"
         }
     },
     "actions": {
-        "copied": "Kopiert",
-        "copy": "Kopieren"
+        "copied": "Kopieret",
+        "copy": "Kopiere"
     },
     "auth": {
-        "createAccount": "Du hast noch keinen Account? <0>Registriere dich jetzt.</0>",
-        "deviceNameLabel": "Gerätename",
-        "deviceNamePlaceholder": "Handy",
+        "createAccount": "Hesch no kei Account? <0>Erschtel eine.</0>",
+        "deviceNameLabel": "Grätename",
+        "deviceNamePlaceholder": "Persöndlechs Natel",
         "generate": {
-            "description": "Deine Passphrase dient als dein Nutzername und Passwort. Speichere sie sicher ab, damit du dich in deinem Konto anmelden kannst",
-            "next": "Ich habe meine Passphrase gespeichert",
+            "description": "Dini Passphrase fonktioniert wie din Benotzername ond s'Passwort. Heb sorg dezue, will du muesch si iigäh, um dich i din Konto iizlogge. <bold>Verlier dini Passphrase OF KEI FALL!</bold>",
+            "next": "Ich han mi Passphrase g'spicheret",
             "passphraseFrameLabel": "Passphrase",
-            "title": "Deine Passphrase"
+            "title": "Din Passphrase"
         },
-        "hasAccount": "Du hast bereits einen Account? <0>Anmelden.</0>",
+        "hasAccount": "Du hesch bereits en Account? <0>Do Amälde.</0>",
         "login": {
-            "description": "Gebe deine Passphrase ein, um dich in deinem Konto anzumelden",
-            "deviceLengthError": "Gebe einen Gerätenamen ein",
-            "passphraseLabel": "12-Wort Passphrase",
+            "description": "Geb din Passphrase a, om dich in di Account i z'logge",
+            "deviceLengthError": "Geb en Grätename i",
+            "passphraseLabel": "12-Word Passphrase",
             "passphrasePlaceholder": "Passphrase",
-            "submit": "Anmelden",
-            "title": "Melde dich in deinem Konto an",
-            "validationError": "Falsche oder unvollständige Passphrase"
+            "submit": "Amälde",
+            "title": "Mäld dich i dim Konto a",
+            "validationError": "Falsches oder onvollständigi Passphrase"
         },
         "register": {
             "information": {
-                "color1": "Profilfarbe 1",
-                "color2": "Profilfarbe 2",
-                "header": "Gebe einen Namen für dein Gerät ein und wähle ein Symbol",
+                "color1": "Profilfarb 1",
+                "color2": "Profilfarb 2",
+                "header": "Geb dim Grät en Namet, den wärsch en Farb ond es Benotzericon!",
                 "icon": "Symbol",
-                "next": "Weiter",
-                "title": "Kontoinformationen"
+                "next": "Witer",
+                "title": "Account Informatione"
             }
         },
         "trust": {
             "failed": {
-                "text": "Hast du es korrekt konfiguriert?",
-                "title": "Server nicht erreichbar"
+                "text": "Hesch du’s richtig konfiguriert?",
+                "title": "Server esch net erreichbar"
             },
-            "host": "Du verbindest dich mit <0>{{hostname}}</0> - stelle sicher das du dem Server vertraust, bevor du ein Konto erstellst",
-            "no": "Zurück",
-            "noHost": "Da der Server nicht eingerichtet wurde, kannst du keinen Account erstellen",
-            "noHostTitle": "Server nicht eingerichtet!",
-            "title": "Vertraust du diesem Server?",
-            "yes": "Ich vertraue diesem Server"
+            "host": "Du verbendisch di met <0>{{hostname}}</0> - stell secher das du im Server vertrausch, bevor du en Account erstellsch...",
+            "no": "Zrog",
+            "noHost": "Do der Server net igstellt esch, chasch kei Account erstelle",
+            "noHostTitle": "Server esch net Igstellt!",
+            "title": "Vertrousch däm Server?",
+            "yes": "I vertrou däm Server 🤞"
         },
         "verify": {
-            "description": "Bitte gebe deine Passphrase ein, um zu bestätigen, dass du sie gespeichert hast und um dein Konto zu erstellen",
-            "invalidData": "Daten sind ungültig",
-            "noMatch": "Passphrasen stimmen nicht überein",
-            "passphraseLabel": "Deine 12-Wort Passphrase",
-            "recaptchaFailed": "ReCaptcha Verifizierung ist fehlgeschlagenen",
-            "register": "Konto erstellen",
-            "title": "Bestätige deine Passphrase"
+            "description": "Bitte geb din Passphrase vo forher i, um z’beschtätige, das du in gspicheret hesch, ond zom Konto erstelle",
+            "invalidData": "T Date send ongöltig",
+            "noMatch": "Passphrase stemt net ö ber’i",
+            "passphraseLabel": "Din 12-Wort Passphrase",
+            "recaptchaFailed": "ReCaptcha Verifizierig esch felgschlage",
+            "register": "Account erstelle",
+            "title": "Beschtätige din Passphrase"
         }
     },
     "errors": {
         "badge": "Kaputt",
-        "details": "Fehlerdetails",
-        "reloadPage": "Seite neuladen",
-        "showError": "Zeige Fehlerdetails an",
-        "title": "Ein Fehler ist aufgetreten!"
+        "details": "Fehler Deteils",
+        "reloadPage": "Lad t’Site neu",
+        "showError": "Zeig t Fehlerdeteils a",
+        "title": "En Fehler esch uftaucht!"
     },
     "footer": {
         "legal": {
-            "disclaimer": "Hinweis",
-            "disclaimerText": "P-Stream hostet keine Dateien, sondern verlinkt lediglich auf Dienste Dritter. Rechtliche Fragen sollten mit den Dateihostern und -anbietern geklärt werden. P-Stream übernimmt keine Verantwortung für die von den Videoanbietern angezeigten Mediendateien."
+            "disclaimer": "Hewis",
+            "disclaimerText": "Bitte beacht: P-Stream host kei Date selber, sondern zeigt nor Inhalt vo Drittabieter a. Rechtlichi Froge sete metem Abieter klärt werde."
         },
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
             "github": "GitHub",
-            "twitter": "Twitter",
-            "funding": "Unterstütze uns"
+            "twitter": "Zwetschere",
+            "funding": "Onterstötz üs"
         },
-        "tagline": "Schau deine Lieblingsserien und Filme mit dieser quelloffenen Streaming App."
+        "tagline": "Lueg dini lieblings Serie ond Felme gratis ohni Werbig z’gse! (っ'ヮ'c)"
     },
     "global": {
         "name": "P-Stream",
         "pages": {
-            "about": "Über",
+            "about": "Öber",
             "dmca": "DMCA",
-            "login": "Anmelden",
-            "onboarding": "Einrichtung",
+            "login": "Amälde",
+            "onboarding": "Irechte",
             "pagetitle": "{{title}} - P-Stream",
-            "register": "Registrieren",
-            "settings": "Einstellungen",
-            "discover": "Entdecken",
-            "support": "Unterstützung",
-            "migration": "Konto übertragen",
+            "register": "Regischtriere",
+            "settings": "Ischtelige",
+            "discover": "Entdecke",
+            "support": "Onterstötze",
+            "migration": "Account öberträge",
             "jip": "Jip"
         }
     },
     "home": {
         "bookmarks": {
-            "sectionTitle": "Favoriten"
+            "sectionTitle": "Läsezeiche"
         },
         "continueWatching": {
-            "sectionTitle": "Weiter ansehen"
+            "sectionTitle": "Witer luete…"
         },
         "mediaList": {
-            "stopEditing": "Bearbeiten beenden"
+            "stopEditing": "Bearbeitig beände"
         },
         "search": {
-            "allResults": "Das ist alles!",
-            "failed": "Das Medium wurde nicht gefunden, bitte versuchen Sie es erneut!",
-            "loading": "Wird geladen...",
-            "noResults": "Wir haben nichts gefunden!",
+            "allResults": "Dasch esch alle…",
+            "failed": "Fäler bem fende fo de Medie, versuechs nomol!",
+            "loading": "Werd glade...",
+            "noResults": "Mer hei nüt gfonde :(",
             "placeholder": {
-                "default": "Was möchtest du schauen?",
+                "default": "Was welsch aluege?",
                 "extra": [
-                    "Was möchtest du entdecken?",
-                    "Was ist auf deiner Merkliste?",
-                    "Was ist dein Lieblingsfilm?",
-                    "Was ist deine Lieblingsserie?",
-                    "Was willst du heute schauen?",
-                    "Wie war dein Tag?",
-                    "Mein Fehler die Seite funktioniert nie...",
-                    "Ist P-Stream nicht das beste?",
+                    "I was för nere Stemig besch grad?",
+                    "Sölle mer dini Browser-Historie lösche?",
+                    "Was möchtisch gern luege?",
+                    "P-Stream esch die bescht Site ever!",
+                    "Was esch of dim Felm ToDo Zetteli?",
+                    "Wie esch din Tag gse?",
+                    "Min Fähler, t’Site fonktioniert nie…",
+                    "P-Stream esch die bescht Site, oder?",
                     ">ᴗ<"
                 ]
             },
-            "sectionTitle": "Suchergebnisse",
+            "sectionTitle": "Suechergebniss",
             "empty": {
-                "default": "Willkommen, hier finden Sie Medien zum Anschauen!",
+                "default": "Wiiilkommme, do chasch Medie zom aluege fende!",
                 "extra": [
-                    "Hier ist nichts :(",
-                    "so leer...",
-                    "So eine Leere.",
-                    "Hallo neuer Benutzer :3"
+                    "Do gets nüt :(",
+                    "so leer do...",
+                    "So en leeri do.",
+                    "Hallo, du cooli Socke :3"
                 ]
             },
-            "discoverMore": "Entdecke mehr",
-            "discover": "Entdecken"
+            "discoverMore": "Entdeck mee",
+            "discover": "Entnecke"
         },
         "titles": {
             "day": {
-                "default": "Was würdest du diesem Nachmittag gerne schauen?",
+                "default": "Was möchtisch a däm schöne nomital aluege?",
                 "extra": [
-                    "Lust auf ein Abenteuer? Dann ist Jurassic Park genau das Richtige."
+                    "Viva la P-Stream e ciao Svizzera"
                 ]
             },
             "morning": {
-                "default": "Was würdest du diesen Morgen gerne schauen?",
+                "default": "Was welsch a däm morge aluege?",
                 "extra": [
-                    "Before Sunrise soll gut sein"
+                    "Viva la P-Stream!"
                 ]
             },
             "night": {
-                "default": "Was möchtest du diesen Abend gerne schauen?",
+                "default": "Besch no wach? Was möchtisch luege?",
                 "extra": [
-                    "Müde? Ich hab gehört The Exorcist soll gut sein."
+                    "Viva la ﻿﻿Svizzera!"
                 ]
             },
             "69": {
-                "default": "Lust auf etwas scharfes?",
+                "default": "Hesch loscht of öpis scharfs?",
                 "extra": [
-                    "Schönen 69. Tag 😘!"
+                    "Schöne 69. Tag 😘!"
                 ]
             },
             "420": {
-                "default": "Was möchten Sie am 4/20 sehen?",
+                "default": "Gets öpis, wodu am 4/20 welsch luege?",
                 "extra": [
-                    "Schönen 4/20 🥳!"
+                    "Fröhleche 4/20 🥳!"
                 ]
             }
         },
         "mediaCard": {
-            "moreInfo": "Mehr Infos",
-            "copyLink": "Link kopieren",
-            "close": "Schließen"
+            "moreInfo": "Me Infos",
+            "copyLink": "Link Kopiere",
+            "close": "Zuemache"
         }
     },
     "media": {
         "episodeDisplay": "S{{season}} E{{episode}}",
         "types": {
-            "movie": "Film",
+            "movie": "Felm",
             "show": "Serie"
         },
-        "unreleased": "Unveröffentlicht",
-        "episodeShort": "F",
+        "unreleased": "Noni veröffentlicht",
+        "episodeShort": "E",
         "seasonShort": "S"
     },
     "navigation": {
         "banner": {
-            "offline": "Internetverbindung ist instabil"
+            "offline": "Check mol dini Internet verbendig, silly goose! 🦢"
         },
         "menu": {
-            "about": "Über uns",
-            "logout": "Abmelden",
-            "register": "Mit der Cloud synchronisieren",
-            "settings": "Einstellungen",
+            "about": "Öber üs",
+            "logout": "Abmälde",
+            "register": "Synchronisiert zo der Wolche",
+            "settings": "Ischtelige",
             "support": "Support",
-            "discover": "Entdecken",
+            "discover": "Entdecke",
             "development": "Entwecklig"
         }
     },
     "notFound": {
-        "badge": "Nicht gefunden",
-        "goHome": "Zurück zur Startseite",
-        "message": "Wir haben überall gesucht: Unter den Eimern, im Schrank, hinter dem Proxy. Wir konnten die gesuchte Seite nicht finden.",
-        "title": "Diese Seite wurde nicht gefunden",
-        "reloadButton": "Versuchs nochmal"
+        "badge": "Net gfonde",
+        "goHome": "Zrog zo Home",
+        "message": "Mir hei überall gluegt: unter de Chübeli, im Chaschte, hinterem Proxy – aber mir hei die Seite, wo du suechsch, leider nöd gfunde. (ಥ﹏ಥ)",
+        "title": "T Site heimer net gfonde",
+        "reloadButton": "Versuechs nomol"
     },
     "onboarding": {
         "defaultConfirm": {
-            "cancel": "Abbrechen",
-            "confirm": "Standard-Setup verwenden",
-            "description": "Das Standard-Setup verfügt nicht über die besten Streams und kann unerträglich langsam sein.",
-            "title": "Sicher?"
+            "cancel": "Abbräche",
+            "confirm": "Standard-Setup verwände",
+            "description": "S Standart Setup het net die beschte Streams. Du verpassisch die beschte Quellene!",
+            "title": "Besch secher?"
         },
         "extension": {
-            "back": "Zurück gehen",
-            "explainer": "Mit der Browser-Erweiterung kannst du die besten Streams benutzen, die wir zu bieten haben. Mit nur einer einfachen Installation.",
-            "explainerIos": "Leider ist die Browser-Extension unter iOS nicht unterstützt. Klicken Sie auf <bold>Zurück</bold>, um eine andere Option auszuwählen.",
-            "extensionHelp": "Falls du die Erweiterung installiert hast, aber sie aber nicht erkannt wird, <bold>öffne die Erweiterung über das Erweiterungsmenü Ihres Browsers</bold> und befolge die Schritte auf dem Bildschirm.",
-            "linkChrome": "Chrome Erweiterung installieren",
-            "linkFirefox": "Firefox Erweiterung installieren",
-            "notDetecting": "Auf Chrome Installiert, aber die Website erkennt es nicht? Versuche, die Seite wieder zu laden!",
-            "notDetectingAction": "Seite neuladen",
+            "back": "Gang zrog",
+            "explainer": "Mit dr Browser-Erweiterig chasch du d’beschte Streams nutze, wo mir z’biete hei – mit nur enere einfache Installierig. 👌",
+            "explainerIos": "Leider chasch t Browser-Erwiterig onter IOS net bruche. Klick uf <bold>Zrog</bold>, om en anderi Option z wähle.",
+            "extensionHelp": "Wenn du d’Erweiterig installiert hesch, sie aber nöd erkannt wird, <bold>öffne sie über s’Erweiterigs-Menü vo dim Browser</bold> und folg de Schritt uf em Bildschirm.",
+            "linkChrome": "Chrome Erweiterig installiere",
+            "linkFirefox": "Firefox Erweiterig installiere",
+            "notDetecting": "Uf Chrome installiert, aber d’Site erkennt sie nöd? Versuech d’Seite neu z’lade!",
+            "notDetectingAction": "Site neu lade",
             "status": {
-                "disallowed": "Browser-Erweiterung ist für diese Website nicht aktiviert",
-                "disallowedAction": "Browser-Erweiterung aktivieren",
-                "failed": "Statusanforderung fehlgeschlagen",
-                "loading": "Wartet dass du die Erweiterung installierst",
-                "outdated": "Erweiterungsversion zu alt",
-                "success": "Die Browser-Erweiterung funktioniert wie erwartet!"
+                "disallowed": "Erwiterig esch för die Site net aktiviert (,,>﹏<,,)",
+                "disallowedAction": "Aktivier Erwiterig",
+                "failed": "Status afrog esch Fehlgschlage",
+                "loading": "Warte of dich, bes du d‘Erwiterig installiert hesch",
+                "outdated": "Erwiterig het en zu alti version",
+                "success": "D‘Erwiterig fonktioniert wie usem Näichäschtli!"
             },
-            "submit": "Weiter",
-            "title": "Lass uns mit einer Erweiterung starten"
+            "submit": "Witer",
+            "title": "Lass üs met der Erwiterig starte"
         },
         "proxy": {
-            "back": "Zurück gehen",
-            "explainer": "Mit der Proxy-Methode kannst du Streams mit guter Qualität benutzen, indem du einen eigenen Proxy einstellst.",
+            "back": "Zrog go",
+            "explainer": "Mit dr Proxy-Methode chasch super Qualität-Streams kriege, indem du e Self-Service-Proxy iirichtisch.",
             "input": {
-                "errorConnection": "Es konnte keine Verbindung zum Proxy hergestellt werden",
-                "errorInvalidUrl": "Keine gültige URL",
-                "errorNotProxy": "Ein Proxy wurde erwartet, aber eine Website wurde eingegeben",
+                "errorConnection": "Chan net metem Proxy verbende",
+                "errorInvalidUrl": "Kei gültigi URL",
+                "errorNotProxy": "Esch esch en Proxy erwartet worde, aber es esch e Website cho",
                 "label": "Proxy-URL",
                 "placeholder": "https://"
             },
-            "link": "Erfahre, wie man einen Proxy einstellt",
-            "submit": "Proxy einreichen",
-            "title": "Lass uns eine neue Proxy erstellen"
+            "link": "Lehr, wie me en Proxy macht",
+            "submit": "Proxy irechte",
+            "title": "Lass üs e neue Proxy mache"
         },
         "start": {
-            "explainer": "Um die bestmöglichen Streams zu erhalten, müssen Sie auswählen, welche Streaming-Methode Sie verwenden möchten.",
+            "explainer": "Lass üs die beschte Streams hole. Du muesch uswehle, weli streaming methode du welsch ne.",
             "options": {
                 "default": {
-                    "text": "Ich möchte keine Streams mit guter Qualität. <0 /> <1>Standardeinstellung benutzen</1>"
+                    "text": "Ich möcht kei gueti Streaming qualität, den chasch s‘standart Setup bruche"
                 },
                 "extension": {
-                    "action": "Browser-Erweitung installieren",
-                    "description": "Installiere die Browser-Erweitung, um Zugriff auf die besten Quellen zu bekommen.",
-                    "quality": "Beste Qualität",
-                    "title": "Browser extension"
+                    "action": "Installier t‘Erwiterig",
+                    "description": "Installier d’Browser-Erweiterig, um Zuegriff uf d’beschte Quellen z’überchun – aber denk dra, sie für die Site z’aktiviere.",
+                    "quality": "Beschti Qually + me Quellene",
+                    "title": "Browser Erwitterig"
                 },
                 "proxy": {
-                    "action": "Proxy einstellen",
-                    "description": "Richte in nur 5 Minuten einen Proxy ein und erhalte Zugriff auf großartige Quellen.",
+                    "action": "Proxy istelle",
+                    "description": "Errecht en gratis Proxy in 5Min. and bechom zuegref of die beschte Quelle…",
                     "quality": "Gute Qualität",
                     "title": "Eigene Proxy"
                 },
                 "or": "oder"
             },
-            "title": "Lass uns mit der Einrichtung von P-Stream starten",
+            "title": "Lass üs metem istelle fo P-Stream starte 🥳",
             "moreInfo": {
                 "explainer": {
                     "default": "3. Standart Istelige",
                     "extensionDescription": "D’Erweiterig git der Zuegriff uf d’meiste Quellen. Si funktioniert wie en lokale Proxy und cha Site verwände, wo spezielli Cookies oder Header bruuche zum Lade.",
                     "intro": "P-Stream hostet kei Videos. Es isch uf Drittanbieter-Websites angewiese für d’Inhalt, drum muesch du wähle, wie s sich mit dene Site verbindet.",
                     "fedapi": {
-                        "fedapiDescription": "Wänn du din eigene Febbox-Account bruchsch, chasch du d’FED-API freischalte, üsi bescht Quelle mit 4K-Qualität, Dolby Atmos, dem meiste Inhalt und de schnellste Ladezyte. Das wird fo üs wermschtens empfohlen!",
+                        "fedapiDescription": "Wenn du din eigene Febbox-Account bruchsch, chasch du d’FED-API freischalte, üsi bescht Quelle mit 4K-Qualität, Dolby Atmos, dem meiste Inhalt und de schnellste Ladezyte. Das wird fo üs wermschtens empfohlen!",
                         "fedapi": "Optionali FED API (Febbox) UI Token"
                     },
                     "defaultDescription": "Bruchsch der integrierti P-Stream Proxy. Es isch der eifachscht Option, chönnt aber langsamer si weg der teilte Bandbreite.",
@@ -307,113 +307,113 @@
                     "outro": "Wenn du meh Froge hesch, wie das funktioniert, chasch gärn uf em <0>P-Stream Discord\\</0>-Server frage!"
                 },
                 "button": "Me Info",
-                "title": "Ein Setup verstehen"
+                "title": "Es Setup versto"
             }
         }
     },
     "overlays": {
-        "close": "Schließen"
+        "close": "Schliesse"
     },
     "player": {
         "back": {
-            "default": "Zurück zur Startseite",
-            "short": "Zurück"
+            "default": "Zrog zor Start-Site",
+            "short": "Zrog"
         },
         "casting": {
-            "enabled": "Casting zum Gerät..."
+            "enabled": "Casting to device 🎬"
         },
         "menus": {
             "downloads": {
-                "copyHlsPlaylist": "HLS-Playlist Link kopieren",
-                "disclaimer": "Videos werden direkt vom Provider heruntergeladen. P-Stream hat keinen Einfluss darauf, wie Downloads bereitgestellt werden.",
-                "downloadSubtitle": "Aktuelle Untertitel herunterladen",
-                "downloadVideo": "Video herunterladen",
-                "hlsDisclaimer": "P-Stream hat keinen Einfluss darauf, wie Downloads bereitgestellt werden. Downloads werden direkt vom Anbieter bezogen. <br /><br />Bitte beachte, dass du eine HLS-Wiedergabeliste herunterlädst, <bold>dies ist nicht empfohlen für Nutzer die nicht mit Erweiterten Streaming Formaten vertraut sind</bold>. Probiere andere Anbieter für andere Formate.",
+                "copyHlsPlaylist": "Kopier HLS-Playlist Link",
+                "disclaimer": "Downloads chömed direkt vom Anbieter. P-Stream het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde.",
+                "downloadSubtitle": "Aktuelle Untertitel ablade",
+                "downloadVideo": "Video abelade",
+                "hlsDisclaimer": "Downloads chömed direkt vom Anbieter. P-Stream het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde. <br /><br />Bitte beachte, dass du e HLS-Playlist abeladsch, <bold>es wird nöd empfohle zum abelade, wenn du dich mit fortgschrittliche Streaming-Formate nöd uskennsch</bold>. Versuech anderi Quellen für anderi Formate.",
                 "onAndroid": {
-                    "1": "Um auf Android Herunterzuladen, tippe auf den Download-Button, <bold>tippe und halte</bold> auf der neuen Seite auf das Video und wähle <bold>Speichern</bold> aus.",
-                    "shortTitle": "Download / Android",
-                    "title": "Auf Android herunterladen"
+                    "1": "Om of Android abezlade, klick ofe abelad chnopf, <bold>Klick ond halt</bold> ofs Video, den wählsch <bold>save</bold>us.",
+                    "shortTitle": "Abelade / Android",
+                    "title": "Of Android Abelade"
                 },
                 "onIos": {
-                    "1": "Um Auf iOS herunterzuladen, klick auf den Download-Button. Klicke dann auf der neuen Seite auf<bold> <ios_share /></bold>, dann auf <bold>In Dateien sichern <ios_files /></bold>.",
-                    "shortTitle": "Download / iOS",
-                    "title": "Auf iOS herunterladen"
+                    "1": "Zum Abelaade uf iOS: Klick uf dr Download-Button, denn uf dr neue Seite klick uf <bold><ios_share /></bold> und nachher uf <bold>In Dateien sichern<ios_files /></bold>.",
+                    "shortTitle": "Abelade / iOS",
+                    "title": "Of iOS abelade"
                 },
                 "onPc": {
-                    "1": "Um am PC herunterzuladen, klicke auf den Download-Button. Klicke dann mit der rechten Maustaste auf das Video und klicke auf <bold>Video speichern als</bold>",
-                    "shortTitle": "Download / PC",
-                    "title": "Am PC herunterladen"
+                    "1": "Uf PC, Klicksch ofe abelad Chnopf, den of ne neue Site, rächts klick ofs Video ond wählsch <bold>Save video as</bold>",
+                    "shortTitle": "Abelade / PC",
+                    "title": "Of PC Abelade"
                 },
-                "title": "Download",
-                "button": "Versuech zum abelade",
+                "title": "Abelade",
+                "button": "Versuech zom abelade",
                 "hlsDownloader": "Oder, goh uf d’<0>HLS Downloader-Website\\</0> und füeg die Playlist-URL vo unten ei."
             },
             "episodes": {
-                "button": "Folgen",
-                "emptyState": "Keine Folgen in dieser Staffel, schau später noch einmal!",
+                "button": "Folge",
+                "emptyState": "Do si kei Folge i dere Staffle, lueg spöter nomol verbi (sorry :3)…",
                 "episodeBadge": "E{{episode}}",
-                "loadingError": "Fehler beim Laden der Sitzung",
-                "loadingList": "Wird geladen...",
-                "loadingTitle": "Wird geladen...",
-                "unairedEpisodes": "Eine oder mehrere Episoden dieser Staffel wurden deaktiviert, weil sie noch nicht ausgestrahlt wurden.",
-                "seasons": "Staffeln"
+                "loadingError": "Fehler bem lade fo de Staffle",
+                "loadingList": "Werd glase...",
+                "loadingTitle": "Werd glade...",
+                "unairedEpisodes": "Ei oder meh Episodä in däre Staffel sind deaktiviert worde, will sie no nöd usgstrahlt worde sind.",
+                "seasons": "Staffle"
             },
             "playback": {
-                "speedLabel": "Wiedergabegeschwindigkeit",
-                "title": "Wiedergabeeinstellungen"
+                "speedLabel": "Wedergabegschwendigkeit",
+                "title": "Wedergab Istellig"
             },
             "quality": {
-                "automaticLabel": "Automatische Qualitätseinstellung",
-                "hint": "Du kannst versuchen die <0>Quelle zu ändern</0> um andere Qualitätsoptionen zu erhalten.",
-                "iosNoQuality": "Durch eine Einschränkung von Apple ist die Qualitätsauswahl für iOS für diese Quelle nicht verfügbar. Du kannst versuchen <0>einen andere Quelle auszuwählen</0> um andere Qualitätsoptionen zu erhalten.",
+                "automaticLabel": "Automatischi Quallität",
+                "hint": "Du chasch <0>d’Quelle wechsle</0>, um anderi Qualität-Optione z’überchun.",
+                "iosNoQuality": "Wäge vo Apple definierti (typisch iOS L) Einschränkige isch s’Wähle vo dr Qualität bi däre Quelle uf iOS nöd verfügbar. Du chasch <0>uf e anderi Quelle wechsle</0>, um verschideni Qualitäte z’überchun.",
                 "title": "Qualität"
             },
             "settings": {
                 "audioItem": "Audio",
-                "downloadItem": "Download",
-                "enableSubtitles": "Untettitel aktivieren",
-                "experienceSection": "Anzeigeerlebnis",
-                "playbackItem": "Wiedergabeeinstellungen",
+                "downloadItem": "Abelade",
+                "enableSubtitles": "Untettitel aktiviere",
+                "experienceSection": "Azeige Erläbnis",
+                "playbackItem": "Wedergabe Istellig",
                 "qualityItem": "Qualität",
-                "sourceItem": "Videoquellen",
-                "subtitleItem": "Untertiteleinstellungen",
-                "videoSection": "Videoeinstellungen"
+                "sourceItem": "Videoquellene",
+                "subtitleItem": "Ontertetel Ischtelige",
+                "videoSection": "Felmli Ischtelige"
             },
             "sources": {
                 "failed": {
-                    "text": "Beim Versuch, Videos zu finden, ist ein Fehler aufgetreten. Bitte versuche es mit einer anderen Quelle.",
-                    "title": "Fehler beim Laden"
+                    "text": "Do esch en Fehler bem versuech Felmli z fende… Versuech mol en anderi Quelle",
+                    "title": "Fehler bem Lade"
                 },
                 "noEmbeds": {
-                    "text": "Es konnten keine Embeds gefunden werden. Bitte versuchen es mit einer anderen Quelle.",
-                    "title": "Keine Embeds gefunden"
+                    "text": "Mir hei kei Embeds gfunde, bitte versuech en anderi Quelle.",
+                    "title": "Kei Embeds gefonde"
                 },
                 "noStream": {
-                    "text": "Diese Quelle bietet keine Streams für diesen Film oder diese Serie.",
-                    "title": "Kein Stream"
+                    "text": "Die Quelle het kei Streams för dä Felm oder Serie.",
+                    "title": "Kei Stream :("
                 },
-                "title": "Quellen",
-                "unknownOption": "Unbekannt",
-                "editOrder": "Bestellung bearbeiten"
+                "title": "Quellene",
+                "unknownOption": "Onbekannt",
+                "editOrder": "Bestellig bearbeite"
             },
             "subtitles": {
-                "customChoice": "Untertiteldatei auswählen oder hier ablegen",
-                "customizeLabel": "Anpassen",
-                "dropSubtitleFile": "Untertiteldatei hier ablegen",
-                "offChoice": "Aus",
+                "customChoice": "Drop oder lad dis File ufe",
+                "customizeLabel": "Apasse",
+                "dropSubtitleFile": "Leg din Ontertetel do ab! >_<",
+                "offChoice": "Us",
                 "settings": {
-                    "backlink": "Eigene Untertitel",
-                    "delay": "Untertitelverzögerung",
-                    "fixCapitals": "Großschreibung korrigieren"
+                    "backlink": "Eigeni Ontertetel",
+                    "delay": "Ontertitelverzögerig",
+                    "fixCapitals": "Grossschribig korrigiere"
                 },
-                "title": "Untertitel",
-                "unknownLanguage": "Unbekannt",
-                "OpenSubtitlesChoice": "offene Untertitel",
-                "notFound": "Keine der verfügbaren Optionen entspricht Ihrer Anfrage",
-                "SourceChoice": "Quellenangaben",
-                "empty": "Es sind hierfür keine Untertitel verfügbar.",
-                "scrapeButton": "Untertitel abschaben",
-                "onChoice": "Auf"
+                "title": "Ontertitel",
+                "unknownLanguage": "Onbekannt",
+                "OpenSubtitlesChoice": "OpenSubtitles",
+                "notFound": "Kei vo de verfüegbare Optionä stimmt mit dinere Suchi öberi",
+                "SourceChoice": "Quelle agab",
+                "empty": "Do si kei Ontertetel verfüegbar.",
+                "scrapeButton": "Ontertitel scrapen",
+                "onChoice": "Aa"
             },
             "watchparty": {
                 "watchpartyItem": "Zäme luege",
@@ -735,80 +735,80 @@
     },
     "migration": {
         "start": {
-            "title": "übertrage deine Daten",
+            "title": "Öberträg dini date",
             "options": {
                 "or": "oder",
                 "direct": {
-                    "title": "direkt übertragen",
-                    "quality": "Leichtestes und schnellstes",
-                    "action": "Daten übertragen",
-                    "description": "Dadurch werden Ihre Daten direkt auf den neuen Server übertragen. Dies ist die schnellste option. <br /><br /> dieser Option können Sie Ihre Passphrase beibehalten!"
+                    "title": "diräkti öberträgig",
+                    "quality": "Liechtischti ond schnällschti",
+                    "action": "Date öberträge",
+                    "description": "Das öbertreit dini Date direkt uf de neue Server. Das isch d’schnällsti Option. <br /><br /> Das erlaubt der au, der Passphrase z‘phalte!"
                 },
                 "download": {
-                    "description": "Dadurch werden Ihre Daten auf Ihr Gerät heruntergeladen. Sie können sie dann auf den neuen Server hochladen oder zur sicheren Aufbewahrung behalten.",
-                    "title": "Daten Downloaden",
-                    "quality": "Technischer",
-                    "action": "Daten downloaden"
+                    "description": "Das lädet dini Date uf dis Gerät abe. Du chasch sie nachher uf de neue Server ufelade oder si einfach zur Sicheriheit behalte.",
+                    "title": "Date abelade",
+                    "quality": "Me technisches",
+                    "action": "Date abelade"
                 },
                 "upload": {
-                    "title": "Daten hochladen",
-                    "description": "Lade deine zuletzt übertragenen Daten hoch um deine Lesezeichen und deinen Fortschritt auf diesem Account zu speichern.",
-                    "quality": "Wiederherstellen aus der Sicherung",
-                    "action": "Daten Hochladen"
+                    "title": "Date ufelade",
+                    "description": "Lad dini vorher exportierti Datei ufe, um dini Lesezeichä und t‘Fortschritt uf däm Account wiederherzustelle.",
+                    "quality": "Stell dis Backup weder her",
+                    "action": "Date ufelade"
                 }
             },
-            "explainer": "Wenn Sie Ihre Daten übertragen oder sichern möchten, können Sie dies mit den folgenden Optionen tun. So bleiben Ihre Daten beim Wechsel des Backend-Servers erhalten."
+            "explainer": "Wen du dini Date öberträge oder es Backup mache welsch, Chasch das met de folgende Optione mache. Demet paltisch du dini Date bem wächsel fo de Backend."
         },
         "direct": {
-            "title": "direkte Übertragung",
+            "title": "diräkti öberträgig",
             "status": {
-                "error": "Fehlgeschlagen übertragen ihrer Daten 😿",
-                "success": "Ihre Daten wurden erfolgreich übertragen!🎉"
+                "error": "Fähler bem öberträge fo dine Date 😿",
+                "success": "Dini date si erfolgrich öbertreit worde!🎉"
             },
             "button": {
-                "migrate": "übertragen",
-                "processing": "Verarbeitet...",
-                "login": "Weiter zum login",
-                "home": "Zur Startseite"
+                "migrate": "öberträge",
+                "processing": "Verarbeitig…",
+                "login": "Witer zom Login",
+                "home": "Zor Start-Site"
             },
-            "description": "Geben Sie die Ziel Backend URL ein, um Ihre aktuellen Kontodaten in ein neues Backend zu migrieren. Ihre Passphrase bleibt dabei unverändert!",
+            "description": "Gib d’Ziel-Backend-URL ii, um dini aktuelle Kontodate zum neue Backend z’öberträge. Dini Passphrase bliibt glych!",
             "backendLabel": "Ziel-Backend-URL",
-            "recaptchaLabel": "ReCaptcha-Schlüssel (optional)",
-            "toggleLable": "Benötigt ReCaptcha?"
+            "recaptchaLabel": "ReCaptcha-Schlössel (optional)",
+            "toggleLable": "Brucht ReCaptcha?"
         },
-        "loginRequired": "Du musst eingeloggt sein, um deine Daten zu migrieren! Bitte gehen sie zurück und loggen sie sich ein um fortzufahren.",
+        "loginRequired": "Du muesch iglogt si om dini date z’migriere! Bitte gang zrog, ond log dich ich, zom witerfahre.",
         "download": {
             "status": {
-                "error": "Das Herunterladen Ihrer Daten ist fehlgeschlagen. 😿",
-                "success": "Ihre Daten wurden erfolgreich heruntergeladen! 🎉"
+                "error": "Bem abelade fo dinere Date esch en Fehler passiert. 😿",
+                "success": "Dini Date si erfolgrich abeglade worde! 🎉"
             },
-            "title": "Daten downloaden",
-            "description": "Dadurch werden Ihre Daten auf Ihr Gerät heruntergeladen. Sie können sie dann auf den neuen Server hochladen oder zur sicheren Aufbewahrung behalten.",
+            "title": "Date abelade",
+            "description": "Das wird dini Date uf dis Gerät abelade. Du chasch sie nacher uf de neue Server ufelade oder sie eifach zur Sicheriheit behalte.",
             "items": {
                 "description": "Der Download beinhaltet:",
-                "bookmarks": "Mit Lesezeichen versehene Medien",
-                "progress": "Beobachten Sie den Fortschritt"
+                "bookmarks": "Medie met Läsezeiche",
+                "progress": "Lueg ber verarbeitig zue"
             },
             "button": {
-                "download": "Daten downloaden",
-                "home": "Zur Startseite",
-                "login": "Weiter zum login"
+                "download": "Date abelade",
+                "home": "Zor Start-Site",
+                "login": "Gang zom Login"
             }
         },
         "upload": {
             "button": {
-                "processing": "Verarbeitet...",
+                "processing": "Verarbeitete...",
                 "import": "Date importiere",
                 "success": "Import abgschlosse",
-                "home": "Gang zo home"
+                "home": "Witer zor Start-Site"
             },
-            "title": "Daten uploaden",
+            "title": "Date ufelade",
             "status": {
                 "success": "Dini date si erfolgrich ufe glade worde! 🎉",
-                "processing": "Verarbeitet Date…",
-                "error": "Fehler bem ufelade fo dinere Date. 😿"
+                "processing": "Verarbeitet Datene…",
+                "error": "Fähler bem ufelade fo dine Date. 😿"
             },
-            "description": "Lade dini vorher exportierte Dateie ufe, um dini Lesezeichä und Fortschritt uf däm Konto wiederherzustelle.",
+            "description": "Lad dini vorher exportierti Dateie ufe, um dini Lesezeichä und din Fortschritt uf das Konto wiederherzustelle.",
             "file": {
                 "description": "Wähl dini Datei us, wodu welsch ufelade",
                 "select": "Wähl en Datei",
@@ -818,17 +818,17 @@
             "dataPreview": "Vorab aluege:",
             "exportedOn": "Exportiert am",
             "items": {
-                "bookmarks": "Gebuchmarkte Medien",
-                "progress": "Beobachten Sie den Fortschritt"
+                "bookmarks": "Medie met Läsezeiche",
+                "progress": "Beobacht der Fortschret"
             }
         },
-        "back": "Zurück gehen"
+        "back": "Gang zrog"
     },
     "downtimeNotice": {
         "badge": "Fehler",
-        "title": "Probleme mit dem Anbieter",
-        "message": "P-Stream hat erneut Probleme mit einigen Anbietern. Wenn Sie eine Sendung nicht finden oder abspielen können, ändern Sie bitte die Quelle. Dieser Fehler wird voraussichtlich für die unten angegebene Zeit bestehen bleiben.",
-        "goHome": "Zur Startseite"
+        "title": "Abieter Problem",
+        "message": "P-Stream het wieder Problemli mit einzelne Anbieter. Wenn du e Serie nöd finde oder abspiele chasch, versuech bitte d’Quelle z’wechsle. Dä Fehler wird voraussichtlich während de unten aaggehne Zytspanne ahalte.",
+        "goHome": "Zor Start-Site"
     },
     "support": {
         "title": "Unterstützung",
@@ -856,19 +856,19 @@
     },
     "details": {
         "director": "Direktor:",
-        "cast": "Besetzung:",
-        "imdb": "Auf IMDb anzeigen",
-        "resume": "Fortsetzen",
-        "play": "Wiedergeben",
+        "cast": "Besetzig:",
+        "imdb": "Uf IMDb azeige",
+        "resume": "Fortsetze",
+        "play": "Abspele",
         "languange": "Sprache:",
         "releaseDate": "Veröffentlichungsdatum:",
-        "rating": "Bewertung:",
+        "rating": "Bewertig:",
         "votes": "Stimmen",
-        "tmdb": "Auf TMDB anzeigen",
-        "episodes": "Folgen",
-        "season": "Staffel",
-        "runtime": "Laufzeit",
-        "airs": "Luft"
+        "tmdb": "Uf TMDB azeige",
+        "episodes": "Folge",
+        "season": "Staffele",
+        "runtime": "Laufzeit:",
+        "airs": "Loft"
     },
     "discover": {
         "page": {

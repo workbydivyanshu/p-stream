@@ -144,7 +144,7 @@
             "day": {
                 "default": "Que voulez-vous regarder cet après-midi ?",
                 "extra": [
-                    "Amoureux des films d'animation ? Suzume est un incontournable."
+                    "Viva la P-Stream !"
                 ]
             },
             "morning": {
@@ -159,6 +159,9 @@
                     "À la recherche d'un bon film d'horreur à regarder ? J'ai entendu dire que Scream était bien."
                 ]
             }
+        },
+        "mediaCard": {
+            "copyLink": "Copier le lien"
         }
     },
     "media": {
