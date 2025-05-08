@@ -422,71 +422,71 @@
         },
         "metadata": {
             "api": {
-                "text": "API Metadaten konnten nicht geladen werden, überprüfe deine Netzwerkverbindung.",
-                "title": "API Metadaten konnten nicht geladen werden"
+                "text": "Het API Metadata net chöne lade. Bitte check dini Internet verbendig.",
+                "title": "API Metadata het net chöne lade"
             },
             "dmca": {
-                "badge": "Entfernt",
-                "text": "Das Video ist aufgrund einer Takedown-Anfrage oder eines Urheberrechtsanspruchs nicht mehr verfügbar.",
-                "title": "Video wurde entfernt"
+                "badge": "Entfärne",
+                "text": "Die Medie isch nüm verfügbar wäge eme Takedown-Notice oder eme Urheberrechtsanspruch. 😨",
+                "title": "D‘Medie si glöscht worde"
             },
             "extensionPermission": {
-                "badge": "Berechtigung fehlt",
-                "button": "Verwende Erweiterung",
-                "text": "Du hast die Browser-Erweiterung, aber wir brauchen deine Berechtigung um mit der Erweiterung zu starten.",
-                "title": "Konfiguriere die Erweiterung"
+                "badge": "D‘Berächtigong fält",
+                "button": "Bruch d‘Erwiterig",
+                "text": "Du hesch t Browser-Erwiterig, aber mer bruche dini Berächtigong zom si bruche. (¬_¬)",
+                "title": "Konfigurier d‘Erwiterig"
             },
             "failed": {
-                "badge": "Fehlgeschlagen",
-                "homeButton": "Zurück zur Startseite",
-                "text": "Konnte die Videometadaten nicht von TMDB laden. Überprüfe ob TMDB funktioniert oder von deiner Internetverbindung gesperrt wird.",
-                "title": "Laden der Metadaten ist fehlgeschlagen"
+                "badge": "Fählgschlage",
+                "homeButton": "Zrog zor Start-Site",
+                "text": "Het d‘Metadate fo TMDB net chöne lade. Öberprüef ob entweder TMDB down esch oder öb si ächt of dim Internet blockiert esch.",
+                "title": "Lade fo de Metadate fehlgschlage"
             },
             "notFound": {
-                "badge": "Nicht gefunden",
-                "homeButton": "Zurück zur Startseite",
-                "text": "Wir konnten das angeforderte Video nicht finden.",
-                "title": "Das Video konnte nicht gefunden werden."
+                "badge": "Net gfonde",
+                "homeButton": "Zrog zor Start-Site",
+                "text": "Mer hei d'Medie, wo du gfrogt hesch, nöd gfunde. Entweder isch es entfernt worde oder du hesch d'URL veränderet (mei, mei, mei).",
+                "title": "Het d‘Medie net chöne fende."
             }
         },
         "nextEpisode": {
-            "next": "Nächste Folge",
-            "replay": "Wiederholung",
-            "nextSeason": "nächste Staffel"
+            "next": "Nächschti Folg",
+            "replay": "Wederholig",
+            "nextSeason": "Nächschti Staffle"
         },
         "playbackError": {
-            "badge": "Wiedergabefehler",
+            "badge": "Wedergabe Fehler",
             "errors": {
-                "errorAborted": "Das Laden des Videos wurde vom Nutzer abgebrochen.",
-                "errorDecode": "Beim Versuch, das Video zu dekodieren, ist ein Fehler aufgetreten, obwohl sie zuvor als brauchbar eingestuft worden war.",
-                "errorGenericMedia": "Unbekannter Videofehler ist aufgetreten.",
-                "errorNetwork": "Es ist ein Netzwerkfehler aufgetreten, der verhindert hat, dass das Video erfolgreich abgerufen werden konnten, obwohl es verfügbar waren.",
-                "errorNotSupported": "Das Video- oder Videoanbieter wird nicht unterstützt."
+                "errorAborted": "S‘abrüefe fo de Medie esch vom Benotzer abbroche worde.",
+                "errorDecode": "Obwohl es vorher als benutzbar bestimmt worde esch, esch e Fehler aufgetrete, während em Versuech, die Medienressource z'dekodiere, was zu eme Fehler gführt het.",
+                "errorGenericMedia": "Onbekannte Medie Fehler oftrete.",
+                "errorNetwork": "Es isch en Netzwerkfehler auftrete, wo verhindert het, dass d‘Medie erfolgrich abgerüft werde chöi, obwohl es vorher verfügbar gse esch.",
+                "errorNotSupported": "S‘Medie oder de Medie-Anbieter wird nöd onterstützt."
             },
-            "homeButton": "Zurück zur Startseite",
-            "text": "Während der Wiedergabe ist ein Fehler aufgetreten. Versuche es erneut.",
-            "title": "Hoppla, etwas ist schiefgegangen!"
+            "homeButton": "Zrog zor Start-Site",
+            "text": "Do esch en Fehler bem abspele fo de Medie 😖. Bitte versuechs nomol oder benotz en anderi Quelle!",
+            "title": "Upsi, Fehler bem abspele!"
         },
         "scraping": {
             "extensionFailure": {
-                "badge": "Erweiterung deaktiviert",
+                "badge": "Erwiterig deaktiviert",
                 "enableExtension": "Erweiterung aktivieren",
-                "homeButton": "Zur Startseite",
+                "homeButton": "Gang heime",
                 "text": "Du hast die P-Streame Erweiterung installiert. Um die Erweiterung zu benutzen, musst du sie für diese Seite aktivieren.",
                 "title": "Bitte aktiviere die Erweiterung"
             },
             "items": {
-                "failure": "Ein Fehler ist aufgetreten",
-                "notFound": "Video nicht gefunden",
-                "pending": "Suche nach Videos..."
+                "failure": "En Fehler esch ufträte",
+                "notFound": "Mer hei s‘Video net (╥﹏╥)",
+                "pending": "Sueche nach Videos…"
             },
             "notFound": {
-                "badge": "Nicht gefunden",
-                "detailsButton": "Details anzeigen",
-                "homeButton": "Zurück zur Startseite",
-                "text": "Wir haben alle Anbieter durchsucht, konnten aber nicht das Video finden nach dem du suchst! Wir stellen keine eigenen Videos bereit und haben keine Kontrolle darüber, was verfügbar ist. Bitte klicke auf \"Details anzeigen\" für mehr Details.",
-                "title": "Wir konnten das nicht finden",
-                "discoverButton": "Endecke mehr"
+                "badge": "Net gfonde",
+                "detailsButton": "Deteils azeige",
+                "homeButton": "Gang zor Start-Site",
+                "text": "Mir hei d'Anbieter durchsuecht und chönd d‘Medie, wo du suechsch, nöd finde! Mir hoste kei Medie und hei kei Kontroll über das, was verfügbar isch. Bitte klick uf „Details zeige“ unten für meh Informatione.",
+                "title": "Chöne mer net fende",
+                "discoverButton": "Entdeck me"
             },
             "tips": {
                 "7": "Halt SHIFT und klick uf den Titel, um de Link mit der Zeit z'kopiere!",
