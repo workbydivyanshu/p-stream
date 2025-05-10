@@ -332,7 +332,7 @@
                 "onAndroid": {
                     "1": "Om of Android abezlade, klick ofe abelad chnopf, <bold>Klick ond halt</bold> ofs Video, den wählsch <bold>save</bold>us.",
                     "shortTitle": "Abelade / Android",
-                    "title": "Of Android Abelade"
+                    "title": "Of Android abelade"
                 },
                 "onIos": {
                     "1": "Zum Abelaade uf iOS: Klick uf dr Download-Button, denn uf dr neue Seite klick uf <bold><ios_share /></bold> und nachher uf <bold>In Dateien sichern<ios_files /></bold>.",
@@ -342,7 +342,7 @@
                 "onPc": {
                     "1": "Uf PC, Klicksch ofe abelad Chnopf, den of ne neue Site, rächts klick ofs Video ond wählsch <bold>Save video as</bold>",
                     "shortTitle": "Abelade / PC",
-                    "title": "Of PC Abelade"
+                    "title": "Of PC abelade"
                 },
                 "title": "Abelade",
                 "button": "Versuech zom abelade",
@@ -470,10 +470,10 @@
         "scraping": {
             "extensionFailure": {
                 "badge": "Erwiterig deaktiviert",
-                "enableExtension": "Erweiterung aktivieren",
+                "enableExtension": "Erwiterig aktiviere",
                 "homeButton": "Gang heime",
-                "text": "Du hast die P-Streame Erweiterung installiert. Um die Erweiterung zu benutzen, musst du sie für diese Seite aktivieren.",
-                "title": "Bitte aktiviere die Erweiterung"
+                "text": "Du hescht P-Stream Erwiterig installiert. Demet du si chasch benotze, muesch si aktiviere.",
+                "title": "Bitte aktivier t Erwiterig"
             },
             "items": {
                 "failure": "En Fehler esch ufträte",
@@ -500,7 +500,7 @@
                 "8": "Wähl en eigeni Ontertetel Farb!",
                 "9": "Migrier dis Konto zonere neue Backend i de Einstellungen!",
                 "10": "Tret em Discord bi!",
-                "11": "Bruch [ und ], om t Untertitel-Ziit z'ändere!",
+                "11": "Bruch [ und ], om d‘Ontertitel-Ziit z'ändere!",
                 "14": "Benotz J ond L zom 10 sekonde z'Skipe!",
                 "15": "Dröck F, om Vollbeld ei- oder uszschalte!",
                 "16": "Dröck M zom Stomschalte!",
@@ -508,92 +508,92 @@
                 "18": "Drück < und >, um d'Wiedergabegschwindigkeit z'ändere!",
                 "20": "Dröck C om der Ontertetel i- oder uszschalte!",
                 "21": "Dröck R, om en Barrel Roll z mache!",
-                "1": "Klick uf s'Zahnradsymbol, um die Quellen z'wechse!",
-                "13": "Benotz die LENKI oder RÄCHTI Pfiltaschte om 5 sekomde z Skipe!"
+                "1": "Klick uf s‘Zahnradsymbol, um d‘Quellen z‘wechse!",
+                "13": "Benotz die LENKI oder RÄCHTI Pfiltaschte om 5 sekomde z‘Skipe!"
             }
         },
         "time": {
             "regular": "{{timeWatched}} / {{duration}}",
-            "remaining": "{{timeLeft}} übrig • Fertig um {{timeFinished, datetime}}",
+            "remaining": "{{timeLeft}} Öbrig • Fertig am {{timeFinished, datetime}}",
             "shortRegular": "{{timeWatched}}",
             "shortRemaining": "-{{timeLeft}}"
         },
         "turnstile": {
-            "description": "Bitte verifiziere deine Menschlichkeit mit dem Captcha auf der Rechten Seite. Dies ist um P-Stream sicher zu halten!",
-            "error": "Menschlichkeit konnte nicht verifiziert werden. Bitte versuche es erneut.",
-            "title": "Wir müssen sicherstellen, dass du Menschlich bist.",
-            "verifyingHumanity": "Verifiziere deine Menschlichkeit..."
+            "description": "Halt, stop. Besch du en Mönsch? Bewis dini Mönschlechkeit indem du schnell en Challenge abschliesch – das dient zor Sicherheit vo P-Stream.",
+            "error": "Du hesch der Tescht net gschaft- Stream het net chöne lade. Ler din Cache und versuech’s nomol, oder wechsle zue ere andere Quelle (tipp uf s’Zahnrad).",
+            "title": "Besch du en Roboter?",
+            "verifyingHumanity": "Verifizier dini Mönschlechkeit… (^▽^)👍"
         }
     },
     "screens": {
         "dmca": {
             "title": "DMCA"
         },
-        "loadingApp": "Die App wird geladen",
-        "loadingUser": "Dein Profil wird geladen",
+        "loadingApp": "D‘App werd glade",
+        "loadingUser": "Dis Profil werd glade",
         "loadingUserError": {
-            "logout": "Abmelden",
-            "reset": "Eigenen Server zurücksetzen",
-            "text": "Beim Laden deines Profils ist ein Fehler aufgetreten",
-            "textWithReset": "Beim Laden deines Profils von deinem Server ist ein Fehler aufgetreten, zurück zum Standard-Server wechseln?",
-            "reload": "Neu laden"
+            "logout": "Abmälde",
+            "reset": "Eigene Server zrogsetze",
+            "text": "Bem lade fo din Profil esch en Fehler uftaucht",
+            "textWithReset": "Profil het nöd vo dim eigene Server glade werde chöne – wotsch zum Standardserver zrogwechsle?",
+            "reload": "Neu lade"
         },
         "migration": {
-            "failed": "Beim Migrieren deiner Daten ist ein Fehler aufgetreten.",
-            "inProgress": "Bitte warte, wir migrieren deine Daten. Das sollte nicht lange dauern."
+            "failed": "Bem öberträge esch en Fehler ufträte. 😿",
+            "inProgress": "Bitte wart en momänt, mer öberträge dini Date. Es set net lang go…"
         }
     },
     "settings": {
         "account": {
             "accountDetails": {
-                "deviceNameLabel": "Gerätename",
-                "deviceNamePlaceholder": "Handy",
-                "editProfile": "Bearbeiten",
-                "logoutButton": "Abmelden"
+                "deviceNameLabel": "Gräte name",
+                "deviceNamePlaceholder": "Natel",
+                "editProfile": "Bearbeite",
+                "logoutButton": "Abmälde"
             },
             "actions": {
                 "delete": {
-                    "button": "Konto löschen",
-                    "confirmButton": "Konto löschen",
-                    "confirmDescription": "Konto wirklich löschen? Alle deine Daten gehen dabei verloren!",
-                    "confirmTitle": "Bist du sicher?",
-                    "text": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Daten werden gelöscht und können nicht wiederhergestellt werden.",
-                    "title": "Konto löschen"
+                    "button": "Account lösche",
+                    "confirmButton": "Account lösche",
+                    "confirmDescription": "Welsch der Account wörklech lösche? All dini Date göi verlore! ૮₍˶Ó﹏Ò ⑅₎ა",
+                    "confirmTitle": "Besch secher?",
+                    "text": "Die Aktion cha net röckgängig gmacht wärde. Alli date werne glöscht ond chöne net wederhergstellt werde.",
+                    "title": "Account lösche"
                 },
-                "title": "Aktionen",
+                "title": "Aktione",
                 "logoutAllDevices": {
-                    "title": "Alle Sitzungen beenden",
-                    "text": "Dies wird dich von allen Geräten abmelden, die mit deinem Konto verbunden sind.",
-                    "button": "Von allen Geräten abmelden"
+                    "title": "Alli Grät abmälde",
+                    "text": "Das werd all dini Grät abmälde wo met dim Account verbonde si.",
+                    "button": "Wo allne Grät abmälde"
                 },
                 "migration": {
-                    "text": "Migrier dis Konto zu eme neue Server oder lad dini Date abe.",
-                    "title": "Account migriere",
-                    "button": "Migrier de Account"
+                    "text": "Öberträg din Account zu eme neue Server oder lad dini Date abe.",
+                    "title": "Account öberträge",
+                    "button": "Öberträg de Account"
                 }
             },
             "devices": {
-                "deviceNameLabel": "Gerätename",
-                "failed": "Laden der Sitzungen fehlgeschlagen",
-                "removeDevice": "Entfernen",
+                "deviceNameLabel": "Geräte name",
+                "failed": "Lade vo der Setzige Fehlgschlage",
+                "removeDevice": "Entfärne",
                 "title": "Geräte"
             },
             "profile": {
-                "finish": "Bearbeiten beenden",
-                "firstColor": "Profilfarbe 1",
-                "secondColor": "Profilfarbe 2",
-                "title": "Profilbild bearbeiten",
+                "finish": "Bearbeite beänden",
+                "firstColor": "Profilfarb 1",
+                "secondColor": "Profilfarb 2",
+                "title": "Profilbeld bearbeiten",
                 "userIcon": "Symbol"
             },
             "register": {
-                "cta": "Los geht's",
-                "text": "Teilen deinen Fortschritt zwischen Geräten und halte sie synchronisiert.",
-                "title": "Mit der Cloud synchronisieren"
+                "cta": "Los goht's",
+                "text": "Teil din watch progress met dine andere Grät ond palt si Synchronisiert. ( ̧⸝⸝⍢⸝⸝)ෆ",
+                "title": "Met der Cloud synchronisiere"
             },
-            "title": "Konto",
+            "title": "Account",
             "admin": {
-                "title": "Admin-Bereich",
-                "text": "Nutzen Sie Tools zum Testen des P-Stream-Zustands.",
+                "title": "Admin-Zentrale",
+                "text": "Notz d‘Wärchzüg wo deför do si, der zuestand vo P-Stream z öberprüefe.",
                 "button": "Check es us"
             }
         },
@@ -605,11 +605,11 @@
                 "gray": "Grau",
                 "red": "Rot",
                 "teal": "Türkis",
-                "green": "Grün",
-                "mocha": "Mokka",
+                "green": "Grüen",
+                "mocha": "Mokka ☕️",
                 "pink": "Pink",
-                "classic": "Klassik",
-                "ember": "Glut",
+                "classic": "Klassisch",
+                "ember": "Ember",
                 "acid": "Säure",
                 "spark": "Funke",
                 "grape": "Traube",
@@ -617,121 +617,121 @@
                 "wolverine": "Wolverine",
                 "popsicle": "Popsicle",
                 "hulk": "Hulk",
-                "spiderman": "Spiderman",
+                "spiderman": "Spinnen Mann",
                 "noir": "Noir"
             },
-            "title": "Aussehen",
+            "title": "Erschinigsbeld",
             "options": {
-                "discoverLabel": "Abschnitt „Entdecken“",
-                "discover": "Abschnitt „Entdecken“",
-                "discoverDescription": "Zeigen Sie den Abschnitt „Entdecken“ auf der Startseite unter Ihren mit Lesezeichen versehenen Medien an. Standardmäßig aktiviert.",
-                "modal": "Details Modal",
-                "modalLabel": "Details modal",
-                "modalDescription": "Zeigt ein Modalfenster mit Details an, wenn Sie auf eine Mediakarte klicken, anstatt zur Watch-Seite zu gelangen. Für den Trailer ist ein Proxy oder eine Erweiterung erforderlich. Standardmässig deaktiviert."
+                "discoverLabel": "Abschnett „Entdecke“",
+                "discover": "Abschnett „Entdecke“",
+                "discoverDescription": "Zeig d‘Entdeckigs-Sektion of der Startsite unter dine gspicherete Medie a. Standartmässig eschs Aktiviert.",
+                "modal": "Deteil-Fenschter",
+                "modalLabel": "Detail-Fenschter",
+                "modalDescription": "Zeigt s‘Deteil-Fenschter wen du of d‘Mediecharte klicksch anschtat diräckt luege. Före Traile esch en Proxy oder en Erwiterig nötig. Standartmässig deaktiviert."
             }
         },
         "connections": {
             "server": {
-                "description": "Falls du dich mit einem anderen Server verbinden willst, um deine Daten zu speichern. Aktiviere dies und gebe die URL an. <0>Anweisungen.</0>",
-                "label": "Eigener Server",
+                "description": "Falls du dich met enere eigene Backend verbende welsch, um deine Daten zu speichern. Aktivier das ond geb din URL i. <0>Awisig.</0>",
+                "label": "Eigene Server",
                 "urlLabel": "Eigene Server-URL",
                 "migration": {
-                    "link": "übertrage meine Daten",
-                    "description": "<0>Meine Daten migrieren</0> auf einen neuen Server."
+                    "link": "Öberträg mini Date",
+                    "description": "<0>Dini Date öberträge</0> ofene neue Server."
                 },
                 "documentation": "Backend-Dokumentation"
             },
             "setup": {
-                "doSetup": "Einrichten",
+                "doSetup": "Irechte",
                 "errorStatus": {
-                    "description": "Es scheint so, als bräuchte eine oder mehrere Schritte in dieser Einrichtung deine Aufmerksamkeit.",
-                    "title": "Etwas braucht deine Aufmerksamkeit"
+                    "description": "Es gset so us, als würdi ei oder meh Element in däre Konfiguration dini Ufmärksamkeit bruuche.",
+                    "title": "Öpis brucht dini Ufmerksamkeit 😱"
                 },
-                "itemError": "Mit diesem Setup stimmt etwas nicht. Führen Sie das Setup erneut durch, um das Problem zu beheben.",
+                "itemError": "Do stemt öpis net met dene Ischtelige. Mach dis Setup erneut, zoms Problem z‘fixe. (ᴗ_ ᴗ。)",
                 "items": {
-                    "default": "Standard Einstellungen",
-                    "extension": "Erweiterung",
+                    "default": "Standart Ischtelig",
+                    "extension": "Erwiterig",
                     "proxy": "Eigene Proxy"
                 },
-                "redoSetup": "Erneut einrichten",
+                "redoSetup": "Erneut Irechte",
                 "successStatus": {
-                    "description": "Alles ist bereit, damit du deine Lieblingsserien und Filme ansehen kannst.",
-                    "title": "Alles eingerichtet!"
+                    "description": "Alles esch barat. Du chasch jetzt dini lieblings Medie aluege. (๑>◡<๑)",
+                    "title": "Alles Igrechtet!!"
                 },
                 "unsetStatus": {
-                    "description": "Klicken Sie bitte auf den Button rechts, um die Setup zu starten.",
-                    "title": "Du hast das Setup noch nicht durchgeführt"
+                    "description": "Klick ofe Chnopf rechts, om metem setup z‘starte.",
+                    "title": "Du heschs setup noni gmacht"
                 }
             },
-            "title": "Verbindung",
+            "title": "Verbendig",
             "workers": {
-                "addButton": "Neuen Worker hinzufügen",
-                "description": "Damit die App funktioniert werden alle Anfrage durch einen Proxy geleitet. Aktiviere dies, falls du deinen eigenen Worker verwenden willst. <0>Anweisungen.</0>",
-                "emptyState": "Keine Worker vorhanden, füge einen unten hinzu",
-                "label": "Verwenden deinen eigenen Worker-Proxys",
+                "addButton": "Neue Worker hinzuefüege",
+                "description": "Damit d’Applikation funktioniert, wird de gesamt Dateverkehr über en Proxys gleitet. Aktivier das, wenn du dini eigene Workers mitbringe wotsch. <0>Anweisungen.</0>",
+                "emptyState": "Kei Worker vorhande (｡•́︿•̀｡), du muesch eine hinzuefüege",
+                "label": "Verwänd en eigene Worker-Proxys",
                 "urlLabel": "Worker-URLs",
                 "urlPlaceholder": "https://",
                 "proxyTMDB": {
                     "title": "Proxy TMDB",
-                    "description": "Nur erforderlich, wenn Sie nicht direkt auf TheMovieDB zugreifen können, z. B. wenn Ihr Internetprovider den Zugriff blockiert. Es wird empfohlen, den Bereich \"Entdecken\" zu deaktivieren, um die Performance mit dieser Option zu verbessern."
+                    "description": "Nome den nötig wen du kei direkte Zuegreff of TheMovieDB hesch, zom Bischpel wenn dini Internetabieter si Blockiere. Es wird empfohle, d‘Entdecke-Sektion z‘deaktiviere, om d‘Leischtig z‘verbessere."
                 },
-                "documentation": "Proxydokumentation"
+                "documentation": "Proxy Dokumentation"
             }
         },
         "preferences": {
-            "language": "App-Sprache",
-            "languageDescription": "Sprache für die ganze App.",
-            "thumbnail": "Miniaturansichten generieren",
-            "thumbnailDescription": "Meistens haben Videos keine Miniaturansicht. Du kannst diese Einstellung anmachen, um sie automatisch zu generieren, aber sie können dein Video langsamer machen.",
-            "thumbnailLabel": "Miniaturansichten generieren",
-            "title": "Einstellungen",
-            "autoplayLabel": "Automatische Wiedergabe",
-            "skipCredits": "Abspann überspringen",
-            "skipCreditsDescription": "Wenn aktiviert, wird die nächste Episode automatisch abgespielt, wenn 99 % der Episode abgeschlossen sind, um den Abspann zu überspringen. Wenn deaktiviert, wird gewartet, bis die Episode vollständig abgeschlossen ist.",
-            "sourceOrder": "Quellen neu anordnen",
-            "sourceOrderEnableLabel": "Benutzerdefinierte Quellreihenfolge",
-            "autoplay": "Automatische Wiedergabe",
-            "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt. Kann von Benutzern mit der Browsererweiterung, einem benutzerdefinierten Proxy oder mit der Standardkonfiguration aktiviert werden, sofern der Host dies zulässt.",
-            "sourceOrderDescription": "Per Drag & Drop können Sie Quellen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der die Quellen für die Medien, die Sie ansehen möchten, geprüft werden. Ist eine Quelle ausgegraut, bedeutet dies, dass die <bold>Erweiterung</bold> für diese Quelle erforderlich ist. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten geeignet)</strong>",
-            "skipCreditsLabel": "Überspringen Sie den Abspann"
+            "language": "App-Sproch",
+            "languageDescription": "D‘Sprach wird uf d’ganzi App agwändet – nor Englisch ond Schwitzerdütsch het so lostige Sache drin.",
+            "thumbnail": "Miniaturbeld generiere",
+            "thumbnailDescription": "Meistens hei d’Videos kei Vorschaubilder. Du chasch die Option aktiviere, zum sie spontan generiere lo, aber das cha s’Video langsamer mache.",
+            "thumbnailLabel": "Miniaturasecht generiere",
+            "title": "Preferences",
+            "autoplayLabel": "Autoplay",
+            "skipCredits": "Abspann öbersprenge",
+            "skipCreditsDescription": "Wenn aktiviert, wird die nöchscht Episode abgschpelt, wen 99% vo de Episode abgschlosse esch, om d‘Credits z‘öbersprenge. Wenn deaktiviert, wird gwartet bes d‘Episode vollständig fertig esch.",
+            "sourceOrder": "Quelle neu a‘ordne",
+            "sourceOrderEnableLabel": "Benutzerdefinierti Quellreihenfolg",
+            "autoplay": "Autoplay",
+            "autoplayDescription": "Spelt automatisch die nöchscht Episode inere Serie ab, sobald s‘Endo erreicht esch. Chan aktiviert werde vo Notzer met dr Browser-Erwiterig, eme eigene Proxy oder mit dr Standart-Irechtig, wenn s‘vom Host erlaubt isch.",
+            "sourceOrderDescription": "Per Drag & Drop chasch t Quelle neu a‘ordne. Das bestimmt d‘Reihenfolg fo de Quelle wo abgsuecht wärde. Wenn e Quelle grau isch, heisst das, d’<bold>Erweiterig</bold> isch för die Quelle nötig. <br><br> <strong>(D’Standard-Reihenfolg isch für di meiste Notzer am beste)</strong>",
+            "skipCreditsLabel": "Skip d‘credits"
         },
-        "reset": "Zurücksetzen",
-        "save": "Speichern",
+        "reset": "Zurogsetze",
+        "save": "Spichere",
         "sidebar": {
             "info": {
                 "appVersion": "App-Version",
-                "backendUrl": "Server-URL",
-                "backendVersion": "Server-Version",
+                "backendUrl": "Backend-URL",
+                "backendVersion": "Backend-Version",
                 "hostname": "Hostname",
-                "insecure": "Unsicher",
-                "notLoggedIn": "Du bist nicht angemeldet",
-                "secure": "Sicher",
-                "title": "App-Informationen",
-                "unknownVersion": "Unbekannt",
+                "insecure": "Onsicher",
+                "notLoggedIn": "Du besch net agmäldet",
+                "secure": "Secher",
+                "title": "App Status",
+                "unknownVersion": "Onbekannt",
                 "userId": "Nutzer-ID"
             }
         },
         "subtitles": {
-            "backgroundBlurLabel": "Hintergrundunschärfe",
-            "backgroundLabel": "Hintergrunddeckkraft",
+            "backgroundBlurLabel": "Hentergrundonscherfi",
+            "backgroundLabel": "Hentergrond deckkraft",
             "colorLabel": "Farbe",
-            "previewQuote": "Das Gras wächst nicht schneller, wenn man daran zieht.",
-            "textSizeLabel": "Schriftgröße",
-            "title": "Untertitel",
-            "textBoldLabel": "Fettgedruckter Text",
+            "previewQuote": "Vom Läbe überzeugt, dass es sinnlos isch, fehlt mir doch dr Muet, drüber z’stah.",
+            "textSizeLabel": "Schriftgrößi",
+            "title": "Ontertitel",
+            "textBoldLabel": "Fettdrockte Text",
             "default": "Standard",
-            "low": "Niedrig",
+            "low": "Nedrig",
             "textStyle": {
                 "default": "Standard",
-                "raised": "Standard",
+                "raised": "Ufzoge",
                 "uniform": "Uniform",
-                "dropShadow": "Schattenwurf",
-                "title": "Textstil",
+                "dropShadow": "Schatteworf",
+                "title": "Text stil",
                 "depressed": "Deprimiert"
             },
-            "verticalPositionLabel": "Vertikale Lage"
+            "verticalPositionLabel": "Vertikali position"
         },
-        "unsaved": "Du hast ungespeicherte Änderungen"
+        "unsaved": "Du hesch onspreichereti änderige…"
     },
     "migration": {
         "start": {
@@ -831,27 +831,27 @@
         "goHome": "Zor Start-Site"
     },
     "support": {
-        "title": "Unterstützung",
+        "title": "Support",
         "q1": {
-            "body": "Nun, Sie können dem offiziellen <0>P-Stream-Discord</0> beitreten und dort Fragen stellen oder Sie können eine E-Mail an den unten auf dieser Seite angegebenen mail senden.",
-            "title": "Wo bekomme ich Hilfe?"
+            "body": "Nun, du chasch em Officiele <0>P-Stream-Discord</0> biträte ond det Froge stelle oder du chasch en Email schecke a d‘Adresse ganz onte uf dere Site.",
+            "title": "Wo chani Helf hole?"
         },
         "q2": {
-            "title": "Wo kann ich einen error oder Fehler reklamieren?",
-            "body": "Wir haben einen <0>GitHub</0>, auf dem Sie in unserem Repository ein detailliertes Problem melden können. Zusätzlich können Sie, wenn Sie möchten, einen Pull Request erstellen, um das Problem selbst zu beheben."
+            "title": "Wo chani en Fehler oder en Bug mälde?",
+            "body": "Mir hei en <0>GitHub</0>, wo du es detailliertes Issue im Repository erstelle chasch. Zusätzlich chasch du, wenn du wetsch, au e Pull Request mache, um s’Problem sälber z’fiixe."
         },
-        "text": "P-Stream ist so benutzerfreundlich wie möglich gestaltet. Dennoch gibt es immer wieder Fragen und Probleme. Diese Seite soll helfen, diese Mängel zu beheben"
+        "text": "P-Stream isch druf usgleit, so benotzerfröntlech wie möglech z‘si. Trotzdäm het Lüüt no Froge und Problem. Die Site isch do, om z‘hälfe."
     },
     "jip": {
         "q1": {
-            "title": "Wo kann ich Hilfe bekommen?",
-            "body": "Nun, Sie können dem offiziellen <0>P-Stream-Discord</0> beitreten und dort Fragen stellen oder Sie können eine E-Mail an den unten auf dieser Seite angegebenen mail senden."
+            "title": "Wo bechomi helf?",
+            "body": "Nun, du chasch em Officielle <0>P-Stream-Discord</0> biträte ond det Froge stelle oder en Email at adresse wo onde a dere Site esch, schribe."
         },
         "q2": {
-            "title": "Wie kann ich einen Fehler oder ein Problem melden?",
-            "body": "Wir haben einen <0>GitHub</0>, auf dem Sie in unserem Repository ein detailliertes Problem melden können. Zusätzlich können Sie, wenn Sie möchten, einen Pull Request erstellen, um das Problem selbst zu beheben."
+            "title": "Wo chani en Fehler oder en Bug mälde?",
+            "body": "Mir hei en <0>GitHub\\</0>, wo du es detailliertes Issue im Repository erstelle chasch. Zusätzlich chasch du, wenn du wotsch, au e Pull Request mache, um s’Problem sälber z’fiixe."
         },
-        "text": "P-Stream ist nicht von einer Kokosnusspalme gefallen, es wurde größtenteils von einer einzigen Person (und zwar einer sehr epischen) gemacht.",
+        "text": "P-Stream isch net usem Hemel gheit - s meischte esch vonere einzelne Person gmacht worde (ond das no sehr idrocksvoll!).",
         "title": "Jip"
     },
     "details": {
@@ -872,21 +872,21 @@
     },
     "discover": {
         "page": {
-            "title": "Entdecken Sie Filme & TV",
-            "subtitle": "Erkunden Sie die neuesten Hits und die zeitlosen Klassiker."
+            "title": "Entdeck Felmli ond Serie",
+            "subtitle": "Entdeck die aktuelle Trends ond altbekannti classics."
         },
         "tabs": {
             "movies": "Filme",
-            "tvshows": "Fernsehserien",
-            "editorpicks": "Redaktionstipps"
+            "tvshows": "Fernsehserie",
+            "editorpicks": "Uniform"
         },
         "carousel": {
             "title": {
                 "movies": "{{category}} Filme",
                 "tvshows": "{{category}} Shows",
                 "inCinemas": "Im Kino",
-                "editorPicks": "Redaktionstipps",
-                "popularOn": "Beliebte {{type}} auf {{provider}}"
+                "editorPicks": "Tipps",
+                "popularOn": "Beliebti {{type}} uf {{provider}}"
             }
         },
         "providers": {
@@ -897,39 +897,39 @@
             "max": "Max",
             "paramountPlus": "Paramount Plus",
             "disneyPlus": "Disney Plus",
-            "shudder": "Zittern",
+            "shudder": "Shudder",
             "fubuTV": "fubuTV"
         },
         "randomMovie": {
-            "button": "Schauen Sie sich etwas Random an",
-            "cancel": "Abbruch Countdown",
+            "button": "Lueg öpis zuefeligs",
+            "cancel": "Countdown abbräche",
             "countdown": "{{countdown}}s",
-            "nowPlaying": "Aktuell abgespielt",
+            "nowPlaying": "Aktuell abgspelt",
             "in": "in"
         },
-        "scrollToTop": "Zurück nach oben"
+        "scrollToTop": "Ufwärts 🚀"
     },
     "fedapi": {
         "setup": {
             "step": {
-                "3": "3. Gehen Sie zur Registerkarte \"Anwendungen\" → \"Cookies\".",
-                "1": "1. Gehen Sie zu <0>febbox.com</0> und melden Sie sich mit Google an (verwenden Sie ein neues Konto!)",
-                "2": "2. Öffnen Sie die Entwicklerwerkzeuge oder inspizieren Sie die Seite",
-                "4": "4. Kopieren Sie das \"ui\"-Cookie.",
-                "5": "5. Schliessen Sie das Tab, melden Sie sich aber NICHT ab!",
-                "warning": "(Teilen Sie dieses Token nicht!)"
+                "3": "3. Gang zom Application Tab → \"Cookies\".",
+                "1": "1. Gang zo <0>febbox.com</0> ond meld dich met dim Google Account a (benotz es neue Account!)",
+                "2": "2. Öffne d‘DevTools oder de inspector vom Browser",
+                "4": "4. Kopiers 'ui' Cookie.",
+                "5": "5. Schliess de Tab ond log dich aber NET us!",
+                "warning": "(Teil dä Token of kei Fall)"
             },
-            "title": "Um Ihr UI-Token zu erhalten:",
-            "showVideo": "Video-Tutorial anzeigen",
-            "hideVideo": "Video-Tutorial ausblenden"
+            "title": "Om di UI-Token z‘erhalte:",
+            "showVideo": "Video-Tutorial azeige",
+            "hideVideo": "Video-Tutorial usblände"
         },
         "onboarding": {
             "title": "Optional: FED-API (Febbox)-Token",
-            "description": "Erstellen Sie ein eigenes Febbox-Konto, um das beste Streaming mit 4K-Qualität, Dolby Atmos, Skip-Intro-Funktion und den schnellsten Ladezeiten zu erhalten!"
+            "description": "Erstell din eigene Febbox-Account, om die bescht streaming qualli in 4K, Dolby Atmos, Skip Intro ond die schnellscht 🏃‍♀️💨 ladezite z‘öbercho!"
         },
         "status": {
-            "success": "Erfolg",
-            "failure": "\"VIP\"-Stream konnte nicht geladen werden. Der Token ist ungültig oder die API ist offline!"
+            "success": "Erfolgrich",
+            "failure": "\"VIP\" Streams hei net chöne abgrüeft werde. Dä Token esch ongöltig oder d‘API isch ned erreichbar!"
         }
     }
 }
