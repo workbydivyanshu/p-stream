@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import IosPwaLimitations from "@/components/buttons/IosPwaLimitations";
 import { BrandPill } from "@/components/layout/BrandPill";
@@ -31,8 +31,9 @@ export function PlayerPart(props: PlayerPartProps) {
   const isIOSPWA =
     isIOS && window.matchMedia("(display-mode: standalone)").matches;
 
-  // Detect if Shift key is being held
   const [isShifting, setIsShifting] = useState(false);
+  const [isHoldingFullscreen, setIsHoldingFullscreen] = useState(false);
+  const holdTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Shift") {
@@ -45,6 +46,24 @@ export function PlayerPart(props: PlayerPartProps) {
       setIsShifting(false);
     }
   });
+
+  const handleTouchStart = () => {
+    if (holdTimeoutRef.current) {
+      clearTimeout(holdTimeoutRef.current);
+    }
+    holdTimeoutRef.current = setTimeout(() => {
+      setIsHoldingFullscreen(true);
+    }, 100);
+  };
+
+  const handleTouchEnd = () => {
+    if (holdTimeoutRef.current) {
+      clearTimeout(holdTimeoutRef.current);
+    }
+    holdTimeoutRef.current = setTimeout(() => {
+      setIsHoldingFullscreen(false);
+    }, 1000);
+  };
 
   const skiptime = useSkipTime();
 
@@ -176,7 +195,16 @@ export function PlayerPart(props: PlayerPartProps) {
           </div>
           <div>
             {/* iOS PWA */}
-            {!isIOSPWA && <Player.Fullscreen />}
+            {!isIOSPWA && (
+              <div
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                className="select-none touch-none"
+                style={{ WebkitTapHighlightColor: "transparent" }}
+              >
+                {isHoldingFullscreen ? <Widescreen /> : <Player.Fullscreen />}
+              </div>
+            )}
             {isIOSPWA && status === playerStatus.PLAYING && <Widescreen />}
           </div>
         </div>
