@@ -1,8 +1,16 @@
-import { Fetcher, makeSimpleProxyFetcher } from "@movie-web/providers";
+import {
+  Fetcher,
+  makeSimpleProxyFetcher,
+  setM3U8ProxyUrl,
+} from "@movie-web/providers";
 
 import { sendExtensionRequest } from "@/backend/extension/messaging";
 import { getApiToken, setApiToken } from "@/backend/helpers/providerApi";
-import { getProviderApiUrls, getProxyUrls } from "@/utils/proxyUrls";
+import {
+  getM3U8ProxyUrls,
+  getProviderApiUrls,
+  getProxyUrls,
+} from "@/utils/proxyUrls";
 
 import { convertBodyToObject, getBodyTypeFromBody } from "../extension/request";
 
@@ -22,6 +30,8 @@ function makeLoadbalancedList(getter: () => string[]) {
 export const getLoadbalancedProxyUrl = makeLoadbalancedList(getProxyUrls);
 export const getLoadbalancedProviderApiUrl =
   makeLoadbalancedList(getProviderApiUrls);
+export const getLoadbalancedM3U8ProxyUrl =
+  makeLoadbalancedList(getM3U8ProxyUrls);
 
 async function fetchButWithApiTokens(
   input: RequestInfo | URL,
@@ -42,6 +52,13 @@ async function fetchButWithApiTokens(
   const newApiToken = response.headers.get("X-Token");
   if (newApiToken) setApiToken(newApiToken);
   return response;
+}
+
+export function setupM3U8Proxy() {
+  const proxyUrl = getLoadbalancedM3U8ProxyUrl();
+  if (proxyUrl) {
+    setM3U8ProxyUrl(proxyUrl);
+  }
 }
 
 export function makeLoadBalancedSimpleProxyFetcher() {

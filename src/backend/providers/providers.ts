@@ -8,7 +8,11 @@ import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import {
   makeExtensionFetcher,
   makeLoadBalancedSimpleProxyFetcher,
+  setupM3U8Proxy,
 } from "@/backend/providers/fetchers";
+
+// Initialize M3U8 proxy on module load
+setupM3U8Proxy();
 
 export function getProviders() {
   if (isExtensionActiveCached()) {
@@ -19,6 +23,8 @@ export function getProviders() {
       consistentIpForRequests: true,
     });
   }
+
+  setupM3U8Proxy();
 
   return makeProviders({
     fetcher: makeStandardFetcher(fetch),

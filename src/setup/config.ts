@@ -14,6 +14,7 @@ interface Config {
   TWITTER_LINK: string;
   TMDB_READ_API_KEY: string;
   CORS_PROXY_URL: string;
+  M3U8_PROXY_URL: string;
   NORMAL_ROUTER: boolean;
   BACKEND_URL: string;
   DISALLOWED_IDS: string;
@@ -39,6 +40,7 @@ export interface RuntimeConfig {
   TMDB_READ_API_KEY: string | null;
   NORMAL_ROUTER: boolean;
   PROXY_URLS: string[];
+  M3U8_PROXY_URLS: string[];
   BACKEND_URL: string | null;
   DISALLOWED_IDS: string[];
   TURNSTILE_KEY: string | null;
@@ -68,6 +70,7 @@ const env: Record<keyof Config, undefined | string> = {
     .VITE_ONBOARDING_PROXY_INSTALL_LINK,
   DMCA_EMAIL: import.meta.env.VITE_DMCA_EMAIL,
   CORS_PROXY_URL: import.meta.env.VITE_CORS_PROXY_URL,
+  M3U8_PROXY_URL: import.meta.env.VITE_M3U8_PROXY_URL,
   NORMAL_ROUTER: import.meta.env.VITE_NORMAL_ROUTER,
   BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
   DISALLOWED_IDS: import.meta.env.VITE_DISALLOWED_IDS,
@@ -119,6 +122,10 @@ export function conf(): RuntimeConfig {
     BACKEND_URL: getKey("BACKEND_URL", BACKEND_URL),
     TMDB_READ_API_KEY: getKey("TMDB_READ_API_KEY"),
     PROXY_URLS: getKey("CORS_PROXY_URL", "")
+      .split(",")
+      .map((v) => v.trim())
+      .filter((v) => v.length > 0),
+    M3U8_PROXY_URLS: getKey("M3U8_PROXY_URL", "")
       .split(",")
       .map((v) => v.trim())
       .filter((v) => v.length > 0),
