@@ -4,6 +4,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { useAsync } from "react-use";
 
 import { getBackendMeta } from "@/backend/accounts/meta";
+import { getRoomStatuses } from "@/backend/player/status";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
@@ -11,6 +12,7 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
+import { useAuthStore } from "@/stores/auth";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 import { useDownloadLink } from "./Downloads";
@@ -26,6 +28,9 @@ export function WatchPartyView({ id }: { id: string }) {
   const [editingCode, setEditingCode] = useState(false);
   const [customCode, setCustomCode] = useState("");
   const backendUrl = useBackendUrl();
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const account = useAuthStore((s) => s.account);
 
   const backendMeta = useAsync(async () => {
     if (!backendUrl) return;
@@ -118,11 +123,30 @@ export function WatchPartyView({ id }: { id: string }) {
     setShowJoinInput(false);
   };
 
-  const handleJoinParty = () => {
+  const handleJoinParty = async () => {
     if (joinCode.length > 0) {
-      setIsJoining(true);
-      enableAsGuest(joinCode);
-      setShowJoinInput(false);
+      setIsValidating(true);
+      setValidationError(null);
+
+      try {
+        const response = await getRoomStatuses(backendUrl, account, joinCode);
+        const hasUsers = Object.keys(response.users).length > 0;
+
+        if (!hasUsers) {
+          setValidationError(t("watchParty.emptyRoom"));
+          setIsValidating(false);
+          return;
+        }
+
+        setIsJoining(true);
+        enableAsGuest(joinCode);
+        setShowJoinInput(false);
+      } catch (error) {
+        console.error("Failed to validate room:", error);
+        setValidationError(t("watchParty.invalidRoom"));
+      } finally {
+        setIsValidating(false);
+      }
     }
   };
 
@@ -341,15 +365,30 @@ export function WatchPartyView({ id }: { id: string }) {
                       className="w-full p-2 text-center text-2xl tracking-widest bg-mediaCard-hoverBackground border border-mediaCard-hoverAccent border-opacity-20 rounded-lg text-type-logo"
                       placeholder="ABCD123456"
                       value={joinCode}
-                      onChange={(e) =>
-                        setJoinCode(e.target.value.toUpperCase())
-                      }
+                      onChange={(e) => {
+                        setJoinCode(e.target.value.toUpperCase());
+                        setValidationError(null);
+                      }}
                     />
+                    {validationError && (
+                      <p className="text-xs text-center text-red-500 mt-1">
+                        {validationError}
+                      </p>
+                    )}
+                    {isValidating && (
+                      <div className="flex items-center justify-center">
+                        <Spinner className="w-5 h-5 mr-2" />
+                        {t("watchParty.validating")}
+                      </div>
+                    )}
                     <div className="flex space-x-2">
                       <Button
                         className="w-full"
                         theme="secondary"
-                        onClick={() => setShowJoinInput(false)}
+                        onClick={() => {
+                          setShowJoinInput(false);
+                          setValidationError(null);
+                        }}
                       >
                         {t("watchParty.cancel")}
                       </Button>
@@ -357,7 +396,7 @@ export function WatchPartyView({ id }: { id: string }) {
                         className="w-full"
                         theme="purple"
                         onClick={handleJoinParty}
-                        disabled={joinCode.length === 0}
+                        disabled={joinCode.length === 0 || isValidating}
                       >
                         {t("watchParty.join")}
                       </Button>
