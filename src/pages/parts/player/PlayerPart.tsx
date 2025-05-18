@@ -5,6 +5,7 @@ import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
 import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
 import { UnreleasedEpisodeOverlay } from "@/components/player/atoms/UnreleasedEpisodeOverlay";
+import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
 import { Widescreen } from "@/components/player/atoms/Widescreen";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
@@ -104,6 +105,14 @@ export function PlayerPart(props: PlayerPartProps) {
         />
         <Player.SkipForward iconSizeClass="text-3xl" inControl={inControl} />
       </Player.CenterMobileControls>
+
+      <div
+        className={`absolute right-4 z-50 transition-all duration-300 ease-in-out ${
+          showTargets ? "top-16" : "top-1"
+        }`}
+      >
+        <WatchPartyStatus />
+      </div>
 
       <Player.TopControls show={showTargets}>
         <div className="grid grid-cols-[1fr,auto] xl:grid-cols-3 items-center">

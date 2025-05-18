@@ -44,8 +44,8 @@ export function WatchPartyStatus() {
 
   return (
     <div
-      className={`absolute top-2 right-2 z-50 p-2 bg-mediaCard-shadow bg-opacity-70 backdrop-blur-sm rounded-md text-white text-xs 
-        flex flex-col items-end gap-1 max-w-[250px] transition-all duration-300
+      className={`absolute top-4 right-4 z-50 p-2 bg-mediaCard-shadow bg-opacity-70 backdrop-blur-sm rounded-md text-white text-xs 
+        flex flex-col items-end gap-1 max-w-[260px] transition-all duration-300
         ${showNotification ? "ring-1 ring-buttons-purple shadow-lg shadow-buttons-purple" : ""}`}
     >
       <div className="flex gap-2 w-full justify-between items-center">

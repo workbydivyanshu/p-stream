@@ -1,7 +1,6 @@
 import { ReactNode, RefObject, useEffect, useRef } from "react";
 
 import { OverlayDisplay } from "@/components/overlays/OverlayDisplay";
-import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
 import { CastingInternal } from "@/components/player/internals/CastingInternal";
 import { HeadUpdater } from "@/components/player/internals/HeadUpdater";
 import { KeyboardEvents } from "@/components/player/internals/KeyboardEvents";
@@ -99,7 +98,6 @@ export function Container(props: PlayerProps) {
         <WebhookReporter />
         <WatchPartyResetter />
         <div className="relative h-screen overflow-hidden">
-          <WatchPartyStatus />
           <VideoClickTarget showingControls={props.showingControls} />
           <HeadUpdater />
           {props.children}
