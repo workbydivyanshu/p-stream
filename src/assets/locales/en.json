@@ -528,7 +528,9 @@
                 "dropSubtitleFile": "Drop subtitle file here! >_<",
                 "scrapeButton": "Scrape subtitles",
                 "empty": "There are no provided subtitles for this.",
-                "notFound": "None of the available options match your query"
+                "notFound": "None of the available options match your query",
+                "useNativeSubtitles": "Use native video subtitles",
+                "useNativeSubtitlesDescription": "May fix subtitles when casting and in PiP"
             },
             "watchparty": {
                 "watchpartyItem": "Watch Party",

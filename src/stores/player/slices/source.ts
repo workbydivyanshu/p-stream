@@ -90,6 +90,7 @@ export interface SourceSlice {
   setSourceId(id: string | null): void;
   enableAutomaticQuality(): void;
   redisplaySource(startAt: number): void;
+  setCaptionAsTrack(asTrack: boolean): void;
 }
 
 export function metaToScrapeMedia(meta: PlayerMeta): ScrapeMedia {
@@ -221,5 +222,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   enableAutomaticQuality() {
     const store = get();
     store.display?.changeQuality(true, null);
+  },
+  setCaptionAsTrack(asTrack: boolean) {
+    set((s) => {
+      s.caption.asTrack = asTrack;
+    });
   },
 });
