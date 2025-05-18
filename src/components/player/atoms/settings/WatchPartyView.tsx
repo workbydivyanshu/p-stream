@@ -136,10 +136,6 @@ export function WatchPartyView({ id }: { id: string }) {
       </Menu.BackLink>
       <Menu.Section>
         <div className="pb-4">
-          <Menu.Paragraph marginClass="text-xs text-type-secondary mb-4">
-            {t("player.menus.watchparty.notice")}
-          </Menu.Paragraph>
-
           {backendSupportsWatchParty &&
             (enabled ? (
               <div className="space-y-4">
@@ -322,6 +318,9 @@ export function WatchPartyView({ id }: { id: string }) {
           >
             {t("player.menus.watchparty.legacyWatchparty")}
           </Menu.Link>
+          <Menu.Paragraph marginClass="text-xs text-type-secondary mb-4">
+            {t("player.menus.watchparty.notice")}
+          </Menu.Paragraph>
         </div>
       </Menu.Section>
     </>

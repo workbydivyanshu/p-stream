@@ -530,7 +530,7 @@
             },
             "watchparty": {
                 "watchpartyItem": "Watch Party",
-                "notice": "Watch Party might not be available for some sources",
+                "notice": "Legacy Watch Party might not be available for some sources",
                 "legacyWatchparty": "Use legacy Watch Party"
             }
         },
