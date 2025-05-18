@@ -41,7 +41,7 @@ importers:
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@movie-web/providers':
         specifier: github:p-stream/providers#production
-        version: https://codeload.github.com/p-stream/providers/tar.gz/e3c8cab4cc0abfc32ddfd6126cbb4c3623e6da51
+        version: https://codeload.github.com/p-stream/providers/tar.gz/6de1e1f63f459458394758103b42a45c355ed960
       '@noble/hashes':
         specifier: ^1.8.0
         version: 1.8.0
@@ -1158,8 +1158,8 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@movie-web/providers@https://codeload.github.com/p-stream/providers/tar.gz/e3c8cab4cc0abfc32ddfd6126cbb4c3623e6da51':
-    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/e3c8cab4cc0abfc32ddfd6126cbb4c3623e6da51}
+  '@movie-web/providers@https://codeload.github.com/p-stream/providers/tar.gz/6de1e1f63f459458394758103b42a45c355ed960':
+    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/6de1e1f63f459458394758103b42a45c355ed960}
     version: 2.3.0
 
   '@napi-rs/wasm-runtime@0.2.9':
@@ -5288,7 +5288,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@movie-web/providers@https://codeload.github.com/p-stream/providers/tar.gz/e3c8cab4cc0abfc32ddfd6126cbb4c3623e6da51':
+  '@movie-web/providers@https://codeload.github.com/p-stream/providers/tar.gz/6de1e1f63f459458394758103b42a45c355ed960':
     dependencies:
       abort-controller: 3.0.0
       cheerio: 1.0.0-rc.12
