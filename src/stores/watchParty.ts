@@ -1,0 +1,65 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+interface WatchPartyStore {
+  // Whether the watch party feature is enabled
+  enabled: boolean;
+  // The room code for the watch party (4 digits)
+  roomCode: string | null;
+  // If the user is hosting (true) or joining (false)
+  isHost: boolean;
+  // Whether to show the status overlay on the player
+  showStatusOverlay: boolean;
+  // Enable watch party with a new room code
+  enableAsHost(): void;
+  // Enable watch party by joining an existing room
+  enableAsGuest(code: string): void;
+  // Disable watch party
+  disable(): void;
+  // Set status overlay visibility
+  setShowStatusOverlay(show: boolean): void;
+}
+
+// Generate a random 4-digit code
+const generateRoomCode = (): string => {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+};
+
+export const useWatchPartyStore = create<WatchPartyStore>()(
+  persist(
+    (set) => ({
+      enabled: false,
+      roomCode: null,
+      isHost: false,
+      showStatusOverlay: false,
+
+      enableAsHost: () =>
+        set(() => ({
+          enabled: true,
+          roomCode: generateRoomCode(),
+          isHost: true,
+        })),
+
+      enableAsGuest: (code: string) =>
+        set(() => ({
+          enabled: true,
+          roomCode: code,
+          isHost: false,
+        })),
+
+      disable: () =>
+        set(() => ({
+          enabled: false,
+          roomCode: null,
+        })),
+
+      setShowStatusOverlay: (show: boolean) =>
+        set(() => ({
+          showStatusOverlay: show,
+        })),
+    }),
+    {
+      name: "watch-party-storage",
+    },
+  ),
+);

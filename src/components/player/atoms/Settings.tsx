@@ -23,6 +23,7 @@ import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
 import { SettingsMenu } from "./settings/SettingsMenu";
 import SourceCaptionsView from "./settings/SourceCaptionsView";
+import { WatchPartyView } from "./settings/WatchPartyView";
 
 function SettingsOverlay({ id }: { id: string }) {
   const [chosenSourceId, setChosenSourceId] = useState<string | null>(null);
@@ -134,6 +135,11 @@ function SettingsOverlay({ id }: { id: string }) {
           </Menu.Card>
         </OverlayPage>
         <DownloadRoutes id={id} />
+        <OverlayPage id={id} path="/watchparty" width={343} height={460}>
+          <Menu.CardWithScrollable>
+            <WatchPartyView id={id} />
+          </Menu.CardWithScrollable>
+        </OverlayPage>
       </OverlayRouter>
     </Overlay>
   );

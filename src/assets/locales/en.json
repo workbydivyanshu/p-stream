@@ -530,7 +530,8 @@
             },
             "watchparty": {
                 "watchpartyItem": "Watch Party",
-                "notice": "Watch Party might not be available for some sources"
+                "notice": "Watch Party might not be available for some sources",
+                "legacyWatchparty": "Use legacy Watch Party"
             }
         },
         "metadata": {
@@ -931,5 +932,32 @@
             "success": "success",
             "failure": "Failed to fetch a 'VIP' stream. Token is invalid or API is down!"
         }
+    },
+    "watchParty": {
+        "status": {
+            "inSync": "In sync",
+            "outOfSync": "Out of sync"
+        },
+        "alone": "Alone",
+        "withCount": "With {{count}} others",
+        "isHost": "You are hosting a watch party",
+        "isGuest": "You are a guest in a watch party",
+        "hosting": "Hosting",
+        "watching": "Watching",
+        "syncing": "Syncing...",
+        "behindHost": "Behind host by {{seconds}} seconds",
+        "aheadOfHost": "Ahead of host by {{seconds}} seconds",
+        "showStatusOverlay": "Show status overlay",
+        "leaveWatchParty": "Leave Watch Party",
+        "shareCode": "Share this code with friends (click to copy)",
+        "connectedAsGuest": "Connected to watch party as guest",
+        "hostParty": "Host a Watch Party",
+        "joinParty": "Join a Watch Party",
+        "viewers": "Viewers ({{count}})",
+        "copyCode": "Click to copy",
+        "join": "Join",
+        "cancel": "Cancel",
+        "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
+        "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host."
     }
 }

@@ -1,5 +1,5 @@
 import { RunOutput } from "@movie-web/providers";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Navigate,
   useLocation,
@@ -12,6 +12,7 @@ import { usePlayer } from "@/components/player/hooks/usePlayer";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { convertProviderCaption } from "@/components/player/utils/captions";
 import { convertRunoutputToSource } from "@/components/player/utils/convertRunoutputToSource";
+import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { ScrapingItems, ScrapingSegment } from "@/hooks/useProviderScrape";
 import { useQueryParam } from "@/hooks/useQueryParams";
 import { MetaPart } from "@/pages/parts/player/MetaPart";
@@ -46,6 +47,8 @@ export function RealPlayerView() {
   } = usePlayer();
   const { setPlayerMeta, scrapeMedia } = usePlayerMeta();
   const backUrl = useLastNonPlayerLink();
+  const router = useOverlayRouter("settings");
+  const openedWatchPartyRef = useRef<boolean>(false);
 
   const paramsData = JSON.stringify({
     media: params.media,
@@ -54,7 +57,24 @@ export function RealPlayerView() {
   });
   useEffect(() => {
     reset();
+    // Reset watch party state when media changes
+    openedWatchPartyRef.current = false;
   }, [paramsData, reset]);
+
+  // Auto-open watch party menu if URL contains watchparty parameter
+  useEffect(() => {
+    if (openedWatchPartyRef.current) return;
+
+    if (status === playerStatus.PLAYING) {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("watchparty")) {
+        setTimeout(() => {
+          router.navigate("/watchparty");
+          openedWatchPartyRef.current = true;
+        }, 1000);
+      }
+    }
+  }, [status, router]);
 
   const metaChange = useCallback(
     (meta: PlayerMeta) => {

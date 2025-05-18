@@ -1,6 +1,7 @@
 import { ReactNode, RefObject, useEffect, useRef } from "react";
 
 import { OverlayDisplay } from "@/components/overlays/OverlayDisplay";
+import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
 import { CastingInternal } from "@/components/player/internals/CastingInternal";
 import { HeadUpdater } from "@/components/player/internals/HeadUpdater";
 import { KeyboardEvents } from "@/components/player/internals/KeyboardEvents";
@@ -10,6 +11,8 @@ import { ProgressSaver } from "@/components/player/internals/ProgressSaver";
 import { ThumbnailScraper } from "@/components/player/internals/ThumbnailScraper";
 import { VideoClickTarget } from "@/components/player/internals/VideoClickTarget";
 import { VideoContainer } from "@/components/player/internals/VideoContainer";
+import { WatchPartyResetter } from "@/components/player/internals/WatchPartyResetter";
+import { WebhookReporter } from "@/components/player/internals/WebhookReporter";
 import { PlayerHoverState } from "@/stores/player/slices/interface";
 import { usePlayerStore } from "@/stores/player/store";
 
@@ -93,7 +96,10 @@ export function Container(props: PlayerProps) {
         <ProgressSaver />
         <KeyboardEvents />
         <MediaSession />
+        <WebhookReporter />
+        <WatchPartyResetter />
         <div className="relative h-screen overflow-hidden">
+          <WatchPartyStatus />
           <VideoClickTarget showingControls={props.showingControls} />
           <HeadUpdater />
           {props.children}

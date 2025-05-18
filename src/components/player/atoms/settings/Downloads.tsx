@@ -80,7 +80,7 @@ export function DownloadView({ id }: { id: string }) {
         {t("player.menus.downloads.title")}
       </Menu.BackLink>
       <Menu.Section>
-        <div>
+        <div className="mb-4">
           {sourceType === "hls" ? (
             <div className="mb-6">
               <Menu.Paragraph marginClass="mb-6">

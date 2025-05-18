@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 
 import IosPwaLimitations from "@/components/buttons/IosPwaLimitations";
 import { BrandPill } from "@/components/layout/BrandPill";
@@ -9,6 +9,7 @@ import { Widescreen } from "@/components/player/atoms/Widescreen";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
@@ -26,6 +27,7 @@ export function PlayerPart(props: PlayerPartProps) {
   const status = usePlayerStore((s) => s.status);
   const { isMobile } = useIsMobile();
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
+  const router = useOverlayRouter("settings");
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isIOSPWA =

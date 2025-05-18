@@ -6,17 +6,13 @@ import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
-import { Paragraph } from "@/components/utils/Text";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { qualityToString } from "@/stores/player/utils/qualities";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
-import { useDownloadLink } from "./Downloads";
-
 export function SettingsMenu({ id }: { id: string }) {
-  const downloadUrl = useDownloadLink();
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const currentQuality = usePlayerStore((s) => s.currentQuality);
@@ -50,14 +46,6 @@ export function SettingsMenu({ id }: { id: string }) {
 
   const downloadable = source?.type === "file" || source?.type === "hls";
 
-  const handleWatchPartyClick = () => {
-    if (downloadUrl) {
-      const watchPartyUrl = `https://www.watchparty.me/create?video=${encodeURIComponent(
-        downloadUrl,
-      )}`;
-      window.open(watchPartyUrl);
-    }
-  };
   return (
     <Menu.Card>
       <Menu.SectionTitle>
@@ -97,15 +85,14 @@ export function SettingsMenu({ id }: { id: string }) {
         </Menu.Link>
         <Menu.Link
           clickable
-          onClick={handleWatchPartyClick}
+          onClick={() =>
+            router.navigate(downloadable ? "/watchparty" : "/download/unable")
+          }
           rightSide={<Icon className="text-xl" icon={Icons.WATCH_PARTY} />}
           className={downloadable ? "opacity-100" : "opacity-50"}
         >
-          {t("player.menus.watchparty.watchpartyItem")}
+          {t("player.menus.watchparty.watchpartyItem")} (Beta)
         </Menu.Link>
-        <Paragraph className="text-xs">
-          {t("player.menus.watchparty.notice")}
-        </Paragraph>
       </Menu.Section>
 
       <Menu.SectionTitle>
