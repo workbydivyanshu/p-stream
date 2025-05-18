@@ -74,6 +74,7 @@ export async function scrapeRottenTomatoes(
     );
   }
 
+  // eslint-disable-next-line no-console
   console.log(
     `[RT Scraper] Using ${hasExtension ? "browser extension" : "custom proxy"} for requests`,
   );
@@ -125,10 +126,7 @@ export async function scrapeRottenTomatoes(
     const movieRows = searchResultsDiv[1].match(
       /<search-page-media-row[^>]*>(.*?)<\/search-page-media-row>/gs,
     );
-    if (!movieRows || movieRows.length === 0) {
-      console.log("[RT Scraper] No movies found in search results");
-      return null;
-    }
+    if (!movieRows || movieRows.length === 0) return null;
 
     // Convert movie rows to structured data
     const movies = movieRows.map((row) => {
@@ -137,7 +135,6 @@ export async function scrapeRottenTomatoes(
       const scoreMatch = row.match(/tomatometerscore="([^"]+)"/);
       const sentimentMatch = row.match(/tomatometersentiment="([^"]+)"/);
       const yearMatch = row.match(/releaseyear="([^"]+)"/);
-      const verifiedHotMatch = row.match(/verifiedhot="([^"]+)"/);
       const tomatometeriscertified = row.match(
         /tomatometeriscertified="([^"]+)"/,
       );
@@ -165,12 +162,7 @@ export async function scrapeRottenTomatoes(
     // Try to find the best matching movie
     const match = findBestMatch(title, movies, year);
 
-    if (!match) {
-      console.log(
-        `[RT Scraper] No match found for "${title}"${year ? ` (${year})` : ""} among ${movies.length} results`,
-      );
-      return null;
-    }
+    if (!match) return null;
 
     // Extract the movie data
     return {
