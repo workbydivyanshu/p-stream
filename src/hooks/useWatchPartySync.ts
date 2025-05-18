@@ -91,7 +91,7 @@ export function useWatchPartySync(
       const params = new URLSearchParams(window.location.search);
       const watchPartyCode = params.get("watchparty");
 
-      if (watchPartyCode && !enabled && watchPartyCode.length === 4) {
+      if (watchPartyCode && !enabled && watchPartyCode.length > 0) {
         enableAsGuest(watchPartyCode);
       }
 

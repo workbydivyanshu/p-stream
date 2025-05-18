@@ -957,6 +957,7 @@
         "copyCode": "Click to copy",
         "join": "Join",
         "cancel": "Cancel",
+        "save": "Save",
         "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
         "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
         "validating": "Validating watch party..."

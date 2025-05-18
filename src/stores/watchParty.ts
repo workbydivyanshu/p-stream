@@ -14,6 +14,8 @@ interface WatchPartyStore {
   enableAsHost(): void;
   // Enable watch party by joining an existing room
   enableAsGuest(code: string): void;
+  // Update the room code
+  updateRoomCode(code: string): void;
   // Disable watch party
   disable(): void;
   // Set status overlay visibility
@@ -45,6 +47,12 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
           enabled: true,
           roomCode: code,
           isHost: false,
+        })),
+
+      updateRoomCode: (code: string) =>
+        set((state) => ({
+          ...state,
+          roomCode: code,
         })),
 
       disable: () =>

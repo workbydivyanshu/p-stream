@@ -23,6 +23,8 @@ export function WatchPartyView({ id }: { id: string }) {
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [backendName, setBackendName] = useState("");
+  const [editingCode, setEditingCode] = useState(false);
+  const [customCode, setCustomCode] = useState("");
   const backendUrl = useBackendUrl();
 
   const backendMeta = useAsync(async () => {
@@ -41,6 +43,7 @@ export function WatchPartyView({ id }: { id: string }) {
     isHost,
     enableAsHost,
     enableAsGuest,
+    updateRoomCode,
     disable,
     showStatusOverlay,
     setShowStatusOverlay,
@@ -48,6 +51,19 @@ export function WatchPartyView({ id }: { id: string }) {
 
   // Watch party sync data
   const { roomUsers } = useWatchPartySync();
+
+  // Auto-host timer
+  useEffect(() => {
+    if (!enabled || isHost || roomUsers.length > 1) return;
+
+    const timer = setTimeout(() => {
+      if (roomUsers.length <= 1) {
+        enableAsHost();
+      }
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, [enabled, isHost, roomUsers.length, enableAsHost]);
 
   // Fetch backend name
   useEffect(() => {
@@ -103,7 +119,7 @@ export function WatchPartyView({ id }: { id: string }) {
   };
 
   const handleJoinParty = () => {
-    if (joinCode.length === 4) {
+    if (joinCode.length > 0) {
       setIsJoining(true);
       enableAsGuest(joinCode);
       setShowJoinInput(false);
@@ -122,6 +138,25 @@ export function WatchPartyView({ id }: { id: string }) {
       const url = new URL(window.location.href);
       url.searchParams.set("watchparty", roomCode);
       navigator.clipboard.writeText(url.toString());
+    }
+  };
+
+  const handleEditCode = () => {
+    if (isHost && roomCode) {
+      setCustomCode(roomCode);
+      setEditingCode(true);
+    }
+  };
+
+  const handleSaveCode = () => {
+    if (customCode.length > 0) {
+      updateRoomCode(customCode);
+      if (roomCode) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("watchparty", customCode);
+        window.history.replaceState({}, "", url.toString());
+      }
+      setEditingCode(false);
     }
   };
 
@@ -161,21 +196,63 @@ export function WatchPartyView({ id }: { id: string }) {
                         </Trans>
                       </div>
                       <div
-                        className="flex items-center justify-center p-3 bg-mediaCard-hoverBackground rounded-lg border border-mediaCard-hoverAccent border-opacity-20 cursor-pointer transition-all duration-300 hover:bg-mediaCard-hoverShadow group"
-                        onClick={handleCopyCode}
-                        title={t("watchParty.copyCode")}
+                        className="relative flex items-center justify-center p-3 bg-mediaCard-hoverBackground rounded-lg border border-mediaCard-hoverAccent border-opacity-20 cursor-pointer transition-all duration-300 hover:bg-mediaCard-hoverShadow group"
+                        onClick={editingCode ? undefined : handleCopyCode}
+                        title={
+                          editingCode ? undefined : t("watchParty.copyCode")
+                        }
                       >
-                        <input
-                          type="text"
-                          readOnly
-                          value={roomCode || ""}
-                          className="bg-transparent border-none text-center text-2xl font-mono tracking-widest w-full outline-none cursor-pointer text-type-logo"
-                          onClick={(e) => {
-                            if (e.target instanceof HTMLInputElement) {
-                              e.target.select();
-                            }
-                          }}
-                        />
+                        {isHost && !editingCode && (
+                          <div
+                            className="absolute top-2 right-2 p-1 hover:bg-mediaCard-hoverShadow rounded-full transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditCode();
+                            }}
+                          >
+                            <Icon
+                              icon={Icons.EDIT}
+                              className="w-3 h-3 text-type-secondary hover:text-type-logo"
+                            />
+                          </div>
+                        )}
+                        {editingCode ? (
+                          <div className="flex w-full gap-2">
+                            <input
+                              type="text"
+                              value={customCode}
+                              maxLength={10}
+                              className="bg-transparent border-none text-center font-mono tracking-widest w-full outline-none text-type-logo text-[min(2rem,4vw)]"
+                              onChange={(e) =>
+                                setCustomCode(e.target.value.toUpperCase())
+                              }
+                              onClick={(e) => e.stopPropagation()}
+                              autoFocus
+                            />
+                            <Button
+                              theme="purple"
+                              className="px-2 py-1  text-xs"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSaveCode();
+                              }}
+                            >
+                              {t("watchParty.save")}
+                            </Button>
+                          </div>
+                        ) : (
+                          <input
+                            type="text"
+                            readOnly
+                            value={roomCode || ""}
+                            className="bg-transparent border-none text-center font-mono tracking-widest w-full outline-none cursor-pointer text-type-logo text-[min(2rem,4vw)]"
+                            onClick={(e) => {
+                              if (e.target instanceof HTMLInputElement) {
+                                e.target.select();
+                              }
+                            }}
+                          />
+                        )}
                       </div>
                       <p className="text-xs text-center text-type-secondary">
                         {isHost
@@ -260,14 +337,12 @@ export function WatchPartyView({ id }: { id: string }) {
                   <div className="space-y-2">
                     <input
                       type="text"
-                      maxLength={4}
+                      maxLength={10}
                       className="w-full p-2 text-center text-2xl tracking-widest bg-mediaCard-hoverBackground border border-mediaCard-hoverAccent border-opacity-20 rounded-lg text-type-logo"
-                      placeholder="0000"
+                      placeholder="ABCD123456"
                       value={joinCode}
                       onChange={(e) =>
-                        setJoinCode(
-                          e.target.value.replace(/[^0-9]/g, "").slice(0, 4),
-                        )
+                        setJoinCode(e.target.value.toUpperCase())
                       }
                     />
                     <div className="flex space-x-2">
@@ -282,7 +357,7 @@ export function WatchPartyView({ id }: { id: string }) {
                         className="w-full"
                         theme="purple"
                         onClick={handleJoinParty}
-                        disabled={joinCode.length !== 4}
+                        disabled={joinCode.length === 0}
                       >
                         {t("watchParty.join")}
                       </Button>
