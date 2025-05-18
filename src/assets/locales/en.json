@@ -221,6 +221,7 @@
         "imdb": "View on IMDb",
         "episodes": "Episodes",
         "season": "Season",
+        "episode": "Episode",
         "airs": "Airs"
     },
     "migration": {

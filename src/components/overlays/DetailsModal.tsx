@@ -128,6 +128,10 @@ function DetailsContent({
   const [, setIsLoadingImdb] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
+  const [showEpisodeMenu, setShowEpisodeMenu] = useState(false);
+  const [customSeason, setCustomSeason] = useState("");
+  const [customEpisode, setCustomEpisode] = useState("");
+  const episodeMenuRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const progress = useProgressStore((s) => s.items);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -363,6 +367,48 @@ function DetailsContent({
       videoRef.current.volume = 0.4;
     }
   }, []);
+
+  // Add click outside handler for episode menu
+  useEffect(() => {
+    if (!showEpisodeMenu) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        episodeMenuRef.current &&
+        !episodeMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowEpisodeMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showEpisodeMenu]);
+
+  const handleCustomNavigation = () => {
+    const season = parseInt(customSeason, 10);
+    const episode = parseInt(customEpisode, 10);
+
+    if (Number.isNaN(season) || Number.isNaN(episode) || !data.id) return;
+
+    // Find the season
+    const seasonData = data.seasonData?.seasons.find(
+      (s) => s.season_number === season,
+    );
+    if (!seasonData) return;
+
+    // Find the episode
+    const episodeData = data.seasonData?.episodes.find(
+      (e) => e.season_number === season && e.episode_number === episode,
+    );
+    if (!episodeData) return;
+
+    // Navigate to the episode
+    window.location.assign(
+      `/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${seasonData.id}/${episodeData.id}`,
+    );
+    setShowEpisodeMenu(false);
+  };
 
   return (
     <div className="relative h-full flex flex-col">
@@ -662,9 +708,66 @@ function DetailsContent({
           <div className="mt-6 md:mt-0">
             {/* Season Selector */}
             <div className="flex justify-between items-center mb-3">
-              <h4 className="text-lg font-semibold text-white">
-                {t("details.episodes")}
-              </h4>
+              <div className="flex items-center gap-3">
+                <h4 className="text-lg font-semibold text-white">
+                  {t("details.episodes")}
+                </h4>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setShowEpisodeMenu(!showEpisodeMenu)}
+                    className="p-2 rounded-full hover:bg-white/10 transition-colors"
+                    title={t("details.goToEpisode")}
+                  >
+                    <Icon icon={Icons.SEARCH} className="text-white/80" />
+                  </button>
+
+                  {/* Episode Selection Menu */}
+                  {showEpisodeMenu && (
+                    <div
+                      ref={episodeMenuRef}
+                      className="absolute top-full left-0 mt-2 p-4 bg-background-main rounded-lg shadow-lg border border-white/10 z-50 min-w-[250px]"
+                    >
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm text-white/80 mb-1">
+                            {t("details.season")}
+                          </label>
+                          <input
+                            type="number"
+                            value={customSeason}
+                            onChange={(e) => setCustomSeason(e.target.value)}
+                            min="1"
+                            max={data.seasonData.seasons.length}
+                            className="w-full px-3 py-2 bg-white/5 rounded border border-white/10 text-white focus:outline-none focus:border-white/30"
+                            placeholder={t("details.season")}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm text-white/80 mb-1">
+                            {t("details.episode")}
+                          </label>
+                          <input
+                            type="number"
+                            value={customEpisode}
+                            onChange={(e) => setCustomEpisode(e.target.value)}
+                            min="1"
+                            className="w-full px-3 py-2 bg-white/5 rounded border border-white/10 text-white focus:outline-none focus:border-white/30"
+                            placeholder={t("details.episode")}
+                          />
+                        </div>
+                        <Button
+                          theme="purple"
+                          onClick={handleCustomNavigation}
+                          className="w-full px-4 py-2"
+                        >
+                          {t("details.play")}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
               <Dropdown
                 options={data.seasonData.seasons.map((season) => ({
                   id: season.season_number.toString(),
