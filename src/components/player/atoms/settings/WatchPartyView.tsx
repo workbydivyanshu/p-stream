@@ -1,11 +1,14 @@
 /* eslint-disable no-alert */
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
+import { useAsync } from "react-use";
 
+import { getBackendMeta } from "@/backend/accounts/meta";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
 import { Menu } from "@/components/player/internals/ContextMenu";
+import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useWatchPartyStore } from "@/stores/watchParty";
@@ -19,6 +22,17 @@ export function WatchPartyView({ id }: { id: string }) {
   const [joinCode, setJoinCode] = useState("");
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
+  const [backendName, setBackendName] = useState("");
+  const backendUrl = useBackendUrl();
+
+  const backendMeta = useAsync(async () => {
+    if (!backendUrl) return;
+    return getBackendMeta(backendUrl);
+  }, [backendUrl]);
+
+  const backendSupportsWatchParty = backendMeta?.value?.version
+    ? backendMeta.value.version >= "2.0.1"
+    : false;
 
   // Watch party store access
   const {
@@ -34,6 +48,19 @@ export function WatchPartyView({ id }: { id: string }) {
 
   // Watch party sync data
   const { roomUsers } = useWatchPartySync();
+
+  // Fetch backend name
+  useEffect(() => {
+    if (backendUrl && enabled) {
+      getBackendMeta(backendUrl)
+        .then((meta) => {
+          setBackendName(meta.name);
+        })
+        .catch(() => {
+          setBackendName("Unknown Server");
+        });
+    }
+  }, [backendUrl, enabled]);
 
   // Listen for validation status events
   useEffect(() => {
@@ -113,173 +140,180 @@ export function WatchPartyView({ id }: { id: string }) {
             {t("player.menus.watchparty.notice")}
           </Menu.Paragraph>
 
-          {enabled ? (
-            <div className="space-y-4">
-              {isJoining ? (
-                <div className="text-center py-4">
-                  <Spinner />
-                  <p className="text-sm text-type-secondary">
-                    {t("watchParty.validating")}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-center">
-                      <span className="text-sm text-type-secondary">
-                        {isHost
-                          ? t("watchParty.isHost")
-                          : t("watchParty.isGuest")}
-                      </span>
-                    </div>
-                    <div
-                      className="flex items-center justify-center p-3 bg-mediaCard-hoverBackground rounded-lg border border-mediaCard-hoverAccent border-opacity-20 cursor-pointer transition-all duration-300 hover:bg-mediaCard-hoverShadow group"
-                      onClick={handleCopyCode}
-                      title={t("watchParty.copyCode")}
-                    >
-                      <input
-                        type="text"
-                        readOnly
-                        value={roomCode || ""}
-                        className="bg-transparent border-none text-center text-2xl font-mono tracking-widest w-full outline-none cursor-pointer text-type-logo"
-                        onClick={(e) => {
-                          if (e.target instanceof HTMLInputElement) {
-                            e.target.select();
-                          }
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-center text-type-secondary">
-                      {isHost
-                        ? t("watchParty.shareCode")
-                        : t("watchParty.connectedAsGuest")}
+          {backendSupportsWatchParty &&
+            (enabled ? (
+              <div className="space-y-4">
+                {isJoining ? (
+                  <div className="text-center py-4">
+                    <Spinner />
+                    <p className="text-sm text-type-secondary">
+                      {t("watchParty.validating")}
                     </p>
                   </div>
-
-                  {roomUsers.length > 1 && (
-                    <div className="bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent border-opacity-20">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium text-white">
-                          {t("watchParty.viewers", { count: roomUsers.length })}
-                        </span>
+                ) : (
+                  <>
+                    <div className="flex flex-col gap-2">
+                      <div className="text-center">
+                        <Trans
+                          i18nKey={
+                            isHost ? "watchParty.isHost" : "watchParty.isGuest"
+                          }
+                          values={{ backendName }}
+                          className="text-sm text-type-secondary"
+                        >
+                          <span className="text-type-logo" />
+                        </Trans>
                       </div>
-                      <div className="max-h-32 overflow-y-auto space-y-1">
-                        {roomUsers.map((user) => (
-                          <div
-                            key={user.userId}
-                            className="flex items-center justify-between text-xs py-1"
-                          >
-                            <span className="flex items-center gap-1">
-                              <Icon
-                                icon={
-                                  user.isHost ? Icons.RISING_STAR : Icons.USER
-                                }
-                                className={`w-3 h-3 ${user.isHost ? "text-onboarding-best" : "text-type-secondary"}`}
-                              />
-                              <span
-                                className={
-                                  user.isHost
-                                    ? "text-onboarding-best"
-                                    : "text-type-secondary"
-                                }
-                              >
-                                {user.userId.substring(0, 8)}...
-                              </span>
-                            </span>
-                            <span className="text-type-secondary">
-                              {user.player.duration > 0
-                                ? `${Math.floor((user.player.time / user.player.duration) * 100)}%`
-                                : `${Math.floor(user.player.time)}s`}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex flex-col space-y-4">
-                    <div className="flex items-center justify-between bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent border-opacity-20">
-                      <span className="text-white">
-                        {t("watchParty.showStatusOverlay")}
-                      </span>
-                      <label className="relative inline-flex items-center cursor-pointer">
+                      <div
+                        className="flex items-center justify-center p-3 bg-mediaCard-hoverBackground rounded-lg border border-mediaCard-hoverAccent border-opacity-20 cursor-pointer transition-all duration-300 hover:bg-mediaCard-hoverShadow group"
+                        onClick={handleCopyCode}
+                        title={t("watchParty.copyCode")}
+                      >
                         <input
-                          type="checkbox"
-                          className="sr-only peer"
-                          checked={showStatusOverlay}
-                          onChange={toggleStatusOverlay}
+                          type="text"
+                          readOnly
+                          value={roomCode || ""}
+                          className="bg-transparent border-none text-center text-2xl font-mono tracking-widest w-full outline-none cursor-pointer text-type-logo"
+                          onClick={(e) => {
+                            if (e.target instanceof HTMLInputElement) {
+                              e.target.select();
+                            }
+                          }}
                         />
-                        <div className="w-9 h-5 bg-mediaCard-hoverBackground rounded-full peer peer-checked:bg-buttons-purple peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-mediaCard-hoverAccent after:border after:rounded-full after:h-4 after:w-4 after:transition-all" />
-                      </label>
+                      </div>
+                      <p className="text-xs text-center text-type-secondary">
+                        {isHost
+                          ? t("watchParty.shareCode")
+                          : t("watchParty.connectedAsGuest")}
+                      </p>
                     </div>
 
-                    <Button
-                      className="w-full"
-                      theme="danger"
-                      onClick={handleDisableParty}
-                    >
-                      {t("watchParty.leaveWatchParty")}
-                    </Button>
+                    {roomUsers.length > 1 && (
+                      <div className="bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent border-opacity-20">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm font-medium text-white">
+                            {t("watchParty.viewers", {
+                              count: roomUsers.length,
+                            })}
+                          </span>
+                        </div>
+                        <div className="max-h-32 overflow-y-auto space-y-1">
+                          {roomUsers.map((user) => (
+                            <div
+                              key={user.userId}
+                              className="flex items-center justify-between text-xs py-1"
+                            >
+                              <span className="flex items-center gap-1">
+                                <Icon
+                                  icon={
+                                    user.isHost ? Icons.RISING_STAR : Icons.USER
+                                  }
+                                  className={`w-3 h-3 ${user.isHost ? "text-onboarding-best" : "text-type-secondary"}`}
+                                />
+                                <span
+                                  className={
+                                    user.isHost
+                                      ? "text-onboarding-best"
+                                      : "text-type-secondary"
+                                  }
+                                >
+                                  {user.userId.substring(0, 8)}...
+                                </span>
+                              </span>
+                              <span className="text-type-secondary">
+                                {user.player.duration > 0
+                                  ? `${Math.floor((user.player.time / user.player.duration) * 100)}%`
+                                  : `${Math.floor(user.player.time)}s`}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex items-center justify-between bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent border-opacity-20">
+                        <span className="text-white">
+                          {t("watchParty.showStatusOverlay")}
+                        </span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={showStatusOverlay}
+                            onChange={toggleStatusOverlay}
+                          />
+                          <div className="w-9 h-5 bg-mediaCard-hoverBackground rounded-full peer peer-checked:bg-buttons-purple peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-mediaCard-hoverAccent after:border after:rounded-full after:h-4 after:w-4 after:transition-all" />
+                        </label>
+                      </div>
+
+                      <Button
+                        className="w-full"
+                        theme="danger"
+                        onClick={handleDisableParty}
+                      >
+                        {t("watchParty.leaveWatchParty")}
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {showJoinInput ? (
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      maxLength={4}
+                      className="w-full p-2 text-center text-2xl tracking-widest bg-mediaCard-hoverBackground border border-mediaCard-hoverAccent border-opacity-20 rounded-lg text-type-logo"
+                      placeholder="0000"
+                      value={joinCode}
+                      onChange={(e) =>
+                        setJoinCode(
+                          e.target.value.replace(/[^0-9]/g, "").slice(0, 4),
+                        )
+                      }
+                    />
+                    <div className="flex space-x-2">
+                      <Button
+                        className="w-full"
+                        theme="secondary"
+                        onClick={() => setShowJoinInput(false)}
+                      >
+                        {t("watchParty.cancel")}
+                      </Button>
+                      <Button
+                        className="w-full"
+                        theme="purple"
+                        onClick={handleJoinParty}
+                        disabled={joinCode.length !== 4}
+                      >
+                        {t("watchParty.join")}
+                      </Button>
+                    </div>
                   </div>
-                </>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {showJoinInput ? (
-                <div className="space-y-2">
-                  <input
-                    type="text"
-                    maxLength={4}
-                    className="w-full p-2 text-center text-2xl tracking-widest bg-mediaCard-hoverBackground border border-mediaCard-hoverAccent border-opacity-20 rounded-lg text-type-logo"
-                    placeholder="0000"
-                    value={joinCode}
-                    onChange={(e) =>
-                      setJoinCode(
-                        e.target.value.replace(/[^0-9]/g, "").slice(0, 4),
-                      )
-                    }
-                  />
-                  <div className="flex space-x-2">
-                    <Button
-                      className="w-full"
-                      theme="secondary"
-                      onClick={() => setShowJoinInput(false)}
-                    >
-                      {t("watchParty.cancel")}
-                    </Button>
+                ) : (
+                  <div className="space-y-4">
                     <Button
                       className="w-full"
                       theme="purple"
-                      onClick={handleJoinParty}
-                      disabled={joinCode.length !== 4}
+                      onClick={handleHostParty}
                     >
-                      {t("watchParty.join")}
+                      {t("watchParty.hostParty")}
+                    </Button>
+                    <Button
+                      className="w-full"
+                      theme="secondary"
+                      onClick={() => setShowJoinInput(true)}
+                    >
+                      {t("watchParty.joinParty")}
                     </Button>
                   </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <Button
-                    className="w-full"
-                    theme="purple"
-                    onClick={handleHostParty}
-                  >
-                    {t("watchParty.hostParty")}
-                  </Button>
-                  <Button
-                    className="w-full"
-                    theme="secondary"
-                    onClick={() => setShowJoinInput(true)}
-                  >
-                    {t("watchParty.joinParty")}
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            ))}
 
-          <Menu.Divider />
+          {backendSupportsWatchParty && <Menu.Divider />}
 
           <Menu.Link
             clickable

@@ -940,8 +940,8 @@
         },
         "alone": "Alone",
         "withCount": "With {{count}} others",
-        "isHost": "You are hosting a watch party",
-        "isGuest": "You are a guest in a watch party",
+        "isHost": "Hosting on <0>{{backendName}}</0>",
+        "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
         "hosting": "Hosting",
         "watching": "Watching",
         "syncing": "Syncing...",
@@ -958,6 +958,7 @@
         "join": "Join",
         "cancel": "Cancel",
         "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-        "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host."
+        "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
+        "validating": "Validating watch party..."
     }
 }
