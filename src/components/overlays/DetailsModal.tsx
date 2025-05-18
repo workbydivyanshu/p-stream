@@ -490,7 +490,15 @@ function DetailsContent({
             >
               <Icon icon={Icons.PLAY} className="text-white" />
               <span className="text-white text-sm pr-1">
-                {showProgress ? t("details.resume") : t("details.play")}
+                {data.type === "movie"
+                  ? !data.releaseDate || new Date(data.releaseDate) > new Date()
+                    ? t("media.unreleased")
+                    : showProgress
+                      ? t("details.resume")
+                      : t("details.play")
+                  : showProgress
+                    ? t("details.resume")
+                    : t("details.play")}
               </span>
             </Button>
           )}
@@ -587,59 +595,64 @@ function DetailsContent({
                   {data.rating}
                 </div>
               )}
-              {data.voteAverage !== undefined &&
-                data.voteCount !== undefined &&
-                data.voteCount > 0 && (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-white/80">
-                      <span className="font-medium">{t("details.rating")}</span>{" "}
-                      <span className="text-white/90">
-                        {imdbData?.imdb_rating
-                          ? `${imdbData.imdb_rating.toFixed(1)}/10 (IMDb)`
-                          : `${data.voteAverage.toFixed(1)}/10 (TMDB)`}
-                      </span>
-                    </div>
-                    {/* Rating Progress Bar */}
-                    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full ${getRatingColor(imdbData?.imdb_rating || data.voteAverage)} transition-all duration-500`}
-                        style={{
-                          width: `${((imdbData?.imdb_rating || data.voteAverage) / 10) * 100}%`,
-                        }}
-                      />
-                    </div>
-                    <div className="text-white/60 text-[10px] text-right">
-                      {formatVoteCount(imdbData?.votes || data.voteCount)}{" "}
-                      {t("details.votes")}
-                    </div>
+              {/* Rating and External Links Section */}
+              <div className="space-y-1">
+                {data.voteAverage !== undefined &&
+                  data.voteCount !== undefined &&
+                  data.voteCount > 0 && (
+                    <>
+                      <div className="flex items-center gap-1 text-white/80">
+                        <span className="font-medium">
+                          {t("details.rating")}
+                        </span>{" "}
+                        <span className="text-white/90">
+                          {imdbData?.imdb_rating
+                            ? `${imdbData.imdb_rating.toFixed(1)}/10 (IMDb)`
+                            : `${data.voteAverage.toFixed(1)}/10 (TMDB)`}
+                        </span>
+                      </div>
+                      {/* Rating Progress Bar */}
+                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full ${getRatingColor(imdbData?.imdb_rating || data.voteAverage)} transition-all duration-500`}
+                          style={{
+                            width: `${((imdbData?.imdb_rating || data.voteAverage) / 10) * 100}%`,
+                          }}
+                        />
+                      </div>
+                      <div className="text-white/60 text-[10px] text-right">
+                        {formatVoteCount(imdbData?.votes || data.voteCount)}{" "}
+                        {t("details.votes")}
+                      </div>
+                    </>
+                  )}
 
-                    {/* External Links */}
-                    <div className="flex gap-3 mt-2">
-                      {data.id && (
-                        <a
-                          href={`https://www.themoviedb.org/${data.type === "show" ? "tv" : "movie"}/${data.id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-[#0d253f] flex items-center justify-center transition-transform hover:scale-110"
-                          title={t("details.tmdb")}
-                        >
-                          <Icon icon={Icons.TMDB} className="text-white" />
-                        </a>
-                      )}
-                      {data.imdbId && (
-                        <a
-                          href={`https://www.imdb.com/title/${data.imdbId}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center transition-transform hover:scale-110"
-                          title={t("details.imdb")}
-                        >
-                          <Icon icon={Icons.IMDB} className="text-black" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                )}
+                {/* External Links - Now outside the vote count condition */}
+                <div className="flex gap-3 mt-2">
+                  {data.id && (
+                    <a
+                      href={`https://www.themoviedb.org/${data.type === "show" ? "tv" : "movie"}/${data.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-[#0d253f] flex items-center justify-center transition-transform hover:scale-110"
+                      title={t("details.tmdb")}
+                    >
+                      <Icon icon={Icons.TMDB} className="text-white" />
+                    </a>
+                  )}
+                  {data.imdbId && (
+                    <a
+                      href={`https://www.imdb.com/title/${data.imdbId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center transition-transform hover:scale-110"
+                      title={t("details.imdb")}
+                    >
+                      <Icon icon={Icons.IMDB} className="text-black" />
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
