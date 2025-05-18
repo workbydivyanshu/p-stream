@@ -20,6 +20,7 @@ import { useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { getRTIcon, scrapeRottenTomatoes } from "@/utils/rottenTomatoesScraper";
 
 import { useModal } from "./Modal";
 import { OverlayPortal } from "./OverlayDisplay";
@@ -126,6 +127,7 @@ function DetailsContent({
   minimal?: boolean;
 }) {
   const [imdbData, setImdbData] = useState<any>(null);
+  const [rtData, setRtData] = useState<any>(null);
   const [, setIsLoadingImdb] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
@@ -243,7 +245,7 @@ function DetailsContent({
   };
 
   useEffect(() => {
-    const fetchImdbData = async () => {
+    const fetchExternalData = async () => {
       if (!data.imdbId) return;
 
       setIsLoadingImdb(true);
@@ -252,7 +254,7 @@ function DetailsContent({
         const userLanguage = useLanguageStore.getState().language;
         const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
-        // Pass the language to the scrapeIMDb function
+        // Fetch IMDb data
         const imdbMetadata = await scrapeIMDb(
           data.imdbId,
           undefined,
@@ -260,15 +262,26 @@ function DetailsContent({
           formattedLanguage,
         );
         setImdbData(imdbMetadata);
+
+        // Fetch Rotten Tomatoes data
+        if (data.type === "movie") {
+          const rtMetadata = await scrapeRottenTomatoes(
+            data.title,
+            data.releaseDate
+              ? new Date(data.releaseDate).getFullYear()
+              : undefined,
+          );
+          setRtData(rtMetadata);
+        }
       } catch (error) {
-        console.error("Failed to fetch IMDb data:", error);
+        console.error("Failed to fetch external data:", error);
       } finally {
         setIsLoadingImdb(false);
       }
     };
 
-    fetchImdbData();
-  }, [data.imdbId]);
+    fetchExternalData();
+  }, [data.imdbId, data.title, data.releaseDate, data.type]);
 
   const formatRuntime = (minutes?: number | null) => {
     if (!minutes) return null;
@@ -720,6 +733,25 @@ function DetailsContent({
                     >
                       <Icon icon={Icons.IMDB} className="text-black" />
                     </a>
+                  )}
+                  {rtData && (
+                    <div className="flex items-center gap-1">
+                      <div className="flex flex-col items-center justify-center gap-1">
+                        <div
+                          className="flex items-center gap-1"
+                          title="Tomatometer"
+                        >
+                          <img
+                            src={getRTIcon(rtData.tomatoIcon)}
+                            alt="Tomatometer"
+                            className="w-8 h-8"
+                          />
+                          <span className="text-sm pl-1 text-white/80">
+                            {rtData.tomatoScore}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
