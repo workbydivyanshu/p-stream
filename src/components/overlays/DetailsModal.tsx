@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { t } from "i18next";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { getMediaBackdrop, getMediaDetails } from "@/backend/metadata/tmdb";
@@ -274,6 +275,17 @@ function DetailsContent({
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+  };
+
+  const getEndTime = (runtime?: number | null) => {
+    if (!runtime) return null;
+    const now = new Date();
+    const endTime = new Date(now.getTime() + runtime * 60000);
+    return endTime.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
   };
 
   const formatVoteCount = (count?: number) => {
@@ -616,9 +628,21 @@ function DetailsContent({
           <div className="md:col-span-1">
             <div className="space-y-3 text-xs">
               {data.runtime && (
-                <div className="flex items-center gap-1 text-white/80">
-                  <span className="font-medium">{t("details.runtime")}</span>{" "}
-                  {formatRuntime(data.runtime)}
+                <div className="flex flex-wrap items-center gap-2 text-white/80">
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium">{t("details.runtime")}</span>{" "}
+                    {formatRuntime(data.runtime)}
+                  </div>
+                  {data.type === "movie" && (
+                    <div className="flex items-center gap-1">
+                      <span className="hidden lg:inline mx-1">•</span>
+                      <Trans
+                        i18nKey="details.endsAt"
+                        className="font-medium"
+                        values={{ time: getEndTime(data.runtime) }}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
               {data.language && (
