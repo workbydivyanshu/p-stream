@@ -476,7 +476,7 @@ export function EpisodesRouter(props: EpisodesProps) {
   return <EpisodesOverlay onChange={props.onChange} id="episodes" />;
 }
 
-export function Episodes() {
+export function Episodes(props: { inControl: boolean }) {
   const { t } = useTranslation();
   const router = useOverlayRouter("episodes");
   const setHasOpenOverlay = usePlayerStore((s) => s.setHasOpenOverlay);
@@ -485,7 +485,7 @@ export function Episodes() {
   useEffect(() => {
     setHasOpenOverlay(router.isRouterActive);
   }, [setHasOpenOverlay, router.isRouterActive]);
-  if (type !== "show") return null;
+  if (type !== "show" || !props.inControl) return null;
 
   return (
     <OverlayAnchor id={router.id}>

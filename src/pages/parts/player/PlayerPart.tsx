@@ -9,9 +9,9 @@ import { Widescreen } from "@/components/player/atoms/Widescreen";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { useWatchPartyStore } from "@/stores/watchParty";
 
 import { ScrapingPartInterruptButton, Tips } from "./ScrapingPart";
 
@@ -27,7 +27,9 @@ export function PlayerPart(props: PlayerPartProps) {
   const status = usePlayerStore((s) => s.status);
   const { isMobile } = useIsMobile();
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
-  const router = useOverlayRouter("settings");
+  const { isHost, enabled } = useWatchPartyStore();
+
+  const inControl = !enabled || isHost;
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isIOSPWA =
@@ -95,12 +97,12 @@ export function PlayerPart(props: PlayerPartProps) {
         className="text-white"
         show={showTouchTargets && status === playerStatus.PLAYING}
       >
-        <Player.SkipBackward iconSizeClass="text-3xl" />
+        <Player.SkipBackward iconSizeClass="text-3xl" inControl={inControl} />
         <Player.Pause
           iconSizeClass="text-5xl"
           className={isLoading ? "opacity-0" : "opacity-100"}
         />
-        <Player.SkipForward iconSizeClass="text-3xl" />
+        <Player.SkipForward iconSizeClass="text-3xl" inControl={inControl} />
       </Player.CenterMobileControls>
 
       <Player.TopControls show={showTargets}>
@@ -149,15 +151,15 @@ export function PlayerPart(props: PlayerPartProps) {
             {status === playerStatus.PLAYING ? (
               <>
                 <Player.Pause />
-                <Player.SkipBackward />
-                <Player.SkipForward />
+                <Player.SkipBackward inControl={inControl} />
+                <Player.SkipForward inControl={inControl} />
                 <Player.Volume />
                 <Player.Time />
               </>
             ) : null}
           </Player.LeftSideControls>
           <div className="flex items-center space-x-3">
-            <Player.Episodes />
+            <Player.Episodes inControl={inControl} />
             {status === playerStatus.PLAYING ? (
               <>
                 <Player.Pip />
@@ -186,7 +188,7 @@ export function PlayerPart(props: PlayerPartProps) {
           <div className="flex justify-center space-x-3">
             {/* Disable PiP for iOS PWA */}
             {!isIOSPWA && status === playerStatus.PLAYING && <Player.Pip />}
-            <Player.Episodes />
+            <Player.Episodes inControl={inControl} />
             {status === playerStatus.PLAYING ? (
               <div className="hidden ssm:block">
                 <Player.Captions />
@@ -219,9 +221,14 @@ export function PlayerPart(props: PlayerPartProps) {
       <Player.NextEpisodeButton
         controlsShowing={showTargets}
         onChange={props.onMetaChange}
+        inControl={inControl}
       />
 
-      <SkipIntroButton controlsShowing={showTargets} skipTime={skiptime} />
+      <SkipIntroButton
+        controlsShowing={showTargets}
+        skipTime={skiptime}
+        inControl={inControl}
+      />
     </Player.Container>
   );
 }

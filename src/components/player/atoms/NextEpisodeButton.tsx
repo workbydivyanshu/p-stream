@@ -93,6 +93,7 @@ function useNextSeasonEpisode(
 export function NextEpisodeButton(props: {
   controlsShowing: boolean;
   onChange?: (meta: PlayerMeta) => void;
+  inControl: boolean;
 }) {
   const { t } = useTranslation();
   const duration = usePlayerStore((s) => s.progress.duration);
@@ -208,6 +209,7 @@ export function NextEpisodeButton(props: {
     time,
   ]);
 
+  if (!props.inControl) return null;
   if (!meta?.episode || !nextEp) return null;
   if (metaType !== "show") return null;
 

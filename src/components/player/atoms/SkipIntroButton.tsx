@@ -42,18 +42,12 @@ function Button(props: {
 export function SkipIntroButton(props: {
   controlsShowing: boolean;
   skipTime?: number | null;
+  inControl: boolean;
 }) {
   const time = usePlayerStore((s) => s.progress.time);
   const status = usePlayerStore((s) => s.status);
   const display = usePlayerStore((s) => s.display);
-
   const showingState = shouldShowSkipButton(time, props.skipTime);
-
-  let show = false;
-  if (showingState === "always") show = true;
-  else if (showingState === "hover" && props.controlsShowing) show = true;
-  if (status !== "playing") show = false;
-
   const animation = showingState === "hover" ? "slide-up" : "fade";
   let bottom = "bottom-[calc(6rem+env(safe-area-inset-bottom))]";
   if (showingState === "always") {
@@ -61,12 +55,17 @@ export function SkipIntroButton(props: {
       ? bottom
       : "bottom-[calc(3rem+env(safe-area-inset-bottom))]";
   }
-
   const handleSkip = useCallback(() => {
     if (typeof props.skipTime === "number" && display) {
       display.setTime(props.skipTime);
     }
   }, [props.skipTime, display]);
+  if (!props.inControl) return null;
+
+  let show = false;
+  if (showingState === "always") show = true;
+  else if (showingState === "hover" && props.controlsShowing) show = true;
+  if (status !== "playing") show = false;
 
   return (
     <Transition
