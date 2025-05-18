@@ -182,12 +182,12 @@ export function getRTIcon(
 ): string {
   switch (type) {
     case "certified_fresh":
-      return "/src/assets/tomatoes/Certified_Fresh.svg";
+      return "/tomatoes/Certified_Fresh.svg";
     case "fresh":
-      return "/src/assets/tomatoes/Fresh.svg";
+      return "/tomatoes/Fresh.svg";
     case "rotten":
-      return "/src/assets/tomatoes/Rotten.svg";
+      return "/tomatoes/Rotten.svg";
     default:
-      return "/src/assets/tomatoes/Rotten.svg";
+      return "/tomatoes/Rotten.svg";
   }
 }
