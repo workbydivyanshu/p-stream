@@ -393,7 +393,7 @@ export function WatchPartyView({ id }: { id: string }) {
           >
             {t("player.menus.watchparty.legacyWatchparty")}
           </Menu.Link>
-          <Menu.Paragraph marginClass="text-xs text-type-secondary mb-4">
+          <Menu.Paragraph marginClass="text-xs text-type-secondary mt-2">
             {t("player.menus.watchparty.notice")}
           </Menu.Paragraph>
         </div>
