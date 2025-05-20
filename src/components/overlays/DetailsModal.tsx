@@ -5,7 +5,11 @@ import { Helmet } from "react-helmet-async";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { getMediaBackdrop, getMediaDetails } from "@/backend/metadata/tmdb";
+import {
+  getMediaBackdrop,
+  getMediaDetails,
+  getMediaLogo,
+} from "@/backend/metadata/tmdb";
 import {
   TMDBContentTypes,
   TMDBMovieData,
@@ -117,6 +121,7 @@ interface DetailsContent {
       vote_count: number;
     }>;
   };
+  logoUrl?: string;
 }
 
 function DetailsContent({
@@ -528,57 +533,67 @@ function DetailsContent({
         )}
       </div>
       {/* Content */}
-      <div className="px-6 pb-6 mt-[-100px] flex-grow">
+      <div className="px-6 pb-6 mt-[-70px] flex-grow">
         {/* Title and Genres Row */}
-        <div className="pb-4">
-          {!minimal && (
-            <Button
-              onClick={() => {
-                if (data.type === "movie") {
-                  window.location.assign(
-                    `/media/tmdb-movie-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-                  );
-                } else if (data.type === "show") {
-                  if (showProgress?.season?.id && showProgress?.episode?.id) {
-                    window.location.assign(
-                      `/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${showProgress.season.id}/${showProgress.episode.id}`,
-                    );
-                  } else {
-                    // Start new show
-                    window.location.assign(
-                      `/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-                    );
-                  }
-                }
-              }}
-              theme="secondary"
-              className={classNames(
-                "gap-2 h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100",
-                "text-md text-white flex items-center justify-center",
-                "bg-buttons-purple bg-opacity-45 hover:bg-buttons-purpleHover hover:bg-opacity-25 backdrop-blur-md",
-                "border-2 border-gray-400 border-opacity-20",
-              )}
-            >
-              <Icon icon={Icons.PLAY} className="text-white" />
-              <span className="text-white text-sm pr-1">
-                {data.type === "movie"
-                  ? !data.releaseDate || new Date(data.releaseDate) > new Date()
-                    ? t("media.unreleased")
-                    : showProgress
-                      ? t("details.resume")
-                      : t("details.play")
-                  : showProgress
-                    ? t("details.resume")
-                    : t("details.play")}
-              </span>
-            </Button>
+        <div className="pb-2">
+          {data.logoUrl ? (
+            <img
+              src={data.logoUrl}
+              alt={data.title}
+              className="h-28 max-w-[400px] object-contain drop-shadow-lg bg-transparent"
+              style={{ background: "none" }}
+            />
+          ) : (
+            <h3 className="text-2xl font-bold text-white z-[999]">
+              {data.title}
+            </h3>
           )}
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
           <div className="flex items-center gap-4">
-            <h3 className="text-2xl font-bold text-white z-[999]">
-              {data.title}
-            </h3>
+            {!minimal && (
+              <Button
+                onClick={() => {
+                  if (data.type === "movie") {
+                    window.location.assign(
+                      `/media/tmdb-movie-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+                    );
+                  } else if (data.type === "show") {
+                    if (showProgress?.season?.id && showProgress?.episode?.id) {
+                      window.location.assign(
+                        `/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${showProgress.season.id}/${showProgress.episode.id}`,
+                      );
+                    } else {
+                      // Start new show
+                      window.location.assign(
+                        `/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+                      );
+                    }
+                  }
+                }}
+                theme="secondary"
+                className={classNames(
+                  "gap-2 h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100",
+                  "text-md text-white flex items-center justify-center",
+                  "bg-buttons-purple bg-opacity-45 hover:bg-buttons-purpleHover hover:bg-opacity-25 backdrop-blur-md",
+                  "border-2 border-gray-400 border-opacity-20",
+                )}
+              >
+                <Icon icon={Icons.PLAY} className="text-white" />
+                <span className="text-white text-sm pr-1">
+                  {data.type === "movie"
+                    ? !data.releaseDate ||
+                      new Date(data.releaseDate) > new Date()
+                      ? t("media.unreleased")
+                      : showProgress
+                        ? t("details.resume")
+                        : t("details.play")
+                    : showProgress
+                      ? t("details.resume")
+                      : t("details.play")}
+                </span>
+              </Button>
+            )}
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -992,7 +1007,7 @@ export function DetailsModal(props: {
             : TMDBContentTypes.TV;
         const details = await getMediaDetails(props.data.id.toString(), type);
         const backdropUrl = getMediaBackdrop(details.backdrop_path);
-
+        const logoUrl = await getMediaLogo(props.data.id.toString(), type);
         if (type === TMDBContentTypes.MOVIE) {
           const movieDetails = details as TMDBMovieData;
           setDetailsData({
@@ -1017,6 +1032,7 @@ export function DetailsModal(props: {
             type: "movie",
             id: movieDetails.id,
             imdbId: movieDetails.external_ids?.imdb_id,
+            logoUrl,
           });
         } else {
           const showDetails = details as TMDBShowData & {
@@ -1057,6 +1073,7 @@ export function DetailsModal(props: {
               seasons: showDetails.seasons,
               episodes: showDetails.episodes,
             },
+            logoUrl,
           });
         }
       } catch (err) {

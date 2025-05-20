@@ -391,3 +391,36 @@ export function formatTMDBSearchResult(
     object_type: mediatype,
   };
 }
+
+/**
+ * Fetches the clear logo for a movie or show from TMDB images endpoint.
+ */
+export async function getMediaLogo(
+  id: string,
+  type: TMDBContentTypes,
+  language?: string,
+): Promise<string | undefined> {
+  const userLanguage = language || useLanguageStore.getState().language;
+  const formattedLanguage = getTmdbLanguageCode(userLanguage);
+  const url =
+    type === TMDBContentTypes.MOVIE
+      ? `/movie/${id}/images`
+      : `/tv/${id}/images`;
+  try {
+    const data = await get<any>(url, {
+      include_image_language: `${formattedLanguage},en,null`,
+    });
+    // Try to find a logo in the user's language, then English, then any
+    const logo =
+      data.logos?.find((l: any) => l.iso_639_1 === formattedLanguage) ||
+      data.logos?.find((l: any) => l.iso_639_1 === "en") ||
+      data.logos?.[0];
+    if (logo && logo.file_path) {
+      return `https://image.tmdb.org/t/p/original${logo.file_path}`;
+    }
+    return undefined;
+  } catch (err) {
+    console.error("Failed to fetch TMDB logo:", err);
+    return undefined;
+  }
+}
