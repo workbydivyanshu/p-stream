@@ -540,7 +540,7 @@ function DetailsContent({
             <img
               src={data.logoUrl}
               alt={data.title}
-              className="h-28 max-w-[400px] object-contain drop-shadow-lg bg-transparent"
+              className="max-w-[12rem] md:max-w-[20rem] object-contain drop-shadow-lg bg-transparent"
               style={{ background: "none" }}
             />
           ) : (
