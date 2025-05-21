@@ -21,7 +21,13 @@ import {
 import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
-import { Heading1, Heading2, Paragraph } from "@/components/utils/Text";
+import { Ol } from "@/components/utils/Ol";
+import {
+  Heading1,
+  Heading2,
+  Heading3,
+  Paragraph,
+} from "@/components/utils/Text";
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
 import {
   useNavigateOnboarding,
@@ -73,7 +79,7 @@ export function FEDAPISetup() {
 
   if (conf().ALLOW_FEBBOX_KEY) {
     return (
-      <div className="mt-12">
+      <div className="mt-6">
         <SettingsCard>
           <div className="flex justify-between items-center gap-4">
             <div className="my-3">
@@ -174,6 +180,15 @@ export function FEDAPISetup() {
   }
 }
 
+function Item(props: { title: string; children: React.ReactNode }) {
+  return (
+    <>
+      <p className="text-white mb-2 font-medium">{props.title}</p>
+      <div className="text-type-text">{props.children}</div>
+    </>
+  );
+}
+
 export function OnboardingPage() {
   const navigate = useNavigateOnboarding();
   const skipModal = useModal("skip");
@@ -214,52 +229,77 @@ export function OnboardingPage() {
         title={t("onboarding.start.moreInfo.title")}
         size="xl"
       >
-        <div>
-          <p>
-            {t("onboarding.start.moreInfo.explainer.intro")}
-            <br />
-            <br />
-            <strong>{t("onboarding.start.moreInfo.explainer.options")}</strong>
-            <br />
-            <strong>
-              {t("onboarding.start.moreInfo.explainer.extension")}
-            </strong>
-            <br />
-            {t("onboarding.start.moreInfo.explainer.extensionDescription")}
-            <br />
-            <br />
-            <strong>{t("onboarding.start.moreInfo.explainer.proxy")}</strong>
-            <br />
-            {t("onboarding.start.moreInfo.explainer.proxyDescription")}
-            <br />
-            <br />
-            <strong>{t("onboarding.start.moreInfo.explainer.default")}</strong>
-            <br />
-            {t("onboarding.start.moreInfo.explainer.defaultDescription")}
-            <br />
-            <br />
+        <Trans
+          i18nKey="onboarding.start.moreInfo.explainer.intro"
+          className="pb-4"
+        />
+        <div className="flex flex-col gap-4 md:flex-row py-8">
+          <div className="md:w-1/2">
+            <Heading3 className="font-normal">
+              <Trans i18nKey="onboarding.start.moreInfo.recommended.title" />
+            </Heading3>
+            <Trans i18nKey="onboarding.start.moreInfo.recommended.subtitle" />
+            <div className="space-y-4 pt-8 bg-mediaCard-hoverAccent/10 rounded-xl p-10 mt-6 mr-2 min-w-[20rem]">
+              <Item
+                title={t("onboarding.start.moreInfo.recommended.desktop.title")}
+              >
+                <Trans i18nKey="onboarding.start.moreInfo.recommended.desktop.description" />
+              </Item>
+              <Item
+                title={t("onboarding.start.moreInfo.recommended.iOS.title")}
+              >
+                <Trans i18nKey="onboarding.start.moreInfo.recommended.iOS.description" />
+              </Item>
+              <Item
+                title={t("onboarding.start.moreInfo.recommended.android.title")}
+              >
+                <Trans i18nKey="onboarding.start.moreInfo.recommended.android.description" />
+              </Item>
+            </div>
+          </div>
+          <div className="inline md:hidden">
+            <Divider />
+          </div>
+          <div>
+            <Ol
+              items={[
+                <Item
+                  title={t("onboarding.start.moreInfo.explainer.extension")}
+                >
+                  {t(
+                    "onboarding.start.moreInfo.explainer.extensionDescription",
+                  )}
+                </Item>,
+                <Item title={t("onboarding.start.moreInfo.explainer.proxy")}>
+                  {t("onboarding.start.moreInfo.explainer.proxyDescription")}
+                </Item>,
+                <Item title={t("onboarding.start.moreInfo.explainer.default")}>
+                  {t("onboarding.start.moreInfo.explainer.defaultDescription")}
+                </Item>,
+              ].filter(Boolean)}
+            />
             {conf().ALLOW_FEBBOX_KEY && (
-              <>
-                <strong>
-                  {t("onboarding.start.moreInfo.explainer.fedapi.fedapi")}
-                </strong>
-                <br />
-                {t(
-                  "onboarding.start.moreInfo.explainer.fedapi.fedapiDescription",
-                )}
-                <br />
-                <br />
-              </>
+              <div className="pt-12 pl-[3.2rem]">
+                <Item
+                  title={t("onboarding.start.moreInfo.explainer.fedapi.fedapi")}
+                >
+                  {t(
+                    "onboarding.start.moreInfo.explainer.fedapi.fedapiDescription",
+                  )}
+                </Item>
+              </div>
             )}
-            <Trans i18nKey="onboarding.start.moreInfo.explainer.outro">
-              <a
-                href="https://discord.com/invite/7z6znYgrTG"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-type-link"
-              />
-            </Trans>
-          </p>
+          </div>
+        </div>
+        <div>
+          <Trans i18nKey="onboarding.start.moreInfo.explainer.outro">
+            <a
+              href="https://discord.com/invite/7z6znYgrTG"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-type-link"
+            />
+          </Trans>
         </div>
       </FancyModal>
       <BiggerCenterContainer>
@@ -282,7 +322,7 @@ export function OnboardingPage() {
         <div className="hidden md:flex w-full flex-col md:flex-row gap-3 pb-6">
           <Card
             onClick={() => navigate("/onboarding/extension")}
-            className="md:w-1/3 md:h-full"
+            className="md:w-1/3"
           >
             <CardContent
               colorClass="!text-onboarding-best"

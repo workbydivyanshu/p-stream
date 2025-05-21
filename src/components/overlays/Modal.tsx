@@ -50,7 +50,7 @@ export function FancyModal(props: {
   id: string;
   children?: ReactNode;
   title?: string;
-  size?: "md" | "xl";
+  size?: "md" | "lg" | "xl";
   oneTime?: boolean;
 }) {
   const modal = useModal(props.id);
@@ -82,6 +82,7 @@ export function FancyModal(props: {
             "group -m-[0.705em] rounded-3xl bg-background-main transition-colors duration-300 focus:relative focus:z-10",
             "w-full mx-4 p-6 bg-mediaCard-hoverBackground bg-opacity-60 backdrop-filter backdrop-blur-lg shadow-lg",
             props.size === "md" ? "max-w-md" : "max-w-2xl",
+            props.size === "xl" ? "max-w-7xl" : "max-w-2xl",
           )}
         >
           <div className="transition-transform duration-300 overflow-y-scroll max-h-[90dvh] scrollbar-none">

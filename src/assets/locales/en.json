@@ -392,17 +392,33 @@
                 "explainer": {
                     "intro": "P-Stream doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
                     "options": "Your Options:",
-                    "extension": "1. Extension (Recommended)",
+                    "extension": "1. Extension",
                     "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
                     "proxy": "2. Proxy",
                     "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
                     "default": "3. Default Setup",
                     "defaultDescription": "Uses P-Stream's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
                     "fedapi": {
-                        "fedapi": "Optional FED API (Febbox) UI token",
-                        "fedapiDescription": "Bringing your own Febbox account allows you to unlock FED API, our best source with 4K quality, Dolby Atmos, the most content, and the best (fastest) load times. This the highly recommended!"
+                        "fedapi": "Additional: FED API (Private) token",
+                        "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API (Private), the best source with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
                     },
                     "outro": "If you have more questions on how this works, feel free to ask on the <0>P-Stream Discord</0> server!"
+                },
+                "recommended": {
+                    "title": "Not sure what to choose?",
+                    "subtitle": "Recommended Configurations:",
+                    "desktop": {
+                        "title": "Desktop:",
+                        "description": "Extension + FED API (Private)"
+                    },
+                    "iOS": {
+                        "title": "iOS:",
+                        "description": "Custom proxy + FED API (Private)"
+                    },
+                    "android": {
+                        "title": "Android:",
+                        "description": "Extension + FED API (Private)"
+                    }
                 }
             },
             "options": {
@@ -412,13 +428,13 @@
                 },
                 "extension": {
                     "action": "Install extension",
-                    "description": "Install browser extension and gain access to the best sources, but remember to enable it for this site.",
+                    "description": "Install browser extension and gain access to additional sources! Remember to enable it for this site.",
                     "quality": "Best quality + More Sources",
                     "title": "Browser extension"
                 },
                 "proxy": {
                     "action": "Setup proxy",
-                    "description": "Setup a free proxy in just 5 minutes and gain access to great sources...",
+                    "description": "Setup a free proxy in just 5 minutes! Improves loading reliability!",
                     "quality": "Good quality",
                     "title": "Custom proxy"
                 }
@@ -916,8 +932,8 @@
     },
     "fedapi": {
         "onboarding": {
-            "title": "Optional: FED API (Febbox) token",
-            "description": "Bring your own Febbox account to get the best streaming with 4K quality, Dolby Atmos, skip intro and the best (fastest) load times!"
+            "title": "FED API (Private) token",
+            "description": "Bring your own FREE Febbox account to gain access to FED API (Private), the best source with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
         },
         "setup": {
             "title": "To get your UI token:",
