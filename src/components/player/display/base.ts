@@ -151,7 +151,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       if (!hls) {
         hls = new Hls({
           autoStartLoad: true,
-          maxBufferSize: 500 * 1000 * 1000, // 500 mb of buffering, should load more fragments at once
+          maxBufferLength: 120, // 120 seconds
+          maxMaxBufferLength: 240,
           fragLoadPolicy: {
             default: {
               maxLoadTimeMs: 30 * 1000, // allow it load extra long, fragments are slow if requested for the first time on an origin
