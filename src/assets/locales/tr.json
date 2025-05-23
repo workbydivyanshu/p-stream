@@ -96,7 +96,8 @@
             "discord": "Discord",
             "dmca": "DMCA",
             "github": "GitHub",
-            "twitter": "Twitter"
+            "twitter": "Twitter",
+            "funding": "Bizi destekleyin"
         },
         "tagline": "Bu açık kaynaklı akış uygulamasıyla en sevdiğiniz dizileri ve filmleri izleyin."
     },
@@ -189,6 +190,11 @@
                     "Mutlu 69 günü 😘!"
                 ]
             }
+        },
+        "mediaCard": {
+            "copyLink": "Bağlantıyı Kopyala",
+            "moreInfo": "Daha fazla bilgi",
+            "close": "Kapat"
         }
     },
     "media": {
@@ -197,7 +203,9 @@
             "movie": "Film",
             "show": "Dizi"
         },
-        "unreleased": "Yayınlanmamış"
+        "unreleased": "Yayınlanmamış",
+        "episodeShort": "B",
+        "seasonShort": "S"
     },
     "navigation": {
         "banner": {
@@ -608,9 +616,58 @@
                 "direct": {
                     "description": "Bu, verilerinizi doğrudan yeni sunucuya taşıyacaktır. Bu en hızlı seçenektir. <br /><br />Bu seçenek, şifrenizi aynı tutmanıza olanak tanır!",
                     "title": "Doğrudan taşıma",
-                    "quality": "En kolay ve hızlı"
+                    "quality": "En kolay ve hızlı",
+                    "action": "Veri aktar"
+                },
+                "download": {
+                    "description": "Bu, veriyi senin cihazına indirecek. Sonra yeni sunucuya yükleyebilir veya saklayabilirsin.",
+                    "title": "Veriyi indir",
+                    "quality": "Daha teknik",
+                    "action": "Veriyi indir"
+                },
+                "upload": {
+                    "title": "Veri Yükle",
+                    "description": "Bu hesaptaki yer imlerinizi ve ilerlemenizi geri yüklemek için daha önce dışa aktardığınız veri dosyanızı yükleyin.",
+                    "quality": "Yedeklemeden geri yükle",
+                    "action": "Veri Yükle"
                 }
             }
+        },
+        "download": {
+            "description": "Bu hesaptaki yer imlerinizi ve ilerlemenizi geri yüklemek için daha önce dışa aktardığınız veri dosyanızı yükleyin.",
+            "title": "Veriyi indir"
+        },
+        "direct": {
+            "description": "Mevcut hesap verilerinizi yeni bir arka uca taşımak için hedef arka uç URL'sini girin. Bu, parolanızı aynı tutar!",
+            "title": "Direkt taşıma",
+            "backendLabel": "Hedef Arka Uç URL'si",
+            "recaptchaLabel": "ReCaptcha Anahtarı (İsteğe bağlı)",
+            "toggleLable": "ReCaptcha Gerekli Mi?",
+            "status": {
+                "error": "Verinizi taşıyamadık. 😿",
+                "success": "Veriniz başarılı bir şekilde taşınmıştır! 🎉"
+            },
+            "button": {
+                "migrate": "Taşı",
+                "processing": "İşleniyor...",
+                "home": "Eve git",
+                "login": "Girişe devam"
+            }
         }
+    },
+    "details": {
+        "resume": "Devam et",
+        "play": "Oynat",
+        "director": "Direktör:",
+        "cast": "Oyuncular:",
+        "releaseDate": "Yayın Tarihi:",
+        "votes": "oylar",
+        "tmdb": "TMDB'de görüntüle",
+        "imdb": "TMDb'de görüntüle",
+        "episodes": "Bölümler",
+        "season": "Sezon",
+        "language": "Dil:",
+        "episode": "Bölüm",
+        "endsAt": "{{time}}'de bitiyor"
     }
 }
