@@ -20,7 +20,7 @@
             "title": "Qu'en est-il de mes données ?"
         },
         "q5": {
-            "body": "P-Stream possède un compte twitter qui peut être trouvé en bas de cette page ainsi qu'un lien vers le code source sur Github.",
+            "body": "P-Stream possède un serveur Discord qui peut être trouvé en-tête de page !",
             "title": "Comment puis-je en savoir plus ?"
         }
     },
@@ -29,11 +29,11 @@
         "copy": "Copier"
     },
     "auth": {
-        "createAccount": "N'avez-vous pas encore de compte ? <0>Créer un compte.</0>",
+        "createAccount": "Vous n'avez-vous pas encore de compte ? <0>Créer un compte.</0>",
         "deviceNameLabel": "Nom de l'appareil",
         "deviceNamePlaceholder": "Téléphone personnel",
         "generate": {
-            "description": "Le nom d'utilisateur et le mot de passe sont obtenus à partir de votre phrase d'accès. Vous devrez la saisir pour accéder à votre compte, alors gardez-la précieusement",
+            "description": "Le nom d'utilisateur et le mot de passe sont obtenus à partir de votre phrase d'accès. Vous devrez la saisir pour accéder à votre compte,<bold>alors gardez-la précieusement !</bold>",
             "next": "J'ai sauvegardé ma phrase d'accès",
             "passphraseFrameLabel": "Phrase d'accès",
             "title": "Votre phrase d'accès"
@@ -52,7 +52,7 @@
             "information": {
                 "color1": "Première couleur de profil",
                 "color2": "Seconde couleur de profil",
-                "header": "Veuillez entrer un nom pour votre appareil, choisir vos couleurs et une icône utilisateur de votre choix",
+                "header": "Veuillez entrer un nom pour votre appareil et choisissez vos couleurs ainsi qu'une icône utilisateur de votre choix !",
                 "icon": "Icône d'utilisateur",
                 "next": "Suivant",
                 "title": "Informations du compte"
@@ -63,7 +63,7 @@
                 "text": "L'avez-vous configuré correctement ?",
                 "title": "Échec de la connexion au serveur"
             },
-            "host": "Vous êtes en train de vous connecter à <0>{{hostname}}</0> - veuillez confirmer que vous lui faites confiance avant de créer un compte",
+            "host": "Vous êtes en train de vous connecter à <0>{{hostname}}</0> - veuillez confirmer que vous lui faites confiance avant de créer un compte...",
             "no": "Retour",
             "noHost": "Le serveur n'a pas été configuré, vous ne pouvez donc pas créer de compte",
             "noHostTitle": "Serveur non configuré !",
@@ -96,7 +96,8 @@
             "discord": "Discord",
             "dmca": "DMCA",
             "github": "GitHub",
-            "twitter": "Twitter"
+            "twitter": "Twitter",
+            "funding": "Soutenez-nous"
         },
         "tagline": "Regardez vos séries et films préférés avec cette application de streaming open source."
     },
@@ -111,7 +112,8 @@
             "register": "Créer un compte",
             "settings": "Paramètres",
             "discover": "Découvrir",
-            "support": "Support"
+            "support": "Support",
+            "migration": "Migrer le compte"
         }
     },
     "home": {
@@ -128,17 +130,33 @@
             "allResults": "C'est tout ce que nous avons !",
             "failed": "Le média n'a pas été trouvé, veuillez réessayer !",
             "loading": "Chargement...",
-            "noResults": "Nous n'avons rien trouvé !",
+            "noResults": "Nous n'avons rien pus trouvé :(",
             "placeholder": {
                 "default": "Que voulez-vous voir ?",
                 "extra": [
                     "Que voulez-vous explorer ?",
                     "Qu'y a-t-il dans votre liste de lecture ?",
                     "Quel est votre film préféré ?",
-                    "Quelle est votre série préférée ?"
+                    "P-Stream est le meilleur site au monde !",
+                    "Qu'est-ce que tu as prévu de regarder aujourd'hui ?",
+                    "Comment s'est passée ta journée ?",
+                    null,
+                    "Est-ce que P-Stream n'est pas tout simplement le meilleur ?",
+                    ">ᴗ<"
                 ]
             },
-            "sectionTitle": "Résultats de la recherche"
+            "sectionTitle": "Résultats de la recherche",
+            "empty": {
+                "extra": [
+                    "Il n'y a rien ici :(",
+                    "Si vide...",
+                    "Tellement vide.",
+                    "Salut, nouvel utilisateur :3"
+                ],
+                "default": "Bienvenue, vous pouvez trouver des films ici !"
+            },
+            "discoverMore": "Découvrir plus",
+            "discover": "Découvrir"
         },
         "titles": {
             "day": {
@@ -158,10 +176,20 @@
                 "extra": [
                     "À la recherche d'un bon film d'horreur à regarder ? J'ai entendu dire que Scream était bien."
                 ]
+            },
+            "420": {
+                "extra": [
+                    "Joyeux 4/20 🥳!"
+                ]
+            },
+            "69": {
+                "default": "Partant pour quelque chose de corsé ?"
             }
         },
         "mediaCard": {
-            "copyLink": "Copier le lien"
+            "copyLink": "Copier le lien",
+            "moreInfo": "Plus d'info",
+            "close": "Fermer"
         }
     },
     "media": {
@@ -170,7 +198,9 @@
             "movie": "Film",
             "show": "Série"
         },
-        "unreleased": "Non publié"
+        "unreleased": "Non publié",
+        "episodeShort": "E",
+        "seasonShort": "S"
     },
     "navigation": {
         "banner": {
@@ -235,17 +265,17 @@
             "explainer": "Pour obtenir les meilleurs flux possibles, vous devrez choisir la méthode de streaming que vous souhaitez utiliser.",
             "options": {
                 "default": {
-                    "text": "Je ne veux pas de flux de bonne qualité,<0 /> <1>utiliser le flux par défaut</1>"
+                    "text": "Je ne veux pas de flux de bonne qualité, utiliser le flux par défaut."
                 },
                 "extension": {
                     "action": "Installer l'extension",
-                    "description": "Installez l'extension pour navigateur et accédez aux meilleures sources.",
+                    "description": "Installez l'extension sur votre navigateur et accédez à d'autres sources ! N'oubliez pas de l'activer pour ce site.",
                     "quality": "Meilleure qualité",
                     "title": "Extension du navigateur"
                 },
                 "proxy": {
                     "action": "Configurez le proxy",
-                    "description": "Configurez un proxy en seulement cinq minutes et accédez à d'excellentes sources.",
+                    "description": "Configurez un proxy en seulement cinq minutes et accédez à d'excellentes sources !",
                     "quality": "Bonne qualité",
                     "title": "Proxy personnalisé"
                 }
@@ -570,5 +600,43 @@
             "title": "Sous-titres"
         },
         "unsaved": "Vous avez des changements non sauvegardés"
+    },
+    "details": {
+        "resume": "Reprendre",
+        "play": "Lire",
+        "releaseDate": "Date de sortie :",
+        "rating": "Classement :",
+        "votes": "votes",
+        "tmdb": "Voir sur TMDB",
+        "imdb": "Voir sur IMDb",
+        "episodes": "Episodes",
+        "season": "Saison",
+        "language": "Langue :",
+        "episode": "Episode",
+        "endsAt": "Finit dans {{time}}"
+    },
+    "migration": {
+        "loginRequired": "Vous devez être connecté pour migrer vos données ! Revenez en arriè.re et connectez-vous pour continuer.",
+        "start": {
+            "title": "Migrer vos données",
+            "explainer": "Si vous souhaitez migrer ou sauvegarder vos données, vous pouvez le faire via les options ci-dessous. Cela vous permettra de conserver vos données lorsque vous changerez de serveur backend.",
+            "options": {
+                "or": "ou",
+                "direct": {
+                    "description": "Cela migrera directement vos données vers le nouveau serveur. C’est l’option la plus rapide. <br /><br /> Cette option vous permet de conserver votre phrase d'accès telle quelle !",
+                    "title": "Migration direct",
+                    "quality": "Le plus facile et le plus rapide",
+                    "action": "Transférer les données"
+                },
+                "download": {
+                    "description": "Cela téléchargera vos données sur votre ordinateur. Vous pourrez ensuite les envoyé sur le nouveau serveur ou simplement les conserver en sécurité.",
+                    "title": "Télécharger les données",
+                    "action": "Télécharger les données"
+                },
+                "upload": {
+                    "title": "Envoyé les données"
+                }
+            }
+        }
     }
 }
