@@ -183,7 +183,10 @@
                 ]
             },
             "69": {
-                "default": "Partant pour quelque chose de corsé ?"
+                "default": "Partant pour quelque chose de corsé ?",
+                "extra": [
+                    "Joyeux jour 69 😘 !"
+                ]
             }
         },
         "mediaCard": {
@@ -613,7 +616,10 @@
         "season": "Saison",
         "language": "Langue :",
         "episode": "Episode",
-        "endsAt": "Finit dans {{time}}"
+        "endsAt": "Finit dans {{time}}",
+        "director": "Réalisateur :",
+        "cast": "Acteurs :",
+        "runtime": "Durée :"
     },
     "migration": {
         "loginRequired": "Vous devez être connecté pour migrer vos données ! Revenez en arriè.re et connectez-vous pour continuer.",
@@ -631,11 +637,54 @@
                 "download": {
                     "description": "Cela téléchargera vos données sur votre ordinateur. Vous pourrez ensuite les envoyé sur le nouveau serveur ou simplement les conserver en sécurité.",
                     "title": "Télécharger les données",
-                    "action": "Télécharger les données"
+                    "action": "Télécharger les données",
+                    "quality": "Plus technique"
                 },
                 "upload": {
-                    "title": "Envoyé les données"
+                    "title": "Envoyé les données",
+                    "description": "Téléversez votre fichier de données précédemment exporté pour restaurer vos marque pages et votre progression sur ce compte.",
+                    "quality": "Restaurer à partir d'une sauvegarde",
+                    "action": "Téléverser des données"
                 }
+            }
+        },
+        "download": {
+            "items": {
+                "progress": "Progression de visionnage",
+                "description": "Le téléchargement inclus :",
+                "bookmarks": "Médias mis en marque page"
+            },
+            "status": {
+                "error": "Échec du téléchargement de vos données. 😿",
+                "success": "Vos données ont été téléchargées avec succès ! 🎉"
+            },
+            "title": "Télécharger les données",
+            "description": "Cela téléchargera vos données sur votre appareil. Vous pourrez ensuite les téléverser sur le nouveau serveur ou simplement les conserver en toute sécurité.",
+            "button": {
+                "download": "Télécharger les données",
+                "home": "Retour au menu principal",
+                "login": "Continuer en se connectant"
+            }
+        },
+        "upload": {
+            "description": "Téléversez votre fichier de données exporté précédemment pour restaurer vos favoris et votre progression sur ce compte.",
+            "title": "Téléverser les données"
+        },
+        "direct": {
+            "title": "Migration directe",
+            "description": "Entrez l'URL du backend de destination pour migrer les données de votre compte actuel vers un nouveau backend. Votre phrase secrète restera la même !",
+            "backendLabel": "URL du backend de destination",
+            "recaptchaLabel": "Clé ReCaptcha (Optionel)",
+            "toggleLable": "Besoin de ReCaptcha ?",
+            "status": {
+                "error": "Échec de la migration de vos données. 😿",
+                "success": "Vos données ont été migrées avec succès ! 🎉"
+            },
+            "button": {
+                "migrate": "Migrer",
+                "processing": "Traitement...",
+                "home": "Retour au menu principal",
+                "login": "Continuer en se connectant"
             }
         }
     }
