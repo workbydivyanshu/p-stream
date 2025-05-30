@@ -202,7 +202,9 @@
             "movie": "Film",
             "show": "Serie"
         },
-        "unreleased": "Non publicato"
+        "unreleased": "Non publicato",
+        "episodeShort": "E",
+        "seasonShort": "S"
     },
     "navigation": {
         "banner": {
@@ -649,7 +651,15 @@
         "languange": "Lingua:",
         "releaseDate": "Data di rilascio:",
         "imdb": "Guarda su IMDb",
-        "episodes": "Episodi"
+        "episodes": "Episodi",
+        "endsAt": "Termina a {{time}}",
+        "language": "Lingua:",
+        "episode": "Episodio",
+        "cast": "Cast:",
+        "runtime": "Dura:",
+        "tmdb": "Guarda su TMDB",
+        "season": "Stagione",
+        "airs": "In onda"
     },
     "migration": {
         "start": {
@@ -664,7 +674,8 @@
                     "title": "Caricare dati",
                     "action": "Carica dati"
                 }
-            }
+            },
+            "title": "Migrare i dati"
         },
         "direct": {
             "toggleLable": "Ti serve il ReCaptcha?",
@@ -675,6 +686,7 @@
         },
         "download": {
             "title": "Caricare il data"
-        }
+        },
+        "loginRequired": "Dovete essere loggato per migrare i dati! Per favore torna indietro e accedi per continuare."
     }
 }
