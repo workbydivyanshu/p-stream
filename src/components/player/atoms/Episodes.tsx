@@ -196,7 +196,10 @@ function EpisodesView({
 
         <div
           ref={carouselRef}
-          className="flex flex-col lg:flex-row lg:overflow-x-auto space-y-3 sm:space-y-4 lg:space-y-0 lg:space-x-4 pb-4 pt-2 lg:px-12 scrollbar-hide carousel-container"
+          className={classNames(
+            "flex flex-col lg:flex-row lg:overflow-x-auto space-y-3 sm:space-y-4 lg:space-y-0 lg:space-x-4 pb-4 pt-2 lg:px-12 scrollbar-hide",
+            { "carousel-container": window.innerWidth >= 1024 },
+          )}
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
