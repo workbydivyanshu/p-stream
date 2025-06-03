@@ -297,17 +297,20 @@
                     "intro": "P-Stream hostet kei Videos. Es isch uf Drittanbieter-Websites angewiese für d’Inhalt, drum muesch du wähle, wie s sich mit dene Site verbindet.",
                     "fedapi": {
                         "fedapiDescription": "Wenn du din eigene Febbox-Account bruchsch, chasch du d’FED-API freischalte, üsi bescht Quelle mit 4K-Qualität, Dolby Atmos, dem meiste Inhalt und de schnellste Ladezyte. Das wird fo üs wermschtens empfohlen!",
-                        "fedapi": "Optionali FED API (Febbox) UI Token"
+                        "fedapi": "Optional: FED API (Private) token"
                     },
                     "defaultDescription": "Bruchsch der integrierti P-Stream Proxy. Es isch der eifachscht Option, chönnt aber langsamer si weg der teilte Bandbreite.",
                     "options": "Dini Optione:",
-                    "extension": "1. Erwiterig (empfohle)",
+                    "extension": "1. Erwiterig",
                     "proxy": "2. Proxy",
                     "proxyDescription": "Dr Proxy scrape Medien vo andere Websites. Er umgoh Browser-Einschränkige (wie CORS), um s’Scrape z’ermögliche.",
                     "outro": "Wenn du meh Froge hesch, wie das funktioniert, chasch gärn uf em <0>P-Stream Discord\\</0>-Server frage!"
                 },
                 "button": "Me Info",
-                "title": "Es Setup versto"
+                "title": "Es Setup versto",
+                "recommended": {
+                    "title": "Net secher, was de uswähle welsch?"
+                }
             }
         }
     },
@@ -868,7 +871,10 @@
         "episodes": "Folge",
         "season": "Staffele",
         "runtime": "Laufzeit:",
-        "airs": "Loft"
+        "airs": "Loft",
+        "language": "Sproch:",
+        "episode": "Episode",
+        "endsAt": "Ändet am {{time}}"
     },
     "discover": {
         "page": {
