@@ -4,6 +4,7 @@ import { WideContainer } from "@/components/layout/WideContainer";
 import { DetailsModal } from "@/components/overlays/details/DetailsModal";
 import { useModal } from "@/components/overlays/Modal";
 import { useDiscoverStore } from "@/stores/discover";
+import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import { DiscoverNavigation } from "./components/DiscoverNavigation";
@@ -17,6 +18,7 @@ export function DiscoverContent() {
   const [detailsData, setDetailsData] = useState<any>();
   const detailsModal = useModal("discover-details");
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const progressItems = useProgressStore((state) => state.items);
 
   // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
@@ -35,19 +37,28 @@ export function DiscoverContent() {
     detailsModal.show();
   };
 
+  const movieProgressItems = Object.entries(progressItems || {}).filter(
+    ([_, item]) => item.type === "movie",
+  );
+  const tvProgressItems = Object.entries(progressItems || {}).filter(
+    ([_, item]) => item.type === "show",
+  );
+
   // Render Movies content with lazy loading
   const renderMoviesContent = () => {
     return (
       <>
-        {/* Movie Recommendations */}
-        <MediaCarousel
-          content={{ type: "recommendations" }}
-          isTVShow={false}
-          carouselRefs={carouselRefs}
-          onShowDetails={handleShowDetails}
-          moreContent
-          showRecommendations
-        />
+        {/* Movie Recommendations - only show if there are movie progress items */}
+        {movieProgressItems.length > 0 && (
+          <MediaCarousel
+            content={{ type: "recommendations" }}
+            isTVShow={false}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            moreContent
+            showRecommendations
+          />
+        )}
 
         {/* Latest Releases */}
         <MediaCarousel
@@ -103,15 +114,17 @@ export function DiscoverContent() {
   const renderTVShowsContent = () => {
     return (
       <>
-        {/* TV Show Recommendations */}
-        <MediaCarousel
-          content={{ type: "recommendations" }}
-          isTVShow
-          carouselRefs={carouselRefs}
-          onShowDetails={handleShowDetails}
-          moreContent
-          showRecommendations
-        />
+        {/* TV Show Recommendations - only show if there are TV show progress items */}
+        {tvProgressItems.length > 0 && (
+          <MediaCarousel
+            content={{ type: "recommendations" }}
+            isTVShow
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            moreContent
+            showRecommendations
+          />
+        )}
 
         {/* On Air */}
         <MediaCarousel
