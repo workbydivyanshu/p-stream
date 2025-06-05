@@ -35,10 +35,10 @@ export const usePreferencesStore = create(
       enableAutoplay: true,
       enableSkipCredits: true,
       enableDiscover: true,
-      enableFeatured: true, // enabled for testing
+      enableFeatured: false,
       enableDetailsModal: false,
       enableImageLogos: true,
-      enableCarouselView: true, // enabled for testing
+      enableCarouselView: false,
       sourceOrder: [],
       enableSourceOrder: false,
       proxyTmdb: false,
