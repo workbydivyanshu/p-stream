@@ -49,7 +49,12 @@ export function CastCarousel({ mediaId, mediaType }: CastCarouselProps) {
     <div className="space-y-4 pt-8">
       <div className="flex overflow-x-auto scrollbar-none pb-4 gap-4">
         {director && (
-          <div className="flex flex-col items-center space-y-2 flex-shrink-0">
+          <a
+            href={`https://www.themoviedb.org/person/${director.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center space-y-2 flex-shrink-0 hover:opacity-80 transition-opacity"
+          >
             <div className="relative h-32 w-32 overflow-hidden rounded-full">
               <img
                 src={getPersonProfileImage(director.profile_path)}
@@ -61,12 +66,15 @@ export function CastCarousel({ mediaId, mediaType }: CastCarouselProps) {
               <span className="font-medium truncate">{director.name}</span>
               <span className="text-sm truncate">{t("Director")}</span>
             </div>
-          </div>
+          </a>
         )}
         {cast.map((member) => (
-          <div
+          <a
             key={member.id}
-            className="flex flex-col items-center space-y-2 flex-shrink-0"
+            href={`https://www.themoviedb.org/person/${member.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center space-y-2 flex-shrink-0 hover:opacity-80 transition-opacity"
           >
             <div className="relative h-32 w-32 overflow-hidden rounded-full">
               <img
@@ -79,7 +87,7 @@ export function CastCarousel({ mediaId, mediaType }: CastCarouselProps) {
               <span className="font-medium truncate">{member.name}</span>
               <span className="text-sm truncate">{member.character}</span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
