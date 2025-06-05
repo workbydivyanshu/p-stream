@@ -17,7 +17,6 @@ interface RoomUser {
     isPaused: boolean;
     time: number;
     duration: number;
-    playbackRate: number;
   };
   content: {
     title: string;
@@ -80,10 +79,6 @@ export function useWatchPartySync(
   const display = usePlayerStore((s) => s.display);
   const currentTime = usePlayerStore((s) => s.progress.time);
   const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
-  const currentPlaybackRate = usePlayerStore(
-    (s) => s.mediaPlaying.playbackRate,
-  );
-
   // Get watch party state
   const { roomCode, isHost, enabled, enableAsGuest } = useWatchPartyStore();
 
@@ -169,10 +164,6 @@ export function useWatchPartySync(
     const predictedHostTime = getPredictedHostTime();
     const difference = currentTime - predictedHostTime;
 
-    // Handle playback rate sync
-    const needsPlaybackRateSync =
-      hostUser.player.playbackRate !== currentPlaybackRate;
-
     // Handle time sync
     const activeThreshold = isPlaying ? 2 : 5;
     const needsTimeSync = Math.abs(difference) > activeThreshold;
@@ -188,20 +179,9 @@ export function useWatchPartySync(
       Math.abs(hostUser.player.time - state.previousHostTime) > 5;
 
     // Sync if needed
-    if (
-      (needsTimeSync ||
-        needsPlayStateSync ||
-        needsJumpSync ||
-        needsPlaybackRateSync) &&
-      !isSyncing
-    ) {
+    if ((needsTimeSync || needsPlayStateSync || needsJumpSync) && !isSyncing) {
       state.syncInProgress = true;
       setIsSyncing(true);
-
-      // Sync playback rate first if needed
-      if (needsPlaybackRateSync) {
-        display.setPlaybackRate(hostUser.player.playbackRate);
-      }
 
       // Sync time
       display.setTime(predictedHostTime);
@@ -229,7 +209,6 @@ export function useWatchPartySync(
     hostUser,
     isHost,
     currentTime,
-    currentPlaybackRate,
     display,
     isSyncing,
     getPredictedHostTime,
@@ -262,7 +241,6 @@ export function useWatchPartySync(
                 isPaused: latestStatus.player.isPaused,
                 time: latestStatus.player.time,
                 duration: latestStatus.player.duration,
-                playbackRate: latestStatus.player.playbackRate,
               },
               content: {
                 title: latestStatus.content.title,

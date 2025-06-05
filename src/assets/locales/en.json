@@ -483,7 +483,8 @@
       },
       "playback": {
         "speedLabel": "Playback speed",
-        "title": "Playback settings"
+        "title": "Playback settings",
+        "disabled": "(Disabled in watch party)"
       },
       "quality": {
         "automaticLabel": "Automatic quality",

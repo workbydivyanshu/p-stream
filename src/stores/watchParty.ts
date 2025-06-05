@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { usePlayerStore } from "@/stores/player/store";
+
 interface WatchPartyStore {
   // Whether the watch party feature is enabled
   enabled: boolean;
@@ -27,6 +29,14 @@ const generateRoomCode = (): string => {
   return Math.floor(1000 + Math.random() * 9000).toString();
 };
 
+// Helper function to reset playback rate to 1x
+const resetPlaybackRate = () => {
+  const display = usePlayerStore.getState().display;
+  if (display) {
+    display.setPlaybackRate(1);
+  }
+};
+
 export const useWatchPartyStore = create<WatchPartyStore>()(
   persist(
     (set) => ({
@@ -35,19 +45,23 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
       isHost: false,
       showStatusOverlay: false,
 
-      enableAsHost: () =>
+      enableAsHost: () => {
+        resetPlaybackRate();
         set(() => ({
           enabled: true,
           roomCode: generateRoomCode(),
           isHost: true,
-        })),
+        }));
+      },
 
-      enableAsGuest: (code: string) =>
+      enableAsGuest: (code: string) => {
+        resetPlaybackRate();
         set(() => ({
           enabled: true,
           roomCode: code,
           isHost: false,
-        })),
+        }));
+      },
 
       updateRoomCode: (code: string) =>
         set((state) => ({

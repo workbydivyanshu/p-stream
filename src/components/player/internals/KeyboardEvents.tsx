@@ -7,6 +7,7 @@ import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useEmpheralVolumeStore } from "@/stores/volume";
+import { useWatchPartyStore } from "@/stores/watchParty";
 
 export function KeyboardEvents() {
   const router = useOverlayRouter("");
@@ -16,6 +17,7 @@ export function KeyboardEvents() {
   const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
   const time = usePlayerStore((s) => s.progress.time);
   const { setVolume, toggleMute } = useVolume();
+  const isInWatchParty = useWatchPartyStore((s) => s.enabled);
 
   const { toggleLastUsed } = useCaptions();
   const setShowVolume = useEmpheralVolumeStore((s) => s.setShowVolume);
@@ -48,7 +50,9 @@ export function KeyboardEvents() {
     delay,
     setShowDelayIndicator,
     setCurrentOverlay,
+    isInWatchParty,
   });
+
   useEffect(() => {
     dataRef.current = {
       setShowVolume,
@@ -67,6 +71,7 @@ export function KeyboardEvents() {
       delay,
       setShowDelayIndicator,
       setCurrentOverlay,
+      isInWatchParty,
     };
   }, [
     setShowVolume,
@@ -85,6 +90,7 @@ export function KeyboardEvents() {
     delay,
     setShowDelayIndicator,
     setCurrentOverlay,
+    isInWatchParty,
   ]);
 
   useEffect(() => {
@@ -116,8 +122,8 @@ export function KeyboardEvents() {
         );
       if (keyL === "m") dataRef.current.toggleMute();
 
-      // Video playback speed
-      if (k === ">" || k === "<") {
+      // Video playback speed - disabled in watch party
+      if ((k === ">" || k === "<") && !dataRef.current.isInWatchParty) {
         const options = [0.25, 0.5, 1, 1.5, 2];
         let idx = options.indexOf(dataRef.current.mediaPlaying?.playbackRate);
         if (idx === -1) idx = options.indexOf(1);
