@@ -43,7 +43,7 @@ export function useSettingsState(
   deviceName: string,
   proxyUrls: string[] | null,
   backendUrl: string | null,
-  febboxToken: string | null,
+  febboxKey: string | null,
   profile:
     | {
         colorA: string;
@@ -67,12 +67,8 @@ export function useSettingsState(
     useDerived(proxyUrls);
   const [backendUrlState, setBackendUrl, resetBackendUrl, backendUrlChanged] =
     useDerived(backendUrl);
-  const [
-    febboxTokenState,
-    setFebboxToken,
-    resetFebboxToken,
-    febboxTokenChanged,
-  ] = useDerived(febboxToken);
+  const [febboxKeyState, setFebboxKey, resetFebboxKey, febboxKeyChanged] =
+    useDerived(febboxKey);
   const [themeState, setTheme, resetTheme, themeChanged] = useDerived(theme);
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const resetPreviewTheme = useCallback(
@@ -165,7 +161,7 @@ export function useSettingsState(
     resetSubStyling();
     resetProxyUrls();
     resetBackendUrl();
-    resetFebboxToken();
+    resetFebboxKey();
     resetDeviceName();
     resetProfile();
     resetEnableThumbnails();
@@ -188,7 +184,7 @@ export function useSettingsState(
     deviceNameChanged ||
     backendUrlChanged ||
     proxyUrlsChanged ||
-    febboxTokenChanged ||
+    febboxKeyChanged ||
     profileChanged ||
     enableThumbnailsChanged ||
     enableAutoplayChanged ||
@@ -235,10 +231,10 @@ export function useSettingsState(
       set: setBackendUrl,
       changed: backendUrlChanged,
     },
-    febboxToken: {
-      state: febboxTokenState,
-      set: setFebboxToken,
-      changed: febboxTokenChanged,
+    febboxKey: {
+      state: febboxKeyState,
+      set: setFebboxKey,
+      changed: febboxKeyChanged,
     },
     profile: {
       state: profileState,

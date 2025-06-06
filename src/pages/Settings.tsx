@@ -131,8 +131,8 @@ export function SettingsPage() {
   const backendUrlSetting = useAuthStore((s) => s.backendUrl);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
 
-  const febboxToken = useAuthStore((s) => s.febboxToken);
-  const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
+  const febboxKey = usePreferencesStore((s) => s.febboxKey);
+  const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
 
   const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
   const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
@@ -193,12 +193,12 @@ export function SettingsPage() {
       if (account && backendUrl) {
         const settings = await getSettings(backendUrl, account);
         if (settings.febboxKey) {
-          setFebboxToken(settings.febboxKey);
+          setFebboxKey(settings.febboxKey);
         }
       }
     };
     loadSettings();
-  }, [account, backendUrl, setFebboxToken]);
+  }, [account, backendUrl, setFebboxKey]);
 
   const state = useSettingsState(
     activeTheme,
@@ -207,7 +207,7 @@ export function SettingsPage() {
     decryptedName,
     proxySet,
     backendUrlSetting,
-    febboxToken,
+    febboxKey,
     account ? account.profile : undefined,
     enableThumbnails,
     enableAutoplay,
@@ -263,13 +263,35 @@ export function SettingsPage() {
         state.appLanguage.changed ||
         state.theme.changed ||
         state.proxyUrls.changed ||
-        state.febboxToken.changed
+        state.febboxKey.changed ||
+        state.enableThumbnails.changed ||
+        state.enableAutoplay.changed ||
+        state.enableSkipCredits.changed ||
+        state.enableDiscover.changed ||
+        state.enableFeatured.changed ||
+        state.enableDetailsModal.changed ||
+        state.enableImageLogos.changed ||
+        state.sourceOrder.changed ||
+        state.enableSourceOrder.changed ||
+        state.proxyTmdb.changed ||
+        state.enableCarouselView.changed
       ) {
         await updateSettings(backendUrl, account, {
           applicationLanguage: state.appLanguage.state,
           applicationTheme: state.theme.state,
           proxyUrls: state.proxyUrls.state?.filter((v) => v !== "") ?? null,
-          febboxKey: state.febboxToken.state,
+          febboxKey: state.febboxKey.state,
+          enableThumbnails: state.enableThumbnails.state,
+          enableAutoplay: state.enableAutoplay.state,
+          enableSkipCredits: state.enableSkipCredits.state,
+          enableDiscover: state.enableDiscover.state,
+          enableFeatured: state.enableFeatured.state,
+          enableDetailsModal: state.enableDetailsModal.state,
+          enableImageLogos: state.enableImageLogos.state,
+          sourceOrder: state.sourceOrder.state,
+          enableSourceOrder: state.enableSourceOrder.state,
+          proxyTmdb: state.proxyTmdb.state,
+          enableCarouselView: state.enableCarouselView.state,
         });
       }
       if (state.deviceName.changed) {
@@ -302,7 +324,7 @@ export function SettingsPage() {
     setSubStyling(state.subtitleStyling.state);
     setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
     setEnableSourceOrder(state.enableSourceOrder.state);
-    setFebboxToken(state.febboxToken.state);
+    setFebboxKey(state.febboxKey.state);
     setProxyTmdb(state.proxyTmdb.state);
     setEnableCarouselView(state.enableCarouselView.state);
 
@@ -325,7 +347,7 @@ export function SettingsPage() {
     account,
     backendUrl,
     setEnableThumbnails,
-    setFebboxToken,
+    setFebboxKey,
     state,
     setEnableAutoplay,
     setEnableSkipCredits,
@@ -424,8 +446,8 @@ export function SettingsPage() {
             setBackendUrl={state.backendUrl.set}
             proxyUrls={state.proxyUrls.state}
             setProxyUrls={state.proxyUrls.set}
-            febboxToken={state.febboxToken.state}
-            setFebboxToken={state.febboxToken.set}
+            febboxKey={state.febboxKey.state}
+            setFebboxKey={state.febboxKey.set}
             proxyTmdb={state.proxyTmdb.state}
             setProxyTmdb={state.proxyTmdb.set}
           />

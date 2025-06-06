@@ -14,6 +14,7 @@ export interface PreferencesStore {
   sourceOrder: string[];
   enableSourceOrder: boolean;
   proxyTmdb: boolean;
+  febboxKey: string | null;
 
   setEnableThumbnails(v: boolean): void;
   setEnableAutoplay(v: boolean): void;
@@ -26,6 +27,7 @@ export interface PreferencesStore {
   setSourceOrder(v: string[]): void;
   setEnableSourceOrder(v: boolean): void;
   setProxyTmdb(v: boolean): void;
+  setFebboxKey(v: string | null): void;
 }
 
 export const usePreferencesStore = create(
@@ -42,6 +44,7 @@ export const usePreferencesStore = create(
       sourceOrder: [],
       enableSourceOrder: false,
       proxyTmdb: false,
+      febboxKey: null,
       setEnableThumbnails(v) {
         set((s) => {
           s.enableThumbnails = v;
@@ -95,6 +98,11 @@ export const usePreferencesStore = create(
       setProxyTmdb(v) {
         set((s) => {
           s.proxyTmdb = v;
+        });
+      },
+      setFebboxKey(v) {
+        set((s) => {
+          s.febboxKey = v;
         });
       },
     })),

@@ -22,10 +22,11 @@ import { Heading1 } from "@/components/utils/Text";
 import {
   SetupPart,
   Status,
-  testFebboxToken,
+  testFebboxKey,
 } from "@/pages/parts/settings/SetupPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { usePreferencesStore } from "@/stores/preferences";
 
 interface ProxyEditProps {
   proxyUrls: string[] | null;
@@ -39,9 +40,9 @@ interface BackendEditProps {
   setBackendUrl: Dispatch<SetStateAction<string | null>>;
 }
 
-interface FebboxTokenProps {
-  febboxToken: string | null;
-  setFebboxToken: Dispatch<SetStateAction<string | null>>;
+interface FebboxKeyProps {
+  febboxKey: string | null;
+  setFebboxKey: Dispatch<SetStateAction<string | null>>;
 }
 
 function ProxyEdit({
@@ -218,17 +219,26 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
   );
 }
 
-async function getFebboxTokenStatus(febboxToken: string | null) {
-  if (febboxToken) {
-    const status: Status = await testFebboxToken(febboxToken);
+async function getFebboxKeyStatus(febboxKey: string | null) {
+  if (febboxKey) {
+    const status: Status = await testFebboxKey(febboxKey);
     return status;
   }
   return "unset";
 }
 
-function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
+function FebboxKeyEdit({ febboxKey, setFebboxKey }: FebboxKeyProps) {
   const { t } = useTranslation();
   const [showVideo, setShowVideo] = useState(false);
+  const user = useAuthStore();
+  const preferences = usePreferencesStore();
+
+  // Enable febbox token when account is loaded and we have a token
+  useEffect(() => {
+    if (user.account && febboxKey === null && preferences.febboxKey) {
+      setFebboxKey(preferences.febboxKey);
+    }
+  }, [user.account, febboxKey, preferences.febboxKey, setFebboxKey]);
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -241,11 +251,11 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
 
   useEffect(() => {
     const checkTokenStatus = async () => {
-      const result = await getFebboxTokenStatus(febboxToken);
+      const result = await getFebboxKeyStatus(febboxKey);
       setStatus(result);
     };
     checkTokenStatus();
-  }, [febboxToken]);
+  }, [febboxKey]);
 
   if (conf().ALLOW_FEBBOX_KEY) {
     return (
@@ -261,12 +271,12 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
           </div>
           <div>
             <Toggle
-              onClick={() => setFebboxToken((s) => (s === null ? "" : null))}
-              enabled={febboxToken !== null}
+              onClick={() => setFebboxKey((s) => (s === null ? "" : null))}
+              enabled={febboxKey !== null}
             />
           </div>
         </div>
-        {febboxToken !== null ? (
+        {febboxKey !== null ? (
           <>
             <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
@@ -328,9 +338,9 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
               <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
               <AuthInputBox
                 onChange={(newToken) => {
-                  setFebboxToken(newToken);
+                  setFebboxKey(newToken);
                 }}
-                value={febboxToken ?? ""}
+                value={febboxKey ?? ""}
                 placeholder="eyABCdE..."
                 passwordToggleable
                 className="flex-grow"
@@ -359,7 +369,7 @@ function FebboxTokenEdit({ febboxToken, setFebboxToken }: FebboxTokenProps) {
 }
 
 export function ConnectionsPart(
-  props: BackendEditProps & ProxyEditProps & FebboxTokenProps,
+  props: BackendEditProps & ProxyEditProps & FebboxKeyProps,
 ) {
   const { t } = useTranslation();
   return (
@@ -377,9 +387,9 @@ export function ConnectionsPart(
           backendUrl={props.backendUrl}
           setBackendUrl={props.setBackendUrl}
         />
-        <FebboxTokenEdit
-          febboxToken={props.febboxToken}
-          setFebboxToken={props.setFebboxToken}
+        <FebboxKeyEdit
+          febboxKey={props.febboxKey}
+          setFebboxKey={props.setFebboxKey}
         />
       </div>
     </div>

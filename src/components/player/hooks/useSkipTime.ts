@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
-import { useAuthStore } from "@/stores/auth";
+import { usePreferencesStore } from "@/stores/preferences";
 
 // Thanks Nemo for this API
 const BASE_URL = "https://skips.pstream.org";
@@ -11,13 +11,13 @@ const MAX_RETRIES = 3;
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
   const [skiptime, setSkiptime] = useState<number | null>(null);
-  const febboxToken = useAuthStore((s) => s.febboxToken);
+  const febboxKey = usePreferencesStore((s) => s.febboxKey);
 
   useEffect(() => {
     const fetchSkipTime = async (retries = 0): Promise<void> => {
       if (!meta?.imdbId || meta.type === "movie") return;
       if (!conf().ALLOW_FEBBOX_KEY) return;
-      if (!febboxToken) return;
+      if (!febboxKey) return;
 
       try {
         const apiUrl = `${BASE_URL}/${meta.imdbId}/${meta.season?.number}/${meta.episode?.number}`;
@@ -57,7 +57,7 @@ export function useSkipTime() {
     meta?.type,
     meta?.season?.number,
     meta?.episode?.number,
-    febboxToken,
+    febboxKey,
   ]);
 
   return skiptime;

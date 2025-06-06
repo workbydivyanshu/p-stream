@@ -42,13 +42,14 @@ import {
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { usePreferencesStore } from "@/stores/preferences";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
-import { Status, testFebboxToken } from "../parts/settings/SetupPart";
+import { Status, testFebboxKey } from "../parts/settings/SetupPart";
 
-async function getFebboxTokenStatus(febboxToken: string | null) {
-  if (febboxToken) {
-    const status: Status = await testFebboxToken(febboxToken);
+async function getFebboxKeyStatus(febboxKey: string | null) {
+  if (febboxKey) {
+    const status: Status = await testFebboxKey(febboxKey);
     return status;
   }
   return "unset";
@@ -57,8 +58,17 @@ async function getFebboxTokenStatus(febboxToken: string | null) {
 export function FEDAPISetup() {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
-  const febboxToken = useAuthStore((s) => s.febboxToken);
-  const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
+  const febboxKey = usePreferencesStore((s) => s.febboxKey);
+  const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
+  const user = useAuthStore();
+
+  // Enable febbox token when account is loaded and we have a token
+  useEffect(() => {
+    if (user.account && febboxKey) {
+      setFebboxKey(febboxKey);
+      setIsExpanded(true);
+    }
+  }, [user.account, febboxKey, setFebboxKey]);
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -71,11 +81,11 @@ export function FEDAPISetup() {
 
   useEffect(() => {
     const checkTokenStatus = async () => {
-      const result = await getFebboxTokenStatus(febboxToken);
+      const result = await getFebboxKeyStatus(febboxKey);
       setStatus(result);
     };
     checkTokenStatus();
-  }, [febboxToken]);
+  }, [febboxKey]);
 
   const [showVideo, setShowVideo] = useState(false);
 
@@ -161,9 +171,9 @@ export function FEDAPISetup() {
                 <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
                 <AuthInputBox
                   onChange={(newToken) => {
-                    setFebboxToken(newToken);
+                    setFebboxKey(newToken);
                   }}
-                  value={febboxToken ?? ""}
+                  value={febboxKey ?? ""}
                   placeholder="eyABCdE..."
                   passwordToggleable
                   className="flex-grow"

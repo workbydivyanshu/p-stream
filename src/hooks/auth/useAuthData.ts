@@ -12,6 +12,7 @@ import {
 import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useLanguageStore } from "@/stores/language";
+import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useThemeStore } from "@/stores/theme";
@@ -28,10 +29,30 @@ export function useAuthData() {
   const importSubtitleLanguage = useSubtitleStore(
     (s) => s.importSubtitleLanguage,
   );
-  const setFebboxToken = useAuthStore((s) => s.setFebboxToken);
+  const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
 
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceItems = useProgressStore((s) => s.replaceItems);
+
+  const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
+  const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
+  const setEnableSkipCredits = usePreferencesStore(
+    (s) => s.setEnableSkipCredits,
+  );
+  const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
+  const setEnableFeatured = usePreferencesStore((s) => s.setEnableFeatured);
+  const setEnableDetailsModal = usePreferencesStore(
+    (s) => s.setEnableDetailsModal,
+  );
+  const setEnableImageLogos = usePreferencesStore((s) => s.setEnableImageLogos);
+  const setEnableCarouselView = usePreferencesStore(
+    (s) => s.setEnableCarouselView,
+  );
+  const setSourceOrder = usePreferencesStore((s) => s.setSourceOrder);
+  const setEnableSourceOrder = usePreferencesStore(
+    (s) => s.setEnableSourceOrder,
+  );
+  const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
 
   const login = useCallback(
     async (
@@ -58,8 +79,8 @@ export function useAuthData() {
     removeAccount();
     clearBookmarks();
     clearProgress();
-    setFebboxToken(null);
-  }, [removeAccount, clearBookmarks, clearProgress, setFebboxToken]);
+    setFebboxKey(null);
+  }, [removeAccount, clearBookmarks, clearProgress, setFebboxKey]);
 
   const syncData = useCallback(
     async (
@@ -87,6 +108,54 @@ export function useAuthData() {
       if (settings.proxyUrls) {
         setProxySet(settings.proxyUrls);
       }
+
+      if (settings.enableThumbnails !== undefined) {
+        setEnableThumbnails(settings.enableThumbnails);
+      }
+
+      if (settings.enableAutoplay !== undefined) {
+        setEnableAutoplay(settings.enableAutoplay);
+      }
+
+      if (settings.enableSkipCredits !== undefined) {
+        setEnableSkipCredits(settings.enableSkipCredits);
+      }
+
+      if (settings.enableDiscover !== undefined) {
+        setEnableDiscover(settings.enableDiscover);
+      }
+
+      if (settings.enableFeatured !== undefined) {
+        setEnableFeatured(settings.enableFeatured);
+      }
+
+      if (settings.enableDetailsModal !== undefined) {
+        setEnableDetailsModal(settings.enableDetailsModal);
+      }
+
+      if (settings.enableImageLogos !== undefined) {
+        setEnableImageLogos(settings.enableImageLogos);
+      }
+
+      if (settings.enableCarouselView !== undefined) {
+        setEnableCarouselView(settings.enableCarouselView);
+      }
+
+      if (settings.sourceOrder !== undefined) {
+        setSourceOrder(settings.sourceOrder);
+      }
+
+      if (settings.enableSourceOrder !== undefined) {
+        setEnableSourceOrder(settings.enableSourceOrder);
+      }
+
+      if (settings.proxyTmdb !== undefined) {
+        setProxyTmdb(settings.proxyTmdb);
+      }
+
+      if (settings.febboxKey !== undefined) {
+        setFebboxKey(settings.febboxKey);
+      }
     },
     [
       replaceBookmarks,
@@ -95,6 +164,18 @@ export function useAuthData() {
       importSubtitleLanguage,
       setTheme,
       setProxySet,
+      setEnableThumbnails,
+      setEnableAutoplay,
+      setEnableSkipCredits,
+      setEnableDiscover,
+      setEnableFeatured,
+      setEnableDetailsModal,
+      setEnableImageLogos,
+      setEnableCarouselView,
+      setSourceOrder,
+      setEnableSourceOrder,
+      setProxyTmdb,
+      setFebboxKey,
     ],
   );
 

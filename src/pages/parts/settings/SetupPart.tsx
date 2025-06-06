@@ -18,6 +18,7 @@ import {
 import { Heading3 } from "@/components/utils/Text";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { usePreferencesStore } from "@/stores/preferences";
 
 const getRegion = async (): Promise<string | null> => {
   if (typeof window === "undefined") return null;
@@ -72,7 +73,7 @@ type SetupData = {
   extension: Status;
   proxy: Status;
   defaultProxy: Status;
-  febboxTokenTest?: Status;
+  febboxKeyTest?: Status;
 };
 
 function testProxy(url: string) {
@@ -87,13 +88,11 @@ function testProxy(url: string) {
   });
 }
 
-export async function testFebboxToken(
-  febboxToken: string | null,
-): Promise<Status> {
+export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
   const BASE_URL = await getBaseUrl();
   const febboxApiTestUrl = `${BASE_URL}/movie/tt13654226`;
 
-  if (!febboxToken) {
+  if (!febboxKey) {
     return "unset";
   }
 
@@ -107,7 +106,7 @@ export async function testFebboxToken(
     try {
       const response = await fetch(febboxApiTestUrl, {
         headers: {
-          "ui-token": febboxToken,
+          "ui-token": febboxKey,
         },
       });
 
@@ -177,7 +176,7 @@ export async function testFebboxToken(
 
 function useIsSetup() {
   const proxyUrls = useAuthStore((s) => s.proxySet);
-  const febboxToken = useAuthStore((s) => s.febboxToken);
+  const febboxKey = usePreferencesStore((s) => s.febboxKey);
   const { loading, value } = useAsync(async (): Promise<SetupData> => {
     const extensionStatus: Status = (await isExtensionActive())
       ? "success"
@@ -192,29 +191,29 @@ function useIsSetup() {
       }
     }
 
-    const febboxTokenStatus: Status = await testFebboxToken(febboxToken);
+    const febboxKeyStatus: Status = await testFebboxKey(febboxKey);
 
     return {
       extension: extensionStatus,
       proxy: proxyStatus,
       defaultProxy: "success",
       ...(conf().ALLOW_FEBBOX_KEY && {
-        febboxTokenTest: febboxTokenStatus,
+        febboxKeyTest: febboxKeyStatus,
       }),
     };
-  }, [proxyUrls, febboxToken]);
+  }, [proxyUrls, febboxKey]);
 
   let globalState: Status = "unset";
   if (
     value?.extension === "success" ||
     value?.proxy === "success" ||
-    value?.febboxTokenTest === "success"
+    value?.febboxKeyTest === "success"
   )
     globalState = "success";
   if (
     value?.proxy === "error" ||
     value?.extension === "error" ||
-    value?.febboxTokenTest === "error"
+    value?.febboxKeyTest === "error"
   )
     globalState = "error";
 
@@ -356,7 +355,7 @@ export function SetupPart() {
             {t("settings.connections.setup.items.default")}
           </SetupCheckList>
           {conf().ALLOW_FEBBOX_KEY && (
-            <SetupCheckList status={setupStates.febboxTokenTest || "unset"}>
+            <SetupCheckList status={setupStates.febboxKeyTest || "unset"}>
               Febbox UI token
             </SetupCheckList>
           )}
