@@ -215,7 +215,8 @@
             "register": "Synchroniser au Cloud",
             "settings": "Paramètres",
             "support": "Support",
-            "discover": "Découvrir"
+            "discover": "Découvrir",
+            "development": "Développement"
         }
     },
     "notFound": {
@@ -289,9 +290,37 @@
             "title": "Commençons par configurer P-Stream",
             "moreInfo": {
                 "recommended": {
-                    "subtitle": "Configurations recommandées :"
+                    "subtitle": "Configurations recommandées :",
+                    "title": "Vous ne savez pas quoi choisir ?",
+                    "desktop": {
+                        "title": "Ordinateur :",
+                        "description": "Extension + API FED (Privée)"
+                    },
+                    "iOS": {
+                        "title": "iOS :",
+                        "description": "Proxy personnalisé + API FED (Privée)"
+                    },
+                    "android": {
+                        "title": "Android :",
+                        "description": "Extension + API FED (Privée)"
+                    }
                 },
-                "button": "Voir plus"
+                "button": "Voir plus",
+                "explainer": {
+                    "intro": "P-Stream n’héberge pas de vidéos. Il s’appuie sur des sites tiers pour accéder au contenu, vous devez donc choisir comment il s’y connecte.",
+                    "proxyDescription": "Le proxy récupère les contenus depuis d’autres sites web. Il contourne les restrictions du navigateur (comme CORS) pour permettre cette récupération.",
+                    "fedapi": {
+                        "fedapi": "Optionnel : jeton API FED (privé)",
+                        "fedapiDescription": "Connectez votre propre compte gratuit Febbox pour accéder à l’API FED (privée), la meilleure source avec qualité 4K, Dolby Atmos, fonction sauter l’intro et des temps de chargement ultra rapides! Cette option est fortement recommandée."
+                    },
+                    "outro": "Si vous avez d’autres questions sur le fonctionnement, n’hésitez pas à les poser sur le serveur <0>Discord de P-Stream</0> !",
+                    "extension": "1. Extension",
+                    "options": "Vos Options :",
+                    "proxy": "2. Proxy",
+                    "default": "3. Configuration par défaut",
+                    "defaultDescription": "Utilise le proxy intégré de P-Stream. C’est l’option la plus simple, mais elle peut être plus lente en raison de la bande passante partagée."
+                },
+                "title": "Comprendre le paramétrage"
             }
         }
     },
@@ -328,7 +357,9 @@
                     "shortTitle": "Télécharger / PC",
                     "title": "Téléchargement sur PC"
                 },
-                "title": "Télécharger"
+                "title": "Télécharger",
+                "hlsDownloader": "Ou rendez-vous sur le site <0>HLS Downloader Website</0> et collez l’URL de la playlist ci-dessous.",
+                "button": "Essayer de télécharger"
             },
             "episodes": {
                 "button": "Épisodes",
@@ -337,7 +368,9 @@
                 "loadingError": "Erreur lors du chargement de la saison",
                 "loadingList": "Chargement...",
                 "loadingTitle": "Chargement...",
-                "unairedEpisodes": "Un ou plusieurs épisodes de cette saison ont été désactivés, car ils n'ont pas encore été diffusés."
+                "unairedEpisodes": "Un ou plusieurs épisodes de cette saison ont été désactivés, car ils n'ont pas encore été diffusés.",
+                "seasons": "Saisons",
+                "showMore": "Voir plus"
             },
             "playback": {
                 "speedLabel": "Vitesse de lecture",
@@ -348,7 +381,8 @@
                 "automaticLabel": "Qualité automatique",
                 "hint": "Vous pouvez essayer de <0>changer de source</0> pour obtenir différentes options de qualité.",
                 "iosNoQuality": "En raison des limitations définies par Apple, la sélection de la qualité n'est pas disponible sur iOS pour cette source. Vous pouvez essayer <0>de changer de source</0> pour obtenir des options de qualité différentes.",
-                "title": "Qualité"
+                "title": "Qualité",
+                "auto": "Auto"
             },
             "settings": {
                 "audioItem": "Audio",
@@ -358,7 +392,7 @@
                 "playbackItem": "Paramètres de lecture",
                 "qualityItem": "Qualité",
                 "sourceItem": "Sources vidéo",
-                "subtitleItem": "Paramètres des sous-titres",
+                "subtitleItem": "Sous-titres",
                 "videoSection": "Paramètres vidéo"
             },
             "sources": {
@@ -378,22 +412,30 @@
                 "unknownOption": "Inconnu"
             },
             "subtitles": {
-                "customChoice": "Glisser ou charger un fichier",
+                "customChoice": "Glisser ou importer un fichier",
                 "customizeLabel": "Personnaliser",
-                "dropSubtitleFile": "Glisser le fichier des sous-titres ici",
+                "dropSubtitleFile": "Faites glisser votre fichier de sous-titres ici ! >_<",
                 "offChoice": "Désactivé",
                 "settings": {
                     "backlink": "Sous-titres personnalisés",
                     "delay": "Délai des sous-titres",
-                    "fixCapitals": "Corriger les capitales"
+                    "fixCapitals": "Correction des majuscules"
                 },
                 "title": "Sous-titres",
-                "unknownLanguage": "Inconnu"
+                "unknownLanguage": "Inconnu",
+                "onChoice": "Activé",
+                "SourceChoice": "Sous-titres d’origine",
+                "empty": "Aucun sous-titre n’est disponible pour ce contenu.",
+                "notFound": "Aucun sous-titre ne correspond à votre recherche",
+                "useNativeSubtitles": "Utiliser les sous-titres natifs de la vidéo"
             },
             "watchparty": {
                 "watchpartyItem": "Watch Party",
                 "notice": "La version précédente de la Watch Party peut ne pas être compatible avec certaines sources",
                 "legacyWatchparty": "Utiliser la version précédente de la Watch Party"
+            },
+            "audio": {
+                "default": "Par défault"
             }
         },
         "metadata": {
@@ -426,7 +468,8 @@
             }
         },
         "nextEpisode": {
-            "next": "Prochain épisode"
+            "next": "Prochain épisode",
+            "nextSeason": "Saison suivante"
         },
         "playbackError": {
             "badge": "Erreur de lecture",
@@ -460,6 +503,11 @@
                 "homeButton": "Revenir à l'accueil",
                 "text": "Nous avons cherché parmi nos sources et n'avons pas trouvé les médias que vous recherchez ! Nous n'hébergeons pas les médias et n'avons aucun contrôle sur ce qui est disponible. Veuillez cliquer sur \"Afficher les détails\" ci-dessous pour plus d'informations.",
                 "title": "Nous n'avons pas trouvé cela"
+            },
+            "tips": {
+                "20": "Appuyez sur C pour activer ou désactiver les sous-titres !",
+                "8": "Personnalisez la couleur des sous-titres !",
+                "10": "Rejoignez le Discord !"
             }
         },
         "time": {
@@ -514,6 +562,11 @@
                     "title": "Mettre fin à toutes les sessions",
                     "text": "Cela vous déconnectera de tous les appareils liés à votre compte.",
                     "button": "Se déconnecter de tous les appareils"
+                },
+                "migration": {
+                    "title": "Migration de compte",
+                    "text": "Migrez votre compte vers un nouveau serveur ou téléchargez vos données.",
+                    "button": "Migrer le compte"
                 }
             },
             "devices": {
@@ -534,7 +587,10 @@
                 "text": "Partagez la progression de vos films et séries entre vos appareils et gardez-les synchronisés.",
                 "title": "Synchroniser au Cloud"
             },
-            "title": "Compte"
+            "title": "Compte",
+            "admin": {
+                "title": "Panneau d'administration"
+            }
         },
         "appearance": {
             "activeTheme": "Actif",
@@ -543,15 +599,48 @@
                 "default": "Défaut",
                 "gray": "Gris",
                 "red": "Rouge",
-                "teal": "Bleu canard"
+                "teal": "Bleu canard",
+                "spark": "Éclair",
+                "classic": "Classique",
+                "green": "Vert",
+                "mocha": "Mocha",
+                "pink": "Rose",
+                "noir": "Noir",
+                "ember": "Braise",
+                "acid": "Acide",
+                "grape": "Violet",
+                "spiderman": "Spiderman",
+                "forest": "Forêt",
+                "wolverine": "Wolverine",
+                "popsicle": "Esquimau",
+                "hulk": "Hulk"
             },
-            "title": "Apparence"
+            "title": "Apparence",
+            "options": {
+                "discover": "Section Découvrir",
+                "discoverDescription": "Afficher la section Découvrir sur la page d’accueil, en dessous de vos contenus favoris. Activé par défaut.",
+                "modalDescription": "Afficher la fenêtre de détails lors du clic sur carte de contenu sur la page d'accueil, au lieu d’aller directement à la page de lecture. Un proxy ou une extension est requis pour la bande-annonce. Option désactivée par défaut.",
+                "discoverLabel": "Section Découvrir",
+                "featured": "Contenus mis en avant",
+                "featuredDescription": "Affiche un carrousel de films et séries en vedette en haut de la page d’accueil. Cette option est désactivée par défaut.",
+                "featuredLabel": "Contenus mis en avant",
+                "modal": "Fenêtre de détails",
+                "modalLabel": "Fenêtre de détails",
+                "carouselView": "Affichage en carrousel",
+                "carouselViewDescription": "Afficher les sections \"En cours de lecture\" et \"Favoris\" sous forme de carrousels au lieu d’une grille. Désactivé par défaut.",
+                "carouselViewLabel": "Affichage en carrousel"
+            }
         },
         "connections": {
             "server": {
                 "description": "Si vous désirez utiliser un système de stockage externe pour enregistrer vos données, activez cette option et indiquez l'URL. <0>Instructions.</0>",
                 "label": "Serveur personnalisé",
-                "urlLabel": "URL du serveur personnalisé"
+                "urlLabel": "URL du serveur personnalisé",
+                "migration": {
+                    "description": "<0>Migrer mes données</0> vers un nouveau serveur.",
+                    "link": "Migrer mes données"
+                },
+                "documentation": "Documentation Backend"
             },
             "setup": {
                 "doSetup": "Configurer",
@@ -582,7 +671,12 @@
                 "emptyState": "Pas encore de workers, ajoutez-en un ci-dessous",
                 "label": "Utiliser des agents proxy personnalisés",
                 "urlLabel": "URLs des workers",
-                "urlPlaceholder": "https://"
+                "urlPlaceholder": "https://",
+                "proxyTMDB": {
+                    "description": "Nécessaire uniquement si vous ne pouvez pas accéder directement à TheMovieDB, par exemple si votre FAI (Fournisseur d'accès à Internet) le bloque. Il est recommandé de désactiver la section Découverte pour améliorer les performances dans ce cas.",
+                    "title": "Proxy TMDB"
+                },
+                "documentation": "Documentation Proxy"
             }
         },
         "preferences": {
@@ -591,7 +685,16 @@
             "thumbnail": "Générer les miniatures",
             "thumbnailDescription": "La plupart du temps, les vidéos n'ont pas de miniatures. Vous pouvez activer ce paramètre pour les générer à la volée, mais ils peuvent ralentir votre vidéo.",
             "thumbnailLabel": "Générer les miniatures",
-            "title": "Préférences"
+            "title": "Préférences",
+            "skipCreditsDescription": "Lorsque cette option est activée, l’épisode suivant se lance automatiquement à 99% pour passer le générique de fin. Lorsqu’elle est désactivée, la lecture attend la fin complète de l’épisode.",
+            "autoplay": "Lecture automatique",
+            "sourceOrderDescription": "Faites glisser et déposez pour réorganiser les sources. Cela déterminera l’ordre dans lequel les sources seront vérifiées pour le contenu que vous souhaitez regarder. Si une source est grisée, cela signifie que l’<bold>extension</bold> est requise pour y accéder. <br><br> <strong>(L’ordre par défaut convient à la plupart des utilisateurs)</strong>",
+            "autoplayDescription": "Permet de lire automatiquement le prochain épisode d’une série une fois l’épisode actuel terminé. Disponible pour les utilisateurs via une extension navigateur, un proxy personnalisé, ou via la configuration par défaut si elle est autorisée par l’hébergeur.",
+            "autoplayLabel": "Lecture automatique",
+            "skipCredits": "Passer le générique de fin",
+            "skipCreditsLabel": "Passer le générique de fin",
+            "sourceOrder": "Modifier l’ordre des sources",
+            "sourceOrderEnableLabel": "Modifier l’ordre des sources"
         },
         "reset": "Réinitialiser",
         "save": "Sauvegarder",
@@ -610,12 +713,24 @@
             }
         },
         "subtitles": {
-            "backgroundBlurLabel": "Flou d'arrière-plan",
-            "backgroundLabel": "Opacité de l'arrière-plan",
+            "backgroundBlurLabel": "Flou du fond",
+            "backgroundLabel": "Opacité du fond",
             "colorLabel": "Couleur",
             "previewQuote": "Plus l'obscurité est profonde, plus la lumière brille.",
-            "textSizeLabel": "Taille des textes",
-            "title": "Sous-titres"
+            "textSizeLabel": "Taille du texte",
+            "title": "Sous-titres",
+            "textStyle": {
+                "default": "Par défaut",
+                "title": "Style des sous-titres",
+                "raised": "Relief",
+                "depressed": "Enfoncé",
+                "uniform": "Uni",
+                "dropShadow": "Ombre portée"
+            },
+            "textBoldLabel": "Texte en gras",
+            "verticalPositionLabel": "Position verticale",
+            "default": "Par défaut",
+            "low": "Basse"
         },
         "unsaved": "Vous avez des changements non sauvegardés"
     },
@@ -689,6 +804,23 @@
             "status": {
                 "processing": "Traitement des données en cours...",
                 "success": "Vos données ont été téléchargées avec succès! 🎉"
+            },
+            "file": {
+                "select": "Choisir un fichier",
+                "change": "Changer de fichier",
+                "name": "Nom du fichier"
+            },
+            "dataPreview": "Aperçu :",
+            "items": {
+                "bookmarks": "Contenus favoris",
+                "progress": "Progression de lecture"
+            },
+            "exportedOn": "Exporté le",
+            "button": {
+                "import": "Importer des données",
+                "processing": "Traitement en cours...",
+                "success": "Importation terminée",
+                "home": "Continuer vers l’accueil"
             }
         },
         "direct": {
@@ -707,18 +839,58 @@
                 "home": "Retour au menu principal",
                 "login": "Continuer en se connectant"
             }
-        }
+        },
+        "back": "Retour"
     },
     "discover": {
         "carousel": {
             "title": {
-                "recommended": "Parce que tu as regardé : {{title}}"
+                "recommended": "Parce que tu as regardé : {{title}}",
+                "movies": "Films {{category}}",
+                "tvshows": "Séries {{category}}",
+                "inCinemas": "Au cinéma",
+                "popularOn": "{{type}} populaires sur {{provider}}",
+                "loading": "Chargement...",
+                "popular": "Les plus populaires",
+                "nowPlaying": "Au cinéma",
+                "topRated": "Les mieux notés",
+                "latestReleases": "Dernières sorties",
+                "4kReleases": "Sorties 4K",
+                "onTheAir": "En cours de diffusion",
+                "editorPicksMovies": "Films sélectionnés",
+                "editorPicksShows": "Séries sélectionnées",
+                "moviesOn": "Films sur {{provider}}",
+                "tvshowsOn": "Séries sur {{provider}}",
+                "genreMovies": "Films {{genre}}",
+                "genreShows": "Séries {{genre}}",
+                "categoryMovies": "Films {{category}}",
+                "categoryShows": "Séries {{category}}"
             },
-            "more": "Voir plus"
+            "more": "Voir plus",
+            "change": "Changer"
         },
         "scrollToTop": "Revenir en haut",
         "tabs": {
-            "movies": "Films"
+            "movies": "Films",
+            "tvshows": "Séries",
+            "editorpicks": "Choix de l'éditeur"
+        },
+        "randomMovie": {
+            "cancel": "Annuler le compte à rebours",
+            "button": "Regarder quelque chose au hasard",
+            "countdown": "{{countdown}}s",
+            "nowPlaying": "Lecture en cours"
+        },
+        "page": {
+            "title": "Découvrir des films et des séries",
+            "subtitle": "Explorez les derniers succès et les classiques intemporels.",
+            "loadMore": "Afficher plus",
+            "loading": "Chargement...",
+            "back": "Retour"
+        },
+        "featured": {
+            "playNow": "Regarder maintenant",
+            "moreInfo": "En savoir plus"
         }
     },
     "watchParty": {
@@ -733,6 +905,53 @@
             "inSync": "Synchronisé",
             "outOfSync": "Désynchronisé"
         },
-        "alone": "Seul"
+        "alone": "Seul",
+        "cancel": "Annuler",
+        "aheadOfHost": "En avance sur l’hôte de {{seconds}} secondes",
+        "showStatusOverlay": "Afficher l’overlay de statut",
+        "join": "Rejoindre",
+        "leaveWatchParty": "Quitter la Watch Party",
+        "episodeMismatch": "Impossible de rejoindre la Watch Party : vous regardez un épisode différent de celui de l’hôte.",
+        "shareCode": "Partagez ce code avec vos amis (cliquez pour copier le lien)",
+        "invalidRoom": "Impossible de se connecter à cette salle",
+        "connectedAsGuest": "Connecté à la Watch Party en tant qu’invité",
+        "hostParty": "Héberger une Watch Party",
+        "joinParty": "Rejoindre une Watch Party",
+        "copyCode": "Cliquez pour copier",
+        "save": "Sauvegarder",
+        "emptyRoom": "Personne n’est encore dans cette salle",
+        "contentMismatch": "Impossible de rejoindre la Watch Party : le contenu ne correspond pas à celui de l’hôte.",
+        "linkCopied": "Copié !"
+    },
+    "fedapi": {
+        "status": {
+            "api_down": "Impossible d'accéder à l'API FED !",
+            "success": "réussi"
+        },
+        "setup": {
+            "showVideo": "Voir le tutoriel vidéo",
+            "hideVideo": "Masquer le tutoriel vidéo",
+            "step": {
+                "warning": "(Ne partagez pas ce jeton !)"
+            }
+        }
+    },
+    "support": {
+        "q2": {
+            "body": "Nous avons un <0>GitHub</0> où vous pouvez créer un ticket détaillé dans notre dépôt. De plus, si vous le souhaitez, vous pouvez proposer une pull request pour corriger le problème vous-même.",
+            "title": "Comment signaler un bug ou un problème ?"
+        },
+        "text": "P-Stream a été conçu pour être aussi simple et intuitif que possible. Cependant, il est normal que des questions ou des problèmes surviennent. Cette page est là pour vous aider à y répondre et à résoudre ces difficultés.",
+        "title": "Centre d’aide",
+        "q1": {
+            "body": "Vous pouvez rejoindre le <0>Discord officiel de P-Stream</0> pour poser vos questions, ou envoyer un e-mail à l’adresse indiquée en bas de cette page.",
+            "title": "Où puis-je obtenir de l’aide ?"
+        }
+    },
+    "downtimeNotice": {
+        "badge": "Problèmes",
+        "goHome": "Retour à l’accueil",
+        "message": "P-Stream rencontre à nouveau des problèmes avec certains fournisseurs. Si vous ne parvenez pas à trouver ou à lire un contenu, veuillez changer de source. Cette erreur risque de persister durant les périodes indiquées ci-dessous.",
+        "title": "Problèmes liés aux fournisseurs"
     }
 }
