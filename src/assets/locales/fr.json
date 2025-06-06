@@ -4,17 +4,17 @@
         "faqTitle": "Questions fréquentes",
         "q1": {
             "body": "P-Stream n'héberge aucun contenu. Lorsque vous cliquez sur un élément à regarder, une recherche est effectuée sur Internet pour trouver le média sélectionné (sur l'écran de chargement et dans l'onglet \"sources vidéo\", vous pouvez voir quelle source vous utilisez). Les médias ne sont jamais téléchargés par P-Stream, tout passe par ce mécanisme de recherche.",
-            "title": "D'où vient le contenu ?"
+            "title": "D’où proviennent les contenus proposés ?"
         },
         "q2": {
             "body": "Il est impossible de demander un film ou une série, car P-Stream ne gère aucun contenu. Le contenu est récupéré en explorant d'autres sites sur Internet.",
             "title": "Où puis-je demander une série ou un film ?"
         },
         "q3": {
-            "body": "Nos résultats de recherche sont alimentés par The Movie Database (TMDB) et s'affichent indépendamment de la disponibilité réelle du contenu dans nos sources.",
-            "title": "Les résultats de la recherche affichent la série ou le film, pourquoi ne puis-je pas le lire ?"
+            "body": "Nos résultats de recherche sont fournis par The Movie Database (TMDB) et peuvent s’afficher même si le contenu n’est pas réellement disponible via nos sources.",
+            "title": "Le film ou la série apparaît dans les résultats de recherche, pourquoi je ne peux pas le/la regarder ?"
         },
-        "title": "À propos de P-Stream",
+        "title": "À propos de P-Stream (^▽^)",
         "q4": {
             "body": "La synchronisation de toutes les données se fait sur la sudo-backend, qui diffère de la backend de communauté et est hébergé indépendamment par moi. Tout le monde peut également l'utiliser.",
             "title": "Qu'en est-il de mes données ?"
@@ -38,7 +38,7 @@
             "passphraseFrameLabel": "Phrase d'accès",
             "title": "Votre phrase d'accès"
         },
-        "hasAccount": "Avez-vous déjà un compte ? <0>Connectez-vous ici.</0>",
+        "hasAccount": "Vous avez déjà un compte ? <0>Connectez-vous ici.</0>",
         "login": {
             "description": "Veuillez saisir votre phrase d'accès pour accéder à votre compte",
             "deviceLengthError": "Veuillez saisir un nom d'appareil",
@@ -99,7 +99,7 @@
             "twitter": "Twitter",
             "funding": "Soutenez-nous"
         },
-        "tagline": "Regardez vos séries et films préférés avec cette application de streaming open source."
+        "tagline": "Regardez vos émissions et films préférés gratuitement et sans aucune pubs ! (っ'ヮ'c)"
     },
     "global": {
         "name": "P-Stream",
@@ -127,7 +127,7 @@
             "stopEditing": "Arrêter l'édition"
         },
         "search": {
-            "allResults": "C'est tout ce que nous avons !",
+            "allResults": "C’est tout ce que nous avons...",
             "failed": "Le média n'a pas été trouvé, veuillez réessayer !",
             "loading": "Chargement...",
             "noResults": "Nous n'avons rien pus trouvé :(",
@@ -214,14 +214,16 @@
             "logout": "Se déconnecter",
             "register": "Synchroniser au Cloud",
             "settings": "Paramètres",
-            "support": "Support"
+            "support": "Support",
+            "discover": "Découvrir"
         }
     },
     "notFound": {
         "badge": "Introuvable",
         "goHome": "Retourner à l'accueil",
         "message": "Nous avons cherché partout : sous les poubelles, dans le placard, derrière le proxy, mais nous n'avons pas pu trouver la page que vous cherchez.",
-        "title": "Impossible de trouver cette page"
+        "title": "Impossible de trouver cette page",
+        "reloadButton": "Réessayer"
     },
     "onboarding": {
         "defaultConfirm": {
@@ -281,9 +283,16 @@
                     "description": "Configurez un proxy en seulement cinq minutes et accédez à d'excellentes sources !",
                     "quality": "Bonne qualité",
                     "title": "Proxy personnalisé"
-                }
+                },
+                "or": "ou"
             },
-            "title": "Commençons par configurer P-Stream"
+            "title": "Commençons par configurer P-Stream",
+            "moreInfo": {
+                "recommended": {
+                    "subtitle": "Configurations recommandées :"
+                },
+                "button": "Voir plus"
+            }
         }
     },
     "overlays": {
@@ -332,7 +341,8 @@
             },
             "playback": {
                 "speedLabel": "Vitesse de lecture",
-                "title": "Paramètres de lecture"
+                "title": "Paramètres de lecture",
+                "disabled": "(Désactivé en mode Watch Party)"
             },
             "quality": {
                 "automaticLabel": "Qualité automatique",
@@ -379,6 +389,11 @@
                 },
                 "title": "Sous-titres",
                 "unknownLanguage": "Inconnu"
+            },
+            "watchparty": {
+                "watchpartyItem": "Watch Party",
+                "notice": "La version précédente de la Watch Party peut ne pas être compatible avec certaines sources",
+                "legacyWatchparty": "Utiliser la version précédente de la Watch Party"
             }
         },
         "metadata": {
@@ -619,7 +634,9 @@
         "endsAt": "Finit dans {{time}}",
         "director": "Réalisateur :",
         "cast": "Acteurs :",
-        "runtime": "Durée :"
+        "runtime": "Durée :",
+        "seasons": "Saison(s)",
+        "trailer": "Bande-annonce"
     },
     "migration": {
         "loginRequired": "Vous devez être connecté pour migrer vos données ! Revenez en arriè.re et connectez-vous pour continuer.",
@@ -668,7 +685,11 @@
         },
         "upload": {
             "description": "Téléversez votre fichier de données exporté précédemment pour restaurer vos favoris et votre progression sur ce compte.",
-            "title": "Téléverser les données"
+            "title": "Téléverser les données",
+            "status": {
+                "processing": "Traitement des données en cours...",
+                "success": "Vos données ont été téléchargées avec succès! 🎉"
+            }
         },
         "direct": {
             "title": "Migration directe",
@@ -687,5 +708,31 @@
                 "login": "Continuer en se connectant"
             }
         }
+    },
+    "discover": {
+        "carousel": {
+            "title": {
+                "recommended": "Parce que tu as regardé : {{title}}"
+            },
+            "more": "Voir plus"
+        },
+        "scrollToTop": "Revenir en haut",
+        "tabs": {
+            "movies": "Films"
+        }
+    },
+    "watchParty": {
+        "withCount": "Avec {{count}} autres",
+        "isHost": "Hébergé sur <0>{{backendName}}</0>",
+        "isGuest": "Regarde en tant qu’invité sur <0>{{backendName}}</0>",
+        "watching": "Regarde",
+        "hosting": "Héberge",
+        "syncing": "Synchronisation...",
+        "behindHost": "{{seconds}} secondes de retard sur l’hôte",
+        "status": {
+            "inSync": "Synchronisé",
+            "outOfSync": "Désynchronisé"
+        },
+        "alone": "Seul"
     }
 }

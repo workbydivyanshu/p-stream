@@ -330,7 +330,8 @@
             },
             "playback": {
                 "speedLabel": "Velocidad de reproducción",
-                "title": "Configuración de reproducción"
+                "title": "Configuración de reproducción",
+                "disabled": "Desabilitado en Watch party"
             },
             "quality": {
                 "automaticLabel": "Calidad automática",
@@ -689,6 +690,48 @@
                 "bookmarks": "Marcadores de contenido",
                 "progress": "Progreso de Visualización"
             }
+        }
+    },
+    "watchParty": {
+        "join": "Unirse",
+        "status": {
+            "inSync": "En sincronización",
+            "outOfSync": "Fuera de sincronización"
+        },
+        "copyCode": "Toca para copiar",
+        "behindHost": "Atrás del anfitrión por {{seconds}} segundos",
+        "alone": "Solo",
+        "withCount": "Con {{count}} otros",
+        "isGuest": "Mirando como invitado en <0>{{backendName}}</0>",
+        "watching": "Mirando",
+        "syncing": "Sincronizando...",
+        "shareCode": "Compartir este codigo con amigos (Toca para copiar link)",
+        "viewers": "Espectadores ({{count}})",
+        "aheadOfHost": "Adelantado del anfitrión por {{seconds}} segundos",
+        "linkCopied": "Copiado!",
+        "invalidRoom": "No se pudo conectar a la sala",
+        "emptyRoom": "Nadie está aún en la sala",
+        "save": "Guardar",
+        "cancel": "Cancelar"
+    },
+    "fedapi": {
+        "setup": {
+            "step": {
+                "warning": "(¡No compartas este token!)",
+                "1": "1. Anda a <0>febbox.com</0> y inicia sesión con Google (¡Usa una cuenta nueva!)",
+                "5": "5. Cierra la pestaña, pero NO cierres sesión!",
+                "4": "4. Copia la galleta/cookie de \"ui\".",
+                "3": "3. Ve a la pestaña de Application → Cookies",
+                "2": "2. Abre DevTools o inspecciona la página"
+            },
+            "title": "Para conseguir tu UI token:",
+            "showVideo": "Muestra el Video Tutorial",
+            "hideVideo": "Oculta el Video Tutorial"
+        },
+        "status": {
+            "invalid_token": "¡No se pudo recuperar un stream 'VIP'. Tu token es inválido!",
+            "api_down": "¡No se pudo alcanzar FED API!",
+            "success": "éxito"
         }
     }
 }

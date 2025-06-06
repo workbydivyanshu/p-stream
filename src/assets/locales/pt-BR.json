@@ -395,8 +395,8 @@
                 "experienceSection": "Experiência de visualização",
                 "playbackItem": "Configurações de reprodução",
                 "qualityItem": "Qualidade",
-                "sourceItem": "Fontes de vídeo",
-                "subtitleItem": "Configurações de legenda",
+                "sourceItem": "Fonte",
+                "subtitleItem": "Legendas",
                 "videoSection": "Configurações de vídeo"
             },
             "sources": {
@@ -413,7 +413,8 @@
                     "title": "Sem transmissão"
                 },
                 "title": "Fontes",
-                "unknownOption": "Desconhecido"
+                "unknownOption": "Desconhecido",
+                "editOrder": "Editar ordem"
             },
             "subtitles": {
                 "customChoice": "Solte ou faça upload do arquivo",
@@ -426,7 +427,10 @@
                     "fixCapitals": "Corrigir letras maiúsculas"
                 },
                 "title": "Legendas",
-                "unknownLanguage": "Desconhecido"
+                "unknownLanguage": "Desconhecido",
+                "onChoice": "Ativado",
+                "SourceChoice": "Fonte das legendas",
+                "OpenSubtitlesChoice": "OpenSubtitles"
             }
         },
         "metadata": {
