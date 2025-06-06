@@ -141,7 +141,8 @@
                     "¿Qué hay en tu lista de seguimiento hoy?",
                     "¿Cómo estuvo su día?",
                     "Mala mia este sitio nunca funciona...",
-                    "¿No es P-Stream lo mejor?"
+                    "¿No es P-Stream lo mejor?",
+                    ">ᴗ<"
                 ]
             },
             "sectionTitle": "Resultados de búsqueda",
@@ -201,7 +202,9 @@
             "movie": "Película",
             "show": "Serie"
         },
-        "unreleased": "No Estrenado"
+        "unreleased": "No Estrenado",
+        "episodeShort": "E",
+        "seasonShort": "S"
     },
     "navigation": {
         "banner": {
@@ -212,14 +215,17 @@
             "logout": "Cerrar sesión",
             "register": "Sincronizar con la nube",
             "settings": "Configuración",
-            "support": "Soporte"
+            "support": "Soporte",
+            "discover": "Descubrir",
+            "development": "Desarrollo"
         }
     },
     "notFound": {
         "badge": "No encontrado",
         "goHome": "Volver a inicio",
         "message": "Buscamos en todas partes: debajo de los contenedores, en el armario, detrás del proxy, pero al final no pudimos encontrar la página que estás buscando.",
-        "title": "No se puede encontrar esa página"
+        "title": "No se puede encontrar esa página",
+        "reloadButton": "Intentar de nuevo"
     },
     "onboarding": {
         "defaultConfirm": {
@@ -279,9 +285,43 @@
                     "description": "Configura un proxy en tan solo 5 minutos y obtén acceso a buenas fuentes.",
                     "quality": "Buena calidad",
                     "title": "Proxy personalizado"
-                }
+                },
+                "or": "o"
             },
-            "title": "Vamos a configurar P-Stream"
+            "title": "Vamos a configurar P-Stream",
+            "moreInfo": {
+                "explainer": {
+                    "default": "3. Configuración predeterminada",
+                    "intro": "P-Stream no aloja los videos. Depende de sitios de páginas web de terceros para el contenido, asi que tienes que elegir como te conectas a esos sitios.",
+                    "fedapi": {
+                        "fedapi": "Adicional: FED API (Privado) token",
+                        "fedapiDescription": "¡Trae tu propia cuenta GRATIS de Febbox para tener acceso a FED API (Privada), la mejor fuente con calidad 4K,Dolby Atmos, saltar intros y los tiempos de carga mas rapidos! ¡Opción altamente recomendada!"
+                    },
+                    "defaultDescription": "Usa el proxy incorporado de P-Stream. Es la opción mas facil pero puede ser mas lenta debido a ancho de banda compartida.",
+                    "extension": "1. Extensión",
+                    "options": "Tus Opciones:",
+                    "extensionDescription": "La extensión te brinda acceso a la mayoría de las fuentes. Actúa como un proxy local y puede manejar sitios que necesitan cookies especiales o encabezados para cargar.",
+                    "proxy": "2. Proxy",
+                    "outro": "¡Si tienes más preguntas en cómo esto funciona, siéntete libre de preguntar en el <0>P-Stream Discord</0> servidor!"
+                },
+                "title": "Comprender una configuración",
+                "recommended": {
+                    "title": "¿No estás seguro de qué elegir?",
+                    "subtitle": "Configuraciones recomendadas:",
+                    "desktop": {
+                        "description": "Extensión + FED API (Privada)"
+                    },
+                    "iOS": {
+                        "title": "iOS:",
+                        "description": "Proxy personalizado + FED API (Privada)"
+                    },
+                    "android": {
+                        "title": "Android:",
+                        "description": "Extensión + FED API (Privada)"
+                    }
+                },
+                "button": "Más información"
+            }
         }
     },
     "overlays": {
@@ -317,7 +357,9 @@
                     "shortTitle": "Descargar / PC",
                     "title": "Descargando en PC"
                 },
-                "title": "Descargar"
+                "title": "Descargar",
+                "button": "Intentar descarga",
+                "hlsDownloader": "O, ve a la <0>hls downloader website</0> y pega el URL de la playlist de abajo."
             },
             "episodes": {
                 "button": "Episodios",
@@ -326,7 +368,10 @@
                 "loadingError": "Error al cargar la temporada",
                 "loadingList": "Cargando...",
                 "loadingTitle": "Cargando...",
-                "unairedEpisodes": "Uno o más episodios de esta temporada se han desactivado porque aún no se han emitido."
+                "unairedEpisodes": "Uno o más episodios de esta temporada se han desactivado porque aún no se han emitido.",
+                "seasons": "Temporadas",
+                "showMore": "Mostrar más",
+                "showLess": "Mostrar menos"
             },
             "playback": {
                 "speedLabel": "Velocidad de reproducción",
@@ -337,7 +382,8 @@
                 "automaticLabel": "Calidad automática",
                 "hint": "Puedes intentar <0>cambiar de fuente</0> para obtener diferentes opciones de calidad.",
                 "iosNoQuality": "Debido a limitaciones definidas por Apple, la selección de calidad no está disponible en iOS para esta fuente. Puedes intentar <0>cambiar a otra fuente</0> para obtener diferentes opciones de calidad.",
-                "title": "Calidad"
+                "title": "Calidad",
+                "auto": "Automático"
             },
             "settings": {
                 "audioItem": "Audio",
@@ -364,7 +410,8 @@
                     "title": "Sin transmisión"
                 },
                 "title": "Fuentes",
-                "unknownOption": "Desconocida"
+                "unknownOption": "Desconocida",
+                "editOrder": "Editar orden"
             },
             "subtitles": {
                 "customChoice": "Sube o arrastra un archivo",
@@ -377,7 +424,13 @@
                     "fixCapitals": "Arreglar capitalización"
                 },
                 "title": "Subtítulos",
-                "unknownLanguage": "Desconocido"
+                "unknownLanguage": "Desconocido",
+                "onChoice": "En",
+                "SourceChoice": "Subtitulos de fuente",
+                "OpenSubtitlesChoice": "OpenSubtitles",
+                "empty": "No hay subtítulos provistos para esto.",
+                "notFound": "Ni una de las opciones habiles coinciden con tus preferencias",
+                "useNativeSubtitles": "Usar subtitulos de video nativos"
             }
         },
         "metadata": {
@@ -607,7 +660,13 @@
         "votes": "votos",
         "tmdb": "Ver en TMDB",
         "imdb": "Ver en IMDb",
-        "episodes": "Episodios"
+        "episodes": "Episodios",
+        "play": "Reproducir",
+        "seasons": "Temporada/s",
+        "trailer": "Trailer",
+        "endsAt": "Termina en {{time}}",
+        "episode": "Episodio",
+        "language": "Idioma:"
     },
     "migration": {
         "loginRequired": "¡Debes iniciar sesión para migrar tus datos! Vuelve e inicia sesión para continuar.",
@@ -689,8 +748,15 @@
             "items": {
                 "bookmarks": "Marcadores de contenido",
                 "progress": "Progreso de Visualización"
+            },
+            "exportedOn": "Exportado en",
+            "button": {
+                "import": "Importar data",
+                "processing": "Procesando...",
+                "success": "Importación completa"
             }
-        }
+        },
+        "back": "Ir de vuelta"
     },
     "watchParty": {
         "join": "Unirse",
@@ -733,5 +799,10 @@
             "api_down": "¡No se pudo alcanzar FED API!",
             "success": "éxito"
         }
+    },
+    "downtimeNotice": {
+        "message": "P-Stream esta experimentando problemas con algunos proveedores de nuevo. Si no puedes encontrar o reproducir un programa, por favor cambie de fuente. Espera que este error persista a lo largo de los siguientes momentos.",
+        "badge": "Problemas",
+        "title": "Problemas de proveedor"
     }
 }
