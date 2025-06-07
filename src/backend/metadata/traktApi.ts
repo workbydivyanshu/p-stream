@@ -29,6 +29,12 @@ export type TraktContentType = "movie" | "episode";
 
 export const TRAKT_BASE_URL = "https://fed-airdate.pstream.org";
 
+export interface TraktDiscoverResponse {
+  movie_tmdb_ids: number[];
+  tv_tmdb_ids: number[];
+  count: number;
+}
+
 // Pagination utility
 export function paginateResults(
   results: TraktLatestResponse,
@@ -47,7 +53,9 @@ export function paginateResults(
 }
 
 // Base function to fetch from Trakt API
-async function fetchFromTrakt(endpoint: string): Promise<TraktLatestResponse> {
+async function fetchFromTrakt<T = TraktLatestResponse>(
+  endpoint: string,
+): Promise<T> {
   const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch from ${endpoint}: ${response.statusText}`);
@@ -93,6 +101,10 @@ export const getDramaReleases = () => fetchFromTrakt("/drama");
 // Popular content
 export const getPopularTVShows = () => fetchFromTrakt("/populartv");
 export const getPopularMovies = () => fetchFromTrakt("/popularmovies");
+
+// Discovery content
+export const getDiscoverContent = () =>
+  fetchFromTrakt<TraktDiscoverResponse>("/discover");
 
 // Type conversion utilities
 export function convertToMediaType(type: TraktContentType): MWMediaType {

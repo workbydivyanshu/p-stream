@@ -8,6 +8,7 @@ import { isExtensionActive } from "@/backend/extension/messaging";
 import { get, getMediaLogo } from "@/backend/metadata/tmdb";
 import {
   TraktReleaseResponse,
+  getDiscoverContent,
   getReleaseDetails,
 } from "@/backend/metadata/traktApi";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
@@ -202,60 +203,107 @@ export function FeaturedCarousel({
         logoFetchController.current.abort(); // Cancel any in-progress logo fetches
       }
       try {
-        if (effectiveCategory === "movies") {
-          // First get the list of popular movies
-          const listData = await get<any>("/movie/popular", {
-            api_key: conf().TMDB_READ_API_KEY,
-            language: formattedLanguage,
-          });
+        if (effectiveCategory === "movies" || effectiveCategory === "tvshows") {
+          // First try to get IDs from Trakt discover endpoint
+          try {
+            const discoverData = await getDiscoverContent();
 
-          // Then fetch full details for each movie to get external_ids
-          const moviePromises = listData.results
-            .slice(0, FETCH_QUANTITY)
-            .map((movie: any) =>
-              get<any>(`/movie/${movie.id}`, {
-                api_key: conf().TMDB_READ_API_KEY,
-                language: formattedLanguage,
-                append_to_response: "external_ids",
-              }),
+            let tmdbIds: number[] = [];
+            if (effectiveCategory === "movies") {
+              tmdbIds = discoverData.movie_tmdb_ids;
+            } else {
+              tmdbIds = discoverData.tv_tmdb_ids;
+            }
+
+            // Then fetch full details for each movie/show to get external_ids
+            const detailPromises = tmdbIds.map((id) =>
+              get<any>(
+                `/${effectiveCategory === "movies" ? "movie" : "tv"}/${id}`,
+                {
+                  api_key: conf().TMDB_READ_API_KEY,
+                  language: formattedLanguage,
+                  append_to_response: "external_ids",
+                },
+              ),
             );
 
-          const movieDetails = await Promise.all(moviePromises);
-          const allMovies = movieDetails.map((movie) => ({
-            ...movie,
-            type: "movie" as const,
-          }));
+            const details = await Promise.all(detailPromises);
+            const mediaItems = details.map((item) => ({
+              ...item,
+              type:
+                effectiveCategory === "movies" ? "movie" : ("show" as const),
+            }));
 
-          // Shuffle
-          const shuffledMovies = [...allMovies].sort(() => 0.5 - Math.random());
-          setMedia(shuffledMovies.slice(0, SLIDE_QUANTITY));
-        } else if (effectiveCategory === "tvshows") {
-          // First get the list of popular shows
-          const listData = await get<any>("/tv/popular", {
-            api_key: conf().TMDB_READ_API_KEY,
-            language: formattedLanguage,
-          });
-
-          // Then fetch full details for each show to get external_ids
-          const showPromises = listData.results
-            .slice(0, FETCH_QUANTITY)
-            .map((show: any) =>
-              get<any>(`/tv/${show.id}`, {
-                api_key: conf().TMDB_READ_API_KEY,
-                language: formattedLanguage,
-                append_to_response: "external_ids",
-              }),
+            // Take the first SLIDE_QUANTITY items
+            setMedia(mediaItems.slice(0, SLIDE_QUANTITY));
+          } catch (traktError) {
+            console.error(
+              "Falling back to TMDB method",
+              "Error fetching from Trakt discover:",
+              traktError,
             );
 
-          const showDetails = await Promise.all(showPromises);
-          const allShows = showDetails.map((show) => ({
-            ...show,
-            type: "show" as const,
-          }));
+            // Fallback to TMDB method
+            if (effectiveCategory === "movies") {
+              // First get the list of popular movies
+              const listData = await get<any>("/movie/popular", {
+                api_key: conf().TMDB_READ_API_KEY,
+                language: formattedLanguage,
+              });
 
-          // Shuffle
-          const shuffledShows = [...allShows].sort(() => 0.5 - Math.random());
-          setMedia(shuffledShows.slice(0, SLIDE_QUANTITY));
+              // Then fetch full details for each movie to get external_ids
+              const moviePromises = listData.results
+                .slice(0, FETCH_QUANTITY)
+                .map((movie: any) =>
+                  get<any>(`/movie/${movie.id}`, {
+                    api_key: conf().TMDB_READ_API_KEY,
+                    language: formattedLanguage,
+                    append_to_response: "external_ids",
+                  }),
+                );
+
+              const movieDetails = await Promise.all(moviePromises);
+              const allMovies = movieDetails.map((movie) => ({
+                ...movie,
+                type: "movie" as const,
+              }));
+
+              // Shuffle
+              const shuffledMovies = [...allMovies].sort(
+                () => 0.5 - Math.random(),
+              );
+              setMedia(shuffledMovies.slice(0, SLIDE_QUANTITY));
+            } else if (effectiveCategory === "tvshows") {
+              // First get the list of popular shows
+              const listData = await get<any>("/tv/popular", {
+                api_key: conf().TMDB_READ_API_KEY,
+                language: formattedLanguage,
+              });
+
+              // Then fetch full details for each show to get external_ids
+              const showPromises = listData.results
+                .slice(0, FETCH_QUANTITY)
+                .map((show: any) =>
+                  get<any>(`/tv/${show.id}`, {
+                    api_key: conf().TMDB_READ_API_KEY,
+                    language: formattedLanguage,
+                    append_to_response: "external_ids",
+                  }),
+                );
+
+              const showDetails = await Promise.all(showPromises);
+              const allShows = showDetails.map((show) => ({
+                ...show,
+                type: "show" as const,
+              }));
+
+              // Shuffle
+              const shuffledShows = [...allShows].sort(
+                () => 0.5 - Math.random(),
+              );
+              setMedia(shuffledShows.slice(0, SLIDE_QUANTITY));
+            }
+          }
         } else if (effectiveCategory === "editorpicks") {
           // Shuffle editor picks Ids
           const allMovieIds = EDITOR_PICKS_MOVIES.map((item) => ({
