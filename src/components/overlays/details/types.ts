@@ -120,6 +120,7 @@ export interface DetailsInfoProps {
   data: DetailsContent;
   imdbData?: any;
   rtData?: any;
+  provider?: string;
 }
 
 export interface DetailsRatingsProps {
@@ -130,4 +131,5 @@ export interface DetailsRatingsProps {
   mediaId?: number;
   mediaType?: "movie" | "show";
   imdbId?: string;
+  provider?: string;
 }

@@ -5,7 +5,12 @@ import { Trans } from "react-i18next";
 import { DetailsRatings } from "./DetailsRatings";
 import { DetailsInfoProps } from "./types";
 
-export function DetailsInfo({ data, imdbData, rtData }: DetailsInfoProps) {
+export function DetailsInfo({
+  data,
+  imdbData,
+  rtData,
+  provider,
+}: DetailsInfoProps) {
   const [isShiftPressed, setIsShiftPressed] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
 
@@ -122,6 +127,7 @@ export function DetailsInfo({ data, imdbData, rtData }: DetailsInfoProps) {
           imdbId={data.imdbId}
           voteAverage={data.voteAverage}
           voteCount={data.voteCount}
+          provider={provider}
         />
       </div>
     </div>

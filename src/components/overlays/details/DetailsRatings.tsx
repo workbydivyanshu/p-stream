@@ -1,5 +1,6 @@
 import { t } from "i18next";
 
+import { PROVIDER_TO_IMAGE_MAP } from "@/backend/metadata/traktApi";
 import { Icon, Icons } from "@/components/Icon";
 import { getRTIcon } from "@/utils/rottenTomatoesScraper";
 
@@ -10,19 +11,44 @@ export function DetailsRatings({
   mediaId,
   mediaType,
   imdbId,
+  provider,
 }: DetailsRatingsProps) {
+  const getProviderImage = (providerName: string) => {
+    const imageKey =
+      PROVIDER_TO_IMAGE_MAP[providerName] ||
+      providerName.toLowerCase().replace(/\s+/g, "");
+    return `/platforms/${imageKey}.png`;
+  };
+
   return (
     <div className="space-y-1">
       {/* External Links */}
       <div className="flex gap-3 mt-2">
+        {provider && (
+          <div
+            className="w-8 h-8 flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
+            style={{
+              animationDelay: "0ms",
+              transform: "scale(0)",
+              opacity: 0,
+            }}
+            title={provider}
+          >
+            <img
+              src={getProviderImage(provider)}
+              alt={provider}
+              className="w-8 h-8 rounded-md"
+            />
+          </div>
+        )}
         {mediaId && (
           <a
             href={`https://www.themoviedb.org/${mediaType === "show" ? "tv" : "movie"}/${mediaId}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 rounded-full bg-[#0d253f] flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
+            className="w-8 h-8 rounded-md bg-[#0d253f] flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
             style={{
-              animationDelay: "0ms",
+              animationDelay: "60ms",
               transform: "scale(0)",
               opacity: 0,
             }}
@@ -36,9 +62,9 @@ export function DetailsRatings({
             href={`https://www.imdb.com/title/${imdbId}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
+            className="w-8 h-8 rounded-md bg-yellow-500 flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
             style={{
-              animationDelay: "60ms",
+              animationDelay: "120ms",
               transform: "scale(0)",
               opacity: 0,
             }}
@@ -53,7 +79,7 @@ export function DetailsRatings({
               <div
                 className="flex items-center gap-1 animate-[scaleIn_0.6s_ease-out_forwards]"
                 style={{
-                  animationDelay: "120ms",
+                  animationDelay: "180ms",
                   transform: "scale(0)",
                   opacity: 0,
                 }}

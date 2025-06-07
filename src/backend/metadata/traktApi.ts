@@ -35,6 +35,12 @@ export interface TraktDiscoverResponse {
   count: number;
 }
 
+export interface TraktNetworkResponse {
+  type: string;
+  platforms: string[];
+  count: number;
+}
+
 // Pagination utility
 export function paginateResults(
   results: TraktLatestResponse,
@@ -106,6 +112,10 @@ export const getPopularMovies = () => fetchFromTrakt("/popularmovies");
 export const getDiscoverContent = () =>
   fetchFromTrakt<TraktDiscoverResponse>("/discover");
 
+// Network content
+export const getNetworkContent = (tmdbId: string) =>
+  fetchFromTrakt<TraktNetworkResponse>(`/network/${tmdbId}`);
+
 // Type conversion utilities
 export function convertToMediaType(type: TraktContentType): MWMediaType {
   return type === "movie" ? MWMediaType.MOVIE : MWMediaType.SERIES;
@@ -130,3 +140,14 @@ export const GENRE_TO_TRAKT_MAP = {
   "28": "action", // Action
   "18": "drama", // Drama
 } as const;
+
+// Map provider names to their image filenames
+export const PROVIDER_TO_IMAGE_MAP: Record<string, string> = {
+  Max: "max",
+  "Prime Video": "prime",
+  Netflix: "netflix",
+  "Disney+": "disney",
+  Hulu: "hulu",
+  "Apple TV+": "appletv",
+  "Paramount+": "paramount",
+};
