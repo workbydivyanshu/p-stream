@@ -14,6 +14,7 @@ import {
   getHuluReleases,
   getLatest4KReleases,
   getLatestReleases,
+  getLatestTVReleases,
   getNetflixMovies,
   getNetflixTVShows,
   getPrimeReleases,
@@ -97,6 +98,7 @@ export type DiscoverContentType =
   | "nowPlaying"
   | "latest"
   | "latest4k"
+  | "latesttv"
   | "genre"
   | "provider"
   | "editorPicks"
@@ -497,6 +499,11 @@ export function useDiscoverMedia({
         case "latest4k":
           data = await fetchTraktMedia(getLatest4KReleases);
           setSectionTitle(t("discover.carousel.title.4kReleases"));
+          break;
+
+        case "latesttv":
+          data = await fetchTraktMedia(getLatestTVReleases);
+          setSectionTitle(t("discover.carousel.title.latestTVReleases"));
           break;
 
         case "genre":

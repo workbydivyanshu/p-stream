@@ -128,7 +128,7 @@ export function DiscoverContent() {
 
         {/* On Air */}
         <MediaCarousel
-          content={{ type: "onTheAir" }}
+          content={{ type: "latesttv", fallback: "onTheAir" }}
           isTVShow
           carouselRefs={carouselRefs}
           onShowDetails={handleShowDetails}
