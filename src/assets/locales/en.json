@@ -949,6 +949,8 @@
       "loading": "Loading...",
       "back": "Go back"
     },
+    "viewLists": "View All Movie Lists",
+    "allLists": "All Movie Lists",
     "scrollToTop": "Back to top"
   },
   "fedapi": {

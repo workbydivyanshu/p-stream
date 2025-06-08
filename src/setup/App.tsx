@@ -15,6 +15,7 @@ import { useOnlineListener } from "@/hooks/usePing";
 import { AboutPage } from "@/pages/About";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import VideoTesterView from "@/pages/developer/VideoTesterView";
+import { DiscoverMore } from "@/pages/discover/AllMovieLists";
 import { Discover } from "@/pages/discover/Discover";
 import { MoreContent } from "@/pages/discover/MoreContent";
 import { DmcaPage } from "@/pages/Dmca";
@@ -178,6 +179,7 @@ function App() {
             element={<MoreContent />}
           />
           <Route path="/discover/more/:category" element={<MoreContent />} />
+          <Route path="/discover/all" element={<DiscoverMore />} />
           {/* Settings page */}
           <Route
             path="/settings"

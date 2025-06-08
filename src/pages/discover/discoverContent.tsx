@@ -1,5 +1,9 @@
+import classNames from "classnames";
+import { t } from "i18next";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { Button } from "@/components/buttons/Button";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { DetailsModal } from "@/components/overlays/details/DetailsModal";
 import { useModal } from "@/components/overlays/Modal";
@@ -16,6 +20,7 @@ import { ScrollToTopButton } from "./components/ScrollToTopButton";
 export function DiscoverContent() {
   const { selectedCategory, setSelectedCategory } = useDiscoverStore();
   const [detailsData, setDetailsData] = useState<any>();
+  const navigate = useNavigate();
   const detailsModal = useModal("discover-details");
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const progressItems = useProgressStore((state) => state.items);
@@ -221,6 +226,18 @@ export function DiscoverContent() {
           {renderEditorPicksContent()}
         </LazyTabContent>
       </WideContainer>
+
+      {/* View All Button */}
+      <div
+        className={classNames(
+          "flex justify-center mt-8 mb-12",
+          isMoviesTab ? "block" : "hidden",
+        )}
+      >
+        <Button theme="purple" onClick={() => navigate("/discover/all")}>
+          {t("discover.viewLists")}
+        </Button>
+      </div>
 
       <ScrollToTopButton />
 
