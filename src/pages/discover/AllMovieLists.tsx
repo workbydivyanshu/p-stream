@@ -9,6 +9,8 @@ import { MediaCard } from "@/components/media/MediaCard";
 import { DetailsModal } from "@/components/overlays/details/DetailsModal";
 import { useModal } from "@/components/overlays/Modal";
 import { Heading1 } from "@/components/utils/Text";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import { useDiscoverStore } from "@/stores/discover";
 import { MediaItem } from "@/utils/mediaTypes";
@@ -22,6 +24,7 @@ export function DiscoverMore() {
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const navigate = useNavigate();
   const { lastView } = useDiscoverStore();
+  const { isMobile } = useIsMobile();
 
   useEffect(() => {
     const fetchLetterboxdLists = async () => {
@@ -81,28 +84,24 @@ export function DiscoverMore() {
       </WideContainer>
       <WideContainer ultraWide>
         {/* Latest Movies */}
-        <MediaCarousel
-          content={{ type: "latest", fallback: "nowPlaying" }}
-          isTVShow={false}
-          carouselRefs={carouselRefs}
-          onShowDetails={handleShowDetails}
-        />
-
-        {/* Latest TV Shows */}
-        <MediaCarousel
-          content={{ type: "latesttv", fallback: "onTheAir" }}
-          isTVShow
-          carouselRefs={carouselRefs}
-          onShowDetails={handleShowDetails}
-        />
+        <div className="relative">
+          <MediaCarousel
+            content={{ type: "latest", fallback: "nowPlaying" }}
+            isTVShow={false}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+          />
+        </div>
 
         {/* Top Rated Movies */}
-        <MediaCarousel
-          content={{ type: "topRated" }}
-          isTVShow={false}
-          carouselRefs={carouselRefs}
-          onShowDetails={handleShowDetails}
-        />
+        <div className="relative">
+          <MediaCarousel
+            content={{ type: "latest4k", fallback: "topRated" }}
+            isTVShow={false}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+          />
+        </div>
 
         {/* Letterboxd Lists */}
         {letterboxdLists.map((list) => (
@@ -149,6 +148,12 @@ export function DiscoverMore() {
                 ))}
                 <div className="md:w-12" />
               </div>
+              {!isMobile && (
+                <CarouselNavButtons
+                  categorySlug={list.listUrl}
+                  carouselRefs={carouselRefs}
+                />
+              )}
             </div>
           </div>
         ))}
