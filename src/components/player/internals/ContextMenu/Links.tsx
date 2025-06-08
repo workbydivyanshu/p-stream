@@ -23,7 +23,9 @@ export function LinkTitle(props: {
     <span
       className={classNames([
         "font-medium text-left",
-        props.box ? "flex flex-col items-center justify-center h-full" : "",
+        props.box
+          ? "flex flex-col items-center justify-center h-full gap-1 text-center"
+          : "",
         props.textClass || "text-video-context-type-main",
       ])}
     >
@@ -98,8 +100,10 @@ export function Link(props: {
   const styles = { width: "calc(100% + 1.5rem)" };
 
   const content = (
-    <div className={classNames("flex items-center flex-1", props.className)}>
-      <div className="flex-1 text-left">{props.children}</div>
+    <div
+      className={classNames("flex items-center flex-1 h-full", props.className)}
+    >
+      <div className="flex-1 text-left flex h-full">{props.children}</div>
       <div className="flex">{props.rightSide}</div>
     </div>
   );
