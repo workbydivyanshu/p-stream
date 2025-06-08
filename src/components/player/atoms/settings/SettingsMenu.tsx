@@ -86,6 +86,9 @@ export function SettingsMenu({ id }: { id: string }) {
             rightText={selectedAudioLanguagePretty ?? undefined}
           >
             {t("player.menus.settings.audioItem")}
+            <span className="text-type-secondary text-sm">
+              {selectedAudioLanguagePretty}
+            </span>
           </Menu.ChevronLink>
         ) : (
           <Menu.ChevronLink
