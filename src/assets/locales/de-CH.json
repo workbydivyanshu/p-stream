@@ -277,13 +277,13 @@
                 },
                 "extension": {
                     "action": "Installier t‘Erwiterig",
-                    "description": "Installier d’Browser-Erweiterig, um Zuegriff uf d’beschte Quellen z’überchun – aber denk dra, sie für die Site z’aktiviere.",
+                    "description": "Installier d’Browser-Erweiterig, um Zuegriff uf zuesätzlechi Quellen z’überchun! Aber denk dra, sie für die Site z’aktiviere.",
                     "quality": "Beschti Qually + me Quellene",
                     "title": "Browser Erwitterig"
                 },
                 "proxy": {
                     "action": "Proxy istelle",
-                    "description": "Errecht en gratis Proxy in 5Min. and bechom zuegref of die beschte Quelle…",
+                    "description": "Erstell en gratis Proxy in 5Min! Verbesserti ladezite!",
                     "quality": "Gute Qualität",
                     "title": "Eigene Proxy"
                 },
@@ -296,7 +296,7 @@
                     "extensionDescription": "D’Erweiterig git der Zuegriff uf d’meiste Quellen. Si funktioniert wie en lokale Proxy und cha Site verwände, wo spezielli Cookies oder Header bruuche zum Lade.",
                     "intro": "P-Stream hostet kei Videos. Es isch uf Drittanbieter-Websites angewiese für d’Inhalt, drum muesch du wähle, wie s sich mit dene Site verbindet.",
                     "fedapi": {
-                        "fedapiDescription": "Wenn du din eigene Febbox-Account bruchsch, chasch du d’FED-API freischalte, üsi bescht Quelle mit 4K-Qualität, Dolby Atmos, dem meiste Inhalt und de schnellste Ladezyte. Das wird fo üs wermschtens empfohlen!",
+                        "fedapiDescription": "Bring din eigene gratis Febbox-Account mit, zum Zuegriff uf d’FED API (Privat) z’übercho. Die beschti Quälle mit 4K-Qualität, Dolby Atmos, Intro Skip ond superschnälle Ladezyte! Wörklich sehr zom Empfehle!",
                         "fedapi": "Optional: FED API (Private) token"
                     },
                     "defaultDescription": "Bruchsch der integrierti P-Stream Proxy. Es isch der eifachscht Option, chönnt aber langsamer si weg der teilte Bandbreite.",
@@ -309,7 +309,20 @@
                 "button": "Me Info",
                 "title": "Es Setup versto",
                 "recommended": {
-                    "title": "Net secher, was de uswähle welsch?"
+                    "title": "Net secher, was de uswähle welsch?",
+                    "desktop": {
+                        "title": "Schribtesch:",
+                        "description": "Erwiterig + FED API (Private)"
+                    },
+                    "iOS": {
+                        "title": "iOS:",
+                        "description": "Eigene Proxy + FED API (Private)"
+                    },
+                    "android": {
+                        "title": "Android:",
+                        "description": "Erwiterig + FED API (Private)"
+                    },
+                    "subtitle": "Empfohleni Konfiguratione:"
                 }
             }
         }
@@ -359,17 +372,21 @@
                 "loadingList": "Werd glase...",
                 "loadingTitle": "Werd glade...",
                 "unairedEpisodes": "Ei oder meh Episodä in däre Staffel sind deaktiviert worde, will sie no nöd usgstrahlt worde sind.",
-                "seasons": "Staffle"
+                "seasons": "Staffle",
+                "showMore": "Zeig me",
+                "showLess": "Zeig weniger"
             },
             "playback": {
                 "speedLabel": "Wedergabegschwendigkeit",
-                "title": "Wedergab Istellig"
+                "title": "Wedergab Istellig",
+                "disabled": "(In watch party usschalte)"
             },
             "quality": {
                 "automaticLabel": "Automatischi Quallität",
                 "hint": "Du chasch <0>d’Quelle wechsle</0>, um anderi Qualität-Optione z’überchun.",
                 "iosNoQuality": "Wäge vo Apple definierti (typisch iOS L) Einschränkige isch s’Wähle vo dr Qualität bi däre Quelle uf iOS nöd verfügbar. Du chasch <0>uf e anderi Quelle wechsle</0>, um verschideni Qualitäte z’überchun.",
-                "title": "Qualität"
+                "title": "Qualität",
+                "auto": "Auto"
             },
             "settings": {
                 "audioItem": "Audio",
@@ -378,8 +395,8 @@
                 "experienceSection": "Azeige Erläbnis",
                 "playbackItem": "Wedergabe Istellig",
                 "qualityItem": "Qualität",
-                "sourceItem": "Videoquellene",
-                "subtitleItem": "Ontertetel Ischtelige",
+                "sourceItem": "Quelle",
+                "subtitleItem": "Ontertetel",
                 "videoSection": "Felmli Ischtelige"
             },
             "sources": {
@@ -416,11 +433,17 @@
                 "SourceChoice": "Quelle agab",
                 "empty": "Do si kei Ontertetel verfüegbar.",
                 "scrapeButton": "Ontertitel scrapen",
-                "onChoice": "Aa"
+                "onChoice": "Aa",
+                "useNativeSubtitles": "Benotz nativi Video-Ontertetel",
+                "useNativeSubtitlesDescription": "Cha d‘Ontertetel bi Casting ond im PiP behebe"
             },
             "watchparty": {
                 "watchpartyItem": "Zäme luege",
-                "notice": "Zäme luege esch felecht net för alli Quellene verfüegbar"
+                "notice": "Zäme luege esch felecht net för alli Quellene verfüegbar",
+                "legacyWatchparty": "Bruch die alti Watch Party"
+            },
+            "audio": {
+                "default": "Standard"
             }
         },
         "metadata": {
@@ -630,7 +653,13 @@
                 "discoverDescription": "Zeig d‘Entdeckigs-Sektion of der Startsite unter dine gspicherete Medie a. Standartmässig eschs Aktiviert.",
                 "modal": "Deteil-Fenschter",
                 "modalLabel": "Detail-Fenschter",
-                "modalDescription": "Zeigt s‘Deteil-Fenschter wen du of d‘Mediecharte klicksch anschtat diräckt luege. Före Traile esch en Proxy oder en Erwiterig nötig. Standartmässig deaktiviert."
+                "modalDescription": "Zeigt s‘Deteil-Fenschter wen du of d‘Mediecharte klicksch anschtat diräckt luege. Före Traile esch en Proxy oder en Erwiterig nötig. Standartmässig deaktiviert.",
+                "logosDescription": "Zeigt Beld-Logos stat Texttitel im Deteilfenschter ond im Entdecke-Bereich.",
+                "featured": "Vorgschlageni Medie",
+                "featuredLabel": "Vorgschlagni Medie",
+                "logos": "Beld Logos",
+                "logosNotice": "Meischtens, si d‘Logos nome of Englisch. För anderi Sproche welsch es felecht abschalte!",
+                "logosLabel": "Beld-Logos"
             }
         },
         "connections": {
@@ -892,7 +921,8 @@
                 "tvshows": "{{category}} Shows",
                 "inCinemas": "Im Kino",
                 "editorPicks": "Tipps",
-                "popularOn": "Beliebti {{type}} uf {{provider}}"
+                "popularOn": "Beliebti {{type}} uf {{provider}}",
+                "loading": "Lade..."
             }
         },
         "providers": {
