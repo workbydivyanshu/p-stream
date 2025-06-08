@@ -140,7 +140,7 @@ export function Navigation(props: NavigationProps) {
                 href={conf().DISCORD_LINK}
                 target="_blank"
                 rel="noreferrer"
-                className="text-xl text-white tabbable rounded-full"
+                className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
               >
                 <IconPatch
                   icon={Icons.DISCORD}
@@ -153,7 +153,7 @@ export function Navigation(props: NavigationProps) {
                 <a
                   onClick={() => handleClick("/discover")}
                   rel="noreferrer"
-                  className="text-xl text-white tabbable rounded-full"
+                  className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
                 >
                   <IconPatch
                     icon={Icons.RISING_STAR}
@@ -166,7 +166,7 @@ export function Navigation(props: NavigationProps) {
                 <a
                   onClick={() => handleClick("/")}
                   rel="noreferrer"
-                  className="text-lg text-white tabbable rounded-full"
+                  className="text-lg text-white tabbable rounded-full backdrop-blur-lg"
                 >
                   <IconPatch
                     icon={Icons.SEARCH}
