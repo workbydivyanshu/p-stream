@@ -839,7 +839,7 @@
         "urlPlaceholder": "https://",
         "proxyTMDB": {
           "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover secton to improve performance with this."
+          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
         }
       }
     },
