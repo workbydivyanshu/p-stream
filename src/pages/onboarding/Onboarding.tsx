@@ -41,11 +41,14 @@ import {
 } from "@/pages/onboarding/utils";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
-import { useAuthStore } from "@/stores/auth";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
-import { Status, testFebboxKey } from "../parts/settings/SetupPart";
+import {
+  Status,
+  testFebboxKey,
+  testRealDebridKey,
+} from "../parts/settings/SetupPart";
 
 async function getFebboxKeyStatus(febboxKey: string | null) {
   if (febboxKey) {
@@ -218,12 +221,130 @@ export function FEDAPISetup() {
     );
   }
 }
+
+async function getRealDebridKeyStatus(realDebridKey: string | null) {
+  if (realDebridKey) {
+    const status: Status = await testRealDebridKey(realDebridKey);
+    return status;
+  }
+  return "unset";
+}
+
+export function RealDebridSetup() {
+  const { t } = useTranslation();
+  const realDebridKey = usePreferencesStore((s) => s.realDebridKey);
+  const setRealDebridKey = usePreferencesStore((s) => s.setRealDebridKey);
+
+  // Initialize isExpanded based on whether realDebridKey has a value
+  const [isExpanded, setIsExpanded] = useState(
+    realDebridKey !== null && realDebridKey !== "",
+  );
+
+  // Add a separate effect to set the initial state
+  useEffect(() => {
+    // If we have a valid key, make sure the section is expanded
+    if (realDebridKey && realDebridKey.length > 0) {
+      setIsExpanded(true);
+    }
+  }, [realDebridKey]);
+
+  const [status, setStatus] = useState<Status>("unset");
+  const statusMap: Record<Status, StatusCircleProps["type"]> = {
+    error: "error",
+    success: "success",
+    unset: "noresult",
+    api_down: "error",
+    invalid_token: "error",
+  };
+
+  useEffect(() => {
+    const checkTokenStatus = async () => {
+      const result = await getRealDebridKeyStatus(realDebridKey);
+      setStatus(result);
+    };
+    checkTokenStatus();
+  }, [realDebridKey]);
+
+  // Toggle handler that preserves the key
+  const toggleExpanded = () => {
+    if (isExpanded) {
+      // Store the key temporarily instead of setting to null
+      setRealDebridKey("");
+      setIsExpanded(false);
+    } else {
+      setIsExpanded(true);
+    }
+  };
+
+  if (conf().ALLOW_REAL_DEBRID_KEY) {
+    return (
+      <div className="mt-6">
+        <SettingsCard>
+          <div className="flex justify-between items-center gap-4">
+            <div className="my-3">
+              <p className="text-white font-bold mb-3">
+                {t("settings.connections.realdebrid.title", "Real Debrid API")}
+              </p>
+              <p className="max-w-[30rem] font-medium">
+                {t(
+                  "settings.connections.realdebrid.description",
+                  "Enter your Real Debrid API key to access premium sources.",
+                )}
+              </p>
+            </div>
+            <div>
+              <Toggle onClick={toggleExpanded} enabled={isExpanded} />
+            </div>
+          </div>
+          {isExpanded ? (
+            <>
+              <Divider marginClass="my-6 px-8 box-content -mx-8" />
+              <p className="text-white font-bold mb-3">
+                {t("settings.connections.realdebrid.tokenLabel", "API Key")}
+              </p>
+              <div className="flex items-center w-full">
+                <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
+                <AuthInputBox
+                  onChange={(newToken) => {
+                    setRealDebridKey(newToken);
+                  }}
+                  value={realDebridKey ?? ""}
+                  placeholder="API Key"
+                  passwordToggleable
+                  className="flex-grow"
+                />
+              </div>
+              {status === "error" && (
+                <p className="text-type-danger mt-4">
+                  {t(
+                    "settings.connections.realdebrid.status.failure",
+                    "Failed to connect to Real Debrid. Please check your API key.",
+                  )}
+                </p>
+              )}
+              {status === "api_down" && (
+                <p className="text-type-danger mt-4">
+                  {t(
+                    "settings.connections.realdebrid.status.api_down",
+                    "Real Debrid API is currently unavailable. Please try again later.",
+                  )}
+                </p>
+              )}
+              {status === "invalid_token" && (
+                <p className="text-type-danger mt-4">
+                  {t(
+                    "settings.connections.realdebrid.status.invalid_token",
+                    "Invalid API key or non-premium account. Real Debrid requires a premium account.",
+                  )}
+                </p>
+              )}
             </>
           ) : null}
         </SettingsCard>
       </div>
     );
   }
+  return null;
 }
 
 function Item(props: { title: string; children: React.ReactNode }) {
@@ -474,6 +595,7 @@ export function OnboardingPage() {
           )}
         </div>
 
+        {/* <RealDebridSetup /> */}
         <FEDAPISetup />
       </BiggerCenterContainer>
     </MinimalPageLayout>

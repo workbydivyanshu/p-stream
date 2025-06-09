@@ -7,6 +7,7 @@ import {
 } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
+import { isExtensionActive } from "@/backend/extension/messaging";
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
@@ -23,6 +24,7 @@ import {
   SetupPart,
   Status,
   testFebboxKey,
+  testRealDebridKey,
 } from "@/pages/parts/settings/SetupPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
@@ -43,6 +45,11 @@ interface BackendEditProps {
 interface FebboxKeyProps {
   febboxKey: string | null;
   setFebboxKey: Dispatch<SetStateAction<string | null>>;
+}
+
+interface RealDebridKeyProps {
+  realDebridKey: string | null;
+  setRealDebridKey: Dispatch<SetStateAction<string | null>>;
 }
 
 function ProxyEdit({
@@ -368,8 +375,134 @@ function FebboxKeyEdit({ febboxKey, setFebboxKey }: FebboxKeyProps) {
   }
 }
 
+async function getRealDebridKeyStatus(realDebridKey: string | null) {
+  if (realDebridKey) {
+    const status: Status = await testRealDebridKey(realDebridKey);
+    return status;
+  }
+  return "unset";
+}
+
+function RealDebridKeyEdit({
+  realDebridKey,
+  setRealDebridKey,
+}: RealDebridKeyProps) {
+  const { t } = useTranslation();
+  const user = useAuthStore();
+  const preferences = usePreferencesStore();
+  const [hasExtension, setHasExtension] = useState(false);
+
+  // Check for extension
+  useEffect(() => {
+    isExtensionActive().then(setHasExtension);
+  }, []);
+
+  // Enable Real Debrid token when account is loaded and we have a token
+  useEffect(() => {
+    if (user.account && realDebridKey === null && preferences.realDebridKey) {
+      setRealDebridKey(preferences.realDebridKey);
+    }
+  }, [
+    user.account,
+    realDebridKey,
+    preferences.realDebridKey,
+    setRealDebridKey,
+  ]);
+
+  const [status, setStatus] = useState<Status>("unset");
+  const statusMap: Record<Status, StatusCircleProps["type"]> = {
+    error: "error",
+    success: "success",
+    unset: "noresult",
+    api_down: "error",
+    invalid_token: "error",
+  };
+
+  useEffect(() => {
+    const checkTokenStatus = async () => {
+      const result = await getRealDebridKeyStatus(realDebridKey);
+      setStatus(result);
+    };
+    checkTokenStatus();
+  }, [realDebridKey]);
+
+  if (conf().ALLOW_REAL_DEBRID_KEY) {
+    return (
+      <SettingsCard>
+        <div className="flex justify-between items-center gap-4">
+          <div className="my-3">
+            <p className="text-white font-bold mb-3">{t("realdebrid.title")}</p>
+            <p className="max-w-[30rem] font-medium">
+              {t("realdebrid.description")}
+            </p>
+            <MwLink>
+              <a
+                href="https://real-debrid.com/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                real-debrid.com
+              </a>
+            </MwLink>
+          </div>
+          <div className="flex items-center gap-3">
+            {!hasExtension && <Icon icon={Icons.UNPLUG} className="text-lg" />}
+            <Toggle
+              onClick={() =>
+                hasExtension
+                  ? setRealDebridKey((s) => (s === null ? "" : null))
+                  : null
+              }
+              enabled={realDebridKey !== null && hasExtension}
+            />
+          </div>
+        </div>
+        {realDebridKey !== null && hasExtension ? (
+          <>
+            <Divider marginClass="my-6 px-8 box-content -mx-8" />
+            <p className="text-white font-bold mb-3">
+              {t("realdebrid.tokenLabel")}
+            </p>
+            <div className="flex items-center w-full">
+              <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
+              <AuthInputBox
+                onChange={(newToken) => {
+                  setRealDebridKey(newToken);
+                }}
+                value={realDebridKey ?? ""}
+                placeholder="ABC123..."
+                passwordToggleable
+                className="flex-grow"
+              />
+            </div>
+            {status === "error" && (
+              <p className="text-type-danger mt-4">
+                {t("realdebrid.status.failure")}
+              </p>
+            )}
+            {status === "api_down" && (
+              <p className="text-type-danger mt-4">
+                {t("realdebrid.status.api_down")}
+              </p>
+            )}
+            {status === "invalid_token" && (
+              <p className="text-type-danger mt-4">
+                {t("realdebrid.status.invalid_token")}
+              </p>
+            )}
+          </>
+        ) : null}
+      </SettingsCard>
+    );
+  }
+  return null;
+}
+
 export function ConnectionsPart(
-  props: BackendEditProps & ProxyEditProps & FebboxKeyProps,
+  props: BackendEditProps &
+    ProxyEditProps &
+    FebboxKeyProps &
+    RealDebridKeyProps,
 ) {
   const { t } = useTranslation();
   return (
@@ -386,6 +519,10 @@ export function ConnectionsPart(
         <BackendEdit
           backendUrl={props.backendUrl}
           setBackendUrl={props.setBackendUrl}
+        />
+        <RealDebridKeyEdit
+          realDebridKey={props.realDebridKey}
+          setRealDebridKey={props.setRealDebridKey}
         />
         <FebboxKeyEdit
           febboxKey={props.febboxKey}
