@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -6,6 +7,7 @@ import { IconPill } from "@/components/layout/IconPill";
 import { useModal } from "@/components/overlays/Modal";
 import { Paragraph } from "@/components/text/Paragraph";
 import { Title } from "@/components/text/Title";
+import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { ErrorContainer, ErrorLayout } from "@/pages/layouts/ErrorLayout";
 import { usePlayerStore } from "@/stores/player/store";
 
@@ -15,6 +17,17 @@ export function PlaybackErrorPart() {
   const { t } = useTranslation();
   const playbackError = usePlayerStore((s) => s.interface.error);
   const modal = useModal("error");
+  const settingsRouter = useOverlayRouter("settings");
+  const hasOpenedSettings = useRef(false);
+
+  // Automatically open the settings overlay when a playback error occurs
+  useEffect(() => {
+    if (playbackError && !hasOpenedSettings.current) {
+      hasOpenedSettings.current = true;
+      settingsRouter.open();
+      settingsRouter.navigate("/source");
+    }
+  }, [playbackError, settingsRouter]);
 
   return (
     <ErrorLayout>
@@ -44,7 +57,10 @@ export function PlaybackErrorPart() {
           theme="secondary"
           padding="md:px-12 p-2.5"
           className="mt-6"
-          onClick={() => window.location.reload()}
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.reload();
+          }}
         >
           {t("errors.reloadPage")}
         </Button>
