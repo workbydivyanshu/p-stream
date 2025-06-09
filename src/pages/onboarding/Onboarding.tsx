@@ -57,18 +57,21 @@ async function getFebboxKeyStatus(febboxKey: string | null) {
 
 export function FEDAPISetup() {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded] = useState(false);
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
   const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
-  const user = useAuthStore();
 
-  // Enable febbox token when account is loaded and we have a token
+  // Initialize isExpanded based on whether febboxKey has a value
+  const [isExpanded, setIsExpanded] = useState(
+    febboxKey !== null && febboxKey !== "",
+  );
+
+  // Add a separate effect to set the initial state
   useEffect(() => {
-    if (user.account && febboxKey) {
-      setFebboxKey(febboxKey);
+    // If we have a valid key, make sure the section is expanded
+    if (febboxKey && febboxKey.length > 0) {
       setIsExpanded(true);
     }
-  }, [user.account, febboxKey, setFebboxKey]);
+  }, [febboxKey]);
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -87,6 +90,17 @@ export function FEDAPISetup() {
     checkTokenStatus();
   }, [febboxKey]);
 
+  // Toggle handler that preserves the key
+  const toggleExpanded = () => {
+    if (isExpanded) {
+      // Store the key temporarily instead of setting to null
+      setFebboxKey("");
+      setIsExpanded(false);
+    } else {
+      setIsExpanded(true);
+    }
+  };
+
   const [showVideo, setShowVideo] = useState(false);
 
   if (conf().ALLOW_FEBBOX_KEY) {
@@ -103,10 +117,7 @@ export function FEDAPISetup() {
               </p>
             </div>
             <div>
-              <Toggle
-                onClick={() => setIsExpanded(!isExpanded)}
-                enabled={isExpanded}
-              />
+              <Toggle onClick={toggleExpanded} enabled={isExpanded} />
             </div>
           </div>
           {isExpanded ? (
@@ -184,6 +195,29 @@ export function FEDAPISetup() {
                   {t("fedapi.status.failure")}
                 </p>
               )}
+              {status === "api_down" && (
+                <p className="text-type-danger mt-4">
+                  {t(
+                    "fedapi.status.api_down",
+                    "Febbox API is currently unavailable. Please try again later.",
+                  )}
+                </p>
+              )}
+              {status === "invalid_token" && (
+                <p className="text-type-danger mt-4">
+                  {t(
+                    "fedapi.status.invalid_token",
+                    "Invalid token. Please check your Febbox UI token.",
+                  )}
+                </p>
+              )}
+            </>
+          ) : null}
+        </SettingsCard>
+      </div>
+    );
+  }
+}
             </>
           ) : null}
         </SettingsCard>
