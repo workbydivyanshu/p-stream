@@ -965,7 +965,8 @@
         },
         "status": {
             "success": "Erfolgrich",
-            "failure": "\"VIP\" Streams hei net chöne abgrüeft werde. Dä Token esch ongöltig oder d‘API isch ned erreichbar!"
+            "failure": "\"VIP\" Streams hei net chöne abgrüeft werde. Dä Token esch ongöltig oder d‘API isch ned erreichbar!",
+            "api_down": "Erreicht FED API net!"
         }
     }
 }

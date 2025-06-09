@@ -935,7 +935,8 @@
                 "editorPicksMovies": "Szerkesztői válogatás filmekből",
                 "categoryMovies": "{{category}} Filmek",
                 "latestReleases": "Legújabbak",
-                "genreMovies": "{{genre}} Filmek"
+                "genreMovies": "{{genre}} Filmek",
+                "latestTVReleases": "Legújabb sorozatok"
             },
             "change": "Módosítás",
             "more": "Mutass többet"
@@ -958,7 +959,9 @@
             "loadMore": "Több betöltése",
             "title": "Fedezz fel filmeket és sorozatokat"
         },
-        "scrollToTop": "Vissza a tetejére"
+        "scrollToTop": "Vissza a tetejére",
+        "allLists": "Összes film listák",
+        "viewLists": "Az összes film lista megnézése"
     },
     "fedapi": {
         "setup": {
