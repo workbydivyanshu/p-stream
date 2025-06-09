@@ -187,6 +187,14 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
               errorName: data.error.name,
               type: "hls",
             });
+          } else if (data.details === "manifestLoadError") {
+            // Handle manifest load errors specifically
+            emit("error", {
+              message: "Failed to load HLS manifest",
+              stackTrace: data.error?.stack || "",
+              errorName: data.error?.name || "ManifestLoadError",
+              type: "hls",
+            });
           }
         });
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
