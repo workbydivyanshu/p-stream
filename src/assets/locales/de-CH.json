@@ -659,7 +659,11 @@
                 "featuredLabel": "Vorgschlagni Medie",
                 "logos": "Beld Logos",
                 "logosNotice": "Meischtens, si d‘Logos nome of Englisch. För anderi Sproche welsch es felecht abschalte!",
-                "logosLabel": "Beld-Logos"
+                "logosLabel": "Beld-Logos",
+                "featuredDescription": "Zeigt es Karussell met empohlene Felme ond Serie, zobersch of der Start-Site! Standardmässig usgschalte.",
+                "carouselView": "Karussell asecht",
+                "carouselViewDescription": "Zeigt dini Watch-Fortschret ond d‘gspicherete Felme imene Karrussel, anstell vonere Raschterasecht. Standartmässig usgschalte.",
+                "carouselViewLabel": "Karussell asecht"
             }
         },
         "connections": {
@@ -705,7 +709,7 @@
                 "urlPlaceholder": "https://",
                 "proxyTMDB": {
                     "title": "Proxy TMDB",
-                    "description": "Nome den nötig wen du kei direkte Zuegreff of TheMovieDB hesch, zom Bischpel wenn dini Internetabieter si Blockiere. Es wird empfohle, d‘Entdecke-Sektion z‘deaktiviere, om d‘Leischtig z‘verbessere."
+                    "description": "Nome den nötig, wen du kei direkte Zuegreff of TheMovieDB hesch, zom Bischpel wenn dini Internetabieter si Blockiere. Es wird empfohle, d‘Entdecke-Sektion z‘deaktiviere, om d‘Leischtig z‘verbessere."
                 },
                 "documentation": "Proxy Dokumentation"
             }
@@ -908,7 +912,10 @@
     "discover": {
         "page": {
             "title": "Entdeck Felmli ond Serie",
-            "subtitle": "Entdeck die aktuelle Trends ond altbekannti classics."
+            "subtitle": "Entdeck die aktuelle Trends ond altbekannti classics.",
+            "loadMore": "Me Lade",
+            "loading": "Ladet...",
+            "back": "Zrog"
         },
         "tabs": {
             "movies": "Filme",
@@ -922,8 +929,24 @@
                 "inCinemas": "Im Kino",
                 "editorPicks": "Tipps",
                 "popularOn": "Beliebti {{type}} uf {{provider}}",
-                "loading": "Lade..."
-            }
+                "loading": "Lade...",
+                "latestTVReleases": "Neuschti Serie",
+                "tvshowsOn": "Serie of {{provider}}",
+                "moviesOn": "Felm of {{provider}}",
+                "recommended": "Wel du {{title}} gse hesch",
+                "genreMovies": "{{genre}} Felme",
+                "genreShows": "{{genre}} Serie",
+                "categoryMovies": "{{category}} Felme",
+                "categoryShows": "{{category}} Serie",
+                "popular": "Am Beliebtischte",
+                "nowPlaying": "Im Kino",
+                "topRated": "Top Bewärtige",
+                "latestReleases": "Zletscht erschene",
+                "4kReleases": "4K Veröffentlicht",
+                "onTheAir": "I der Loft"
+            },
+            "change": "Ändere",
+            "more": "Me Azeige"
         },
         "providers": {
             "netflix": "Netflix",
@@ -943,7 +966,13 @@
             "nowPlaying": "Aktuell abgspelt",
             "in": "in"
         },
-        "scrollToTop": "Ufwärts 🚀"
+        "scrollToTop": "Ufwärts 🚀",
+        "viewLists": "Ganzi Felmlischte azeige",
+        "allLists": "Ganzi Felm Lischte",
+        "featured": {
+            "playNow": "Jetzt abspele",
+            "moreInfo": "Me Infos"
+        }
     },
     "fedapi": {
         "setup": {
@@ -960,13 +989,42 @@
             "hideVideo": "Video-Tutorial usblände"
         },
         "onboarding": {
-            "title": "Optional: FED-API (Febbox)-Token",
-            "description": "Erstell din eigene Febbox-Account, om die bescht streaming qualli in 4K, Dolby Atmos, Skip Intro ond die schnellscht 🏃‍♀️💨 ladezite z‘öbercho!"
+            "title": "FED API (Privat) token",
+            "description": "Erstell din eigene Gratis Febbox-Account, före zuegref of d‘FED API (Privat) z‘öbercho. Met dere bechonsch die bescht streaming qualli met 4K, Dolby Atmos, Skip Intro ond die schnellscht 🏃‍♀️💨 ladezite!"
         },
         "status": {
             "success": "Erfolgrich",
             "failure": "\"VIP\" Streams hei net chöne abgrüeft werde. Dä Token esch ongöltig oder d‘API isch ned erreichbar!",
-            "api_down": "Erreicht FED API net!"
+            "api_down": "Erreicht FED API net!",
+            "invalid_token": "Fehler bem hohle fom \"VIP\" stream. Din Token esch ongöltig."
         }
+    },
+    "watchParty": {
+        "status": {
+            "inSync": "In sync",
+            "outOfSync": "Net synct"
+        },
+        "alone": "Einsam",
+        "withCount": "Met {{count}} andere",
+        "isHost": "Hosting of <0>{{backendName}}</0>",
+        "isGuest": "Luegt als Gascht of <0>{{backendName}}</0>",
+        "watching": "Luege",
+        "showStatusOverlay": "Zeigt status overlay",
+        "leaveWatchParty": "Verlass Watch Party",
+        "shareCode": "Teil dä Code met dine frönde (klick zom kopiere)",
+        "connectedAsGuest": "Verbendet als Gascht zor Watch Party",
+        "hostParty": "Host en Watch Party",
+        "joinParty": "Verbende zonere Watch Party",
+        "viewers": "Zueschauer ({{count}})",
+        "join": "Verbende",
+        "cancel": "Abbräche",
+        "save": "Spichere",
+        "emptyRoom": "Niemer esch do",
+        "invalidRoom": "Ruum net erreichbar",
+        "episodeMismatch": "Cha nöd a de Watch Party teilneh: Du luegsch e anderi Episode als der Host.",
+        "validating": "Watch Party werd öberprüeft...",
+        "linkCopied": "Kopiert!",
+        "copyCode": "Klick zom Kopiere",
+        "contentMismatch": "Cha nöd a de Watch Party teilneh: Dr Inhalt stimmt nöd mit dem vom Host überei."
     }
 }

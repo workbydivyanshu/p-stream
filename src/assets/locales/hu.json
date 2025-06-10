@@ -848,7 +848,7 @@
                 "urlPlaceholder": "https://",
                 "proxyTMDB": {
                     "title": "Proxy TMDB-hez",
-                    "description": "Csak akkor szükséges, ha nem tudod elérni a TheMovieDB-t közvetlen, például ha az internetszolgáltatód blokkolja. Ajánlott a felfedezés szekció kikapcsolása, a teljesítmény növeléséhez ezzel."
+                    "description": "Csak akkor szükséges, ha nem tudod elérni a TheMovieDB-t közvetlen, például ha az internetszolgáltatód blokkolja. Ajánlott a felfedezés szekció kikapcsolása, a teljesítmény növeléséhez, ha ezt a funkciót használod."
                 },
                 "description": "Az alkalmazás működéséhez az összes forgalom proxykon keresztül halad. Kapcsold be ezt, ha saját munkafolyamataidat (workereidet) szeretnéd használni. <0>Útmutató.</0>"
             }
