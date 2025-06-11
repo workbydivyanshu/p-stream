@@ -7,7 +7,6 @@ import {
 } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
-import { isExtensionActive } from "@/backend/extension/messaging";
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
@@ -390,12 +389,6 @@ function RealDebridKeyEdit({
   const { t } = useTranslation();
   const user = useAuthStore();
   const preferences = usePreferencesStore();
-  const [hasExtension, setHasExtension] = useState(false);
-
-  // Check for extension
-  useEffect(() => {
-    isExtensionActive().then(setHasExtension);
-  }, []);
 
   // Enable Real Debrid token when account is loaded and we have a token
   useEffect(() => {
@@ -446,18 +439,13 @@ function RealDebridKeyEdit({
             </MwLink>
           </div>
           <div className="flex items-center gap-3">
-            {!hasExtension && <Icon icon={Icons.UNPLUG} className="text-lg" />}
             <Toggle
-              onClick={() =>
-                hasExtension
-                  ? setRealDebridKey((s) => (s === null ? "" : null))
-                  : null
-              }
-              enabled={realDebridKey !== null && hasExtension}
+              onClick={() => setRealDebridKey((s) => (s === null ? "" : null))}
+              enabled={realDebridKey !== null}
             />
           </div>
         </div>
-        {realDebridKey !== null && hasExtension ? (
+        {realDebridKey !== null ? (
           <>
             <Divider marginClass="my-6 px-8 box-content -mx-8" />
             <p className="text-white font-bold mb-3">
