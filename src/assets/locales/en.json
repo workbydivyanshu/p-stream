@@ -792,7 +792,10 @@
         "logosLabel": "Image logos",
         "carouselView": "Carousel view",
         "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view"
+        "carouselViewLabel": "Carousel view",
+        "forceCompactEpisodeView": "Force compact episode view",
+        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
+        "forceCompactEpisodeViewLabel": "Compact episodes"
       }
     },
     "connections": {
