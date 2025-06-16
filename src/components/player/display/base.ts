@@ -259,60 +259,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       return;
     }
 
-    // For MP4 files, ensure we use partial loading (206 responses)
-    if (src.url.toLowerCase().endsWith(".mp4")) {
-      vid.preload = "metadata";
-
-      if (vid.buffered && vid.duration) {
-        vid.addEventListener("progress", () => {
-          const currentTime = vid.currentTime;
-          const buffered = vid.buffered;
-
-          // Check if we need to pause loading temporarily
-          // If we've buffered more than 3 minutes ahead, pause loading
-          for (let i = 0; i < buffered.length; i += 1) {
-            if (
-              buffered.start(i) <= currentTime &&
-              buffered.end(i) > currentTime
-            ) {
-              // We're in this buffer range
-              const bufferedAhead = buffered.end(i) - currentTime;
-
-              // If we have more than 3 minutes buffered ahead, pause loading
-              // This prevents excessive range requests
-              if (bufferedAhead > 180) {
-                // Pause loading temporarily
-                vid.preload = "none";
-
-                // Resume loading when buffered content drops below 2 minutes
-                setTimeout(() => {
-                  if (buffered.end(i) - vid.currentTime < 120) {
-                    vid.preload = "auto";
-                  }
-                }, 5000);
-              }
-              break;
-            }
-          }
-        });
-      }
-
-      vid.addEventListener(
-        "loadedmetadata",
-        () => {
-          if (startAt > 0) {
-            vid.currentTime = startAt;
-          }
-          // Set to a moderate preload after metadata is loaded
-          vid.preload = "auto";
-        },
-        { once: true },
-      );
-      vid.src = processCdnLink(src.url);
-      return;
-    }
-
-    // Default handling for other source types
     vid.src = processCdnLink(src.url);
     vid.currentTime = startAt;
   }
