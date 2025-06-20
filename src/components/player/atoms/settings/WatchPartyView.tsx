@@ -194,7 +194,7 @@ export function WatchPartyView({ id }: { id: string }) {
   return (
     <>
       <Menu.BackLink onClick={() => router.navigate("/")}>
-        {t("player.menus.watchparty.watchpartyItem")} (Beta)
+        {t("player.menus.watchparty.watchpartyItem")}
       </Menu.BackLink>
       <Menu.Section>
         <div className="pb-4">

@@ -122,7 +122,7 @@ export function SettingsMenu({ id }: { id: string }) {
           rightSide={<Icon className="text-xl" icon={Icons.WATCH_PARTY} />}
           className={downloadable ? "opacity-100" : "opacity-50"}
         >
-          {t("player.menus.watchparty.watchpartyItem")} (Beta)
+          {t("player.menus.watchparty.watchpartyItem")}
         </Menu.Link>
       </Menu.Section>
       <Menu.SectionTitle />
