@@ -350,17 +350,32 @@ export function useDiscoverMedia({
         // Fetch details for each TMDB ID
         const mediaPromises = tmdbIds.map(async (tmdbId: number) => {
           const endpoint = `/${mediaType}/${tmdbId}`;
-          const data = await get<any>(endpoint, {
-            api_key: conf().TMDB_READ_API_KEY,
-            language: formattedLanguage,
-          });
-          return {
-            ...data,
-            type: mediaType === "movie" ? "movie" : "show",
-          };
+          try {
+            const data = await get<any>(endpoint, {
+              api_key: conf().TMDB_READ_API_KEY,
+              language: formattedLanguage,
+            });
+            return {
+              ...data,
+              type: mediaType === "movie" ? "movie" : "show",
+            };
+          } catch (err) {
+            console.error(`Error fetching details for TMDB ID ${tmdbId}:`, err);
+            return null; // Return null for failed items
+          }
         });
 
-        const results = await Promise.all(mediaPromises);
+        // Use Promise.allSettled to handle failed requests gracefully
+        const settledResults = await Promise.allSettled(mediaPromises);
+
+        // Filter out failed requests and nulls
+        const results = settledResults
+          .filter(
+            (result): result is PromiseFulfilledResult<any> =>
+              result.status === "fulfilled" && result.value !== null,
+          )
+          .map((result) => result.value);
+
         return {
           results,
           hasMore: hasMoreResults,
