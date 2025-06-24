@@ -413,13 +413,13 @@ function ParticlesCanvas() {
   return <canvas className="particles" ref={canvasRef} />;
 }
 
-export function Lightbar(props: { className?: string }) {
+export function Lightbar(props: { className?: string; noParticles?: boolean }) {
   return (
     <div className="absolute inset-0 w-full h-[680px] overflow-hidden pointer-events-none -mt-64">
       <div className="max-w-screen w-full h-[680px] relative pt-64">
         <div className={props.className}>
           <div className="lightbar">
-            <ParticlesCanvas />
+            {!props.noParticles && <ParticlesCanvas />}
             <div className="lightbar-visual" />
           </div>
         </div>

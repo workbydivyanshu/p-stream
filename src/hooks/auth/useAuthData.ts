@@ -54,6 +54,10 @@ export function useAuthData() {
   );
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
 
+  const setEnableLowPerformanceMode = usePreferencesStore(
+    (s) => s.setEnableLowPerformanceMode,
+  );
+
   const login = useCallback(
     async (
       loginResponse: LoginResponse,
@@ -156,6 +160,10 @@ export function useAuthData() {
       if (settings.febboxKey !== undefined) {
         setFebboxKey(settings.febboxKey);
       }
+
+      if (settings.enableLowPerformanceMode !== undefined) {
+        setEnableLowPerformanceMode(settings.enableLowPerformanceMode);
+      }
     },
     [
       replaceBookmarks,
@@ -176,6 +184,7 @@ export function useAuthData() {
       setEnableSourceOrder,
       setProxyTmdb,
       setFebboxKey,
+      setEnableLowPerformanceMode,
     ],
   );
 

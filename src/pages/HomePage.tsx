@@ -70,6 +70,9 @@ export function HomePage() {
   const enableCarouselView = usePreferencesStore(
     (state) => state.enableCarouselView,
   );
+  const enableLowPerformanceMode = usePreferencesStore(
+    (state) => state.enableLowPerformanceMode,
+  );
 
   const handleClick = (path: To) => {
     window.scrollTo(0, 0);
@@ -168,7 +171,8 @@ export function HomePage() {
       {/* Under user content */}
       <WideContainer ultraWide classNames="!px-3 md:!px-9">
         {/* Empty text */}
-        {!(showBookmarks || showWatching) && !enableDiscover ? (
+        {!(showBookmarks || showWatching) &&
+        (!enableDiscover || enableLowPerformanceMode) ? (
           <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">
             <p className="text-[18.5px] pb-3">{emptyText}</p>
           </div>
@@ -186,12 +190,12 @@ export function HomePage() {
         {/* there... perfect. */}
 
         {/* Discover section or discover button */}
-        {enableDiscover && !search ? (
+        {enableDiscover && !search && !enableLowPerformanceMode ? (
           <DiscoverContent />
         ) : (
           <div className="flex flex-col justify-center items-center h-40 space-y-4">
             <div className="flex flex-col items-center justify-center">
-              {!search && (
+              {!search && !enableLowPerformanceMode && (
                 <Button
                   className="px-py p-[0.35em] mt-3 rounded-xl text-type-dimmed box-content text-[18px] bg-largeCard-background justify-center items-center"
                   onClick={() => handleClick("/discover")}

@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { usePreferencesStore } from "@/stores/preferences";
 
 function Divider() {
   return <hr className="border-0 w-full h-px bg-dropdown-border" />;
@@ -227,6 +228,10 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
     setOpen((s) => !s);
   }, []);
 
+  const enableLowPerformanceMode = usePreferencesStore(
+    (s) => s.enableLowPerformanceMode,
+  );
+
   return (
     <div className="relative is-dropdown">
       <div
@@ -271,9 +276,11 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <DropdownLink href="/about" icon={Icons.CIRCLE_QUESTION}>
             {t("navigation.menu.about")}
           </DropdownLink>
-          <DropdownLink href="/discover" icon={Icons.RISING_STAR}>
-            {t("navigation.menu.discover")}
-          </DropdownLink>
+          {!enableLowPerformanceMode && (
+            <DropdownLink href="/discover" icon={Icons.RISING_STAR}>
+              {t("navigation.menu.discover")}
+            </DropdownLink>
+          )}
           <WatchPartyInputLink />
           {deviceName ? (
             <DropdownLink

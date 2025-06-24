@@ -4,6 +4,7 @@ import { Icons } from "@/components/Icon";
 import { DetailsModal } from "@/components/overlays/details/DetailsModal";
 import { useModal } from "@/components/overlays/Modal";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 
 import { VideoPlayerButton } from "./Button";
 
@@ -29,6 +30,14 @@ export function InfoButton() {
     });
     modal.show();
   };
+
+  const enableLowPerformanceMode = usePreferencesStore(
+    (state) => state.enableLowPerformanceMode,
+  );
+
+  if (enableLowPerformanceMode) {
+    return null;
+  }
 
   return (
     <>

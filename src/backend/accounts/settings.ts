@@ -22,6 +22,7 @@ export interface SettingsInput {
   sourceOrder?: string[];
   enableSourceOrder?: boolean;
   proxyTmdb?: boolean;
+  enableLowPerformanceMode?: boolean;
 }
 
 export interface SettingsResponse {
@@ -42,6 +43,7 @@ export interface SettingsResponse {
   sourceOrder?: string[];
   enableSourceOrder?: boolean;
   proxyTmdb?: boolean;
+  enableLowPerformanceMode?: boolean;
 }
 
 export function updateSettings(

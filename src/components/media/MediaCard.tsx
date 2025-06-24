@@ -67,6 +67,10 @@ function MediaCardContent({
 
   const [searchQuery] = useSearchQuery();
 
+  const enableLowPerformanceMode = usePreferencesStore(
+    (state) => state.enableLowPerformanceMode,
+  );
+
   if (isReleased() && media.year) {
     dotListContent.push(media.year.toFixed());
   }
@@ -190,7 +194,7 @@ function MediaCardContent({
           <DotList className="text-xs" content={dotListContent} />
         </div>
 
-        {!closable && (
+        {!closable && !enableLowPerformanceMode && (
           <div className="absolute bottom-0 translate-y-1 right-1">
             <button
               className="media-more-button p-2"

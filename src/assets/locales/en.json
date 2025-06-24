@@ -961,6 +961,7 @@
       }
     },
     "preferences": {
+      "title": "Preferences",
       "language": "Application language",
       "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
       "thumbnail": "Generate thumbnails",
@@ -972,9 +973,11 @@
       "skipCredits": "Skip End Credits",
       "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
       "skipCreditsLabel": "Skip end credits",
+      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
+      "lowPerformanceModeLabel": "Low performance mode",
       "sourceOrder": "Reordering sources",
       "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "title": "Preferences",
       "sourceOrderEnableLabel": "Custom source order"
     },
     "reset": "Reset",
