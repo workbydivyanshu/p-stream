@@ -11,7 +11,6 @@ import {
 
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
-import { useLowPerformanceMode } from "@/hooks/useLowPerformanceMode";
 import { useOnlineListener } from "@/hooks/usePing";
 import { AboutPage } from "@/pages/About";
 import { AdminPage } from "@/pages/admin/AdminPage";
@@ -99,7 +98,6 @@ export const maintenanceTime = "March 31th 11:00 PM - 5:00 AM EST";
 function App() {
   useHistoryListener();
   useOnlineListener();
-  useLowPerformanceMode(); // Check for ?lp parameter in URL
   const maintenance = false; // Shows maintance page
   const [showDowntime, setShowDowntime] = useState(maintenance);
 
