@@ -213,6 +213,7 @@ export function MediaCarousel({
     genreName: selectedGenreName,
     providerName: selectedProviderName,
     mediaTitle: selectedRecommendationTitle,
+    isCarouselView: true,
   });
 
   // Find active button
@@ -313,11 +314,13 @@ export function MediaCarousel({
         <div className="relative overflow-hidden carousel-container md:pb-4">
           <div className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8">
             <div className="md:w-12" />
-            {Array.from({ length: 10 }).map(() => (
-              <MediaCardSkeleton
-                key={`loading-skeleton-${Math.random().toString(36).substring(7)}`}
-              />
-            ))}
+            {Array(10)
+              .fill(null)
+              .map(() => (
+                <MediaCardSkeleton
+                  key={`skeleton-loading-${Math.random().toString(36).substring(2)}`}
+                />
+              ))}
             <div className="md:w-12" />
           </div>
         </div>
@@ -533,11 +536,13 @@ export function MediaCarousel({
                   />
                 </div>
               ))
-            : Array.from({ length: 10 }).map(() => (
-                <MediaCardSkeleton
-                  key={`loading-skeleton-${Math.random().toString(36).substring(7)}`}
-                />
-              ))}
+            : Array(10)
+                .fill(null)
+                .map((_, i) => (
+                  <MediaCardSkeleton
+                    key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(2)}`}
+                  />
+                ))}
 
           {moreContent && generatedMoreLink && (
             <MoreCard link={generatedMoreLink} />
