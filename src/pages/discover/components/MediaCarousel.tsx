@@ -538,7 +538,7 @@ export function MediaCarousel({
               ))
             : Array(10)
                 .fill(null)
-                .map((_, i) => (
+                .map((_, _i) => (
                   <MediaCardSkeleton
                     key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(2)}`}
                   />
