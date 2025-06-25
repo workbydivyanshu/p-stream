@@ -660,20 +660,8 @@
                 "movies": "{{category}}电影",
                 "tvshows": "{{category}}节目",
                 "inCinemas": "电影院中",
-                "popularOn": "{{provider}}上受欢迎的{{type}}",
-                "editorPicks": "编辑精选"
+                "popularOn": "{{provider}}上受欢迎的{{type}}"
             }
-        },
-        "providers": {
-            "netflix": "Netflix",
-            "appleTv": "Apple TV+",
-            "amazonPrime": "Amazon Prime Video",
-            "hulu": "Hulu",
-            "max": "Max",
-            "paramountPlus": "Paramount Plus",
-            "disneyPlus": "Disney Plus",
-            "shudder": "Shudder",
-            "fubuTV": "fubuTV"
         },
         "randomMovie": {
             "button": "随便看点什么",

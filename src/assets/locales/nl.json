@@ -776,20 +776,8 @@
                 "movies": "{{category}} Films",
                 "tvshows": "{{category}} Shows",
                 "inCinemas": "In de bioscoop",
-                "popularOn": "Populair {{type}} op {{provider}}",
-                "editorPicks": "Aanbevolen door ons"
+                "popularOn": "Populair {{type}} op {{provider}}"
             }
-        },
-        "providers": {
-            "netflix": "Netflix",
-            "appleTv": "Apple TV+",
-            "amazonPrime": "Amazon Prime Video",
-            "hulu": "Hulu",
-            "max": "Max",
-            "paramountPlus": "Paramount Plus",
-            "disneyPlus": "Disney Plus",
-            "shudder": "Shudder",
-            "fubuTV": "fubuTV"
         },
         "page": {
             "title": "Ontdek Films & TV",

@@ -891,12 +891,9 @@
         "title": "Jip"
     },
     "details": {
-        "director": "Direktor:",
-        "cast": "Besetzig:",
         "imdb": "Uf IMDb azeige",
         "resume": "Fortsetze",
         "play": "Abspele",
-        "languange": "Sprache:",
         "releaseDate": "Veröffentlichungsdatum:",
         "rating": "Bewertig:",
         "votes": "Stimmen",
@@ -927,7 +924,6 @@
                 "movies": "{{category}} Filme",
                 "tvshows": "{{category}} Shows",
                 "inCinemas": "Im Kino",
-                "editorPicks": "Tipps",
                 "popularOn": "Beliebti {{type}} uf {{provider}}",
                 "loading": "Lade...",
                 "latestTVReleases": "Neuschti Serie",
@@ -947,17 +943,6 @@
             },
             "change": "Ändere",
             "more": "Me Azeige"
-        },
-        "providers": {
-            "netflix": "Netflix",
-            "appleTv": "Apple TV+",
-            "amazonPrime": "Amazon Prime Video",
-            "hulu": "Hulu",
-            "max": "Max",
-            "paramountPlus": "Paramount Plus",
-            "disneyPlus": "Disney Plus",
-            "shudder": "Shudder",
-            "fubuTV": "fubuTV"
         },
         "randomMovie": {
             "button": "Lueg öpis zuefeligs",
@@ -994,7 +979,6 @@
         },
         "status": {
             "success": "Erfolgrich",
-            "failure": "\"VIP\" Streams hei net chöne abgrüeft werde. Dä Token esch ongöltig oder d‘API isch ned erreichbar!",
             "api_down": "Erreicht FED API net!",
             "invalid_token": "Fehler bem hohle fom \"VIP\" stream. Din Token esch ongöltig."
         }

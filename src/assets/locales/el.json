@@ -661,20 +661,8 @@
                 "tvshows": "{{category}}Σειρές",
                 "inCinemas": "Στα Σινεμά",
                 "popularOn": "Δημοφιλείς{{type}} στο {{provider}}",
-                "editorPicks": "Επιλογές Συντακτών",
                 "movies": "{{category}}Ταινίες"
             }
-        },
-        "providers": {
-            "netflix": "Netflix",
-            "appleTv": "Apple TV+",
-            "hulu": "Hulu",
-            "max": "Max",
-            "disneyPlus": "Disney Plus",
-            "shudder": "Shudder",
-            "fubuTV": "fubuTV",
-            "paramountPlus": "Paramount Plus",
-            "amazonPrime": "Amazon Prime Video"
         },
         "randomMovie": {
             "button": "Παρακολούθησε κάτι τυχαίο",
@@ -895,11 +883,8 @@
     },
     "details": {
         "episodes": "Επεισόδια",
-        "languange": "Γλώσσα:",
         "resume": "Συνεχίστε",
         "play": "Αναπαραγωγή",
-        "director": "Σκηνοθέτης:",
-        "cast": "Ηθοποιοί:",
         "releaseDate": "Ημερομηνία κυκλοφορίας:",
         "rating": "Βαθμολογία:",
         "votes": "Ψήφοι",
@@ -924,7 +909,6 @@
             "showVideo": "Εμφάνιση εκπαιδευτικού βίντεο"
         },
         "status": {
-            "failure": "Αποτυχία λήψης ροής \"VIP\". Το διακριτικό δεν είναι έγκυρο ή το API είναι εκτός λειτουργίας!",
             "success": "επιτυχία"
         },
         "onboarding": {

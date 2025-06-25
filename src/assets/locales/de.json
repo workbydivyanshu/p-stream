@@ -808,12 +808,9 @@
         "title": "Jip"
     },
     "details": {
-        "director": "Direktor:",
-        "cast": "Besetzung:",
         "imdb": "Auf IMDb anzeigen",
         "resume": "Fortsetzen",
         "play": "Wiedergeben",
-        "languange": "Sprache:",
         "releaseDate": "Veröffentlichungsdatum:",
         "rating": "Bewertung:",
         "votes": "Stimmen",

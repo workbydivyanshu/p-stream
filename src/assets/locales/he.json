@@ -743,21 +743,9 @@
             "title": {
                 "inCinemas": "בקולנוע",
                 "popularOn": "פופולרי {{type}} ב-{{provider}}",
-                "editorPicks": "בחירות העורך",
                 "tvshows": "{{category}} סדרות",
                 "movies": "{{category}} סרטים"
             }
-        },
-        "providers": {
-            "netflix": "נטפליקס",
-            "appleTv": "אפל טיוי+",
-            "amazonPrime": "אמזון פריים",
-            "hulu": "הולו",
-            "max": "מקס",
-            "disneyPlus": "דיסני פלוס",
-            "shudder": "שאדר",
-            "fubuTV": "פובו טיוי",
-            "paramountPlus": "פרמונט פלוס"
         },
         "randomMovie": {
             "cancel": "בטל ספירה לאחור",
@@ -897,10 +885,7 @@
         "episodes": "פרקים",
         "resume": "להמשיך",
         "play": "לנגן",
-        "director": "במאי:",
-        "cast": "משתתפים:",
         "runtime": "זמן ריצה:",
-        "languange": "שפה:",
         "releaseDate": "תאריך השקה:",
         "rating": "דירוג:",
         "votes": "הצבעות",
@@ -928,8 +913,7 @@
             "description": "הביאו חשבון Febbox משלכם כדי לקבל את הסטרימינג הטוב ביותר עם איכות 4K, Dolby Atmos, דילוג על מבוא וזמני הטעינה הטובים (המהירים ביותר)!"
         },
         "status": {
-            "success": "הצלחה",
-            "failure": "נכשל הבאה של זרם 'VIP'. המפתח אינו חוקי או ה-API מושבת!"
+            "success": "הצלחה"
         }
     }
 }

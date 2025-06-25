@@ -863,10 +863,7 @@
     "details": {
         "resume": "سيرة ذاتية",
         "play": "تشغيل",
-        "director": "المخرج:",
-        "cast": "طاقم التمثيل:",
         "runtime": "مدة:",
-        "languange": "اللغة:",
         "releaseDate": "تاريخ الصدور:",
         "rating": "التصنيف:",
         "votes": "الأصوات",

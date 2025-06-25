@@ -656,20 +656,8 @@
                 "movies": "{{श्रेणी}} फ़िल्में",
                 "tvshows": "{{श्रेणी}} शो",
                 "popularOn": "{{provider}} पर लोकप्रिय {{type}}",
-                "editorPicks": "संपादक की पसंद",
                 "inCinemas": "सिनेमाघरों में"
             }
-        },
-        "providers": {
-            "netflix": "NetFlix",
-            "appleTv": "Apple TV+",
-            "amazonPrime": "Amazon Prime Video",
-            "hulu": "Hulu",
-            "max": "Max",
-            "paramountPlus": "Paramount Plus",
-            "shudder": "Shudder",
-            "fubuTV": "fubuTV",
-            "disneyPlus": "Disney Plus"
         },
         "randomMovie": {
             "cancel": "उलटी गिनती रद्द करें",

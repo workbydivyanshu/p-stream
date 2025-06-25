@@ -593,9 +593,6 @@
     },
     "details": {
         "resume": "Reia",
-        "play": "Redă",
-        "director": "Director:",
-        "cast": "Distribuție:",
-        "languange": "Limbă:"
+        "play": "Redă"
     }
 }

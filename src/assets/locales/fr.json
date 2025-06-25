@@ -747,8 +747,6 @@
         "language": "Langue :",
         "episode": "Épisode",
         "endsAt": "Finit dans {{time}}",
-        "director": "Réalisateur :",
-        "cast": "Acteurs :",
         "runtime": "Durée :",
         "seasons": "Saison(s)",
         "trailer": "Bande-annonce"
