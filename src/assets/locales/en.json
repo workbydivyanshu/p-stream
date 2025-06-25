@@ -640,8 +640,8 @@
         "customizeLabel": "Customize",
         "offChoice": "Off",
         "onChoice": "On",
-        "SourceChoice": "Source Captions",
-        "OpenSubtitlesChoice": "OpenSubtitles",
+        "SourceChoice": "Source Subtitles",
+        "OpenSubtitlesChoice": "External Subtitles",
         "settings": {
           "backlink": "Custom subtitles",
           "delay": "Subtitle delay",
