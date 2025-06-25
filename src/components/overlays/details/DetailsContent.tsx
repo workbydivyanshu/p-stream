@@ -166,9 +166,21 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         ? `${window.location.origin}/media/tmdb-movie-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
         : `${window.location.origin}/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
-    copyToClipboard(shareUrl);
-    setHasCopiedShare(true);
-    setTimeout(() => setHasCopiedShare(false), 2000);
+    // Check if the device is iOS and share API is available
+    if (/iPad|iPhone|iPod/i.test(navigator.userAgent) && navigator.share) {
+      navigator
+        .share({
+          title: "P-Stream",
+          text: data.title,
+          url: shareUrl,
+        })
+        .catch((error) => console.error("Error sharing:", error));
+    } else {
+      // Fall back to clipboard copy for non-iOS devices
+      copyToClipboard(shareUrl);
+      setHasCopiedShare(true);
+      setTimeout(() => setHasCopiedShare(false), 2000);
+    }
   };
 
   return (
