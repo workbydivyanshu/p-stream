@@ -165,6 +165,12 @@ export function EpisodeCarousel({
     return element.scrollHeight > element.clientHeight;
   };
 
+  // Add a new effect to reset states when season changes
+  useEffect(() => {
+    setExpandedEpisodes({});
+    setTruncatedEpisodes({});
+  }, [selectedSeason]);
+
   // Check truncation after render and when expanded state changes
   useEffect(() => {
     const checkTruncation = () => {
@@ -178,9 +184,21 @@ export function EpisodeCarousel({
       setTruncatedEpisodes(newTruncatedState);
     };
 
+    checkTruncation();
+
     // Wait for the transition to complete
     const timeoutId = setTimeout(checkTruncation, 250);
-    return () => clearTimeout(timeoutId);
+
+    // Also check when window is resized
+    const handleResize = () => {
+      checkTruncation();
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [episodes, expandedEpisodes]);
 
   return (
