@@ -1,20 +1,86 @@
 {
     "about": {
-        "description": "P-Stream är en webbapplikation som söker efter strömmar på internet. Teamet strävar efter en mestadels minimalistisk ansats för att konsumera innehåll.",
+        "description": "P-Stream är en vidareutveckling (”fork”) av Movie-Web som är garanterad att fortsätta fungera även efter att movie-web.app stängts ner. P-Stream körs på en privat, egenhostad VPS. Jag driver den här sidan med förlust; det finns väldigt lite reklam eftersom jag tror på fri tillgång till media.",
         "faqTitle": "Vanliga frågor",
         "q1": {
-            "body": "P-Stream hostar ingen innehåll. När du klickar på något att titta på, söks internet efter det valda mediet (På laddningsskärmen och i fliken 'Videokällor' kan du se vilken källa du använder). Inget medium laddas upp av P-Stream, allt sker genom sökmotorn.",
-            "title": "Var kommer innehållet ifrån?"
+            "body": "P-Stream hostar ingen innehåll. När du klickar på något att titta på, söks internet efter det valda mediet (På laddningsskärmen och i fliken 'Videokällor' kan du se vilken källa du använder). Media laddas aldrig upp av P-Stream, allt sker genom sökmotorn.",
+            "title": "Var kommer innehållet ifrån?",
+            "section": "general"
         },
         "q2": {
             "body": "Det går inte att begära en show eller film, P-Stream hanterar inte något innehåll. Allt innehåll visas genom källor på internet.",
-            "title": "Var kan jag begära en show eller film?"
+            "title": "Var kan jag begära en serie eller film?",
+            "section": "sök"
         },
         "q3": {
             "body": "Våra sökresultat drivs av The Movie Database (TMDB) och visas oavsett om våra källor faktiskt har innehållet.",
-            "title": "Sökresultaten visar showen eller filmen, varför kan jag inte spela upp den?"
+            "title": "Sökresultaten visar showen eller filmen, varför kan jag inte spela upp den?",
+            "section": "sök"
         },
-        "title": "Om P-Stream"
+        "title": "Om P-Stream",
+        "help": "Hittar du inget svar? <0>Få support här.</0>",
+        "q6": {
+            "body": "Inte än, men du kan installera den som en PWA (Progressive Web App). På iOS, gå in på Safari → Dela → Lägg till på startskärmen. På Android, gå in på Chrome → 3 punkter → Lägg till på startskärmen. En experimentell APK finns tillgänglig via vår Discord, men den rekommenderas inte.",
+            "title": "Finns det en P-stream-app?",
+            "section": "general"
+        },
+        "sections": {
+            "search": "Sök och innehållstillgänglighet",
+            "general": "General",
+            "playback": "Uppspelningsproblem",
+            "connections": "Anslutningar",
+            "language": "Språk- och textinställningar"
+        },
+        "q13": {
+            "body": "Prova att byta källa. Kvaliteten varierar beroende på leverantör; FED API erbjuder ofta fler alternativ.",
+            "title": "Videokvaliteten är inte vad jag förväntat.",
+            "section": "uppspelning"
+        },
+        "q15": {
+            "body": "Kolla så att ljudet inte är avstängt på din enhet och testa att byta källa. Ljudproblem kan bero på den specifika källan.",
+            "title": "Varför finns det inget ljud?",
+            "section": "uppspelning"
+        },
+        "q14": {
+            "body": "Om 4K inte visas är det troligtvis inte tillgängligt från den källan.",
+            "title": "4K är inte tillgängligt.",
+            "section": "uppspelning"
+        },
+        "searchPlaceholder": "Sök FAQ...",
+        "q4": {
+            "title": "Vad gäller min data och sådant?",
+            "body": "All data synkroniseras med communityns backend, vem som helst kan också använda detta.",
+            "section": "general"
+        },
+        "q5": {
+            "title": "Hur kan jag få veta mer?",
+            "body": "P-Stream har en Discord-server som kan hittas högst upp på sidan!",
+            "section": "general"
+        },
+        "q7": {
+            "title": "Hur gör jag ett konto?",
+            "body": "Tryck på \"Synkronisera till molnet\" i rullgardinsmenyn eller gå till inställningar för att skapa och synkronisera ett communitykonto.",
+            "section": "general"
+        },
+        "q9": {
+            "title": "Detta media saknas / Kan jag begära media?",
+            "section": "sök"
+        },
+        "q10": {
+            "title": "Jag kan inte hitta filmen/serien jag söker!",
+            "body": "TMDB driver vår sökning. Testa att trycka på 🔎‐ikonen för avancerade sökalternativ om resultaten inte är korrekta.",
+            "section": "sök"
+        },
+        "q11": {
+            "title": "Varför ser jag en svart skärm?",
+            "body": "Förmodligen en korrupt eller trasig video‐fil. Prova att byta källa.",
+            "section": "uppspelning"
+        },
+        "q12": {
+            "title": "Avsnittet jag tittar på stämmer inte.",
+            "body": "Byt till en annan källa. Vi kontrollerar inte innehållet eller om avsnitten är korrekta.",
+            "section": "uppspelning"
+        }
     },
     "actions": {
         "copied": "Kopierad",
