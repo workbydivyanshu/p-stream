@@ -14,7 +14,12 @@
             "body": "Hasil pencarian aplikasi ini menggunakan API milik The Movie Database (TMDB) dan menampilkan semua hasil pencarian terlepas dari apakah sumber media tersebut dapat ditemukan di penyedia pihak ketiga atau tidak.",
             "title": "Hasil pencarian menampilkan serial televisi atau film yang saya cari, tapi mengapa saya tidak bisa memutarnya?"
         },
-        "title": "Tentang P-Stream"
+        "title": "Tentang P-Stream",
+        "sections": {
+            "language": "Tetapan Bahasa & Sari kata",
+            "playback": "Masalah Playback"
+        },
+        "help": "Tidak dapat mencari jawapan? <0>-Mengambil pertolongan di sini.</0>"
     },
     "actions": {
         "copied": "Disalin",
