@@ -16,7 +16,7 @@ import { AboutPage } from "@/pages/About";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import VideoTesterView from "@/pages/developer/VideoTesterView";
 import { Discover } from "@/pages/discover/Discover";
-import { DmcaPage } from "@/pages/Dmca";
+import { DmcaPage, shouldHaveDmcaPage } from "@/pages/Dmca";
 import MaintenancePage from "@/pages/errors/MaintenancePage";
 import { NotFoundPage } from "@/pages/errors/NotFoundPage";
 import { HomePage } from "@/pages/HomePage";
@@ -145,7 +145,9 @@ function App() {
             element={<OnboardingExtensionPage />}
           />
           <Route path="/onboarding/proxy" element={<OnboardingProxyPage />} />
-          <Route path="/dmca" element={<DmcaPage />} />
+          {shouldHaveDmcaPage() ? (
+            <Route path="/dmca" element={<DmcaPage />} />
+          ) : null}
           {/* Support page */}
           <Route path="/support" element={<SupportPage />} />
           {/* Discover page */}

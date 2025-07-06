@@ -18,7 +18,7 @@ import VideoTesterView from "@/pages/developer/VideoTesterView";
 import { DiscoverMore } from "@/pages/discover/AllMovieLists";
 import { Discover } from "@/pages/discover/Discover";
 import { MoreContent } from "@/pages/discover/MoreContent";
-import { DmcaPage } from "@/pages/Dmca";
+import { DmcaPage, shouldHaveDmcaPage } from "@/pages/Dmca";
 import MaintenancePage from "@/pages/errors/MaintenancePage";
 import { NotFoundPage } from "@/pages/errors/NotFoundPage";
 import { HomePage } from "@/pages/HomePage";
@@ -164,7 +164,9 @@ function App() {
           />
           <Route path="/migration/upload" element={<MigrationUploadPage />} />
 
-          <Route path="/dmca" element={<DmcaPage />} />
+          {shouldHaveDmcaPage() ? (
+            <Route path="/dmca" element={<DmcaPage />} />
+          ) : null}
           {/* Support page */}
           <Route path="/support" element={<SupportPage />} />
           <Route path="/jip" element={<JipPage />} />
