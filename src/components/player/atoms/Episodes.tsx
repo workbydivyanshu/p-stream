@@ -112,6 +112,7 @@ export function EpisodesView({
   const meta = usePlayerStore((s) => s.meta);
   const [loadingState] = useSeasonData(meta?.tmdbId ?? "", selectedSeason);
   const progress = useProgressStore();
+  const updateItem = useProgressStore((s) => s.updateItem);
   const carouselRef = useRef<HTMLDivElement>(null);
   const activeEpisodeRef = useRef<HTMLDivElement>(null);
   const [expandedEpisodes, setExpandedEpisodes] = useState<{
@@ -193,6 +194,55 @@ export function EpisodesView({
       router.close(true);
     },
     [setPlayerMeta, loadingState, router, onChange],
+  );
+
+  const toggleWatchStatus = useCallback(
+    (episodeId: string, event: React.MouseEvent) => {
+      event.stopPropagation();
+      if (loadingState.value && meta?.tmdbId) {
+        const episode = loadingState.value.season.episodes.find(
+          (ep) => ep.id === episodeId,
+        );
+        if (episode) {
+          // Check if the episode is already watched
+          const episodeProgress =
+            progress.items[meta.tmdbId]?.episodes?.[episodeId];
+          const percentage = episodeProgress
+            ? (episodeProgress.progress.watched /
+                episodeProgress.progress.duration) *
+              100
+            : 0;
+
+          // If watched (>90%), reset to 0%, otherwise set to 100%
+          const isWatched = percentage > 90;
+
+          updateItem({
+            meta: {
+              tmdbId: meta.tmdbId,
+              title: meta.title || "",
+              type: "show",
+              releaseYear: meta.releaseYear,
+              poster: meta.poster,
+              episode: {
+                tmdbId: episodeId,
+                number: episode.number,
+                title: episode.title || "",
+              },
+              season: {
+                tmdbId: selectedSeason,
+                number: loadingState.value.season.number,
+                title: loadingState.value.season.title || "",
+              },
+            },
+            progress: {
+              watched: isWatched ? 0 : 60,
+              duration: 60,
+            },
+          });
+        }
+      }
+    },
+    [loadingState, meta, selectedSeason, updateItem, progress.items],
   );
 
   const handleScroll = (direction: "left" | "right") => {
@@ -300,13 +350,14 @@ export function EpisodesView({
 
               const isAired = hasAired(ep.air_date);
               const isActive = ep.id === meta?.episode?.tmdbId;
+              const isWatched = percentage > 98;
 
               return (
                 <div key={ep.id} ref={isActive ? activeEpisodeRef : null}>
                   {/* Extra small screens - Simple vertical list with no thumbnails */}
                   <div
                     className={classNames(
-                      "block w-full px-3",
+                      "block w-full px-3 relative",
                       forceCompactEpisodeView ? "" : "sm:hidden",
                     )}
                   >
@@ -315,12 +366,29 @@ export function EpisodesView({
                       active={isActive}
                       clickable={isAired}
                       rightSide={
-                        episodeProgress && (
-                          <ProgressRing
-                            className="h-[18px] w-[18px] text-white"
-                            percentage={percentage > 90 ? 100 : percentage}
-                          />
-                        )
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => toggleWatchStatus(ep.id, e)}
+                            className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
+                            title={
+                              isWatched
+                                ? t("player.menus.episodes.markAsUnwatched")
+                                : t("player.menus.episodes.markAsWatched")
+                            }
+                          >
+                            <Icon
+                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                              className="h-4 w-4 text-white/80"
+                            />
+                          </button>
+                          {episodeProgress && (
+                            <ProgressRing
+                              className="h-[18px] w-[18px] text-white"
+                              percentage={percentage > 98 ? 100 : percentage}
+                            />
+                          )}
+                        </div>
                       }
                     >
                       <Menu.LinkTitle>
@@ -383,6 +451,25 @@ export function EpisodesView({
                               : `(${t("media.unreleased")})`}
                           </span>
                         )}
+                      </div>
+
+                      {/* Mark as watched button */}
+                      <div className="absolute top-2 right-2">
+                        <button
+                          type="button"
+                          onClick={(e) => toggleWatchStatus(ep.id, e)}
+                          className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                          title={
+                            isWatched
+                              ? t("player.menus.episodes.markAsUnwatched")
+                              : t("player.menus.episodes.markAsWatched")
+                          }
+                        >
+                          <Icon
+                            icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                            className="h-4 w-4 text-white/80"
+                          />
+                        </button>
                       </div>
                     </div>
 
@@ -491,6 +578,25 @@ export function EpisodesView({
                             </span>
                           )}
                         </div>
+
+                        {/* Mark as watched button */}
+                        <div className="absolute top-2 right-2">
+                          <button
+                            type="button"
+                            onClick={(e) => toggleWatchStatus(ep.id, e)}
+                            className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                            title={
+                              isWatched
+                                ? t("player.menus.episodes.markAsUnwatched")
+                                : t("player.menus.episodes.markAsWatched")
+                            }
+                          >
+                            <Icon
+                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                              className="h-4 w-4 text-white/80"
+                            />
+                          </button>
+                        </div>
                       </div>
                     )}
 
@@ -507,6 +613,23 @@ export function EpisodesView({
                         <h3 className="font-bold text-white line-clamp-1">
                           {ep.title}
                         </h3>
+                        {expandedEpisodes[`large-${ep.id}`] && (
+                          <button
+                            type="button"
+                            onClick={(e) => toggleWatchStatus(ep.id, e)}
+                            className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
+                            title={
+                              isWatched
+                                ? t("player.menus.episodes.markAsUnwatched")
+                                : t("player.menus.episodes.markAsWatched")
+                            }
+                          >
+                            <Icon
+                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                              className="h-4 w-4 text-white/80"
+                            />
+                          </button>
+                        )}
                       </div>
                       {ep.overview && (
                         <div className="relative">

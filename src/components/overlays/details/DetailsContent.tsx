@@ -333,6 +333,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
             seasons={data.seasonData.seasons}
             mediaId={data.id}
             mediaTitle={data.title}
+            mediaPosterUrl={data.posterUrl}
           />
         )}
 

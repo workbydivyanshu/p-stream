@@ -7,6 +7,7 @@ import { Button } from "@/components/buttons/Button";
 import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { hasAired } from "@/components/player/utils/aired";
+import { useProgressStore } from "@/stores/progress";
 
 import { EpisodeCarouselProps } from "./types";
 
@@ -19,6 +20,7 @@ export function EpisodeCarousel({
   seasons,
   mediaId,
   mediaTitle,
+  mediaPosterUrl,
 }: EpisodeCarouselProps) {
   const [showEpisodeMenu, setShowEpisodeMenu] = useState(false);
   const [customSeason, setCustomSeason] = useState("");
@@ -35,6 +37,7 @@ export function EpisodeCarousel({
   const descriptionRefs = useRef<{
     [key: number]: HTMLParagraphElement | null;
   }>({});
+  const updateItem = useProgressStore((s) => s.updateItem);
 
   const handleScroll = (direction: "left" | "right") => {
     if (!carouselRef.current) return;
@@ -143,6 +146,61 @@ export function EpisodeCarousel({
     const url = `/media/tmdb-tv-${mediaId}-${mediaTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${seasonData.id}/${episodeData.id}`;
     window.location.href = url;
     setShowEpisodeMenu(false);
+  };
+
+  const toggleWatchStatus = (episodeId: number, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (mediaId) {
+      const episode = episodes.find((ep) => ep.id === episodeId);
+      if (episode) {
+        const seasonData = seasons.find(
+          (s) => s.season_number === selectedSeason,
+        );
+        if (!seasonData) return;
+
+        // Check if the episode is already watched
+        const episodeProgress =
+          progress[mediaId.toString()]?.episodes?.[episodeId];
+        const percentage = episodeProgress
+          ? (episodeProgress.progress.watched /
+              episodeProgress.progress.duration) *
+            100
+          : 0;
+
+        // If watched (>90%), reset to 0%, otherwise set to 100%
+        const isWatched = percentage > 90;
+
+        // Get the poster URL from the mediaPosterUrl prop
+        const posterUrl = mediaPosterUrl;
+
+        // Update progress
+        updateItem({
+          meta: {
+            tmdbId: mediaId.toString(),
+            title: mediaTitle || "",
+            type: "show",
+            releaseYear: new Date().getFullYear(),
+            poster: posterUrl,
+            episode: {
+              tmdbId: episodeId.toString(),
+              number: episode.episode_number,
+              title: episode.name || "",
+            },
+            season: {
+              tmdbId: seasonData.id.toString(),
+              number: selectedSeason,
+              title: seasonData.name || "",
+            },
+          },
+          progress: {
+            watched: isWatched ? 0 : 60,
+            duration: 60,
+          },
+        });
+      }
+    }
   };
 
   const currentSeasonEpisodes = episodes.filter(
@@ -314,6 +372,7 @@ export function EpisodeCarousel({
               : 0;
             const isAired = hasAired(episode.air_date);
             const isExpanded = expandedEpisodes[episode.id];
+            const isWatched = percentage > 98;
 
             return (
               <Link
@@ -362,6 +421,25 @@ export function EpisodeCarousel({
                         </span>
                       )}
                     </div>
+
+                    {/* Mark as watched button */}
+                    <div className="absolute top-2 right-2">
+                      <button
+                        type="button"
+                        onClick={(e) => toggleWatchStatus(episode.id, e)}
+                        className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                        title={
+                          isWatched
+                            ? t("player.menus.episodes.markAsUnwatched")
+                            : t("player.menus.episodes.markAsWatched")
+                        }
+                      >
+                        <Icon
+                          icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                          className="h-4 w-4 text-white/80"
+                        />
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -376,11 +454,22 @@ export function EpisodeCarousel({
                     <h3 className="font-bold text-white line-clamp-1">
                       {episode.name}
                     </h3>
-                    {!isExpanded && (
-                      <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
-                        {t("media.episodeShort")}
-                        {episode.episode_number}
-                      </span>
+                    {isExpanded && (
+                      <button
+                        type="button"
+                        onClick={(e) => toggleWatchStatus(episode.id, e)}
+                        className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
+                        title={
+                          isWatched
+                            ? t("player.menus.episodes.markAsUnwatched")
+                            : t("player.menus.episodes.markAsWatched")
+                        }
+                      >
+                        <Icon
+                          icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                          className="h-4 w-4 text-white/80"
+                        />
+                      </button>
                     )}
                   </div>
                   {episode.overview && (

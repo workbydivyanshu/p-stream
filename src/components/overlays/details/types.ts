@@ -4,6 +4,7 @@ export interface DetailsContent {
   title: string;
   overview?: string;
   backdrop?: string;
+  posterUrl?: string;
   runtime?: number | null;
   genres?: Array<{ id: number; name: string }>;
   language?: string;
@@ -97,6 +98,7 @@ export interface EpisodeCarouselProps {
   }>;
   mediaId?: number;
   mediaTitle?: string;
+  mediaPosterUrl?: string;
 }
 
 export interface DetailsBodyProps {

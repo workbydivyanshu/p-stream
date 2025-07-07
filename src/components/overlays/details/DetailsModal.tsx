@@ -6,6 +6,7 @@ import {
   getMediaBackdrop,
   getMediaDetails,
   getMediaLogo,
+  getMediaPoster,
 } from "@/backend/metadata/tmdb";
 import {
   TMDBContentTypes,
@@ -40,10 +41,12 @@ export function DetailsModal({ id, data, minimal }: DetailsModalProps) {
         const logoUrl = await getMediaLogo(data.id.toString(), type);
         if (type === TMDBContentTypes.MOVIE) {
           const movieDetails = details as TMDBMovieData;
+          const posterUrl = getMediaPoster(movieDetails.poster_path);
           setDetailsData({
             title: movieDetails.title,
             overview: movieDetails.overview,
             backdrop: backdropUrl,
+            posterUrl,
             runtime: movieDetails.runtime,
             genres: movieDetails.genres,
             language: movieDetails.original_language,
@@ -70,10 +73,12 @@ export function DetailsModal({ id, data, minimal }: DetailsModalProps) {
               season_number: number;
             }>;
           };
+          const posterUrl = getMediaPoster(showDetails.poster_path);
           setDetailsData({
             title: showDetails.name,
             overview: showDetails.overview,
             backdrop: backdropUrl,
+            posterUrl,
             episodes: showDetails.number_of_episodes,
             seasons: showDetails.number_of_seasons,
             genres: showDetails.genres,
