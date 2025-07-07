@@ -436,6 +436,19 @@ export async function getMediaCredits(
   return get<TMDBCredits>(`/${endpoint}/${id}/credits`);
 }
 
+export async function getRelatedMedia(
+  id: string,
+  type: TMDBContentTypes,
+  limit: number = 10,
+): Promise<TMDBMovieSearchResult[] | TMDBShowSearchResult[]> {
+  const endpoint = type === TMDBContentTypes.MOVIE ? "movie" : "tv";
+  const data = await get<{
+    results: TMDBMovieSearchResult[] | TMDBShowSearchResult[];
+  }>(`/${endpoint}/${id}/similar`);
+
+  return data.results.slice(0, limit);
+}
+
 export async function getPersonDetails(id: string): Promise<TMDBPerson> {
   return get<TMDBPerson>(`/person/${id}`);
 }
