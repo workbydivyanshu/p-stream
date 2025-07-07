@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Toggle } from "@/components/buttons/Toggle";
@@ -8,6 +8,7 @@ import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useWatchPartyStore } from "@/stores/watchParty";
+import { isAutoplayAllowed } from "@/utils/autoplay";
 
 function ButtonList(props: {
   options: number[];
@@ -47,7 +48,16 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   const display = usePlayerStore((s) => s.display);
   const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
   const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
+  const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
+  const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
+  const enableLowPerformanceMode = usePreferencesStore(
+    (s) => s.enableLowPerformanceMode,
+  );
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
+
+  const allowAutoplay = useMemo(() => isAutoplayAllowed(), []);
+  const canShowAutoplay =
+    !isInWatchParty && allowAutoplay && !enableLowPerformanceMode;
 
   const setPlaybackRate = useCallback(
     (v: number) => {
@@ -91,6 +101,18 @@ export function PlaybackSettingsView({ id }: { id: string }) {
       </Menu.Section>
       <Menu.Section>
         <div className="space-y-4 mt-3">
+          {canShowAutoplay && (
+            <Menu.Link
+              rightSide={
+                <Toggle
+                  enabled={enableAutoplay}
+                  onClick={() => setEnableAutoplay(!enableAutoplay)}
+                />
+              }
+            >
+              {t("settings.preferences.autoplayLabel")}
+            </Menu.Link>
+          )}
           <Menu.Link
             rightSide={
               <Toggle

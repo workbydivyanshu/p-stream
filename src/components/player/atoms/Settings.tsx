@@ -129,7 +129,7 @@ function SettingsOverlay({ id }: { id: string }) {
             <EmbedSelectionView id={id} sourceId={chosenSourceId} />
           </Menu.CardWithScrollable>
         </OverlayPage>
-        <OverlayPage id={id} path="/playback" width={343} height={270}>
+        <OverlayPage id={id} path="/playback" width={343} height={330}>
           <Menu.Card>
             <PlaybackSettingsView id={id} />
           </Menu.Card>
