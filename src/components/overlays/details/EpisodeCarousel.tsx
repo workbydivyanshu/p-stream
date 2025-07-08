@@ -169,8 +169,8 @@ export function EpisodeCarousel({
             100
           : 0;
 
-        // If watched (>80%), reset to 0%, otherwise set to 100%
-        const isWatched = percentage > 80;
+        // If watched (>90%), reset to 0%, otherwise set to 100%
+        const isWatched = percentage > 90;
 
         // Get the poster URL from the mediaPosterUrl prop
         const posterUrl = mediaPosterUrl;
@@ -372,7 +372,7 @@ export function EpisodeCarousel({
               : 0;
             const isAired = hasAired(episode.air_date);
             const isExpanded = expandedEpisodes[episode.id];
-            const isWatched = percentage > 98;
+            const isWatched = percentage > 90;
 
             return (
               <Link

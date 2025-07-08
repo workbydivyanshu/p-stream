@@ -213,8 +213,8 @@ export function EpisodesView({
               100
             : 0;
 
-          // If watched (>80%), reset to 0%, otherwise set to 100%
-          const isWatched = percentage > 80;
+          // If watched (>90%), reset to 0%, otherwise set to 100%
+          const isWatched = percentage > 90;
 
           updateItem({
             meta: {
@@ -350,7 +350,7 @@ export function EpisodesView({
 
               const isAired = hasAired(ep.air_date);
               const isActive = ep.id === meta?.episode?.tmdbId;
-              const isWatched = percentage > 98;
+              const isWatched = percentage > 90;
 
               return (
                 <div key={ep.id} ref={isActive ? activeEpisodeRef : null}>
@@ -385,7 +385,7 @@ export function EpisodesView({
                           {episodeProgress && (
                             <ProgressRing
                               className="h-[18px] w-[18px] text-white"
-                              percentage={percentage > 98 ? 100 : percentage}
+                              percentage={percentage}
                             />
                           )}
                         </div>
@@ -526,7 +526,7 @@ export function EpisodesView({
                         <div
                           className="h-full bg-progress-filled"
                           style={{
-                            width: `${percentage > 98 ? 100 : percentage}%`,
+                            width: `${percentage}%`,
                           }}
                         />
                       </div>
@@ -679,7 +679,7 @@ export function EpisodesView({
                         <div
                           className="h-full bg-progress-filled"
                           style={{
-                            width: `${percentage > 98 ? 100 : percentage}%`,
+                            width: `${percentage}%`,
                           }}
                         />
                       </div>
