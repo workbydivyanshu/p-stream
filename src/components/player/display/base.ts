@@ -38,21 +38,41 @@ const levelConversionMap: Record<number, SourceQuality> = {
   2160: "4k",
 };
 
-function hlsLevelToQuality(level?: Level): SourceQuality | null {
-  return levelConversionMap[level?.height ?? 0] ?? null;
-}
+// Define quality thresholds for mapping non-standard resolutions
+const qualityThresholds = [
+  { minHeight: 1800, quality: "4k" as SourceQuality },
+  { minHeight: 800, quality: "1080" as SourceQuality },
+  { minHeight: 600, quality: "720" as SourceQuality },
+  { minHeight: 420, quality: "480" as SourceQuality },
+  { minHeight: 0, quality: "360" as SourceQuality },
+];
 
-function qualityToHlsLevel(quality: SourceQuality): number | null {
-  const found = Object.entries(levelConversionMap).find(
-    (entry) => entry[1] === quality,
-  );
-  return found ? +found[0] : null;
+function hlsLevelToQuality(level?: Level): SourceQuality | null {
+  if (!level?.height) return null;
+
+  // First check for exact matches
+  const exactMatch = levelConversionMap[level.height];
+  if (exactMatch) return exactMatch;
+
+  // For non-standard resolutions, map to closest standard quality
+  for (const threshold of qualityThresholds) {
+    if (level.height >= threshold.minHeight) {
+      return threshold.quality;
+    }
+  }
+
+  return "unknown"; // fallback to unknown quality
 }
 
 function hlsLevelsToQualities(levels: Level[]): SourceQuality[] {
   return levels
     .map((v) => hlsLevelToQuality(v))
     .filter((v): v is SourceQuality => !!v);
+}
+
+// Sort levels by quality (height) to ensure we can select the best one
+function sortLevelsByQuality(levels: Level[]): Level[] {
+  return [...levels].sort((a, b) => (b.height || 0) - (a.height || 0));
 }
 
 export function makeVideoElementDisplayInterface(): DisplayInterface {
@@ -115,18 +135,25 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
 
     if (!hls) return;
     if (!automaticQuality) {
-      const qualities = hlsLevelsToQualities(hls.levels);
+      const sortedLevels = sortLevelsByQuality(hls.levels);
+      const qualities = hlsLevelsToQualities(sortedLevels);
       const availableQuality = getPreferredQuality(qualities, {
         lastChosenQuality: preferenceQuality,
         automaticQuality,
       });
       if (availableQuality) {
-        const levelIndex = hls.levels.findIndex(
-          (v) => v.height === qualityToHlsLevel(availableQuality),
+        // Find the best level that matches our preferred quality
+        const matchingLevels = hls.levels.filter(
+          (level) => hlsLevelToQuality(level) === availableQuality,
         );
-        if (levelIndex !== -1) {
-          hls.currentLevel = levelIndex;
-          hls.loadLevel = levelIndex;
+        if (matchingLevels.length > 0) {
+          // Pick the highest resolution level for this quality
+          const bestLevel = sortLevelsByQuality(matchingLevels)[0];
+          const levelIndex = hls.levels.indexOf(bestLevel);
+          if (levelIndex !== -1) {
+            hls.currentLevel = levelIndex;
+            hls.loadLevel = levelIndex;
+          }
         }
       }
     } else {
