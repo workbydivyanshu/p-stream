@@ -8,7 +8,7 @@ import { OptionItem } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { OverlayPage } from "@/components/overlays/OverlayPage";
 import { Menu } from "@/components/player/internals/ContextMenu";
-import { convertSubtitlesToSrt } from "@/components/player/utils/captions";
+import { convertSubtitlesToSrtDataurl } from "@/components/player/utils/captions";
 import { Transition } from "@/components/utils/Transition";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
@@ -125,31 +125,11 @@ export function DownloadView({ id }: { id: string }) {
   const sourceType = usePlayerStore((s) => s.source?.type);
   const selectedCaption = usePlayerStore((s) => s.caption?.selected);
   const openSubtitleDownload = useCallback(() => {
-    if (!selectedCaption?.srtData) return;
-
-    try {
-      // Convert subtitles to SRT format
-      const srtContent = convertSubtitlesToSrt(selectedCaption.srtData);
-
-      // Create a Blob with the SRT content
-      const blob = new Blob([srtContent], { type: "application/x-subrip" });
-      const url = URL.createObjectURL(blob);
-
-      // Create an anchor element for downloading
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "subtitles.srt";
-      document.body.appendChild(a);
-      a.click();
-
-      // Clean up
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 100);
-    } catch (error) {
-      console.error("Error downloading subtitles:", error);
-    }
+    const dataUrl = selectedCaption
+      ? convertSubtitlesToSrtDataurl(selectedCaption?.srtData)
+      : null;
+    if (!dataUrl) return;
+    window.open(dataUrl);
   }, [selectedCaption]);
 
   const playerOptions = useMemo(
