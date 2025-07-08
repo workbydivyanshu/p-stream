@@ -31,15 +31,6 @@ export function EmbedOption(props: {
   const { t } = useTranslation();
   const unknownEmbedName = t("player.menus.sources.unknownOption");
 
-  const currentSourceId = usePlayerStore((s) => s.sourceId);
-  const captionList = usePlayerStore((s) => s.captionList);
-
-  const isActive = useMemo(() => {
-    if (currentSourceId !== props.sourceId) return false;
-
-    return captionList.some((caption) => caption.id.includes(props.embedId));
-  }, [currentSourceId, props.sourceId, props.embedId, captionList]);
-
   const embedName = useMemo(() => {
     if (!props.embedId) return unknownEmbedName;
     const sourceMeta = getCachedMetadata().find((s) => s.id === props.embedId);
@@ -54,12 +45,7 @@ export function EmbedOption(props: {
   );
 
   return (
-    <SelectableLink
-      loading={loading}
-      error={errored}
-      onClick={run}
-      selected={isActive}
-    >
+    <SelectableLink loading={loading} error={errored} onClick={run}>
       <span className="flex flex-col">
         <span>{embedName}</span>
       </span>
