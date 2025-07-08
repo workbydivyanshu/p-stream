@@ -423,23 +423,25 @@ export function EpisodeCarousel({
                     </div>
 
                     {/* Mark as watched button */}
-                    <div className="absolute top-2 right-2">
-                      <button
-                        type="button"
-                        onClick={(e) => toggleWatchStatus(episode.id, e)}
-                        className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
-                        title={
-                          isWatched
-                            ? t("player.menus.episodes.markAsUnwatched")
-                            : t("player.menus.episodes.markAsWatched")
-                        }
-                      >
-                        <Icon
-                          icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
-                          className="h-4 w-4 text-white/80"
-                        />
-                      </button>
-                    </div>
+                    {isAired && (
+                      <div className="absolute top-2 right-2">
+                        <button
+                          type="button"
+                          onClick={(e) => toggleWatchStatus(episode.id, e)}
+                          className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                          title={
+                            isWatched
+                              ? t("player.menus.episodes.markAsUnwatched")
+                              : t("player.menus.episodes.markAsWatched")
+                          }
+                        >
+                          <Icon
+                            icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                            className="h-4 w-4 text-white/80"
+                          />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -454,7 +456,7 @@ export function EpisodeCarousel({
                     <h3 className="font-bold text-white line-clamp-1">
                       {episode.name}
                     </h3>
-                    {isExpanded && (
+                    {isExpanded && isAired && (
                       <button
                         type="button"
                         onClick={(e) => toggleWatchStatus(episode.id, e)}

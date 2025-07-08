@@ -367,21 +367,23 @@ export function EpisodesView({
                       clickable={isAired}
                       rightSide={
                         <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={(e) => toggleWatchStatus(ep.id, e)}
-                            className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
-                            title={
-                              isWatched
-                                ? t("player.menus.episodes.markAsUnwatched")
-                                : t("player.menus.episodes.markAsWatched")
-                            }
-                          >
-                            <Icon
-                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
-                              className="h-4 w-4 text-white/80"
-                            />
-                          </button>
+                          {isAired && (
+                            <button
+                              type="button"
+                              onClick={(e) => toggleWatchStatus(ep.id, e)}
+                              className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
+                              title={
+                                isWatched
+                                  ? t("player.menus.episodes.markAsUnwatched")
+                                  : t("player.menus.episodes.markAsWatched")
+                              }
+                            >
+                              <Icon
+                                icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                                className="h-4 w-4 text-white/80"
+                              />
+                            </button>
+                          )}
                           {episodeProgress && (
                             <ProgressRing
                               className="h-[18px] w-[18px] text-white"
@@ -454,23 +456,25 @@ export function EpisodesView({
                       </div>
 
                       {/* Mark as watched button */}
-                      <div className="absolute top-2 right-2">
-                        <button
-                          type="button"
-                          onClick={(e) => toggleWatchStatus(ep.id, e)}
-                          className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
-                          title={
-                            isWatched
-                              ? t("player.menus.episodes.markAsUnwatched")
-                              : t("player.menus.episodes.markAsWatched")
-                          }
-                        >
-                          <Icon
-                            icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
-                            className="h-4 w-4 text-white/80"
-                          />
-                        </button>
-                      </div>
+                      {isAired && (
+                        <div className="absolute top-2 right-2">
+                          <button
+                            type="button"
+                            onClick={(e) => toggleWatchStatus(ep.id, e)}
+                            className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                            title={
+                              isWatched
+                                ? t("player.menus.episodes.markAsUnwatched")
+                                : t("player.menus.episodes.markAsWatched")
+                            }
+                          >
+                            <Icon
+                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                              className="h-4 w-4 text-white/80"
+                            />
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Content */}
@@ -580,23 +584,25 @@ export function EpisodesView({
                         </div>
 
                         {/* Mark as watched button */}
-                        <div className="absolute top-2 right-2">
-                          <button
-                            type="button"
-                            onClick={(e) => toggleWatchStatus(ep.id, e)}
-                            className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
-                            title={
-                              isWatched
-                                ? t("player.menus.episodes.markAsUnwatched")
-                                : t("player.menus.episodes.markAsWatched")
-                            }
-                          >
-                            <Icon
-                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
-                              className="h-4 w-4 text-white/80"
-                            />
-                          </button>
-                        </div>
+                        {isAired && (
+                          <div className="absolute top-2 right-2">
+                            <button
+                              type="button"
+                              onClick={(e) => toggleWatchStatus(ep.id, e)}
+                              className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                              title={
+                                isWatched
+                                  ? t("player.menus.episodes.markAsUnwatched")
+                                  : t("player.menus.episodes.markAsWatched")
+                              }
+                            >
+                              <Icon
+                                icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                                className="h-4 w-4 text-white/80"
+                              />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
 
@@ -613,7 +619,7 @@ export function EpisodesView({
                         <h3 className="font-bold text-white line-clamp-1">
                           {ep.title}
                         </h3>
-                        {expandedEpisodes[`large-${ep.id}`] && (
+                        {expandedEpisodes[`large-${ep.id}`] && isAired && (
                           <button
                             type="button"
                             onClick={(e) => toggleWatchStatus(ep.id, e)}
