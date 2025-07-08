@@ -213,8 +213,8 @@ export function EpisodesView({
               100
             : 0;
 
-          // If watched (>90%), reset to 0%, otherwise set to 100%
-          const isWatched = percentage > 90;
+          // If watched (>80%), reset to 0%, otherwise set to 100%
+          const isWatched = percentage > 80;
 
           updateItem({
             meta: {
