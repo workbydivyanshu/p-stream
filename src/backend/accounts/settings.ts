@@ -23,6 +23,7 @@ export interface SettingsInput {
   enableSourceOrder?: boolean;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
+  enableNativeSubtitles?: boolean;
 }
 
 export interface SettingsResponse {
@@ -44,6 +45,7 @@ export interface SettingsResponse {
   enableSourceOrder?: boolean;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
+  enableNativeSubtitles?: boolean;
 }
 
 export function updateSettings(

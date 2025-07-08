@@ -10,6 +10,7 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
 
 export function ColorOption(props: {
@@ -229,6 +230,7 @@ export function CaptionSettingsView({
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const subtitleStore = useSubtitleStore();
+  const preferencesStore = usePreferencesStore();
   const styling = subtitleStore.styling;
   const overrideCasing = subtitleStore.overrideCasing;
   const delay = subtitleStore.delay;
@@ -236,11 +238,16 @@ export function CaptionSettingsView({
   const setDelay = subtitleStore.setDelay;
   const updateStyling = subtitleStore.updateStyling;
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
-  const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
+  const enableNativeSubtitles = preferencesStore.enableNativeSubtitles;
 
   useEffect(() => {
     subtitleStore.updateStyling(styling);
   }, [styling, subtitleStore]);
+
+  // Sync preferences with player store
+  useEffect(() => {
+    setCaptionAsTrack(enableNativeSubtitles);
+  }, [enableNativeSubtitles, setCaptionAsTrack]);
 
   const handleStylingChange = (newStyling: SubtitleStyling) => {
     updateStyling(newStyling);
@@ -267,7 +274,7 @@ export function CaptionSettingsView({
         {t("player.menus.subtitles.settings.backlink")}
       </Menu.BackLink>
       <Menu.Section className="space-y-6 pb-5">
-        {!captionAsTrack ? (
+        {!enableNativeSubtitles ? (
           <>
             <div className="flex justify-between items-center">
               <Menu.FieldTitle>
@@ -275,8 +282,12 @@ export function CaptionSettingsView({
               </Menu.FieldTitle>
               <div className="flex justify-center items-center">
                 <Toggle
-                  enabled={captionAsTrack}
-                  onClick={() => setCaptionAsTrack(!captionAsTrack)}
+                  enabled={enableNativeSubtitles}
+                  onClick={() =>
+                    preferencesStore.setEnableNativeSubtitles(
+                      !enableNativeSubtitles,
+                    )
+                  }
                 />
               </div>
             </div>
@@ -478,8 +489,12 @@ export function CaptionSettingsView({
               </Menu.FieldTitle>
               <div className="flex justify-center items-center">
                 <Toggle
-                  enabled={captionAsTrack}
-                  onClick={() => setCaptionAsTrack(!captionAsTrack)}
+                  enabled={enableNativeSubtitles}
+                  onClick={() =>
+                    preferencesStore.setEnableNativeSubtitles(
+                      !enableNativeSubtitles,
+                    )
+                  }
                 />
               </div>
             </div>

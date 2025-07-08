@@ -54,6 +54,8 @@ export function VerifyPassphrase(props: VerifyPassphraseProps) {
     enableSourceOrder: store.enableSourceOrder,
     proxyTmdb: store.proxyTmdb,
     febboxKey: store.febboxKey,
+    enableLowPerformanceMode: store.enableLowPerformanceMode,
+    enableNativeSubtitles: store.enableNativeSubtitles,
   }));
 
   const backendUrl = useBackendUrl();

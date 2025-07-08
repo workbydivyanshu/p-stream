@@ -57,6 +57,9 @@ export function useAuthData() {
   const setEnableLowPerformanceMode = usePreferencesStore(
     (s) => s.setEnableLowPerformanceMode,
   );
+  const setEnableNativeSubtitles = usePreferencesStore(
+    (s) => s.setEnableNativeSubtitles,
+  );
 
   const login = useCallback(
     async (
@@ -164,6 +167,10 @@ export function useAuthData() {
       if (settings.enableLowPerformanceMode !== undefined) {
         setEnableLowPerformanceMode(settings.enableLowPerformanceMode);
       }
+
+      if (settings.enableNativeSubtitles !== undefined) {
+        setEnableNativeSubtitles(settings.enableNativeSubtitles);
+      }
     },
     [
       replaceBookmarks,
@@ -185,6 +192,7 @@ export function useAuthData() {
       setProxyTmdb,
       setFebboxKey,
       setEnableLowPerformanceMode,
+      setEnableNativeSubtitles,
     ],
   );
 
