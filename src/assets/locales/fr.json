@@ -4,24 +4,107 @@
         "faqTitle": "Questions fréquentes",
         "q1": {
             "body": "P-Stream n'héberge aucun contenu. Lorsque vous cliquez sur un élément à regarder, une recherche est effectuée sur Internet pour trouver le média sélectionné (sur l'écran de chargement et dans l'onglet \"sources vidéo\", vous pouvez voir quelle source vous utilisez). Les médias ne sont jamais téléchargés par P-Stream, tout passe par ce mécanisme de recherche.",
-            "title": "D’où proviennent les contenus proposés ?"
+            "title": "D’où proviennent les contenus proposés ?",
+            "section": "général"
         },
         "q2": {
             "body": "Il est impossible de demander un film ou une série, car P-Stream ne gère aucun contenu. Le contenu est récupéré en explorant d'autres sites sur Internet.",
-            "title": "Où puis-je demander une série ou un film ?"
+            "title": "Où puis-je demander une série ou un film ?",
+            "section": "rechercher"
         },
         "q3": {
             "body": "Nos résultats de recherche sont fournis par The Movie Database (TMDB) et peuvent s’afficher même si le contenu n’est pas réellement disponible via nos sources.",
-            "title": "Le film ou la série apparaît dans les résultats de recherche, pourquoi je ne peux pas le/la regarder ?"
+            "title": "Le film ou la série apparaît dans les résultats de recherche, pourquoi je ne peux pas le/la regarder ?",
+            "section": "rechercher"
         },
         "title": "À propos de P-Stream (^▽^)",
         "q4": {
             "body": "La synchronisation de toutes les données se fait sur la sudo-backend, qui diffère de la backend de communauté et est hébergé indépendamment par moi. Tout le monde peut également l'utiliser.",
-            "title": "Qu'en est-il de mes données ?"
+            "title": "Qu'en est-il de mes données ?",
+            "section": "général"
         },
         "q5": {
             "body": "P-Stream possède un serveur Discord qui peut être trouvé en-tête de page !",
-            "title": "Comment puis-je en savoir plus ?"
+            "title": "Comment puis-je en savoir plus ?",
+            "section": "général"
+        },
+        "searchPlaceholder": "Rechercher dans la FAQ...",
+        "sections": {
+            "general": "Général",
+            "search": "Recherche et disponibilité du contenu",
+            "playback": "Problèmes de lecture",
+            "connections": "Connexions",
+            "language": "Language et paramètre de sous-tirteage"
+        },
+        "help": "Vous ne trouvez pas de réponse ? <0>Contactez notre support ici.</0>",
+        "q14": {
+            "title": "La 4K n'est pas disponible.",
+            "body": "Si la 4K n'est pas affichée, elle n'est probablement pas disponible depuis cette source.",
+            "section": "lecture"
+        },
+        "q6": {
+            "section": "général",
+            "title": "Y a-t-il une application P-Stream ?",
+            "body": "Pas encore, mais vous pouvez l'installer en tant que PWA (Progressive Web App). Sur iOS, utilisez Safari → Partager → Sur l'écran d'accueil. Sur Android, utilisez Chrome → 3 points → Ajouter à l'écran d'accueil. Un APK expérimental est disponible via notre Discord, mais il n'est pas recommendé."
+        },
+        "q7": {
+            "title": "Comment créer un compte ?",
+            "body": "Appuyez sur \"Synchroniser vers le Cloud\" sur la liste déroulante ou allez sur les Paramètres pour créer et synchroniser un compte de communauté.",
+            "section": "général"
+        },
+        "q9": {
+            "title": "Il manque ce media / Puis-je demander des media ?",
+            "section": "rechercher",
+            "body": "Non — vu que nous n'hébergeons pas de contenu, nous ne pouvons ajouter ni changer ce qui est disponible. La liste du contenu est basée sur ce qui est publiquement accessible par le mécanisme de recherche."
+        },
+        "q10": {
+            "title": "Je ne peux pas trouver le film/série que je cherche !",
+            "body": "Nos recherches sont alimentées par TMDB. Essayez d'appuyer sur l'icône 🔎 pour des options de recherche avancées si les résultats ne sont pas précis.",
+            "section": "rechercher"
+        },
+        "q11": {
+            "title": "Pourquoi est-ce que je vois un écran noir ?",
+            "body": "Probablement un fichier vidéo cassé ou corrompu. Essayez de changer de source.",
+            "section": "lecture"
+        },
+        "q12": {
+            "title": "L'épisode que je regarde est incorrect.",
+            "section": "lecture",
+            "body": "Passez sur une source différente. Nous ne contrôlons ni le conten, ni la précision des épisodes."
+        },
+        "q13": {
+            "title": "La qualité vidéo n'est pas celle que j'attendais.",
+            "body": "Essayez de changer de source. La qualité varie par fournisseur ; l'API FED offre souvent plus d'options.",
+            "section": "lecture"
+        },
+        "q15": {
+            "title": "Pourquoi n'y a-t-il pas d'audio ?",
+            "section": "lecture",
+            "body": "Assurez-vous que le son de votre appareil n'est pas coupé et essayez de changer de source. Les problèmes d'audio peuvent être provoqués par certaines sources."
+        },
+        "q16": {
+            "title": "La vidéo est teinte ou pâle.",
+            "body": "Cela peut être causé par un mauvais fichier ou une vidéo HDR. Assurez-vous que votre appareil supporte le HDR, ou changez de source.",
+            "section": "lecture"
+        },
+        "q17": {
+            "title": "Je vois des bugs visuels.",
+            "section": "lecture",
+            "body": "Les bugs visuels viennent souvent de fichiers de mauvaise qualité. Essayez de changer de source."
+        },
+        "q18": {
+            "title": "La source se charge lentement.",
+            "section": "lecture",
+            "body": "La vitesse dépend du site d'hébergement. Passez sur une autre source pour de meilleures performances."
+        },
+        "q19": {
+            "title": "Comment est-ce que je change de source ?",
+            "body": "Pendant la lecture, appuyez sur l'icône ⚙️, puis choisissez une autre source dans \"sources vidéo\".",
+            "section": "lecture"
+        },
+        "q20": {
+            "title": "Qu'est-ce que l'API FED ?",
+            "body": "L'API FED est notre outil de récupération qui obtient des streams directement à partir de Febbox. Chaque compte Febbox gratuit inclut 100 Go par mois de bande passante illimitée, et nous utilisons votre token d'interface pour récupérer du contenu comme si vous le regardiez vous-même. La configuration la plus facile est avec un navigateur Internet sur ordinateur, mais des instructions pour mobiles sont disponibles sur notre Discord."
         }
     },
     "actions": {

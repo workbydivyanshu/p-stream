@@ -14,7 +14,17 @@
             "body": "Naše výsledky vyhledávání jsou založeny na The Movie Database (TMDB) a zobrazují se bez ohledu na to, zda naše zdroje skutečně obsah mají.",
             "title": "Ve výsledcích vyhledávání se zobrazuje pořad nebo film, proč jej nemůžu přehrát?"
         },
-        "title": "O P-Streamu"
+        "title": "O P-Streamu",
+        "sections": {
+            "language": "Jazyk & nastavení titulků"
+        },
+        "searchPlaceholder": "Prohledat FAQ...",
+        "q6": {
+            "title": "Existuje i P-Stream aplikace?"
+        },
+        "q11": {
+            "title": "Proč vidím černou obrazovku?"
+        }
     },
     "actions": {
         "copied": "Zkopírováno",

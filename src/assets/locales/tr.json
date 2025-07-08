@@ -3,25 +3,38 @@
         "description": "P-Stream internette akışlar için tarama yapan bir web uygulamasıdır. Ekip, içerik tüketmeye karşı ekseriyetle minimalist bir yaklaşım sergilemektedir.",
         "faqTitle": "Sıkça sorulan sorular",
         "q1": {
-            "body": "P-Stream herhangi bir içerik barındırmaz. İzlemek için bir şeye tıkladığınızda, seçilen medya için internette arama yapılır (Yükleme ekranında ve 'video kaynakları' sekmesinde hangi kaynağı kullandığınızı görebilirsiniz). Medya hiçbir zaman P-Stream tarafından yüklenmez, her şey bu arama mekanizması aracılığıyla gerçekleşir.",
-            "title": "İçerikler nereden geliyor?"
+            "body": "P-Stream herhangi bir içerik barındırmaz. İzlemek için bir şeye tıkladığınızda, seçilen medya için internette arama yapılır (Yükleme ekranında ve ‘video kaynakları’ sekmesinde hangi kaynağı kullandığınızı görebilirsiniz). Medya asla P-Stream tarafından yüklenmez, her şey bu arama mekanizması aracılığıyla gerçekleşir.",
+            "title": "İçerik nereden geliyor?",
+            "section": "genel"
         },
         "q2": {
-            "body": "Bir dizi veya film talep etmek mümkün değildir, P-Stream içeriklerin hiçbirini yönetmez. Tüm içerikler internet üzerindeki kaynaklar aracılığıyla görüntülenir.",
-            "title": "Bir dizi veya filmi nereden talep edebilirim?"
+            "body": "Bir dizi veya film talep etmek mümkün değildir, P-Stream herhangi bir içeriği yönetmez. Tüm içerikler internet üzerindeki kaynaklar aracılığıyla görüntülenir.",
+            "title": "Bir dizi veya filmi nereden talep edebilirim?",
+            "section": "arama"
         },
         "q3": {
             "body": "Arama sonuçlarımız The Movie Database (TMDB) tarafından desteklenmektedir ve kaynaklarımızın içeriğe gerçekten sahip olup olmadığına bakılmaksızın görüntülenir.",
-            "title": "Arama sonuçları diziyi veya filmi gösteriyor, neden oynatamıyorum?"
+            "title": "Arama sonuçları diziyi veya filmi gösteriyor, neden oynatamıyorum?",
+            "section": "arama"
         },
         "title": "P-Stream hakkında",
         "q4": {
             "body": "Tüm veriler topluluk sunucusuyla senkronize edilir, isteyen herkes bunu kullanmakta özgürdür.",
-            "title": "Peki ya benim verileri ve bilgilerim?"
+            "title": "Peki ya benim verileri ve bilgilerim?",
+            "section": "genel"
         },
         "q5": {
             "body": "P-Stream’in bir Discord sunucusu var, sayfanın en üst kısmına bak!",
             "title": "Daha fazlasını nasıl bulabilirim?"
+        },
+        "help": "Bir cevap bulamıyor musunuz? <0>Buradan destek alın.</0>",
+        "searchPlaceholder": "SSS'de arama yapın...",
+        "sections": {
+            "general": "Genel",
+            "search": "Arama ve İçerik Kullanılabilirliği",
+            "playback": "Oynatma Sorunları",
+            "connections": "Bağlantılar",
+            "language": "Dil ve Altyazı Ayarları"
         }
     },
     "actions": {
