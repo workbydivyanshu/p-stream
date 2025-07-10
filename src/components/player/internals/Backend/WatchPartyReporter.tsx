@@ -19,7 +19,7 @@ export const emitValidationStatus = (success: boolean) => {
 /**
  * Component that sends player status to the backend when watch party is enabled
  */
-export function WebhookReporter() {
+export function WatchPartyReporter() {
   const { statusHistory, latestStatus } = usePlayerStatusPolling(5); // Keep last 5 status points
   const lastReportTime = useRef<number>(0);
   const lastReportedStateRef = useRef<string>("");
