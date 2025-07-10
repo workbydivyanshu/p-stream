@@ -7,6 +7,8 @@ import {
   getMediaDetails,
   getMediaPoster,
   multiSearch,
+  searchMovies,
+  searchTVShows,
 } from "./tmdb";
 import { TMDBContentTypes } from "./types/tmdb";
 
@@ -25,6 +27,9 @@ const tmdbIdPattern = /^tmdb:(\d+)(?::(movie|tv))?$/i;
 
 // detect "year:YYYY"
 const yearPattern = /(.+?)\s+year:(\d{4})$/i;
+
+// detect "type:movie" or "type:tv"
+const typePattern = /(.+?)\s+type:(movie|tv)$/i;
 
 export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
   if (cache.has(query)) return cache.get(query) as MediaItem[];
@@ -82,8 +87,25 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
     yearValue = yearMatch[2];
   }
 
-  // normal search
-  const data = await multiSearch(queryWithoutYear);
+  // type extract logic
+  let typeValue: string | undefined;
+  let queryWithoutType = queryWithoutYear;
+
+  const typeMatch = queryWithoutYear.match(typePattern);
+  if (typeMatch && typeMatch[2]) {
+    queryWithoutType = typeMatch[1].trim();
+    typeValue = typeMatch[2].toLowerCase();
+  }
+
+  let data: any[];
+  if (typeValue === "movie") {
+    data = await searchMovies(queryWithoutType);
+  } else if (typeValue === "tv") {
+    data = await searchTVShows(queryWithoutType);
+  } else {
+    data = await multiSearch(queryWithoutType);
+  }
+
   let results = data.map((v) => {
     const formattedResult = formatTMDBSearchResult(v, v.media_type);
     return formatTMDBMetaToMediaItem(formattedResult);

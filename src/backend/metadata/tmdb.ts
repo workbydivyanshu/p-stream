@@ -248,6 +248,38 @@ export async function multiSearch(
   return results;
 }
 
+export async function searchMovies(
+  query: string,
+): Promise<TMDBMovieSearchResult[]> {
+  const data = await get<{
+    results: TMDBMovieSearchResult[];
+  }>("search/movie", {
+    query,
+    include_adult: false,
+    page: 1,
+  });
+  return data.results.map((result) => ({
+    ...result,
+    media_type: TMDBContentTypes.MOVIE,
+  }));
+}
+
+export async function searchTVShows(
+  query: string,
+): Promise<TMDBShowSearchResult[]> {
+  const data = await get<{
+    results: TMDBShowSearchResult[];
+  }>("search/tv", {
+    query,
+    include_adult: false,
+    page: 1,
+  });
+  return data.results.map((result) => ({
+    ...result,
+    media_type: TMDBContentTypes.TV,
+  }));
+}
+
 export async function generateQuickSearchMediaUrl(
   query: string,
 ): Promise<string | undefined> {

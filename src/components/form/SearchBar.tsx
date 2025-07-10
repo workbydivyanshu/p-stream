@@ -115,6 +115,15 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
                     </p>
                   </div>
                   <div>
+                    <p className="mb-0.5">Type search:</p>
+                    <p className="text-type-secondary italic pl-2">
+                      Marvel type:movie
+                    </p>
+                    <p className="text-type-secondary italic pl-2">
+                      Friends type:tv
+                    </p>
+                  </div>
+                  <div>
                     <p className="mb-0.5">TMDB ID search:</p>
                     <p className="text-type-secondary italic pl-2">
                       tmdb:123456 - For movies
