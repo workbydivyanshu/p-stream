@@ -104,7 +104,33 @@
         },
         "q20": {
             "title": "Qu'est-ce que l'API FED ?",
-            "body": "L'API FED est notre outil de récupération qui obtient des streams directement à partir de Febbox. Chaque compte Febbox gratuit inclut 100 Go par mois de bande passante illimitée, et nous utilisons votre token d'interface pour récupérer du contenu comme si vous le regardiez vous-même. La configuration la plus facile est avec un navigateur Internet sur ordinateur, mais des instructions pour mobiles sont disponibles sur notre Discord."
+            "body": "L'API FED est notre outil de récupération qui obtient des streams directement à partir de Febbox. Chaque compte Febbox gratuit inclut 100 Go par mois de bande passante illimitée, et nous utilisons votre token d'interface pour récupérer du contenu comme si vous le regardiez vous-même. La configuration la plus facile est avec un navigateur Internet sur ordinateur, mais des instructions pour mobiles sont disponibles sur notre Discord.",
+            "section": "connexions"
+        },
+        "q21": {
+            "title": "L'API FED fonctionne-t-elle sur tous les appareils ?",
+            "body": "Oui. Une fois configuré, votre jeton fonctionne sur tous les appareils connectés.",
+            "section": "connexions"
+        },
+        "q22": {
+            "title": "Pourquoi ai-je besoin d'une extension ou d'un proxy personnalisé ?",
+            "section": "connexions"
+        },
+        "q23": {
+            "title": "Qu'est ce que l'extension ? Est-elle sûre ?",
+            "section": "connexions"
+        },
+        "q24": {
+            "section": "connexions"
+        },
+        "q25": {
+            "title": "Comment puis-je changer de langue ?",
+            "body": "Nous priorisons l'anglais, mais certaines sources propose d'autres langues. Essayer de changer de source. Pour FED API, seulement Safari prend en charge le changement d'audio via fichier MP4.",
+            "section": "langue"
+        },
+        "q26": {
+            "title": "Mes sous-titres ne sont pas synchronisés.",
+            "section": "langue"
         }
     },
     "actions": {

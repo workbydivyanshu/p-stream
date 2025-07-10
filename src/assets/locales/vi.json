@@ -1,6 +1,6 @@
 {
     "about": {
-        "description": "P-Stream là một ứng dụng web tìm kiếm các nguồn truyền phát trực tuyến trên Internet. Nhóm phát triển ứng dụng này nhắm đến một cách dễ dàng hơn trong việc tiêu thụ nội dung.",
+        "description": "P-Stream là một nhánh của movie-web được đảm bảo sẽ tiếp tục hoạt động ngay cả sau khi movie-web.app ngừng hoạt động. P-Stream chạy trên VPS riêng tư, tự lưu trữ. Tôi điều hành trang web này phi lợi nhuận; có rất ít quảng cáo vì tôi tin vào phương tiện truyền thông miễn phí.",
         "faqTitle": "Các câu hỏi thường gặp",
         "q1": {
             "body": "P-Stream không lưu trữ bất kì nội dung nào. Khi bạn chọn xem một nội dung nào đó, ứng dụng sẽ tìm kiếm nội dung đó trên Internet (Khi nội dung tải và trong tab 'nguồn video' bạn sẽ tìm thấy nguồn đang được dùng). Nội dung không bao giờ được tải lên trên P-Stream, mọi thứ đều được tìm kiếm thông qua phương thức này.",
@@ -35,7 +35,7 @@
         },
         "q23": {
             "body": "Nó là một công cụ local proxy được dùng để kết nối các đường truyền mà ngăn chặn các máy quét. Nó bắt chước phiên duyệt web của bạn. Nó cũng hoàn toàn là một mã nguồn mở và có thể được tìm thấy trên github.",
-            "title": "Phần mở rộng là gì? Nó có an toàn không?",
+            "title": "Tiện ích mở rộng là gì? Nó có an toàn không?",
             "section": "kết nối"
         },
         "q25": {
@@ -128,12 +128,12 @@
             "section": "kết nối"
         },
         "q22": {
-            "title": "Tại sao tôi cần phần mở rộng hoặc proxy tùy chỉnh?",
-            "body": "Một số nguồn chặn máy quét. Phần mở rộng hoạt động như một local proxy và bỏ qua những chướng vật như chặn IP, headers và cookies.",
+            "title": "Tại sao tôi cần phần tiện ích mở rộng hoặc proxy tùy chỉnh?",
+            "body": "Một số nguồn chặn máy quét. Tiện ích mở rộng hoạt động như một local proxy và bỏ qua những chướng vật như chặn IP, headers và cookies.",
             "section": "kết nối"
         },
         "q24": {
-            "title": "Febbox token của tôi thất bại trong lúc cài đặt. Tôi nên làm gì?",
+            "title": "Febbox token của tôi thất bại trong lúc thiết lập. Tôi nên làm gì?",
             "body": "ISP của bạn có thể đang chặn FED API. Cài đặt một DNS tùy chọn như 1.1.1.1 hay NextDNS. Bạn cũng có thể thay đổi khu vực của bạn trong panel người dùng.",
             "section": "kết nối"
         }
@@ -250,12 +250,12 @@
                 "default": "Bạn muốn xem gì?",
                 "extra": [
                     "Bạn đang muốn làm gì?",
-                    null,
+                    "Chúng tôi có nên xóa trình duyệt web của bạn không?",
                     "Ban muốn xem gì?",
                     "P-Stream là trang web tuyệt nhất!",
                     "Có gì trong danh sách phim của bạn hôm nay?",
                     "Hôm nay bạn thế nào?",
-                    null,
+                    "Xin lỗi nha, trang này hay hỏng lắm...",
                     "Không phải P-Stream là tuyệt nhất sao?",
                     ">ᴗ<"
                 ]
@@ -267,7 +267,7 @@
                 "extra": [
                     "Không có gì ở đây :(",
                     "Thật trống rỗng...",
-                    null,
+                    "Trống trải thật.",
                     "Xin chào người dùng mới :3"
                 ]
             },
@@ -297,6 +297,12 @@
                 "extra": [
                     "Chúc mừng ngày 20/4 🥳 !"
                 ]
+            },
+            "69": {
+                "default": "Muốn khuấy đảo tí cho đời thêm vui không?",
+                "extra": [
+                    "Chúc mừng 69 ngày 😘!"
+                ]
             }
         },
         "mediaCard": {
@@ -325,14 +331,16 @@
             "register": "Đồng bộ hóa với đám mây",
             "settings": "Cài đặt",
             "support": "Hỗ trợ",
-            "discover": "Khám phá"
+            "discover": "Khám phá",
+            "development": "Phát triển"
         }
     },
     "notFound": {
         "badge": "Không tìm thấy",
         "goHome": "Quay lại trang chính",
         "message": "Chúng tôi đã tìm kiếm khắp nơi: dưới thùng rác, trong tủ quần áo, đằng sau máy chủ proxy nhưng vẫn không thể tìm thấy trang bạn đang tìm kiếm. (ಥ﹏ಥ)",
-        "title": "Không thể tìm thấy trang"
+        "title": "Không thể tìm thấy trang",
+        "reloadButton": "Thử lại"
     },
     "onboarding": {
         "defaultConfirm": {
@@ -343,14 +351,94 @@
         },
         "extension": {
             "back": "Trở lại",
-            "explainer": "Bạn có thể sử dụng các nguồn tốt nhất mà chúng tôi cung cấp bằng cách sử dụng tiện ích mở rộng trình duyệt. Cài đặt rất đơn giản.👌"
+            "explainer": "Bạn có thể sử dụng các nguồn tốt nhất mà chúng tôi cung cấp bằng cách sử dụng tiện ích mở rộng trình duyệt. Cài đặt rất đơn giản.👌",
+            "status": {
+                "outdated": "Phiên bản tiện ích mở rộng quá cũ",
+                "disallowed": "Tiện ích mở rộng chưa được bật cho trang này (,,>﹏<,,)",
+                "disallowedAction": "Bật tiện ích mở rộng",
+                "failed": "Không thể yêu cầu trạng thái",
+                "loading": "Đang chờ bạn cài đặt tiện ích mở rộng",
+                "success": "Tiện ích mở rộng đang hoạt động như mong đợi!"
+            },
+            "extensionHelp": "Nếu bạn đã cài đặt tiện ích mở rộng nhưng không được phát hiện, hãy <bold>mở tiện ích mở rộng thông qua menu tiện ích mở rộng của trình duyệt</bold> và làm theo các bước trên màn hình.",
+            "explainerIos": "Thật không may, tiện ích mở rộng của trình duyệt không được hỗ trợ trên iOS. Nhấn <bold>Quay lại</bold> để chọn tùy chọn khác.",
+            "linkChrome": "Cài đặt tiện ích mở rộng của Chrome",
+            "linkFirefox": "Cài đặt tiện ích mở rộng của Firefox",
+            "notDetecting": "Đã cài đặt trên Chrome nhưng trang web không phát hiện? Hãy thử tải lại trang!",
+            "notDetectingAction": "Tải lại trang",
+            "submit": "Tiếp tục",
+            "title": "Hãy bắt đầu với một tiện ích mở rộng"
         },
         "start": {
             "moreInfo": {
                 "explainer": {
-                    "outro": "Nếu bạn còn thắc mắc cách hoạt động của trang, liên hệ server <0>P-Stream Discord</0>!"
+                    "outro": "Nếu bạn còn thắc mắc cách hoạt động của trang, liên hệ server <0>P-Stream Discord</0>!",
+                    "proxy": "2. Proxy",
+                    "extensionDescription": "Tiện ích mở rộng này cho phép bạn truy cập vào hầu hết các nguồn. Nó hoạt động như một proxy cục bộ và có thể xử lý các trang web cần cookie hoặc tiêu đề đặc biệt để tải.",
+                    "proxyDescription": "Proxy thu thập phương tiện truyền thông từ các trang web khác. Nó bỏ qua các hạn chế của trình duyệt (như CORS) để cho phép thu thập.",
+                    "fedapi": {
+                        "fedapiDescription": "Mang theo tài khoản Febbox MIỄN PHÍ của riêng bạn để có quyền truy cập vào FED API (Riêng tư), nguồn tốt nhất với chất lượng 4K, Dolby Atmos, bỏ qua phần giới thiệu và thời gian tải nhanh nhất! Khuyến nghị cao!",
+                        "fedapi": "Bổ sung: Mã token FED API (Riêng tư)"
+                    },
+                    "extension": "1. Tiện ích mở rộng",
+                    "intro": "P-Stream không lưu trữ video. Nó dựa vào các trang web của bên thứ ba để có nội dung, vì vậy bạn cần chọn cách kết nối với các trang web đó.",
+                    "options": "Các lựa chọn của bạn:",
+                    "default": "3. Thiết lập mặc định",
+                    "defaultDescription": "Sử dụng proxy tích hợp của P-Stream. Đây là lựa chọn dễ nhất nhưng có thể chậm hơn do băng thông được chia sẻ."
+                },
+                "recommended": {
+                    "desktop": {
+                        "description": "Tiện ích mở rộng + FED API (Riêng tư)",
+                        "title": "Desktop:"
+                    },
+                    "android": {
+                        "description": "Tiện ích mở rộng + FED API (Riêng tư)",
+                        "title": "Android:"
+                    },
+                    "title": "Bạn không biết nên chọn gì?",
+                    "subtitle": "Cấu hình được đề xuất:",
+                    "iOS": {
+                        "title": "iOS:",
+                        "description": "Proxy tùy chỉnh + FED API (Riêng tư)"
+                    }
+                },
+                "button": "Thêm thông tin",
+                "title": "Tìm hiểu thiết lập"
+            },
+            "explainer": "Để có được luồng phát trực tuyến tốt nhất có thể, bạn sẽ cần chọn phương pháp phát trực tuyến mà bạn muốn sử dụng.",
+            "options": {
+                "extension": {
+                    "action": "Cài đặt tiện ích mở rộng",
+                    "description": "Cài đặt tiện ích mở rộng trình duyệt và truy cập vào các nguồn bổ sung! Hãy nhớ bật tiện ích này cho trang web này.",
+                    "quality": "Chất lượng tốt nhất + Nhiều nguồn hơn",
+                    "title": "Tiện ích mở rộng trình duyệt"
+                },
+                "or": "hoặc",
+                "default": {
+                    "text": "Tôi không muốn có luồng chất lượng tốt, hãy sử dụng thiết lập mặc định."
+                },
+                "proxy": {
+                    "action": "Thiết lập proxy",
+                    "description": "Thiết lập proxy miễn phí chỉ trong 5 phút! Cải thiện độ tin cậy khi tải!",
+                    "quality": "Chất lượng tốt",
+                    "title": "Proxy tùy chỉnh"
                 }
-            }
+            },
+            "title": "Hãy thiết lập P-Stream nào🥳"
+        },
+        "proxy": {
+            "explainer": "Bạn có thể có được luồng chất lượng cao bằng cách tạo và sử dụng proxy tự phục vụ.",
+            "title": "Hãy tạo một proxy mới",
+            "back": "Quay về",
+            "input": {
+                "errorConnection": "Không thể kết nối tới proxy",
+                "errorInvalidUrl": "URL không hợp lệ",
+                "errorNotProxy": "Không phải proxy mà là trang web",
+                "label": "Proxy URL",
+                "placeholder": "https://"
+            },
+            "link": "Tìm hiểu cách tạo proxy",
+            "submit": "Nhập proxy"
         }
     },
     "player": {
@@ -362,10 +450,112 @@
             "episodes": {
                 "button": "Tập",
                 "loadingList": "Đang tải...",
-                "loadingTitle": "Đang tải..."
+                "loadingTitle": "Đang tải...",
+                "markAsWatched": "Đánh dấu là đã xem",
+                "markAsUnwatched": "Đánh dấu là chưa xem",
+                "emptyState": "Không có tập nào trong mùa này, hãy quay lại sau (xin lỗi :3)...",
+                "episodeBadge": "T{{episode}}",
+                "loadingError": "Lỗi khi tải mùa này",
+                "unairedEpisodes": "Một hoặc nhiều tập trong mùa này đã bị tắt vì chúng chưa được phát sóng.",
+                "seasons": "Mùa",
+                "showMore": "Xem thêm",
+                "showLess": "Hiển thị ít hơn"
             },
             "sources": {
-                "title": "Nguồn"
+                "title": "Nguồn",
+                "failed": {
+                    "text": "Đã xảy ra lỗi khi cố gắng tìm video... Hãy thử nguồn khác?"
+                },
+                "noStream": {
+                    "text": "Nguồn này không có luồng nào cho bộ phim hoặc chương trình này. /ᐠ - ˕ -マ Ⳋ",
+                    "title": "Không có luồng :("
+                },
+                "noEmbeds": {
+                    "text": "Chúng tôi không tìm thấy bất kỳ nội dung nhúng nào, vui lòng thử nguồn khác.",
+                    "title": "Không tìm thấy mã nhúng"
+                },
+                "unknownOption": "Không rõ",
+                "editOrder": "Sắp xếp thứ tự"
+            },
+            "quality": {
+                "hint": "Bạn có thể thử <0>chuyển đổi nguồn</0> để có các tùy chọn chất lượng khác nhau.",
+                "iosNoQuality": "Do những hạn chế do Apple xác định, lựa chọn chất lượng không khả dụng trên iOS cho nguồn này. Bạn có thể thử <0>chuyển sang nguồn khác</0> để có các tùy chọn chất lượng khác.",
+                "automaticLabel": "Chất lượng tự động",
+                "title": "Chất lượng",
+                "auto": "Tự động"
+            },
+            "subtitles": {
+                "notFound": "Không có tùy chọn nào có sẵn phù hợp với truy vấn của bạn",
+                "customChoice": "Thả hoặc tải tập tin lên",
+                "customizeLabel": "Tùy chỉnh",
+                "onChoice": "Bật",
+                "settings": {
+                    "backlink": "Phụ đề tùy chỉnh",
+                    "delay": "Độ trễ phụ đề",
+                    "fixCapitals": "Sửa lỗi viết hoa"
+                },
+                "title": "Phụ đề",
+                "unknownLanguage": "Không rõ",
+                "dropSubtitleFile": "Thả file phụ đề vào đây! >_<",
+                "empty": "Không có phụ đề nào được cung cấp cho video này.",
+                "useNativeSubtitles": "Sử dụng phụ đề video gốc",
+                "useNativeSubtitlesDescription": "Có thể sửa phụ đề khi phát và trong PiP",
+                "offChoice": "Tắt",
+                "SourceChoice": "Nguồn phụ đề",
+                "OpenSubtitlesChoice": "Phụ đề bên ngoài"
+            },
+            "playback": {
+                "speedLabel": "Tốc độ phát lại",
+                "title": "Cài đặt phát lại",
+                "disabled": "(Tắt trong buổi tiệc xem)"
+            },
+            "settings": {
+                "downloadItem": "Tải xuống",
+                "enableSubtitles": "Bật Phụ đề",
+                "experienceSection": "Trải nghiệm xem",
+                "playbackItem": "Cài đặt phát lại",
+                "audioItem": "Âm thanh",
+                "qualityItem": "Chất lượng",
+                "sourceItem": "Nguồn",
+                "subtitleItem": "Phụ đề",
+                "videoSection": "Cài đặt video"
+            },
+            "watchparty": {
+                "watchpartyItem": "Watch Party",
+                "notice": "Legacy Watch Party có thể không khả dụng đối với một số nguồn",
+                "legacyWatchparty": "Dùng legacy Watch Party"
+            },
+            "audio": {
+                "default": "Mặc định"
+            },
+            "downloads": {
+                "openIn": "Mở trong...",
+                "vlc": "VLC",
+                "iina": "IINA",
+                "hlsOpenInDisclaimer": "Mở luồng HLS với trình phát bên ngoài CÓ THỂ KHÔNG HOẠT ĐỘNG!",
+                "hlsDisclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. P-Stream không kiểm soát cách cung cấp tải xuống.<br /><br />Xin lưu ý rằng bạn đang tải xuống danh sách phát HLS, <bold>không nên tải xuống nếu bạn không quen với các định dạng phát trực tuyến nâng cao</bold>. Hãy thử các nguồn khác nhau cho các định dạng khác nhau.",
+                "onAndroid": {
+                    "1": "Để tải xuống trên Android, hãy nhấp vào nút tải xuống, sau đó trên trang mới, <bold>nhấn và giữ</bold> vào video, sau đó chọn <bold>lưu</bold>.",
+                    "shortTitle": "Tải xuống / Android",
+                    "title": "Tải xuống trên Android"
+                },
+                "onIos": {
+                    "1": "Để tải xuống trên iOS, hãy nhấp vào nút tải xuống, sau đó trên trang mới, nhấp vào <bold><ios_share /></bold>, sau đó <bold>Lưu vào Tệp <ios_files /></bold>.",
+                    "shortTitle": "Tải xuống / iOS",
+                    "title": "Tải xuống trên iOS"
+                },
+                "onPc": {
+                    "1": "Trên PC, nhấp vào nút tải xuống, sau đó, trên trang mới, nhấp chuột phải vào video và chọn <bold>Lưu video thành</bold>",
+                    "shortTitle": "Tải xuống / PC",
+                    "title": "Tải xuống trên PC"
+                },
+                "title": "Tải xuống",
+                "button": "Lượt tải xuống",
+                "hlsDownloader": "Hoặc, hãy truy cập <0>trang web tải xuống hls</0> và dán URL danh sách phát bên dưới.",
+                "disclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. P-Stream không kiểm soát cách cung cấp tải xuống.",
+                "copyHlsPlaylist": "Sao chép liên kết danh sách phát HLS",
+                "downloadSubtitle": "Tải xuống phụ đề hiện tại",
+                "downloadVideo": "Tải xuống video"
             }
         },
         "metadata": {
@@ -376,7 +566,23 @@
                 "title": "Không thể tìm thấy nội dung."
             },
             "failed": {
-                "homeButton": "Về trang chính"
+                "homeButton": "Về trang chính",
+                "badge": "Thất bại"
+            },
+            "api": {
+                "text": "Không thể tải dữ liệu API, vui lòng kiểm tra kết nối internet của bạn.",
+                "title": "Không thể tải dữ liệu API"
+            },
+            "extensionPermission": {
+                "badge": "Quyền bị thiếu",
+                "button": "Sử dụng tiện ích mở rộng",
+                "text": "Bạn có tiện ích mở rộng cho trình duyệt, nhưng chúng tôi cần sự cho phép của bạn để bắt đầu sử dụng tiện ích mở rộng. (¬_¬)",
+                "title": "Cấu hình tiện ích mở rộng"
+            },
+            "dmca": {
+                "text": "Phương tiện truyền thông này không còn khả dụng do thông báo gỡ xuống hoặc khiếu nại về bản quyền. 😨",
+                "badge": "Đã xóa",
+                "title": "Phương tiện truyền thông đã bị xóa"
             }
         },
         "playbackError": {
@@ -386,11 +592,26 @@
         "scraping": {
             "notFound": {
                 "homeButton": "Về trang chính",
-                "text": "Chúng tôi đã tìm kiếm thông qua các nhà cung cấp của mình và không thể tìm thấy phương tiện truyền thông bạn đang tìm kiếm! Chúng tôi không host các phương tiện truyền thông và không có quyền kiểm soát những gì có sẵn. Vui lòng nhấp vào 'Hiển thị chi tiết' bên dưới để biết thêm chi tiết."
+                "text": "Chúng tôi đã tìm kiếm thông qua các nhà cung cấp của mình và không thể tìm thấy phương tiện truyền thông bạn đang tìm kiếm! Chúng tôi không host các phương tiện truyền thông và không có quyền kiểm soát những gì có sẵn. Vui lòng nhấp vào 'Hiển thị chi tiết' bên dưới để biết thêm chi tiết.",
+                "badge": "Không tìm thấy",
+                "detailsButton": "Chi tiết",
+                "discoverButton": "Khám phá thêm",
+                "title": "Chúng tôi không tìm thấy"
             },
             "extensionFailure": {
-                "homeButton": "Về trang chính"
+                "homeButton": "Về trang chính",
+                "badge": "Tiện ích mở rộng đã bị vô hiệu hóa",
+                "text": "Bạn đã cài đặt tiện ích mở rộng P-Stream. Để bắt đầu sử dụng, bạn cần bật tiện ích mở rộng cho trang web này.",
+                "enableExtension": "Bật tiện ích mở rộng",
+                "title": "Vui lòng bật tiện ích mở rộng"
+            },
+            "tips": {
+                "5": "Tải tiện ích mở rộng để có thêm nhiều nguồn hơn!",
+                "2": "Nhấp vào tiêu đề để sao chép liên kết!"
             }
+        },
+        "casting": {
+            "enabled": "Truyền đến thiết bị 🎬"
         }
     },
     "settings": {
@@ -398,10 +619,10 @@
             "setup": {
                 "items": {
                     "default": "Cài đặt mặc định",
-                    "extension": "Mở rộng",
+                    "extension": "Tiện ích mở rộng",
                     "proxy": "Proxy tùy chỉnh"
                 },
-                "redoSetup": "Làm lại cài đặt",
+                "redoSetup": "Thiết lập lại",
                 "successStatus": {
                     "description": "Tất cả mọi thứ đã sẵn sàng để bạn bắt đầu xem phương tiện bạn yêu thích. (๑>◡<๑)",
                     "title": "Mọi thứ đã hoàn tất!"
@@ -428,7 +649,14 @@
             }
         },
         "preferences": {
-            "lowPerformanceModeDescription": "Tối ưu hóa ứng dụng cho các kết nối và thiết bị chậm hơn bằng cách tắt các tính năng sử dụng nhiều băng thông. Chế độ này giúp giảm mức sử dụng dữ liệu và cải thiện hiệu suất trong khi vẫn giữ nguyên chức năng tìm kiếm và xem phim. "
+            "lowPerformanceModeDescription": "Tối ưu hóa ứng dụng cho các kết nối và thiết bị chậm hơn bằng cách tắt các tính năng sử dụng nhiều băng thông. Chế độ này giúp giảm mức sử dụng dữ liệu và cải thiện hiệu suất trong khi vẫn giữ nguyên chức năng tìm kiếm và xem phim. ",
+            "sourceOrderDescription": "Kéo và thả để sắp xếp lại các nguồn. Thao tác này sẽ xác định thứ tự các nguồn được kiểm tra cho phương tiện bạn đang cố gắng xem. Nếu một nguồn bị mờ đi, điều đó có nghĩa là <bold>tiện ích mở rộng</bold> là bắt buộc đối với nguồn đó. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
+            "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc. Người dùng có thể bật bằng tiện ích mở rộng trình duyệt, proxy tùy chỉnh hoặc bằng thiết lập mặc định nếu được máy chủ cho phép."
+        },
+        "appearance": {
+            "options": {
+                "modalDescription": "Hiển thị chi tiết khi bạn nhấp vào thẻ phương tiện thay vì đi đến trang xem. Cần có Proxy hoặc Tiện ích mở rộng cho đoạn giới thiệu. Bị tắt theo mặc định."
+            }
         }
     },
     "migration": {
@@ -487,7 +715,10 @@
             "toggleLable": "Cần ReCaptcha?",
             "backendLabel": "Điểm đến URL cuối",
             "button": {
-                "home": "Về trang chính"
+                "home": "Về trang chính",
+                "migrate": "Nhập",
+                "processing": "Đang xử lý...",
+                "login": "Tiếp tục đăng nhập"
             }
         },
         "upload": {
@@ -543,6 +774,18 @@
         "airs": "Phát sóng"
     },
     "downtimeNotice": {
-        "goHome": "Về trang chính"
+        "goHome": "Về trang chính",
+        "badge": "Sự cố",
+        "message": "P-Stream đang gặp sự cố với một số nhà cung cấp một lần nữa, nếu bạn không tìm thấy hoặc không phát được chương trình, vui lòng thay đổi nguồn. Dự kiến lỗi này sẽ tiếp diễn trong thời gian tới.",
+        "title": "Sự cố nhà cung cấp"
+    },
+    "realdebrid": {
+        "description": "Nhập mã API Real Debrid của bạn để truy cập Real Debrid. Cần có tiện ích mở rộng."
+    },
+    "watchParty": {
+        "linkCopied": "Đã sao chép!"
+    },
+    "overlays": {
+        "close": "Đóng"
     }
 }
