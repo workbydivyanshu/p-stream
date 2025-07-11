@@ -127,7 +127,8 @@
         },
         "q26": {
             "title": "Moje napisy są rozsynchronizowane.",
-            "section": "język"
+            "section": "język",
+            "body": "Wejdź w \"Dostosuj\" w ustawieniach napisów lub wciśnij [ i ] na klawiaturze. Możesz również dodać własny plik z napisami."
         },
         "searchPlaceholder": "Przeszukaj FAQ..."
     },
@@ -220,7 +221,8 @@
             "settings": "Ustawienia",
             "discover": "Odkrywaj",
             "support": "Wsparcie",
-            "migration": "Migruj konto"
+            "migration": "Migruj konto",
+            "jip": "Jip"
         }
     },
     "home": {
@@ -309,7 +311,9 @@
             "movie": "Film",
             "show": "Serial"
         },
-        "unreleased": "Niewydane"
+        "unreleased": "Niewydane",
+        "episodeShort": "O",
+        "seasonShort": "S"
     },
     "navigation": {
         "banner": {
@@ -402,7 +406,13 @@
                     },
                     "defaultDescription": "Używa wbudowanego Proxy P-Stream. Jest to najłatwiejsza opcja, ale może być wolniejsza przez udostępnianie przepustowości.",
                     "default": "3. Domyślna konfiguracja",
-                    "outro": "Jeśli masz więcej pytań nad tym jak to działa, możesz śmiało zapytać na naszym serwerze! <0>P-Stream Discord</0>"
+                    "outro": "Jeśli masz więcej pytań nad tym jak to działa, możesz śmiało zapytać na naszym serwerze! <0>P-Stream Discord</0>",
+                    "intro": "P-Stream nie umieszcza plików wideo. Polegamy na treściach ze stron trzecich, więc musisz wybrać w jaki sposób platforma ma się z nimi połączyć.",
+                    "options": "Twoje Opcje:",
+                    "extension": "1. Rozszerzenie",
+                    "extensionDescription": "Rozszerzenie pozwala na dostęp do większości źródeł. Działa jako lokalne proxy i jest w stanie załadować strony, które wymagają pewnych plików cookies lub nagłówków.",
+                    "proxy": "2. Proxy",
+                    "proxyDescription": "Proxy zbiera media z innych stron. Omija restrykcje (takie jak; CORS)."
                 },
                 "button": "Więcej info",
                 "recommended": {
@@ -420,7 +430,8 @@
                         "title": "Android:",
                         "description": "Rozszerzenie + FED API (Prywatne)"
                     }
-                }
+                },
+                "title": "Informacje o konfiguracji"
             }
         }
     },
@@ -462,7 +473,8 @@
                 "openIn": "Otwórz w...",
                 "vlc": "VLC",
                 "iina": "IINA",
-                "hlsOpenInDisclaimer": "Otwieranie streamów HLS w zewnętrznym odtwarzaczu MOŻE NIE ZADZIAŁAĆ!"
+                "hlsOpenInDisclaimer": "Otwieranie streamów HLS w zewnętrznym odtwarzaczu MOŻE NIE ZADZIAŁAĆ!",
+                "button": "Próba pobrania"
             },
             "episodes": {
                 "button": "Odcinki",
@@ -536,7 +548,8 @@
                 "onChoice": "Włącz",
                 "notFound": "Żadna z dostępnych opcji nie pasuje do Twojej prośby",
                 "useNativeSubtitles": "Użyj natywnych napisów",
-                "useNativeSubtitlesDescription": "Może naprawić napisy podczas przesyłania i w PiP"
+                "useNativeSubtitlesDescription": "Może naprawić napisy podczas przesyłania i w PiP",
+                "scrapeButton": "Napisy zbieraczy"
             },
             "watchparty": {
                 "notice": "Starsza werjsa Oglądaj Wspólnie może nie działac z pewnymi źródłami",
@@ -617,20 +630,38 @@
             },
             "tips": {
                 "1": "Kliknij w ikonkę zębatek, aby zmienić źródło!",
-                "2": "Kliknij w tytuł, aby skopiować link!"
+                "2": "Kliknij w tytuł, aby skopiować link!",
+                "13": "Użyj strzałek LEWA lub PRAWA, aby pominąć o 5 sekund!",
+                "18": "Wciśnij < i > aby zmienić prędkość odtwarzania!",
+                "5": "Zainstaluj rozszerzenie, aby mieć więcej źródeł!",
+                "7": "Przytrzymaj SHIFT i kliknij w tytuł, aby skopiować link!",
+                "3": "Wciśnij i przytrzymaj lub przytrzymaj SHIFT, aby wyświetlić przycisk od szerokiego ekranu, zamiast pełnego!",
+                "4": "Niektóre źródła działają lepiej niż inne!",
+                "6": "Przytrzymaj zakładki, aby edytować lub usunąć!",
+                "8": "Ustaw niestandardowy kolor napisów!",
+                "9": "Migruj swoje konto do nowego backendu w ustawieniach!",
+                "10": "Dołącz do serwera Discord!",
+                "11": "Użyj [ i ] żeby dostosować prędkość napisów!",
+                "12": "Wciśnij SPACJĘ lub K, aby wznowić/zatrzymać!",
+                "14": "Użyj J lub L, aby pominąć o 10 sekund!",
+                "15": "Wciśnij F, aby włączyć pełny ekran!",
+                "16": "Wciśnij M, aby wyciszyć!",
+                "17": "Użyj strzałek GÓRA lub DÓŁ, aby zmienić głośność!",
+                "19": "Wciśnij . lub , aby ruszyć klatka po klatce w trakcie pauzy!",
+                "20": "Wciśnij C, aby włączyć napisy!"
             }
         },
         "time": {
             "regular": "{{timeWatched}} / {{duration}}",
-            "remaining": "Zostało {{timeLeft}} • Skończ o {{timeFinished, datetime}}",
+            "remaining": "Zostało {{timeLeft}} • Skończy się {{timeFinished, datetime}}",
             "shortRegular": "{{timeWatched}}",
             "shortRemaining": "-{{timeLeft}}"
         },
         "turnstile": {
-            "description": "Proszę potwierdź że jesteś człowiekiem, wypełniając Captcha po prawej stronie. Ma to zapewnić bezpieczeństwo P-Stream!",
-            "error": "Nie udało się zweryfikować Twojego człowieczeństwa. Proszę spróbuj ponownie.",
-            "title": "Musimy sprawdzić, czy jesteś człowiekiem.",
-            "verifyingHumanity": "Sprawdzasz swoje człowieczeństwo..."
+            "description": "Proszę potwierdź, że jesteś człowiekiem, wypełniając Captcha po prawej stronie. Ma to zapewnić bezpieczeństwo P-Stream.",
+            "error": "Nie udało się zweryfikować. Proszę spróbuj ponownie. Wyczyść pamięć cache i spróbuj ponownie, lub zmień źródło (kliknij w zębatkę).",
+            "title": "Czy jesteś robocikiem 🤖?",
+            "verifyingHumanity": "Weryfikacja... (^▽^)👍"
         }
     },
     "screens": {
@@ -643,11 +674,12 @@
             "logout": "Wyloguj się",
             "reset": "Zresetuj serwer niestandardowy",
             "text": "Nie udało się wczytać profilu",
-            "textWithReset": "Nie udało się wczytać profilu z niestandardowego serwera, chcesz powrócić do domyślnego serwera?"
+            "textWithReset": "Nie udało się wczytać profilu z niestandardowego serwera, chcesz powrócić do domyślnego serwera?",
+            "reload": "Odśwież"
         },
         "migration": {
-            "failed": "Migracja danych nie powiodła się.",
-            "inProgress": "Proszę czekać, przeprowadzamy migrację danych. Nie powinno to zająć dużo czasu."
+            "failed": "Migracja danych nie powiodła się. 😿",
+            "inProgress": "Proszę czekać, przeprowadzamy migrację danych. To zajmie chwilkę."
         }
     },
     "settings": {
@@ -662,7 +694,7 @@
                 "delete": {
                     "button": "Usuń konto",
                     "confirmButton": "Usuń konto",
-                    "confirmDescription": "Na pewno chcesz usunąć swoje konto? Wszystkie twoje dane zostaną stracone!",
+                    "confirmDescription": "Na pewno chcesz usunąć swoje konto? Wszystkie twoje dane zostaną stracone! ૮₍˶Ó﹏Ò ⑅₎ა",
                     "confirmTitle": "Jesteś pewny?",
                     "text": "Działanie to jest nieodwracalne. Wszystkie dane zostaną usunięte i nie będzie można ich odzyskać.",
                     "title": "Usuń konto"
@@ -672,6 +704,11 @@
                     "title": "Zakończ wszystkie sesje",
                     "text": "To wyloguje Cię ze wszystkich urządzeń powiązanych z Twoim kontem.",
                     "button": "Wyloguj się ze wszystkich urządzeń"
+                },
+                "migration": {
+                    "title": "Migracja konta",
+                    "text": "Migruj swoje konto do nowego serwera lub pobierz swoje dane.",
+                    "button": "Migruj konto"
                 }
             },
             "devices": {
@@ -692,7 +729,20 @@
                 "text": "Udostępnij postępy oglądania między urządzeniami i synchronizuj je.",
                 "title": "Synchronizuj z chmurą"
             },
-            "title": "Konto"
+            "title": "Konto",
+            "admin": {
+                "extensionOverride": {
+                    "text": "Nadpisanie wykrycia rozszerzenie dla potrzeby testów. To sprawi, że aplikacja zadziała, mimo braku rozszerzenia.",
+                    "title": "Nadpisanie rozszerzenia",
+                    "button": "Włącz nadpisanie",
+                    "buttonDisabled": "Wyłącz nadpisanie",
+                    "enabled": "Nadpisanie rozszerzenia jest obecnie włączone",
+                    "disabled": "Nadpisanie rozszerzenia jest obecnie wyłączone"
+                },
+                "title": "Panel administracyjny",
+                "text": "Korzystaj z narzędzi stworzonych do sprawdzania stanu P-Stream.",
+                "button": "Sprawdź to"
+            }
         },
         "appearance": {
             "activeTheme": "Aktywny",
@@ -701,23 +751,61 @@
                 "default": "Domyślny",
                 "gray": "Szary",
                 "red": "Czerwony",
-                "teal": "Morski"
+                "teal": "Morski",
+                "classic": "Klasyczny",
+                "green": "Zielony",
+                "mocha": "Mocha",
+                "pink": "Ruszofy",
+                "noir": "Czarne kino",
+                "ember": "Rozżarzony",
+                "acid": "Kwasowy",
+                "spark": "Błyszczący",
+                "grape": "Winogronowy",
+                "spiderman": "Spiderman",
+                "forest": "Las",
+                "wolverine": "Wolverine",
+                "popsicle": "Popsicle",
+                "hulk": "Hulk"
             },
-            "title": "Wygląd"
+            "title": "Wygląd",
+            "options": {
+                "forceCompactEpisodeViewDescription": "Wymuś karuzelę odcinków w odtwarzaczu, aby użyć \"klasycznego\" kompaktowego pionowego widoku. Domyślnie wyłączone.",
+                "discover": "Sekcja Odkrywaj",
+                "modalDescription": "Pokaż szczegóły gdy klikniesz na kartę medii zamiast przejścia na stronę oglądania. Proxy lub rozszerzenie są wymagane na zwiastun. Domyślnie wyłączone.",
+                "discoverDescription": "Pokaż sekcję Odkrywaj na stronie Startowej poniżej zakładek. Domyślnie włączone.",
+                "discoverLabel": "Sekcja Odkrywaj",
+                "featured": "Wyróżnione media",
+                "featuredDescription": "Pokaż karuzelę wyróżnionych filmów i seriali na górzej Twojej strony startowej! Domyślnie wyłączone.",
+                "featuredLabel": "Wyróżnione media",
+                "logos": "Logo",
+                "logosDescription": "Pokaż logo zamiast tekstu tytułów w szczegółach i wyróżnionych sekcjach. Domyślnie włączone.",
+                "logosNotice": "W większości logo są po Angielsku. Jeśli używasz innego języka, wyłącz tą opcję!",
+                "logosLabel": "Zdjęcia logo",
+                "carouselView": "Widok z karuzeli",
+                "carouselViewDescription": "Pokaż Twoje obecnie oglądane oraz sekcje jako widok z karuzeli, zamiast widoku z siatki. Domyślnie wyłączone.",
+                "carouselViewLabel": "Widok z karuzeli",
+                "forceCompactEpisodeView": "Wymuś kompaktowy widok odcinków",
+                "forceCompactEpisodeViewLabel": "Kompaktowe odcinki"
+            }
         },
         "connections": {
             "server": {
                 "description": "Jeśli chcesz połączyć się z niestandardowym backendem w celu przechowywania danych, włącz tę opcję i podaj adres URL. <0>Instrukcje.</0>",
                 "label": "Serwer niestandardowy",
-                "urlLabel": "Adres URL niestandardowego serwera"
+                "urlLabel": "Adres URL niestandardowego serwera",
+                "migration": {
+                    "description": "<0>Migruj moje dane</0> do nowego serwera.",
+                    "link": "Migruj moje dane"
+                },
+                "documentation": "Dokumentacja backendu"
             },
             "setup": {
                 "doSetup": "Konfiguruj",
                 "errorStatus": {
-                    "description": "Wygląda na to, że jeden lub więcej elementów tej konfiguracji wymaga Twojej uwagi.",
-                    "title": "Coś wymaga twojej uwagi"
+                    "description": "Wygląda na to, że jeden lub więcej elementów tej konfiguracji wymaga Twojej uwagii.",
+                    "title": "Coś wymaga Twojej uwagi 😱"
                 },
-                "itemError": "Coś jest nie tak z tym ustawieniem. Ponownie przejdź przez konfigurację, aby to naprawić.",
+                "itemError": "Coś jest nie tak z tym ustawieniem. Ponownie przejdź przez konfigurację, aby to naprawić. (ᴗ_ ᴗ。)",
                 "items": {
                     "default": "Domyślna konfiguracja",
                     "extension": "Rozszerzenie",
@@ -725,7 +813,7 @@
                 },
                 "redoSetup": "Ponów konfigurację",
                 "successStatus": {
-                    "description": "Wszystko jest gotowe, abyś mógł zacząć oglądać ulubione media.",
+                    "description": "Wszystko jest gotowe, abyś mógł zacząć oglądać ulubione media. (๑>◡<๑)",
                     "title": "Wszystko jest gotowe!"
                 },
                 "unsetStatus": {
@@ -737,10 +825,15 @@
             "workers": {
                 "addButton": "Dodaj nowego pracownika",
                 "description": "Aby aplikacja działała, cały ruch jest kierowany przez serwery proxy. Włącz tę opcję, jeśli chcesz korzystać z własnych pracowników. <0>Instrukcje.</0>",
-                "emptyState": "Brak pracowników, dodaj jednego poniżej",
+                "emptyState": "Brak pracowników (｡•́︿•̀｡), dodaj jednego poniżej",
                 "label": "Używaj niestandardowych pracowników proxy",
                 "urlLabel": "Adresy URL pracowników",
-                "urlPlaceholder": "https://"
+                "urlPlaceholder": "https://",
+                "proxyTMDB": {
+                    "description": "Potrzebne jeśli nie możesz uzyskać dostępu do TheMovieDB. Rekomendujemy wyłączenie sekcji Odkrywaj, aby poprawić wydajność.",
+                    "title": "Proxy TMDB"
+                },
+                "documentation": "Dokumentacja proxy"
             }
         },
         "preferences": {
@@ -749,7 +842,14 @@
             "thumbnail": "Generuj miniatury",
             "thumbnailDescription": "W większości przypadków filmy nie mają miniatur. Możesz włączyć to ustawienie, aby generować je na bieżąco, ale może to spowolnić wideo.",
             "thumbnailLabel": "Generuj miniatury",
-            "title": "Preferencje"
+            "title": "Preferencje",
+            "skipCreditsDescription": "Gdy włączone automatycznie odtwarza następny odcinek, gdy obecny jest w 99% obejrzany. Gdy wyłączone odtwarzanie nastąpi gdy cały odcinek jest skończony.",
+            "autoplay": "Autoodtwarzanie",
+            "autoplayDescription": "Automatycznie odtwórz następny odcinek zbliżając się do końca obecnego. Może zostać włączone przez użytkownika w rozszerzeniu, niestandardowym proxy lub domyślną konfiguracją, jeśli dozwolone.",
+            "autoplayLabel": "Autoodtwarzanie",
+            "skipCredits": "Pomiń napisy końcowe",
+            "skipCreditsLabel": "Pomiń napisy końcowe",
+            "lowPerformanceMode": "Tryb niskiej wydajności/przepustowości"
         },
         "reset": "Reset",
         "save": "Zapisz",
@@ -888,6 +988,31 @@
     "downtimeNotice": {
         "badge": "Problemy",
         "goHome": "Wróć do strony głównej",
-        "title": "Problemy z dostawcą"
+        "title": "Problemy z dostawcą",
+        "message": "P-Stream napotkał problem z niektórymi dostawcami, jeśli nie możesz znaleźć albo odtworzyć serialu, proszę zmienić źródło. Możesz spodziewać sie tego problemu przez pewien czas."
+    },
+    "support": {
+        "text": "P-Stream jest zaprojektowany jak najbardziej przejrzyście, jak to możliwe. Aczkolwiek nie wykluczamy pytań lub problemów. Ta strona jest po to, aby Ci z tym pomóc",
+        "title": "Wsparcie",
+        "q1": {
+            "body": "Możesz dołączyć do oficjalnego serwera <0>P-Stream discord</0> i zadać nam pytania lub wysłać do nas maila, którego znajdziesz na dole strony.",
+            "title": "Gdzie mogę otrzymać pomoc?"
+        },
+        "q2": {
+            "title": "W jaki sposób mogę zgłosić błąd lub problem?",
+            "body": "Mamy stronę na GitHubie <0>GitHub</0> gdzie możesz stworzyć opisany problem w naszym repozytorium."
+        }
+    },
+    "jip": {
+        "title": "Jip",
+        "text": "P-Stream nie spadło z kokosa, zostało stworzone głównie przez jedną osobę (bardzo epicką).",
+        "q1": {
+            "body": "Możesz dołączyć do oficjalnego serwera <0>P-Stream discord</0> i zadać nam pytania lub wysłać do nas maila, którego znajdziesz na dole strony.",
+            "title": "Gdzie mogę otrzymać pomoc?"
+        },
+        "q2": {
+            "body": "Mamy stronę na GitHubie <0>GitHub</0> gdzie możesz stworzyć opisany problem w naszym repozytorium.",
+            "title": "W jaki sposób mogę zgłosić błąd lub problem?"
+        }
     }
 }
