@@ -31,6 +31,7 @@ interface Config {
   AD_CONTENT_URL: string;
   TRACK_SCRIPT: string;
   BANNER_MESSAGE: string;
+  BANNER_ID: string;
 }
 
 export interface RuntimeConfig {
@@ -58,6 +59,7 @@ export interface RuntimeConfig {
   AD_CONTENT_URL: string[];
   TRACK_SCRIPT: string | null;
   BANNER_MESSAGE: string | null;
+  BANNER_ID: string | null;
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -88,6 +90,7 @@ const env: Record<keyof Config, undefined | string> = {
   AD_CONTENT_URL: import.meta.env.VITE_AD_CONTENT_URL,
   TRACK_SCRIPT: import.meta.env.VITE_TRACK_SCRIPT,
   BANNER_MESSAGE: import.meta.env.VITE_BANNER_MESSAGE,
+  BANNER_ID: import.meta.env.VITE_BANNER_ID,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -161,5 +164,6 @@ export function conf(): RuntimeConfig {
       .filter((v) => v.length > 0),
     TRACK_SCRIPT: getKey("TRACK_SCRIPT"),
     BANNER_MESSAGE: getKey("BANNER_MESSAGE"),
+    BANNER_ID: getKey("BANNER_ID"),
   };
 }

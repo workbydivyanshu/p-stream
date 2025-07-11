@@ -22,7 +22,7 @@ export function Banner(props: {
   };
 
   useEffect(() => {
-    const hideBannerFlag = sessionStorage.getItem("hideBanner");
+    const hideBannerFlag = sessionStorage.getItem(`hideBanner-${props.id}`);
     if (hideBannerFlag) {
       hideBanner(props.id, true);
     }
@@ -44,7 +44,7 @@ export function Banner(props: {
           className="absolute right-4 hover:cursor-pointer"
           onClick={() => {
             hideBanner(props.id, true);
-            sessionStorage.setItem("hideBanner", "true");
+            sessionStorage.setItem(`hideBanner-${props.id}`, "true");
           }}
         >
           <Icon icon={Icons.X} />
@@ -73,21 +73,22 @@ export function BannerLocation(props: { location?: string }) {
   }, [setLocation, loc]);
 
   useEffect(() => {
-    const customMessage = conf().BANNER_MESSAGE;
+    const config = conf();
+    const customMessage = config.BANNER_MESSAGE;
+    const bannerId = config.BANNER_ID || "custom-message";
     const shouldShow = customMessage && loc === null;
 
     if (shouldShow) {
-      showBanner("custom-message");
+      showBanner(bannerId);
     }
   }, [loc, showBanner]);
 
   if (currentLocation !== loc) return null;
 
-  const hideBannerFlag = sessionStorage.getItem("hideBanner");
-  if (hideBannerFlag) return null;
-
-  const customMessage = conf().BANNER_MESSAGE;
-  const hasCustomBanner = banners.some((b) => b.id === "custom-message");
+  const config = conf();
+  const customMessage = config.BANNER_MESSAGE;
+  const bannerId = config.BANNER_ID || "custom-message";
+  const hasCustomBanner = banners.some((b) => b.id === bannerId);
 
   return (
     <div>
@@ -97,7 +98,7 @@ export function BannerLocation(props: { location?: string }) {
         </Banner>
       ) : null}
       {hasCustomBanner && customMessage ? (
-        <Banner id="custom-message" type="info">
+        <Banner id={bannerId} type="info">
           {customMessage}
         </Banner>
       ) : null}
