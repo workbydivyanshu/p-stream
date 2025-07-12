@@ -30,8 +30,27 @@ function makeLoadbalancedList(getter: () => string[]) {
 export const getLoadbalancedProxyUrl = makeLoadbalancedList(getProxyUrls);
 export const getLoadbalancedProviderApiUrl =
   makeLoadbalancedList(getProviderApiUrls);
-export const getLoadbalancedM3U8ProxyUrl =
-  makeLoadbalancedList(getM3U8ProxyUrls);
+function getEnabledM3U8ProxyUrls() {
+  const allM3U8ProxyUrls = getM3U8ProxyUrls();
+  const enabledProxies = localStorage.getItem("m3u8-proxy-enabled");
+
+  if (!enabledProxies) {
+    return allM3U8ProxyUrls;
+  }
+
+  try {
+    const enabled = JSON.parse(enabledProxies);
+    return allM3U8ProxyUrls.filter(
+      (_url, index) => enabled[index.toString()] !== false,
+    );
+  } catch {
+    return allM3U8ProxyUrls;
+  }
+}
+
+export const getLoadbalancedM3U8ProxyUrl = makeLoadbalancedList(
+  getEnabledM3U8ProxyUrls,
+);
 
 async function fetchButWithApiTokens(
   input: RequestInfo | URL,
