@@ -97,7 +97,7 @@ function ProxyEdit({
           </p>
           <p className="max-w-[30rem] font-medium">
             <Trans i18nKey="settings.connections.workers.description">
-              <MwLink to="https://docs.pstream.org/proxy/deploy">
+              <MwLink to="https://docs.pstream.mov/proxy/deploy">
                 {t("settings.connections.workers.documentation")}
               </MwLink>
             </Trans>
@@ -183,7 +183,7 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
           </p>
           <p className="max-w-[30rem] font-medium">
             <Trans i18nKey="settings.connections.server.description">
-              <MwLink to="https://docs.pstream.org/backend/deploy">
+              <MwLink to="https://docs.pstream.mov/backend/deploy">
                 {t("settings.connections.server.documentation")}
               </MwLink>
             </Trans>

@@ -1,5 +1,5 @@
 # P-Stream
-[![P-Stream Image](.github/P-Stream.png)](https://docs.pstream.org)  
+[![P-Stream Image](.github/P-Stream.png)](https://docs.pstream.mov)  
 
 **I *do not* endorse piracy of any kind I simply enjoy programming and large user counts.**
 
@@ -10,18 +10,18 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/p-stream/p-stream)
 
-**NOTE: To self-host, more setup is required. Check the [docs](https://docs.pstream.org) to properly set up!!!!**
+**NOTE: To self-host, more setup is required. Check the [docs](https://docs.pstream.mov) to properly set up!!!!**
 
 
 ## Links And Resources
 | Service        | Link                                                             | Source Code                                              |
 |----------------|------------------------------------------------------------------|----------------------------------------------------------|
-| P-Stream Docs | [docs](https://docs.pstream.org)                          | [source code](https://github.com/p-stream/docs)        |
-| Extension      | [extension](https://docs.pstream.org/extension)                | [source code](https://github.com/p-stream/browser-ext) |
-| Proxy          | [simple-proxy](https://docs.pstream.org/proxy)              | [source code](https://github.com/p-stream/sudo-proxy)  |             
+| P-Stream Docs | [docs](https://docs.pstream.mov)                          | [source code](https://github.com/p-stream/docs)        |
+| Extension      | [extension](https://docs.pstream.mov/extension)                | [source code](https://github.com/p-stream/browser-ext) |
+| Proxy          | [simple-proxy](https://docs.pstream.mov/proxy)              | [source code](https://github.com/p-stream/sudo-proxy)  |             
 | Backend        | [backend](https://server.fifthwit.net)                    | [source code](https://github.com/p-stream/backend)     |
-| Frontend       | [P-Stream](https://docs.pstream.org/instances)                | [source code](https://github.com/p-stream/p-stream)        |
-| Weblate        | [weblate](https://weblate.pstream.org)         | |
+| Frontend       | [P-Stream](https://docs.pstream.mov/instances)                | [source code](https://github.com/p-stream/p-stream)        |
+| Weblate        | [weblate](https://weblate.pstream.mov)         | |
 
 ***I provide these if you are not able to host yourself, though I do encourage hosting the frontend.***
 

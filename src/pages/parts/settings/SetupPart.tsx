@@ -42,7 +42,7 @@ const getBaseUrl = async (): Promise<string> => {
     case "south":
       return "https://fed-api-south.pstream.org";
     case "asia":
-      return "https://fed-api-asia.pstream.org";
+      return "https://fed-api-asia.pstream.mov";
     case "europe":
       return "https://fed-api-europe.pstream.org";
     case "unknown":
