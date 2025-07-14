@@ -175,162 +175,147 @@ export function MigrationUploadPage() {
     <MinimalPageLayout>
       <PageTitle k="migration.upload.title" subpage />
       <CenterContainer>
-        {user.account ? (
-          <div>
-            <Stepper current={2} steps={2} className="mb-12" />
-            <Heading2 className="!text-4xl !mt-0">
-              {t("migration.upload.title")}
-            </Heading2>
-            <Paragraph className="text-lg max-w-md mb-6">
-              {t("migration.upload.description")}
-            </Paragraph>
+        <div>
+          <Stepper current={2} steps={2} className="mb-12" />
+          <Heading2 className="!text-4xl !mt-0">
+            {t("migration.upload.title")}
+          </Heading2>
+          <Paragraph className="text-lg max-w-md mb-6">
+            {t("migration.upload.description")}
+          </Paragraph>
 
-            <SettingsCard>
-              <div className="flex py-6 flex-col space-y-4 items-center justify-center">
-                <div className="flex flex-col space-y-2 w-full items-center">
-                  <p className="text-sm">
-                    {t("migration.upload.file.description")}:
-                  </p>
+          <SettingsCard>
+            <div className="flex py-6 flex-col space-y-4 items-center justify-center">
+              <div className="flex flex-col space-y-2 w-full items-center">
+                <p className="text-sm">
+                  {t("migration.upload.file.description")}:
+                </p>
+              </div>
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                className="hidden"
+              />
+
+              <Button
+                onClick={handleFileButtonClick}
+                theme="purple"
+                className="w-full max-w-xs"
+                padding="md:px-12 p-2.5"
+              >
+                <Icon icon={Icons.FILE} className="pr-2" />
+                {selectedFile
+                  ? t("migration.upload.file.change")
+                  : t("migration.upload.file.select")}
+              </Button>
+
+              {selectedFile && (
+                <div className="text-center mt-2 w-full">
+                  <span className="text-sm font-medium">
+                    {selectedFile.name}
+                    {uploadedData?.exportDate && (
+                      <div className="text-sm pb-2">
+                        {t("migration.upload.exportedOn")}:{" "}
+                        {new Date(
+                          uploadedData?.exportDate || "",
+                        ).toLocaleDateString()}
+                      </div>
+                    )}
+                  </span>
                 </div>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                  className="hidden"
-                />
+              )}
 
-                <Button
-                  onClick={handleFileButtonClick}
-                  theme="purple"
-                  className="w-full max-w-xs"
-                  padding="md:px-12 p-2.5"
-                >
-                  <Icon icon={Icons.FILE} className="pr-2" />
-                  {selectedFile
-                    ? t("migration.upload.file.change")
-                    : t("migration.upload.file.select")}
-                </Button>
+              {status === "processing" && (
+                <div className="flex items-center gap-2 text-sm text-green-400">
+                  <Icon icon={Icons.CLOCK} className="pr-2" />
+                  {t("migration.upload.status.processing")}
+                </div>
+              )}
 
-                {selectedFile && (
-                  <div className="text-center mt-2 w-full">
-                    <span className="text-sm font-medium">
-                      {selectedFile.name}
-                      {uploadedData?.exportDate && (
-                        <div className="text-sm pb-2">
-                          {t("migration.upload.exportedOn")}:{" "}
-                          {new Date(
-                            uploadedData?.exportDate || "",
-                          ).toLocaleDateString()}
-                        </div>
-                      )}
+              {status === "error" && (
+                <div className="flex items-center gap-2 text-sm text-red-400">
+                  <Icon icon={Icons.WARNING} className="pr-2" />
+                  {t("migration.upload.status.error")}
+                </div>
+              )}
+            </div>
+          </SettingsCard>
+
+          {uploadedData && (
+            <SettingsCard className="mt-6">
+              <Heading2 className="!my-0 !text-type-secondary">
+                {t("migration.upload.dataPreview")}
+              </Heading2>
+              <Divider marginClass="my-6 px-8 box-content -mx-8" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-background rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Icon icon={Icons.BOOKMARK} className="text-xl" />
+                    <span className="font-medium">
+                      {t("migration.upload.items.bookmarks")}
                     </span>
                   </div>
-                )}
-
-                {status === "processing" && (
-                  <div className="flex items-center gap-2 text-sm text-green-400">
-                    <Icon icon={Icons.CLOCK} className="pr-2" />
-                    {t("migration.upload.status.processing")}
+                  <div className="text-xl font-bold mt-2">
+                    {uploadedData.bookmarks
+                      ? Object.keys(uploadedData.bookmarks).length
+                      : 0}
                   </div>
-                )}
+                </div>
 
-                {status === "error" && (
-                  <div className="flex items-center gap-2 text-sm text-red-400">
-                    <Icon icon={Icons.WARNING} className="pr-2" />
-                    {t("migration.upload.status.error")}
+                <div className="p-4 bg-background rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Icon icon={Icons.CLOCK} className="text-xl" />
+                    <span className="font-medium">
+                      {t("migration.upload.items.progress")}
+                    </span>
                   </div>
+                  <div className="text-xl font-bold mt-2">
+                    {uploadedData.progress
+                      ? Object.keys(uploadedData.progress).length
+                      : 0}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex py-6 flex-col space-y-2 items-center justify-center">
+                {status === "success" ? (
+                  <div className="flex items-center gap-2 text-green-400">
+                    <Icon icon={Icons.CHECKMARK} className="pr-2" />
+                    {t("migration.upload.status.success")}
+                  </div>
+                ) : (
+                  <Button
+                    onClick={handleImport}
+                    className="w-full max-w-xs"
+                    theme="purple"
+                    padding="md:px-12 p-2.5"
+                    disabled={status === "processing"}
+                  >
+                    <Icon icon={Icons.CLOUD_ARROW_UP} className="pr-2" />
+                    {status === "processing"
+                      ? t("migration.upload.button.processing")
+                      : t("migration.upload.button.import")}
+                  </Button>
                 )}
               </div>
             </SettingsCard>
+          )}
 
-            {uploadedData && (
-              <SettingsCard className="mt-6">
-                <Heading2 className="!my-0 !text-type-secondary">
-                  {t("migration.upload.dataPreview")}
-                </Heading2>
-                <Divider marginClass="my-6 px-8 box-content -mx-8" />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Icon icon={Icons.BOOKMARK} className="text-xl" />
-                      <span className="font-medium">
-                        {t("migration.upload.items.bookmarks")}
-                      </span>
-                    </div>
-                    <div className="text-xl font-bold mt-2">
-                      {uploadedData.bookmarks
-                        ? Object.keys(uploadedData.bookmarks).length
-                        : 0}
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Icon icon={Icons.CLOCK} className="text-xl" />
-                      <span className="font-medium">
-                        {t("migration.upload.items.progress")}
-                      </span>
-                    </div>
-                    <div className="text-xl font-bold mt-2">
-                      {uploadedData.progress
-                        ? Object.keys(uploadedData.progress).length
-                        : 0}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex py-6 flex-col space-y-2 items-center justify-center">
-                  {status === "success" ? (
-                    <div className="flex items-center gap-2 text-green-400">
-                      <Icon icon={Icons.CHECKMARK} className="pr-2" />
-                      {t("migration.upload.status.success")}
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={handleImport}
-                      className="w-full max-w-xs"
-                      theme="purple"
-                      padding="md:px-12 p-2.5"
-                      disabled={status === "processing"}
-                    >
-                      <Icon icon={Icons.CLOUD_ARROW_UP} className="pr-2" />
-                      {status === "processing"
-                        ? t("migration.upload.button.processing")
-                        : t("migration.upload.button.import")}
-                    </Button>
-                  )}
-                </div>
-              </SettingsCard>
-            )}
-
-            <div className="flex justify-between mt-6">
-              <Button theme="secondary" onClick={() => navigate("/migration")}>
-                {t("migration.back")}
-              </Button>
-
-              {status === "success" && (
-                <Button onClick={() => navigate("/")} theme="purple">
-                  {t("migration.upload.button.home")}
-                </Button>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center text-center mb-8">
-            <Paragraph className="max-w-[320px] text-md">
-              {t("migration.loginRequired")}
-            </Paragraph>
-            <Button
-              theme="purple"
-              className="mt-4"
-              onClick={() => navigate("/")}
-            >
-              {t("migration.download.button.home")}
+          <div className="flex justify-between mt-6">
+            <Button theme="secondary" onClick={() => navigate("/migration")}>
+              {t("migration.back")}
             </Button>
+
+            {status === "success" && (
+              <Button onClick={() => navigate("/")} theme="purple">
+                {t("migration.upload.button.home")}
+              </Button>
+            )}
           </div>
-        )}
+        </div>
       </CenterContainer>
     </MinimalPageLayout>
   );
