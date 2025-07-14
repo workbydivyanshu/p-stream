@@ -4,24 +4,85 @@
         "faqTitle": "Hüfig gstelti Froge",
         "q1": {
             "body": "P-Stream hostet kei Inhalt selber. Wenn du öpis zum Luege aaklicksch, wird s’Internet nach dem usgwählte Medium dürsuecht (uf em Ladebildschirm ond im Tab „Videoquellen“ gsesch, weli Quelle grad brucht wird). Medie wird nie vo P-Stream ufelade – alles lauft über die Suechfunktion.",
-            "title": "Woher stamme die Videos?"
+            "title": "Woher stamme die Videos?",
+            "section": "generel"
         },
         "q2": {
             "body": "Es isch nöd möglich, e Serie oder e Film z'wünsche, will P-Stream kei Inhalt verwaltet. Alles wird über Quellen im Internet agluegt.",
-            "title": "Wo chan ich en Serie oder en Felm afroge?"
+            "title": "Wo chan ich en Serie oder en Felm afroge?",
+            "section": "suechi"
         },
         "q3": {
             "body": "Üsi Suechergebnis chöme fo The Movie Database (TMDB) ond werde au azeigt, wenn üsi Quellene dä Inhalt vellecht tatsächlech net hend.",
-            "title": "T Suechergäbnis zeige t Serie ond t Felme, wiso chani si net abspele?"
+            "title": "T Suechergäbnis zeige t Serie ond t Felme, wiso chani si net abspele?",
+            "section": "suech"
         },
         "title": "Öber P-Stream (^▽^)",
         "q4": {
             "title": "Was esch met mine Date und em Stuff?",
-            "body": "Alli Date werdet met der Community-Backend synchronisiert, ond jede cha die au notze."
+            "body": "Alli Date werdet met der Community-Backend synchronisiert, ond jede cha die au notze.",
+            "section": "generel"
         },
         "q5": {
             "title": "Wie chani me usefende?",
-            "body": "P-Stream het en Discord server, me fendet en zoberscht of de Website!"
+            "body": "P-Stream het en Discord server, me fendet en zoberscht of de Website!",
+            "section": "generel"
+        },
+        "q9": {
+            "body": "Nei—wel mer kei Medie selber hei. Alli Medie basiere of däm, was öber d‘Suechfonktion öffentlich zuegänglech isch.",
+            "title": "Die Medie fehle / Chani si afroge?",
+            "section": "suech"
+        },
+        "q6": {
+            "body": "Momentan noni, aber du chasch en PWA (Progressive Web App) installiere. Of iOS, benotz Safari → Share → Add to Home Screen. Of Andriod, benotz Chrome → 3 dots → Add to Home Screen. En Beta fonere APK esch of üsem Discord verfüegbar, aber es werd net empfole.",
+            "title": "Gets en P-Stream app?",
+            "section": "generel"
+        },
+        "q15": {
+            "body": "Stel secher, das s‘Grät stom gschalte esch ond wächsle t Sources. Audio problem chöne fo de Source entsto.",
+            "title": "Wiso hani kei Audio?",
+            "section": "Wedergob"
+        },
+        "q13": {
+            "body": "Nem mol en anderi Source. D‘Qualität fo de Provider mängisch onterschedlech; FED API het öfters me Optione.",
+            "title": "D‘Video qualität esch net die woni erwartet ha.",
+            "section": "Wedergob"
+        },
+        "help": "Fendisch kei antwort? <0>Bechom en Antwort.</0>",
+        "searchPlaceholder": "Suech FAQ…",
+        "sections": {
+            "general": "Generel",
+            "playback": "Wedergobe Fehler",
+            "connections": "Verbendige",
+            "language": "Sproche & Ontertetel Ischtelige"
+        },
+        "q7": {
+            "title": "Wie mach ich en Account?",
+            "body": "Dröck “Sync to Cloud“ im dropdown menu oder gang it Ischtelige zom erstelle oder sync en community account.",
+            "section": "generel"
+        },
+        "q10": {
+            "title": "Ich cha der Felm/Serie net fende!",
+            "body": "TMDB betribt üsi Suechi. Versuech mol s‘🔎 icon az‘klicke för erwitereti suech optione, fals t ergäbnis net steme.",
+            "section": "suechi"
+        },
+        "q11": {
+            "title": "Wiso gseni en Black-Screen?",
+            "body": "Wahrschindlech ein beschädigts Video. Versuech en anderi Quelle.",
+            "section": "Wedergot"
+        },
+        "q12": {
+            "title": "D‘Episode woni lueg stemt net.",
+            "body": "Due zonere andere Source wächsle. Mer hei kei iflos of d‘Medie wo for Sources chöme.",
+            "section": "Wedergob"
+        },
+        "q14": {
+            "title": "4K esch net verfüegbar.",
+            "body": "Wen 4K net azeigt werd, esches warschindlech fo de Source net verfüegbar.",
+            "section": "Wedergob"
+        },
+        "q16": {
+            "title": "S‘Video esch blass oder verschwome."
         }
     },
     "actions": {
@@ -438,8 +499,8 @@
                 "useNativeSubtitlesDescription": "Cha d‘Ontertetel bi Casting ond im PiP behebe"
             },
             "watchparty": {
-                "watchpartyItem": "Zäme luege",
-                "notice": "Zäme luege esch felecht net för alli Quellene verfüegbar",
+                "watchpartyItem": "Watch Party",
+                "notice": "Watch Party esch felecht net för alli Quellene verfüegbar",
                 "legacyWatchparty": "Bruch die alti Watch Party"
             },
             "audio": {
@@ -729,7 +790,10 @@
             "autoplay": "Autoplay",
             "autoplayDescription": "Spelt automatisch die nöchscht Episode inere Serie ab, sobald s‘Endo erreicht esch. Chan aktiviert werde vo Notzer met dr Browser-Erwiterig, eme eigene Proxy oder mit dr Standart-Irechtig, wenn s‘vom Host erlaubt isch.",
             "sourceOrderDescription": "Per Drag & Drop chasch t Quelle neu a‘ordne. Das bestimmt d‘Reihenfolg fo de Quelle wo abgsuecht wärde. Wenn e Quelle grau isch, heisst das, d’<bold>Erweiterig</bold> isch för die Quelle nötig. <br><br> <strong>(D’Standard-Reihenfolg isch für di meiste Notzer am beste)</strong>",
-            "skipCreditsLabel": "Skip d‘credits"
+            "skipCreditsLabel": "Skip d‘credits",
+            "lowPerformanceMode": "Chlini performenc/bandwiti Modus",
+            "lowPerformanceModeDescription": "Optimiert d‘Application för schwachi verbendige met em drossle for Bandwiti feature. Dä Modus schränkt der Dateverbruch i, ohni d‘Hauptsuechi ond fonktione zom luege izschränke. ",
+            "lowPerformanceModeLabel": "Chlini performenc Mode"
         },
         "reset": "Zurogsetze",
         "save": "Spichere",
@@ -899,7 +963,7 @@
         "votes": "Stimmen",
         "tmdb": "Uf TMDB azeige",
         "episodes": "Folge",
-        "season": "Staffele",
+        "season": "Staffle",
         "runtime": "Laufzeit:",
         "airs": "Loft",
         "language": "Sproch:",
@@ -998,7 +1062,7 @@
         "shareCode": "Teil dä Code met dine frönde (klick zom kopiere)",
         "connectedAsGuest": "Verbendet als Gascht zor Watch Party",
         "hostParty": "Host en Watch Party",
-        "joinParty": "Verbende zonere Watch Party",
+        "joinParty": "Join Watch Party",
         "viewers": "Zueschauer ({{count}})",
         "join": "Verbende",
         "cancel": "Abbräche",
