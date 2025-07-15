@@ -209,7 +209,9 @@
         "links": {
             "discord": "Discord",
             "dmca": "DMCA",
-            "github": "GitHub"
+            "github": "GitHub",
+            "twitter": "Twitter",
+            "funding": "Contribui"
         },
         "tagline": "Assista aos seus programas e filmes favoritos com esta aplicação de streaming de código aberto."
     },
@@ -221,7 +223,11 @@
             "login": "Entrar",
             "pagetitle": "{{title}} - P-Stream",
             "register": "Registrar",
-            "settings": "Configurações"
+            "settings": "Configurações",
+            "discover": "Explorar",
+            "support": "Suporte",
+            "onboarding": "Configuração",
+            "migration": "Migrar Conta"
         }
     },
     "home": {
@@ -240,9 +246,31 @@
             "loading": "A carregar...",
             "noResults": "Não conseguimos encontrar nada!",
             "placeholder": {
-                "default": "O que deseja assistir?"
+                "default": "O que deseja assistir?",
+                "extra": [
+                    "O que te apetece ver?",
+                    "Devemos apagar o teu histórico do browser?",
+                    "O que queres ver em streaming?",
+                    "P-Stream é o melhor site de sempre!",
+                    "O qu está na tua lista para ver hoje?",
+                    "Como foi o teu dia?",
+                    "Foi erro meu, o site nunca funciona como deve ser...",
+                    "O P-Stream não é simplesmente o melhor?",
+                    ">ᴗ<"
+                ]
             },
-            "sectionTitle": "Resultados da pesquisa"
+            "sectionTitle": "Resultados da pesquisa",
+            "empty": {
+                "default": "Bem-vindo, encontra conteúdo aqui para veres!",
+                "extra": [
+                    "Não há nada aqui :(",
+                    "Tão vazio...",
+                    "Que vazio.",
+                    "Olá novo utilizador :3"
+                ]
+            },
+            "discoverMore": "Descobre mais",
+            "discover": "Explora"
         },
         "titles": {
             "day": {
@@ -262,7 +290,24 @@
                 "extra": [
                     "Cansado? Dizem que O Exorcista é bom."
                 ]
+            },
+            "420": {
+                "default": "O que gostarias de ver neste 4/20?",
+                "extra": [
+                    "Feliz 4/20 🥳!"
+                ]
+            },
+            "69": {
+                "default": "Apetece-te algo picante?",
+                "extra": [
+                    "Feliz dia 69 😘!"
+                ]
             }
+        },
+        "mediaCard": {
+            "moreInfo": "Mais info",
+            "copyLink": "Copiar Link",
+            "close": "Fechar"
         }
     },
     "media": {
@@ -270,7 +315,10 @@
         "types": {
             "movie": "Filme",
             "show": "Série"
-        }
+        },
+        "unreleased": "Por Lançar",
+        "episodeShort": "E",
+        "seasonShort": "S"
     },
     "navigation": {
         "banner": {
@@ -555,5 +603,49 @@
             "title": "Legendas"
         },
         "unsaved": "Tem alterações não guardadas"
+    },
+    "migration": {
+        "loginRequired": "Tens de ter sessão iniciada para migrar os teus dados! Por favor, volta atrás e inicia sessão para continuar.",
+        "start": {
+            "explainer": "Se quiseres migrar ou fazer backup dos teus dados, podes fazê-lo através das opções abaixo. Isto vai permitir-te manter os teus dados quando mudares de servidor backend.",
+            "options": {
+                "download": {
+                    "description": "Isto vai descarregar os teus dados para o teu dispositivo. Depois podes carregar esses dados para o novo servidor ou simplesmente guardá-los para segurança.",
+                    "title": "Descarregar dados",
+                    "quality": "Mais técnico",
+                    "action": "Descarregar dados"
+                },
+                "or": "ou",
+                "direct": {
+                    "description": "Isto vai migrar os teus dados diretamente para o novo servidor. Esta é a opção mais rápida.<br /><br />Esta opção permite-te manter a tua frase de segurança igual!",
+                    "title": "Migração direta",
+                    "quality": "A mais fácil e rápida",
+                    "action": "Transferir dados"
+                },
+                "upload": {
+                    "title": "Carregar Dados",
+                    "description": "Carrega o ficheiro de dados que exportaste anteriormente para restaurar os teus favoritos e progresso nesta conta.",
+                    "quality": "Restaurar de um backup"
+                }
+            },
+            "title": "Migrar os teus dados"
+        }
+    },
+    "details": {
+        "runtime": "Duração:",
+        "releaseDate": "Data de Lançamento:",
+        "resume": "Resumir",
+        "play": "Reproduzir",
+        "language": "Linguagem:",
+        "rating": "Avaliação:",
+        "votes": "votos",
+        "tmdb": "Ver no TMDB",
+        "imdb": "Ver no IMDb",
+        "episodes": "Episódios",
+        "seasons": "Temporada/s",
+        "season": "Temporada",
+        "episode": "Episódio",
+        "endsAt": "Acaba a {{time}}",
+        "trailer": "Trailer"
     }
 }

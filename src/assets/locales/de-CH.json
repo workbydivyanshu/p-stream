@@ -435,7 +435,9 @@
                 "unairedEpisodes": "Ei oder meh Episodä in däre Staffel sind deaktiviert worde, will sie no nöd usgstrahlt worde sind.",
                 "seasons": "Staffle",
                 "showMore": "Zeig me",
-                "showLess": "Zeig weniger"
+                "showLess": "Zeig weniger",
+                "markAsWatched": "Markiers als agluegt",
+                "markAsUnwatched": "Markier als net agluegt"
             },
             "playback": {
                 "speedLabel": "Wedergabegschwendigkeit",
@@ -724,7 +726,10 @@
                 "featuredDescription": "Zeigt es Karussell met empohlene Felme ond Serie, zobersch of der Start-Site! Standardmässig usgschalte.",
                 "carouselView": "Karussell asecht",
                 "carouselViewDescription": "Zeigt dini Watch-Fortschret ond d‘gspicherete Felme imene Karrussel, anstell vonere Raschterasecht. Standartmässig usgschalte.",
-                "carouselViewLabel": "Karussell asecht"
+                "carouselViewLabel": "Karussell asecht",
+                "forceCompactEpisodeView": "Erzweng kompakte Episoden ansicht",
+                "forceCompactEpisodeViewDescription": "Erzweng die klassisch kompakt Asecht vom Episodekarussell im Player. Isch standartmässig deaktiviert.",
+                "forceCompactEpisodeViewLabel": "Kompakti Episodene"
             }
         },
         "connections": {
@@ -791,9 +796,9 @@
             "autoplayDescription": "Spelt automatisch die nöchscht Episode inere Serie ab, sobald s‘Endo erreicht esch. Chan aktiviert werde vo Notzer met dr Browser-Erwiterig, eme eigene Proxy oder mit dr Standart-Irechtig, wenn s‘vom Host erlaubt isch.",
             "sourceOrderDescription": "Per Drag & Drop chasch t Quelle neu a‘ordne. Das bestimmt d‘Reihenfolg fo de Quelle wo abgsuecht wärde. Wenn e Quelle grau isch, heisst das, d’<bold>Erweiterig</bold> isch för die Quelle nötig. <br><br> <strong>(D’Standard-Reihenfolg isch für di meiste Notzer am beste)</strong>",
             "skipCreditsLabel": "Skip d‘credits",
-            "lowPerformanceMode": "Chlini performenc/bandwiti Modus",
+            "lowPerformanceMode": "Performenc/bandwiti Modus",
             "lowPerformanceModeDescription": "Optimiert d‘Application för schwachi verbendige met em drossle for Bandwiti feature. Dä Modus schränkt der Dateverbruch i, ohni d‘Hauptsuechi ond fonktione zom luege izschränke. ",
-            "lowPerformanceModeLabel": "Chlini performenc Mode"
+            "lowPerformanceModeLabel": "Performenc Mode"
         },
         "reset": "Zurogsetze",
         "save": "Spichere",
