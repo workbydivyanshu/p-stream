@@ -1092,8 +1092,8 @@
   },
   "fedapi": {
     "onboarding": {
-      "title": "FED API (Private) token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API (Private), the best source with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
+      "title": "Febbox token",
+      "description": "Bring your own FREE Febbox account to gain access to exclusive sources! The best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
     },
     "setup": {
       "title": "To get your UI token:",
@@ -1110,7 +1110,7 @@
     },
     "status": {
       "success": "success",
-      "api_down": "Cannot reach FED API!",
+      "api_down": "Cannot reach an API!",
       "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
     }
   },

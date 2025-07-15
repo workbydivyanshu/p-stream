@@ -20,38 +20,6 @@ import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { usePreferencesStore } from "@/stores/preferences";
 
-const getRegion = async (): Promise<string | null> => {
-  if (typeof window === "undefined") return null;
-  try {
-    const regionData = window.localStorage.getItem("__MW::region");
-    if (!regionData) return null;
-    const parsed = JSON.parse(regionData);
-    return parsed?.state?.region || null;
-  } catch {
-    return null;
-  }
-};
-
-const getBaseUrl = async (): Promise<string> => {
-  const region = await getRegion();
-  switch (region) {
-    case "us-east":
-      return "https://fed-api-east.pstream.org";
-    case "us-west":
-      return "https://fed-api-west.pstream.org";
-    case "south":
-      return "https://fed-api-south.pstream.org";
-    case "asia":
-      return "https://fed-api-asia.pstream.mov";
-    case "europe":
-      return "https://fed-api-europe.pstream.org";
-    case "unknown":
-      return "https://fed-api-east.pstream.org";
-    default:
-      return "";
-  }
-};
-
 const testUrl = "https://postman-echo.com/get";
 
 const sleep = (ms: number): Promise<void> => {
@@ -90,8 +58,8 @@ function testProxy(url: string) {
 }
 
 export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
-  const BASE_URL = await getBaseUrl();
-  const febboxApiTestUrl = `${BASE_URL}/movie/tt13654226`;
+  const BASE_URL = "https://febbox.andresdev.org";
+  const febboxApiTestUrl = `${BASE_URL}/movie/950396`;
 
   if (!febboxKey) {
     return "unset";
@@ -127,7 +95,7 @@ export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
       }
 
       const data = (await response.json()) as any;
-      if (!data || !data.streams) {
+      if (!data || !data.sources) {
         console.error("Invalid response format from Febbox API:", data);
         attempts += 1;
         if (attempts === maxAttempts) {
@@ -139,12 +107,14 @@ export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
         continue;
       }
 
-      const isVIPLink = Object.values(data.streams).some((link: any) => {
-        if (typeof link === "string") {
-          return link.toLowerCase().includes("vip");
-        }
-        return false;
-      });
+      const isVIPLink =
+        Array.isArray(data.sources) &&
+        data.sources.some((source: any) => {
+          if (typeof source?.file === "string") {
+            return source.file.toLowerCase().includes("vip");
+          }
+          return false;
+        });
 
       if (isVIPLink) {
         console.log("VIP link found, returning success");
