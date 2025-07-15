@@ -171,6 +171,30 @@ export function MigrationUploadPage() {
     status,
   ]);
 
+  const handleLocalSave = useCallback(() => {
+    if (!uploadedData) return;
+    setStatus("processing");
+    try {
+      if (uploadedData.bookmarks) {
+        localStorage.setItem(
+          "__MW::bookmarks",
+          JSON.stringify({ state: { bookmarks: uploadedData.bookmarks } }),
+        );
+        replaceBookmarks(uploadedData.bookmarks);
+      }
+      if (uploadedData.progress) {
+        localStorage.setItem(
+          "__MW::progress",
+          JSON.stringify({ state: { items: uploadedData.progress } }),
+        );
+        replaceProgress(uploadedData.progress);
+      }
+      setStatus("success");
+    } catch (e) {
+      setStatus("error");
+    }
+  }, [uploadedData, replaceBookmarks, replaceProgress]);
+
   return (
     <MinimalPageLayout>
       <PageTitle k="migration.upload.title" subpage />
@@ -284,9 +308,11 @@ export function MigrationUploadPage() {
                 {status === "success" ? (
                   <div className="flex items-center gap-2 text-green-400">
                     <Icon icon={Icons.CHECKMARK} className="pr-2" />
-                    {t("migration.upload.status.success")}
+                    {user.account
+                      ? t("migration.upload.status.success")
+                      : t("migration.upload.status.successLocal")}
                   </div>
-                ) : (
+                ) : user.account ? (
                   <Button
                     onClick={handleImport}
                     className="w-full max-w-xs"
@@ -298,6 +324,19 @@ export function MigrationUploadPage() {
                     {status === "processing"
                       ? t("migration.upload.button.processing")
                       : t("migration.upload.button.import")}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleLocalSave}
+                    className="w-full max-w-xs"
+                    theme="purple"
+                    padding="md:px-12 p-2.5"
+                    disabled={status === "processing"}
+                  >
+                    <Icon icon={Icons.CLOUD_ARROW_UP} className="pr-2" />
+                    {status === "processing"
+                      ? t("migration.upload.button.processing")
+                      : t("migration.upload.button.saveLocal")}
                   </Button>
                 )}
               </div>
