@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { type DragEvent, useRef, useState } from "react";
+import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { convert } from "subsrt-ts";
 
@@ -23,26 +23,106 @@ export function CaptionOption(props: {
   onClick?: () => void;
   error?: React.ReactNode;
   flag?: boolean;
+  subtitleUrl?: string;
+  subtitleType?: string;
+  // subtitle details from wyzie
+  subtitleSource?: string;
+  subtitleEncoding?: string;
+  isHearingImpaired?: boolean;
 }) {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const tooltipContent = useMemo(() => {
+    if (!props.subtitleUrl && !props.subtitleSource) return null;
+
+    const parts = [];
+
+    if (props.subtitleSource) {
+      parts.push(`Source: ${props.subtitleSource}`);
+    }
+
+    if (props.subtitleEncoding) {
+      parts.push(`Encoding: ${props.subtitleEncoding}`);
+    }
+
+    if (props.isHearingImpaired) {
+      parts.push(`Hearing Impaired: Yes`);
+    }
+
+    if (props.subtitleUrl) {
+      parts.push(`URL: ${props.subtitleUrl}`);
+    }
+
+    return parts.join("\n");
+  }, [
+    props.subtitleUrl,
+    props.subtitleSource,
+    props.subtitleEncoding,
+    props.isHearingImpaired,
+  ]);
+
+  const handleMouseEnter = () => {
+    if (tooltipTimeoutRef.current) {
+      clearTimeout(tooltipTimeoutRef.current);
+    }
+    tooltipTimeoutRef.current = setTimeout(() => setShowTooltip(true), 500);
+  };
+
+  const handleMouseLeave = () => {
+    if (tooltipTimeoutRef.current) {
+      clearTimeout(tooltipTimeoutRef.current);
+    }
+    setShowTooltip(false);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <SelectableLink
-      selected={props.selected}
-      loading={props.loading}
-      error={props.error}
-      onClick={props.onClick}
+    <div
+      className="relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <span
-        data-active-link={props.selected ? true : undefined}
-        className="flex items-center"
+      <SelectableLink
+        selected={props.selected}
+        loading={props.loading}
+        error={props.error}
+        onClick={props.onClick}
       >
-        {props.flag ? (
-          <span data-code={props.countryCode} className="mr-3 inline-flex">
-            <FlagIcon langCode={props.countryCode} />
-          </span>
-        ) : null}
-        <span>{props.children}</span>
-      </span>
-    </SelectableLink>
+        <span
+          data-active-link={props.selected ? true : undefined}
+          className="flex items-center"
+        >
+          {props.flag ? (
+            <span data-code={props.countryCode} className="mr-3 inline-flex">
+              <FlagIcon langCode={props.countryCode} />
+            </span>
+          ) : null}
+          <span>{props.children}</span>
+          {props.subtitleType && (
+            <span className="ml-2 px-2 py-0.5 rounded bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-xs font-semibold">
+              {props.subtitleType.toUpperCase()}
+            </span>
+          )}
+          {props.isHearingImpaired && (
+            <Icon icon={Icons.EAR} className="ml-2" />
+          )}
+        </span>
+      </SelectableLink>
+      {tooltipContent && showTooltip && (
+        <div className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-black/80 text-white/80 text-xs rounded-lg backdrop-blur-sm w-60 break-all whitespace-pre-line">
+          {tooltipContent}
+        </div>
+      )}
+    </div>
   );
 }
 

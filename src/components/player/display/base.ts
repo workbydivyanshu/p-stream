@@ -532,6 +532,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
             id: track.id.toString(),
             language: track.lang ?? "unknown",
             url: track.url,
+            type: "vtt", // HLS captions are typically VTT format
             needsProxy: false,
             hls: true,
           };

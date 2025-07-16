@@ -96,6 +96,12 @@ export function SourceCaptionsView({
             }
             onClick={() => startDownload(v.id)}
             flag
+            subtitleUrl={v.url}
+            subtitleType={v.type}
+            // subtitle details from wyzie
+            subtitleSource={v.source}
+            subtitleEncoding={v.encoding}
+            isHearingImpaired={v.isHearingImpaired}
           >
             {v.languageName}
           </CaptionOption>
