@@ -58,97 +58,82 @@ export function MigrationDownloadPage() {
     <MinimalPageLayout>
       <PageTitle subpage k="global.pages.migration" />
       <CenterContainer>
-        {user.account ? (
-          <div>
-            <Stepper steps={2} current={2} className="mb-12" />
-            <Heading2 className="!text-4xl">
-              {t("migration.download.title")}
-            </Heading2>
-            <div className="space-y-6 max-w-3xl mx-auto">
-              <Paragraph className="text-lg max-w-md">
-                {t("migration.download.description")}
-              </Paragraph>
-              <SettingsCard>
-                <div className="flex justify-between items-center">
-                  <Heading3 className="!my-0 !text-type-secondary">
-                    {t("migration.download.items.description")}{" "}
-                  </Heading3>
-                </div>
-                <Divider marginClass="my-6 px-8 box-content -mx-8" />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Icon icon={Icons.BOOKMARK} className="text-xl" />
-                      <span className="font-medium">
-                        {t("migration.download.items.bookmarks")}
-                      </span>
-                    </div>
-                    <div className="text-xl font-bold mt-2">
-                      {Object.keys(bookmarks).length}
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Icon icon={Icons.CLOCK} className="text-xl" />
-                      <span className="font-medium">
-                        {t("migration.download.items.progress")}
-                      </span>
-                    </div>
-                    <div className="text-xl font-bold mt-2">
-                      {Object.keys(progress).length}
-                    </div>
-                  </div>
-                </div>
-              </SettingsCard>
-            </div>
-            <Divider />
-            <div className="flex justify-between">
-              <Button theme="secondary" onClick={() => navigate("/migration")}>
-                {t("migration.back")}
-              </Button>
-              {status !== "success" && (
-                <Button theme="purple" onClick={handleDownload}>
-                  {t("migration.download.button.download")}
-                </Button>
-              )}
-
-              {status === "success" && (
-                <div>
-                  <Button theme="purple" onClick={() => navigate("/")}>
-                    {t("migration.download.button.home")}
-                  </Button>
-                </div>
-              )}
-            </div>
-            <div className="flex justify-center pt-4">
-              {status === "success" && (
-                <p className="text-green-600 mt-4">
-                  {t("migration.download.status.success")}
-                </p>
-              )}
-              {status === "error" && (
-                <p className="text-red-600 mt-4">
-                  {t("migration.download.status.error")}
-                </p>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center text-center mb-8">
-            <Paragraph className="max-w-[320px] text-md">
-              {t("migration.loginRequired")}
+        <div>
+          <Stepper steps={2} current={2} className="mb-12" />
+          <Heading2 className="!text-4xl">
+            {t("migration.download.title")}
+          </Heading2>
+          <div className="space-y-6 max-w-3xl mx-auto">
+            <Paragraph className="text-lg max-w-md">
+              {t("migration.download.description")}
             </Paragraph>
-            <Button
-              theme="purple"
-              className="mt-4"
-              onClick={() => navigate("/")}
-            >
-              {t("migration.download.button.home")}
-            </Button>
+            <SettingsCard>
+              <div className="flex justify-between items-center">
+                <Heading3 className="!my-0 !text-type-secondary">
+                  {t("migration.download.items.description")}{" "}
+                </Heading3>
+              </div>
+              <Divider marginClass="my-6 px-8 box-content -mx-8" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="p-4 bg-background rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Icon icon={Icons.BOOKMARK} className="text-xl" />
+                    <span className="font-medium">
+                      {t("migration.download.items.bookmarks")}
+                    </span>
+                  </div>
+                  <div className="text-xl font-bold mt-2">
+                    {Object.keys(bookmarks).length}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-background rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Icon icon={Icons.CLOCK} className="text-xl" />
+                    <span className="font-medium">
+                      {t("migration.download.items.progress")}
+                    </span>
+                  </div>
+                  <div className="text-xl font-bold mt-2">
+                    {Object.keys(progress).length}
+                  </div>
+                </div>
+              </div>
+            </SettingsCard>
           </div>
-        )}
+          <Divider />
+          <div className="flex justify-between">
+            <Button theme="secondary" onClick={() => navigate("/migration")}>
+              {t("migration.back")}
+            </Button>
+            {status !== "success" && (
+              <Button theme="purple" onClick={handleDownload}>
+                {t("migration.download.button.download")}
+              </Button>
+            )}
+
+            {status === "success" && (
+              <div>
+                <Button theme="purple" onClick={() => navigate("/")}>
+                  {t("migration.download.button.home")}
+                </Button>
+              </div>
+            )}
+          </div>
+          <div className="flex justify-center pt-4">
+            {status === "success" && (
+              <p className="text-green-600 mt-4">
+                {t("migration.download.status.success")}
+              </p>
+            )}
+            {status === "error" && (
+              <p className="text-red-600 mt-4">
+                {t("migration.download.status.error")}
+              </p>
+            )}
+          </div>
+        </div>
       </CenterContainer>
     </MinimalPageLayout>
   );
