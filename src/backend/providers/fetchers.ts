@@ -2,7 +2,7 @@ import {
   Fetcher,
   makeSimpleProxyFetcher,
   setM3U8ProxyUrl,
-} from "@movie-web/providers";
+} from "@p-stream/providers";
 
 import { sendExtensionRequest } from "@/backend/extension/messaging";
 import { getApiToken, setApiToken } from "@/backend/helpers/providerApi";

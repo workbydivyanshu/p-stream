@@ -39,12 +39,12 @@ importers:
       '@marsidev/react-turnstile':
         specifier: ^0.7.2
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@movie-web/providers':
-        specifier: github:p-stream/providers#production
-        version: '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/9a2ab1bcd409b78c49fa01ec5d82ff91179bfb95'
       '@noble/hashes':
         specifier: ^1.8.0
         version: 1.8.0
+      '@p-stream/providers':
+        specifier: github:p-stream/providers#production
+        version: https://codeload.github.com/p-stream/providers/tar.gz/062d8bfda6688cf0812c5edd9d3e03e7e69e2bab
       '@plasmohq/messaging':
         specifier: ^0.6.2
         version: 0.6.2(react@18.3.1)
@@ -1186,8 +1186,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/9a2ab1bcd409b78c49fa01ec5d82ff91179bfb95':
-    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/9a2ab1bcd409b78c49fa01ec5d82ff91179bfb95}
+  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/062d8bfda6688cf0812c5edd9d3e03e7e69e2bab':
+    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/062d8bfda6688cf0812c5edd9d3e03e7e69e2bab}
     version: 2.3.0
 
   '@pkgjs/parseargs@0.11.0':
@@ -3324,6 +3324,10 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.3:
+    resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
+    engines: {node: '>=12'}
+
   pify@2.3.0:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
@@ -5455,7 +5459,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/9a2ab1bcd409b78c49fa01ec5d82ff91179bfb95':
+  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/062d8bfda6688cf0812c5edd9d3e03e7e69e2bab':
     dependencies:
       abort-controller: 3.0.0
       cheerio: 1.0.0-rc.12
@@ -5564,7 +5568,7 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.8
       estree-walker: 2.0.2
-      picomatch: 4.0.2
+      picomatch: 4.0.3
     optionalDependencies:
       rollup: 4.43.0
 
@@ -7781,6 +7785,8 @@ snapshots:
   picomatch@2.3.1: {}
 
   picomatch@4.0.2: {}
+
+  picomatch@4.0.3: {}
 
   pify@2.3.0: {}
 
