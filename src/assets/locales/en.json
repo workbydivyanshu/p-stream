@@ -155,7 +155,9 @@
       "custom": "Custom",
       "customPassphraseLabel": "Custom Passphrase",
       "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase"
+      "useCustomPassphrase": "Use Custom Passphrase",
+      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
+      "passphraseTooShort": "Passphrase must be at least 8 characters long."
     },
     "hasAccount": "Already have an account? <0>Login here.</0>",
     "login": {

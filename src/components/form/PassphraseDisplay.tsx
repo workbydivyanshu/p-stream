@@ -18,9 +18,13 @@ export function PassphraseDisplay(props: {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customPassphrase, setCustomPassphrase] = useState("");
   const [isShiftHeld, setIsShiftHeld] = useState(false);
+  const [validationError, setValidationError] = useState("");
   const isMounted = useMountedState();
 
   const timeout = useRef<ReturnType<typeof setTimeout>>();
+
+  const validPassphraseRegex =
+    /^[a-zA-Z0-9\s\-_.,!?@#$%^&*()+=:;"'<>[\]{}|\\/`~]+$/;
 
   function copyMnemonic() {
     copy(props.mnemonic);
@@ -41,12 +45,46 @@ export function PassphraseDisplay(props: {
     }
   }
 
+  function validatePassphrase(passphrase: string): boolean {
+    if (passphrase.length < 8) {
+      setValidationError(t("auth.generate.passphraseTooShort"));
+      return false;
+    }
+    if (!validPassphraseRegex.test(passphrase)) {
+      setValidationError(t("auth.generate.invalidPassphraseCharacters"));
+      return false;
+    }
+    setValidationError("");
+    return true;
+  }
+
+  function handleCustomPassphraseChange(value: string) {
+    setCustomPassphrase(value);
+    // Clear validation error when user starts typing
+    if (validationError) {
+      setValidationError("");
+    }
+  }
+
   function handleCustomPassphraseSubmit() {
     if (customPassphrase.trim()) {
-      props.onCustomPassphrase?.(customPassphrase.trim());
-      setShowCustomInput(false);
-      setCustomPassphrase("");
+      if (validatePassphrase(customPassphrase.trim())) {
+        props.onCustomPassphrase?.(customPassphrase.trim());
+        setShowCustomInput(false);
+        setCustomPassphrase("");
+        setValidationError("");
+      }
     }
+  }
+
+  function handleCancelCustomInput() {
+    setShowCustomInput(false);
+    setCustomPassphrase("");
+    setValidationError("");
+  }
+
+  function handleShowCustomInput() {
+    setShowCustomInput(true);
   }
 
   useEffect(() => {
@@ -69,7 +107,7 @@ export function PassphraseDisplay(props: {
           <button
             type="button"
             className="text-authentication-copyText hover:text-authentication-copyTextHover transition-colors flex gap-2 items-center cursor-pointer"
-            onClick={() => setShowCustomInput(false)}
+            onClick={handleCancelCustomInput}
           >
             <Icon icon={Icons.X} className="text-xs" />
             <span className="text-sm">{t("actions.cancel")}</span>
@@ -78,16 +116,22 @@ export function PassphraseDisplay(props: {
         <div className="px-4 py-4">
           <AuthInputBox
             value={customPassphrase}
-            onChange={setCustomPassphrase}
+            // eslint-disable-next-line react/jsx-no-bind
+            onChange={handleCustomPassphraseChange}
             placeholder={t("auth.generate.customPassphrasePlaceholder")}
             passwordToggleable
             className="mb-4"
           />
+          {validationError && (
+            <p className="text-authentication-errorText text-sm mb-4">
+              {validationError}
+            </p>
+          )}
           <button
             type="button"
-            className="w-full bg-authentication-inputBg hover:bg-authentication-inputBg/80 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+            className="w-full bg-authentication-inputBg hover:bg-authentication-inputBg/80 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleCustomPassphraseSubmit}
-            disabled={!customPassphrase.trim()}
+            disabled={!customPassphrase.trim() || !!validationError}
           >
             {t("auth.generate.useCustomPassphrase")}
           </button>
@@ -111,7 +155,7 @@ export function PassphraseDisplay(props: {
                 ? "opacity-100 scale-100"
                 : "opacity-0 scale-95 pointer-events-none"
             }`}
-            onClick={() => setShowCustomInput(true)}
+            onClick={handleShowCustomInput}
             title={t("auth.generate.useCustomPassphrase")}
           >
             <Icon icon={Icons.EDIT} className="text-xs" />
@@ -120,7 +164,7 @@ export function PassphraseDisplay(props: {
           <button
             type="button"
             className="text-authentication-copyText hover:text-authentication-copyTextHover transition-colors flex gap-2 items-center cursor-pointer"
-            onClick={() => copyMnemonic()}
+            onClick={copyMnemonic}
           >
             <Icon
               icon={hasCopied ? Icons.CHECKMARK : Icons.COPY}
