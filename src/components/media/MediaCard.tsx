@@ -268,6 +268,11 @@ export function MediaCard(props: MediaCardProps) {
     }
   };
 
+  const handleCardContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleShowDetails();
+  };
+
   const content = (
     <>
       <MediaCardContent {...props} onShowDetails={handleShowDetails} />
@@ -284,6 +289,7 @@ export function MediaCard(props: MediaCardProps) {
             e.preventDefault();
           }
         }}
+        onContextMenu={handleCardContextMenu}
       >
         {content}
       </span>
@@ -299,6 +305,7 @@ export function MediaCard(props: MediaCardProps) {
         props.closable ? "hover:cursor-default" : "",
       )}
       onClick={handleCardClick}
+      onContextMenu={handleCardContextMenu}
     >
       {content}
     </Link>
