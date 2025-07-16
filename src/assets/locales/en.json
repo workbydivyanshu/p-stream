@@ -140,7 +140,8 @@
   },
   "actions": {
     "copied": "Copied",
-    "copy": "Copy"
+    "copy": "Copy",
+    "cancel": "Cancel"
   },
   "auth": {
     "createAccount": "Don't have an account yet 😬 <0>Create an account.</0>",
@@ -150,7 +151,11 @@
       "description": "Your passphrase acts as your username and password. Make sure to keep it safe as you will need to enter it to login to your account. <bold>Do NOT lose your passphrase!</bold>",
       "next": "I have saved my passphrase",
       "passphraseFrameLabel": "Passphrase",
-      "title": "Your passphrase"
+      "title": "Your passphrase",
+      "custom": "Custom",
+      "customPassphraseLabel": "Custom Passphrase",
+      "customPassphrasePlaceholder": "Enter your custom passphrase",
+      "useCustomPassphrase": "Use Custom Passphrase"
     },
     "hasAccount": "Already have an account? <0>Login here.</0>",
     "login": {
