@@ -75,7 +75,7 @@ export function CaptionCue({
 
   return (
     <p
-      className="pointer-events-none mb-1 select-none rounded px-4 py-1 text-center leading-normal"
+      className="mb-1 rounded px-4 py-1 text-center leading-normal"
       style={{
         color: styling.color,
         fontSize: `${(1.5 * styling.size).toFixed(2)}em`,
@@ -145,7 +145,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   if (captionAsTrack || !caption || isCasting) return null;
 
   return (
-    <Transition className="pointer-events-none" animation="slide-up" show>
+    <Transition animation="slide-up" show>
       <div
         className="text-white absolute w-full flex flex-col items-center transition-[bottom]"
         style={{
