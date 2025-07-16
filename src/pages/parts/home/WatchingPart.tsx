@@ -11,7 +11,7 @@ import { useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { MediaItem } from "@/utils/mediaTypes";
 
-const LONG_PRESS_DURATION = 500; // 0.5 seconds
+const LONG_PRESS_DURATION = 700; // 0.7 seconds
 
 export function WatchingPart({
   onItemsChange,
