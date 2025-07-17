@@ -51,6 +51,40 @@ export function BookmarksPart({
     return output;
   }, [bookmarks, progressItems]);
 
+  const { groupedItems, regularItems } = useMemo(() => {
+    const grouped: Record<string, MediaItem[]> = {};
+    const regular: MediaItem[] = [];
+
+    items.forEach((item) => {
+      const bookmark = bookmarks[item.id];
+      if (bookmark?.group) {
+        if (!grouped[bookmark.group]) {
+          grouped[bookmark.group] = [];
+        }
+        grouped[bookmark.group].push(item);
+      } else {
+        regular.push(item);
+      }
+    });
+
+    // Sort items within each group by date
+    Object.keys(grouped).forEach((group) => {
+      grouped[group].sort((a, b) => {
+        const bookmarkA = bookmarks[a.id];
+        const bookmarkB = bookmarks[b.id];
+        const progressA = progressItems[a.id];
+        const progressB = progressItems[b.id];
+
+        const dateA = Math.max(bookmarkA.updatedAt, progressA?.updatedAt ?? 0);
+        const dateB = Math.max(bookmarkB.updatedAt, progressB?.updatedAt ?? 0);
+
+        return dateB - dateA;
+      });
+    });
+
+    return { groupedItems: grouped, regularItems: regular };
+  }, [items, bookmarks, progressItems]);
+
   useEffect(() => {
     onItemsChange(items.length > 0);
   }, [items, onItemsChange]);
@@ -91,38 +125,82 @@ export function BookmarksPart({
 
   return (
     <div className="relative">
-      <SectionHeading
-        title={t("home.bookmarks.sectionTitle") || "Bookmarks"}
-        icon={Icons.BOOKMARK}
-      >
-        <EditButton
-          editing={editing}
-          onEdit={setEditing}
-          id="edit-button-bookmark"
-        />
-      </SectionHeading>
-      <MediaGrid ref={gridRef}>
-        {items.map((v) => (
-          <div
-            key={v.id}
-            style={{ userSelect: "none" }}
-            onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-              e.preventDefault()
-            }
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
+      {/* Grouped Bookmarks */}
+      {Object.entries(groupedItems).map(([group, groupItems]) => (
+        <div key={group} className="mb-6">
+          <SectionHeading
+            title={group}
+            icon={Icons.BOOKMARK}
+            className="mb-8" // margin?
           >
-            <WatchedMediaCard
-              media={v}
-              closable={editing}
-              onClose={() => removeBookmark(v.id)}
-              onShowDetails={onShowDetails}
+            <EditButton
+              editing={editing}
+              onEdit={setEditing}
+              id={`edit-button-bookmark-${group}`}
             />
-          </div>
-        ))}
-      </MediaGrid>
+          </SectionHeading>
+          <MediaGrid>
+            {groupItems.map((v) => (
+              <div
+                key={v.id}
+                style={{ userSelect: "none" }}
+                onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                  e.preventDefault()
+                }
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+              >
+                <WatchedMediaCard
+                  media={v}
+                  closable={editing}
+                  onClose={() => removeBookmark(v.id)}
+                  onShowDetails={onShowDetails}
+                />
+              </div>
+            ))}
+          </MediaGrid>
+        </div>
+      ))}
+
+      {/* Regular Bookmarks */}
+      {regularItems.length > 0 && (
+        <div>
+          <SectionHeading
+            title={t("home.bookmarks.sectionTitle")}
+            icon={Icons.BOOKMARK}
+          >
+            <EditButton
+              editing={editing}
+              onEdit={setEditing}
+              id="edit-button-bookmark"
+            />
+          </SectionHeading>
+          <MediaGrid ref={gridRef}>
+            {regularItems.map((v) => (
+              <div
+                key={v.id}
+                style={{ userSelect: "none" }}
+                onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                  e.preventDefault()
+                }
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+              >
+                <WatchedMediaCard
+                  media={v}
+                  closable={editing}
+                  onClose={() => removeBookmark(v.id)}
+                  onShowDetails={onShowDetails}
+                />
+              </div>
+            ))}
+          </MediaGrid>
+        </div>
+      )}
     </div>
   );
 }

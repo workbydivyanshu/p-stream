@@ -73,6 +73,40 @@ export function BookmarksCarousel({
     return output;
   }, [bookmarks, progressItems]);
 
+  const { groupedItems, regularItems } = useMemo(() => {
+    const grouped: Record<string, MediaItem[]> = {};
+    const regular: MediaItem[] = [];
+
+    items.forEach((item) => {
+      const bookmark = bookmarks[item.id];
+      if (bookmark?.group) {
+        if (!grouped[bookmark.group]) {
+          grouped[bookmark.group] = [];
+        }
+        grouped[bookmark.group].push(item);
+      } else {
+        regular.push(item);
+      }
+    });
+
+    // Sort items within each group by date
+    Object.keys(grouped).forEach((group) => {
+      grouped[group].sort((a, b) => {
+        const bookmarkA = bookmarks[a.id];
+        const bookmarkB = bookmarks[b.id];
+        const progressA = progressItems[a.id];
+        const progressB = progressItems[b.id];
+
+        const dateA = Math.max(bookmarkA.updatedAt, progressA?.updatedAt ?? 0);
+        const dateB = Math.max(bookmarkB.updatedAt, progressB?.updatedAt ?? 0);
+
+        return dateB - dateA;
+      });
+    });
+
+    return { groupedItems: grouped, regularItems: regular };
+  }, [items, bookmarks, progressItems]);
+
   const handleWheel = (e: React.WheelEvent) => {
     if (isScrolling) return;
     isScrolling = true;
@@ -130,32 +164,34 @@ export function BookmarksCarousel({
 
   return (
     <>
-      <SectionHeading
-        title={t("home.bookmarks.sectionTitle") || "Bookmarks"}
-        icon={Icons.BOOKMARK}
-        className="ml-4 md:ml-12 mt-2 -mb-5"
-      >
-        <div className="mr-4 md:mr-8">
-          <EditButton
-            editing={editing}
-            onEdit={setEditing}
-            id="edit-button-bookmark"
-          />
-        </div>
-      </SectionHeading>
-      <div className="relative overflow-hidden carousel-container md:pb-4">
-        <div
-          id={`carousel-${categorySlug}`}
-          className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8"
-          ref={(el) => {
-            carouselRefs.current[categorySlug] = el;
-          }}
-          onWheel={handleWheel}
-        >
-          <div className="md:w-12" />
+      {/* Grouped Bookmarks Carousels */}
+      {Object.entries(groupedItems).map(([group, groupItems]) => (
+        <div key={group}>
+          <SectionHeading
+            title={group}
+            icon={Icons.BOOKMARK}
+            className="ml-4 md:ml-12 mt-2 -mb-5"
+          >
+            <div className="mr-4 md:mr-8">
+              <EditButton
+                editing={editing}
+                onEdit={setEditing}
+                id={`edit-button-bookmark-${group}`}
+              />
+            </div>
+          </SectionHeading>
+          <div className="relative overflow-hidden carousel-container md:pb-4">
+            <div
+              id={`carousel-${group}`}
+              className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8"
+              ref={(el) => {
+                carouselRefs.current[group] = el;
+              }}
+              onWheel={handleWheel}
+            >
+              <div className="md:w-12" />
 
-          {items.length > 0
-            ? items.map((media) => (
+              {groupItems.map((media) => (
                 <div
                   key={media.id}
                   style={{ userSelect: "none" }}
@@ -176,23 +212,89 @@ export function BookmarksCarousel({
                     onClose={() => removeBookmark(media.id)}
                   />
                 </div>
-              ))
-            : Array.from({ length: SKELETON_COUNT }).map(() => (
-                <MediaCardSkeleton
-                  key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(7)}`}
-                />
               ))}
 
-          <div className="md:w-12" />
-        </div>
+              <div className="md:w-12" />
+            </div>
 
-        {!isMobile && (
-          <CarouselNavButtons
-            categorySlug={categorySlug}
-            carouselRefs={carouselRefs}
-          />
-        )}
-      </div>
+            {!isMobile && (
+              <CarouselNavButtons
+                categorySlug={group}
+                carouselRefs={carouselRefs}
+              />
+            )}
+          </div>
+        </div>
+      ))}
+
+      {/* Regular Bookmarks Carousel */}
+      {regularItems.length > 0 && (
+        <>
+          <SectionHeading
+            title={t("home.bookmarks.sectionTitle") || "Bookmarks"}
+            icon={Icons.BOOKMARK}
+            className="ml-4 md:ml-12 mt-2 -mb-5"
+          >
+            <div className="mr-4 md:mr-8">
+              <EditButton
+                editing={editing}
+                onEdit={setEditing}
+                id="edit-button-bookmark"
+              />
+            </div>
+          </SectionHeading>
+          <div className="relative overflow-hidden carousel-container md:pb-4">
+            <div
+              id={`carousel-${categorySlug}`}
+              className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8"
+              ref={(el) => {
+                carouselRefs.current[categorySlug] = el;
+              }}
+              onWheel={handleWheel}
+            >
+              <div className="md:w-12" />
+
+              {regularItems.length > 0
+                ? regularItems.map((media) => (
+                    <div
+                      key={media.id}
+                      style={{ userSelect: "none" }}
+                      onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                        e.preventDefault()
+                      }
+                      onTouchStart={handleTouchStart}
+                      onTouchEnd={handleTouchEnd}
+                      onMouseDown={handleMouseDown}
+                      onMouseUp={handleMouseUp}
+                      className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                    >
+                      <WatchedMediaCard
+                        key={media.id}
+                        media={media}
+                        onShowDetails={onShowDetails}
+                        closable={editing}
+                        onClose={() => removeBookmark(media.id)}
+                      />
+                    </div>
+                  ))
+                : Array.from({ length: SKELETON_COUNT }).map(() => (
+                    <MediaCardSkeleton
+                      key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(7)}`}
+                    />
+                  ))}
+
+              <div className="md:w-12" />
+            </div>
+
+            {!isMobile && (
+              <CarouselNavButtons
+                categorySlug={categorySlug}
+                carouselRefs={carouselRefs}
+              />
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }

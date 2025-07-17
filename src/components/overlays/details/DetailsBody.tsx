@@ -10,6 +10,7 @@ import { Button } from "@/components/buttons/Button";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaBookmarkButton } from "@/components/media/MediaBookmark";
+import { useBookmarkStore } from "@/stores/bookmarks";
 
 import { DetailsBodyProps } from "./types";
 
@@ -28,6 +29,37 @@ export function DetailsBody({
   const [releaseInfo, setReleaseInfo] = useState<TraktReleaseResponse | null>(
     null,
   );
+  const [groupName, setGroupName] = useState("");
+  const addBookmarkWithGroup = useBookmarkStore((s) => s.addBookmarkWithGroup);
+  const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
+  const addBookmark = useBookmarkStore((s) => s.addBookmark);
+  const bookmarks = useBookmarkStore((s) => s.bookmarks);
+  const currentGroup = bookmarks[data.id?.toString() ?? ""]?.group;
+
+  const handleGroupSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!data.id) return;
+
+    const meta = {
+      tmdbId: data.id.toString(),
+      title: data.title,
+      type: data.type || "movie",
+      releaseYear: data.releaseDate
+        ? new Date(data.releaseDate).getFullYear()
+        : 0,
+      poster: data.posterUrl,
+    };
+
+    if (currentGroup) {
+      // Remove from group by removing bookmark and re-adding without group
+      removeBookmark(data.id.toString());
+      addBookmark(meta);
+    } else if (groupName.trim()) {
+      // Add to group
+      addBookmarkWithGroup(meta, groupName.trim());
+      setGroupName("");
+    }
+  };
 
   useEffect(() => {
     const fetchReleaseInfo = async () => {
@@ -152,66 +184,99 @@ export function DetailsBody({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-4">
-        <Button
-          onClick={onPlayClick}
-          theme="purple"
-          className={classNames(
-            "flex-1 sm:flex-initial sm:w-auto",
-            "gap-2 h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100",
-            "text-md text-white flex items-center justify-center",
-          )}
-        >
-          <Icon icon={Icons.PLAY} className="text-white" />
-          <span className="text-white text-sm pr-1">
-            {data.type === "movie"
-              ? !data.releaseDate || new Date(data.releaseDate) > new Date()
-                ? t("media.unreleased")
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Button
+            onClick={onPlayClick}
+            theme="purple"
+            className={classNames(
+              "flex-1 sm:flex-initial sm:w-auto",
+              "gap-2 h-12 rounded-lg px-4 py-2 my-1 transition-transform hover:scale-105 duration-100",
+              "text-md text-white flex items-center justify-center",
+            )}
+          >
+            <Icon icon={Icons.PLAY} className="text-white" />
+            <span className="text-white text-sm pr-1">
+              {data.type === "movie"
+                ? !data.releaseDate || new Date(data.releaseDate) > new Date()
+                  ? t("media.unreleased")
+                  : showProgress
+                    ? t("details.resume")
+                    : t("details.play")
                 : showProgress
                   ? t("details.resume")
-                  : t("details.play")
-              : showProgress
-                ? t("details.resume")
-                : t("details.play")}
-          </span>
-        </Button>
-        <div className="flex items-center gap-1 flex-shrink-0">
-          {imdbData?.trailer_url && (
+                  : t("details.play")}
+            </span>
+          </Button>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {imdbData?.trailer_url && (
+              <button
+                type="button"
+                onClick={onTrailerClick}
+                className="p-2 opacity-75 transition-opacity duration-300 hover:scale-110 hover:cursor-pointer hover:opacity-95"
+                title={t("details.trailer")}
+              >
+                <IconPatch
+                  icon={Icons.FILM}
+                  className="transition-transform duration-300 hover:scale-110 hover:cursor-pointer"
+                />
+              </button>
+            )}
+            <MediaBookmarkButton
+              media={{
+                id: data.id?.toString() || "",
+                title: data.title,
+                year: data.releaseDate
+                  ? new Date(data.releaseDate).getFullYear()
+                  : undefined,
+                poster: data.posterUrl,
+                type: data.type || "movie",
+              }}
+            />
             <button
               type="button"
-              onClick={onTrailerClick}
+              onClick={onShareClick}
               className="p-2 opacity-75 transition-opacity duration-300 hover:scale-110 hover:cursor-pointer hover:opacity-95"
-              title={t("details.trailer")}
+              title="Share"
             >
               <IconPatch
-                icon={Icons.FILM}
+                icon={Icons.IOS_SHARE}
                 className="transition-transform duration-300 hover:scale-110 hover:cursor-pointer"
               />
             </button>
-          )}
-          <MediaBookmarkButton
-            media={{
-              id: data.id?.toString() || "",
-              title: data.title,
-              year: data.releaseDate
-                ? new Date(data.releaseDate).getFullYear()
-                : undefined,
-              poster: data.backdrop,
-              type: data.type || "movie",
-            }}
-          />
-          <button
-            type="button"
-            onClick={onShareClick}
-            className="p-2 opacity-75 transition-opacity duration-300 hover:scale-110 hover:cursor-pointer hover:opacity-95"
-            title="Share"
-          >
-            <IconPatch
-              icon={Icons.IOS_SHARE}
-              className="transition-transform duration-300 hover:scale-110 hover:cursor-pointer"
-            />
-          </button>
+          </div>
         </div>
+
+        {/* Group Input */}
+        <form
+          onSubmit={handleGroupSubmit}
+          className="flex items-center gap-2 sm:ml-auto"
+        >
+          {currentGroup ? (
+            <div className="w-64 px-3 py-2 text-xs bg-gray-700/50 border border-gray-600 rounded-lg text-white">
+              In:{" "}
+              <span className="font-semibold text-purple-400">
+                {currentGroup}
+              </span>
+            </div>
+          ) : (
+            <input
+              type="text"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              placeholder="Add to group..."
+              className="w-64 px-3 py-2 text-xs bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+            />
+          )}
+          <Button
+            onClick={handleGroupSubmit}
+            disabled={currentGroup ? false : !groupName.trim()}
+            theme={currentGroup ? "danger" : "purple"}
+            className="px-3 py-2 text-xs"
+          >
+            {currentGroup ? "Remove" : "Add"}
+          </Button>
+        </form>
       </div>
     </div>
   );

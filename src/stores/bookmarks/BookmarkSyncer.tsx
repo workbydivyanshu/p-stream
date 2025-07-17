@@ -32,6 +32,7 @@ async function syncBookmarks(
             title: item.title ?? "",
             type: item.type ?? "",
             year: item.year ?? NaN,
+            group: item.group,
           },
           tmdbId: item.tmdbId,
         });

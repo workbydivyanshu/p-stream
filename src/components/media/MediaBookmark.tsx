@@ -9,10 +9,12 @@ import { IconPatch } from "../buttons/IconPatch";
 
 interface MediaBookmarkProps {
   media: MediaItem;
+  group?: string;
 }
 
-export function MediaBookmarkButton({ media }: MediaBookmarkProps) {
+export function MediaBookmarkButton({ media, group }: MediaBookmarkProps) {
   const addBookmark = useBookmarkStore((s) => s.addBookmark);
+  const addBookmarkWithGroup = useBookmarkStore((s) => s.addBookmarkWithGroup);
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
   const meta: PlayerMeta | undefined = useMemo(() => {
@@ -31,8 +33,16 @@ export function MediaBookmarkButton({ media }: MediaBookmarkProps) {
   const toggleBookmark = useCallback(() => {
     if (!meta) return;
     if (isBookmarked) removeBookmark(meta.tmdbId);
+    else if (group) addBookmarkWithGroup(meta, group);
     else addBookmark(meta);
-  }, [isBookmarked, meta, addBookmark, removeBookmark]);
+  }, [
+    isBookmarked,
+    meta,
+    addBookmark,
+    addBookmarkWithGroup,
+    removeBookmark,
+    group,
+  ]);
 
   const buttonOpacityClass =
     media.year === undefined ? "hover:opacity-100" : "hover:opacity-95";

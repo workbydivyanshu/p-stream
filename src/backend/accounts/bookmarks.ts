@@ -10,6 +10,7 @@ export interface BookmarkMetaInput {
   year: number;
   poster?: string;
   type: string;
+  group?: string;
 }
 
 export interface BookmarkInput {
