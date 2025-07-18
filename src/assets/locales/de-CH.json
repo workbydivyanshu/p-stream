@@ -222,7 +222,7 @@
         },
         "titles": {
             "day": {
-                "default": "Was möchtisch a däm schöne nomital aluege?",
+                "default": "Was möchtisch a däm schöne nomitag aluege?",
                 "extra": [
                     "Viva la P-Stream e ciao Svizzera"
                 ]
@@ -426,7 +426,7 @@
                 "hlsDownloader": "Oder, goh uf d’<0>HLS Downloader-Website\\</0> und füeg die Playlist-URL vo unten ei."
             },
             "episodes": {
-                "button": "Folge",
+                "button": "Folg",
                 "emptyState": "Do si kei Folge i dere Staffle, lueg spöter nomol verbi (sorry :3)…",
                 "episodeBadge": "E{{episode}}",
                 "loadingError": "Fehler bem lade fo de Staffle",
@@ -967,7 +967,7 @@
         "rating": "Bewertig:",
         "votes": "Stimmen",
         "tmdb": "Uf TMDB azeige",
-        "episodes": "Folge",
+        "episodes": "Folg",
         "season": "Staffle",
         "runtime": "Laufzeit:",
         "airs": "Loft",

@@ -140,7 +140,8 @@
     },
     "actions": {
         "copied": "Cawpied",
-        "copy": "Cawpy"
+        "copy": "Cawpy",
+        "cancel": "Cwancel"
     },
     "auth": {
         "createAccount": "Don't have an account yet 😬 <0>Cweate an account.</0>",
@@ -150,7 +151,13 @@
             "description": "Youw passphwase acts as youw usewnyame ;;w;; and passwowd. Make suwe t-to k-k-keep i-it safe ;;w;; as you wiww nyeed t-to entew i-it t-to wogin t-to youw account. <bold>Do NyOT wose youw passphwase!</bold>",
             "next": "I have saved my passphwase",
             "passphraseFrameLabel": "Passphwase",
-            "title": "Your passphwase"
+            "title": "Your passphwase",
+            "custom": "Cwustom UwU",
+            "customPassphrasePlaceholder": "Entew uw cuwstom passphwase",
+            "customPassphraseLabel": "Cwustom Passphwase >~<",
+            "useCustomPassphrase": "Use cuwstom passphwase",
+            "invalidPassphraseCharacters": "Invawid passphwase chawactews. Onwy engwish wettews, nuwmbews 1-10, and nowmaw symbows awe awwowed.",
+            "passphraseTooShort": "Passphwase muwst be at weast 8 chawactews wong."
         },
         "hasAccount": "Already have an account? <0>wogin here!</0>",
         "login": {
@@ -954,13 +961,15 @@
                 "success": "Impwort compwete",
                 "import": "Impwort dwata",
                 "processing": "Pwocessing...",
-                "home": "Contwinue to home"
+                "home": "Contwinue to home",
+                "saveLocal": "Save wocawwy"
             },
             "title": "Upwoad dwata",
             "status": {
                 "processing": "Pwocessing dwata...",
                 "error": "Fwailed to upwoad youw dwata. 😿",
-                "success": "y-youw dwata has been upwoaded succwessfully! 🎉"
+                "success": "y-youw dwata has been upwoaded succwessfully! 🎉",
+                "successLocal": "Youww data has been saved wocawwy! OwO 🎉"
             },
             "file": {
                 "description": "Sewect the file you w-want to upwoad",
