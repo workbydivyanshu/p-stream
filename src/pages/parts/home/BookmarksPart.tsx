@@ -7,9 +7,21 @@ import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
+import { UserIcon, UserIcons } from "@/components/UserIcon";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
+
+function parseGroupString(group: string): { icon: UserIcons; name: string } {
+  const match = group.match(/^\[([a-zA-Z0-9_]+)\](.*)$/);
+  if (match) {
+    const iconKey = match[1].toUpperCase() as keyof typeof UserIcons;
+    const icon = UserIcons[iconKey] || UserIcons.CAT;
+    const name = match[2].trim();
+    return { icon, name };
+  }
+  return { icon: UserIcons.CAT, name: group };
+}
 
 const LONG_PRESS_DURATION = 700; // 0.7 seconds
 
@@ -126,43 +138,49 @@ export function BookmarksPart({
   return (
     <div className="relative">
       {/* Grouped Bookmarks */}
-      {Object.entries(groupedItems).map(([group, groupItems]) => (
-        <div key={group} className="mb-6">
-          <SectionHeading
-            title={group}
-            icon={Icons.BOOKMARK}
-            className="mb-8" // margin?
-          >
-            <EditButton
-              editing={editing}
-              onEdit={setEditing}
-              id={`edit-button-bookmark-${group}`}
-            />
-          </SectionHeading>
-          <MediaGrid>
-            {groupItems.map((v) => (
-              <div
-                key={v.id}
-                style={{ userSelect: "none" }}
-                onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                  e.preventDefault()
-                }
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-              >
-                <WatchedMediaCard
-                  media={v}
-                  closable={editing}
-                  onClose={() => removeBookmark(v.id)}
-                  onShowDetails={onShowDetails}
-                />
-              </div>
-            ))}
-          </MediaGrid>
-        </div>
-      ))}
+      {Object.entries(groupedItems).map(([group, groupItems]) => {
+        const { icon, name } = parseGroupString(group);
+        return (
+          <div key={group} className="mb-6">
+            <SectionHeading
+              title={name}
+              customIcon={
+                <span className="w-6 h-6 flex items-center justify-center">
+                  <UserIcon icon={icon} className="w-full h-full" />
+                </span>
+              }
+            >
+              <EditButton
+                editing={editing}
+                onEdit={setEditing}
+                id={`edit-button-bookmark-${group}`}
+              />
+            </SectionHeading>
+            <MediaGrid>
+              {groupItems.map((v) => (
+                <div
+                  key={v.id}
+                  style={{ userSelect: "none" }}
+                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                    e.preventDefault()
+                  }
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                  onMouseDown={handleMouseDown}
+                  onMouseUp={handleMouseUp}
+                >
+                  <WatchedMediaCard
+                    media={v}
+                    closable={editing}
+                    onClose={() => removeBookmark(v.id)}
+                    onShowDetails={onShowDetails}
+                  />
+                </div>
+              ))}
+            </MediaGrid>
+          </div>
+        );
+      })}
 
       {/* Regular Bookmarks */}
       {regularItems.length > 0 && (

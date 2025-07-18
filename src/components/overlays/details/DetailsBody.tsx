@@ -8,6 +8,7 @@ import {
 } from "@/backend/metadata/traktApi";
 import { Button } from "@/components/buttons/Button";
 import { IconPatch } from "@/components/buttons/IconPatch";
+import { GroupDropdown } from "@/components/form/GroupDropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaBookmarkButton } from "@/components/media/MediaBookmark";
 import { useBookmarkStore } from "@/stores/bookmarks";
@@ -29,17 +30,22 @@ export function DetailsBody({
   const [releaseInfo, setReleaseInfo] = useState<TraktReleaseResponse | null>(
     null,
   );
-  const [groupName, setGroupName] = useState("");
   const addBookmarkWithGroup = useBookmarkStore((s) => s.addBookmarkWithGroup);
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
   const addBookmark = useBookmarkStore((s) => s.addBookmark);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
   const currentGroup = bookmarks[data.id?.toString() ?? ""]?.group;
 
-  const handleGroupSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!data.id) return;
+  const allGroups = Array.from(
+    new Set(
+      Object.values(bookmarks)
+        .map((b) => b.group)
+        .filter(Boolean),
+    ),
+  ) as string[];
 
+  const handleSelectGroup = (group: string) => {
+    if (!data.id) return;
     const meta = {
       tmdbId: data.id.toString(),
       title: data.title,
@@ -49,16 +55,26 @@ export function DetailsBody({
         : 0,
       poster: data.posterUrl,
     };
+    addBookmarkWithGroup(meta, group);
+  };
 
-    if (currentGroup) {
-      // Remove from group by removing bookmark and re-adding without group
-      removeBookmark(data.id.toString());
-      addBookmark(meta);
-    } else if (groupName.trim()) {
-      // Add to group
-      addBookmarkWithGroup(meta, groupName.trim());
-      setGroupName("");
-    }
+  const handleCreateGroup = (group: string) => {
+    handleSelectGroup(group);
+  };
+
+  const handleRemoveGroup = () => {
+    if (!data.id) return;
+    const meta = {
+      tmdbId: data.id.toString(),
+      title: data.title,
+      type: data.type || "movie",
+      releaseYear: data.releaseDate
+        ? new Date(data.releaseDate).getFullYear()
+        : 0,
+      poster: data.posterUrl,
+    };
+    removeBookmark(data.id.toString());
+    addBookmark(meta);
   };
 
   useEffect(() => {
@@ -247,36 +263,14 @@ export function DetailsBody({
           </div>
         </div>
 
-        {/* Group Input */}
-        <form
-          onSubmit={handleGroupSubmit}
-          className="flex items-center gap-2 sm:ml-auto"
-        >
-          {currentGroup ? (
-            <div className="w-64 px-3 py-2 text-xs bg-gray-700/50 border border-gray-600 rounded-lg text-white">
-              In:{" "}
-              <span className="font-semibold text-purple-400">
-                {currentGroup}
-              </span>
-            </div>
-          ) : (
-            <input
-              type="text"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-              placeholder="Add to group..."
-              className="w-64 px-3 py-2 text-xs bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-            />
-          )}
-          <Button
-            onClick={handleGroupSubmit}
-            disabled={currentGroup ? false : !groupName.trim()}
-            theme={currentGroup ? "danger" : "purple"}
-            className="px-3 py-2 text-xs"
-          >
-            {currentGroup ? "Remove" : "Add"}
-          </Button>
-        </form>
+        {/* Group Dropdown */}
+        <GroupDropdown
+          groups={allGroups}
+          currentGroup={currentGroup}
+          onSelectGroup={handleSelectGroup}
+          onCreateGroup={handleCreateGroup}
+          onRemoveGroup={handleRemoveGroup}
+        />
       </div>
     </div>
   );

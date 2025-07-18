@@ -5,11 +5,23 @@ import { EditButton } from "@/components/buttons/EditButton";
 import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
+import { UserIcon, UserIcons } from "@/components/UserIcon";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
+
+function parseGroupString(group: string): { icon: UserIcons; name: string } {
+  const match = group.match(/^\[([a-zA-Z0-9_]+)\](.*)$/);
+  if (match) {
+    const iconKey = match[1].toUpperCase() as keyof typeof UserIcons;
+    const icon = UserIcons[iconKey] || UserIcons.CAT;
+    const name = match[2].trim();
+    return { icon, name };
+  }
+  return { icon: UserIcons.CAT, name: group };
+}
 
 interface BookmarksCarouselProps {
   carouselRefs: React.MutableRefObject<{
@@ -165,67 +177,74 @@ export function BookmarksCarousel({
   return (
     <>
       {/* Grouped Bookmarks Carousels */}
-      {Object.entries(groupedItems).map(([group, groupItems]) => (
-        <div key={group}>
-          <SectionHeading
-            title={group}
-            icon={Icons.BOOKMARK}
-            className="ml-4 md:ml-12 mt-2 -mb-5"
-          >
-            <div className="mr-4 md:mr-8">
-              <EditButton
-                editing={editing}
-                onEdit={setEditing}
-                id={`edit-button-bookmark-${group}`}
-              />
-            </div>
-          </SectionHeading>
-          <div className="relative overflow-hidden carousel-container md:pb-4">
-            <div
-              id={`carousel-${group}`}
-              className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8"
-              ref={(el) => {
-                carouselRefs.current[group] = el;
-              }}
-              onWheel={handleWheel}
+      {Object.entries(groupedItems).map(([group, groupItems]) => {
+        const { icon, name } = parseGroupString(group);
+        return (
+          <div key={group}>
+            <SectionHeading
+              title={name}
+              customIcon={
+                <span className="w-6 h-6 flex items-center justify-center">
+                  <UserIcon icon={icon} className="w-full h-full" />
+                </span>
+              }
+              className="ml-4 md:ml-12 mt-2 -mb-5"
             >
-              <div className="md:w-12" />
+              <div className="mr-4 md:mr-8">
+                <EditButton
+                  editing={editing}
+                  onEdit={setEditing}
+                  id={`edit-button-bookmark-${group}`}
+                />
+              </div>
+            </SectionHeading>
+            <div className="relative overflow-hidden carousel-container md:pb-4">
+              <div
+                id={`carousel-${group}`}
+                className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8"
+                ref={(el) => {
+                  carouselRefs.current[group] = el;
+                }}
+                onWheel={handleWheel}
+              >
+                <div className="md:w-12" />
 
-              {groupItems.map((media) => (
-                <div
-                  key={media.id}
-                  style={{ userSelect: "none" }}
-                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                    e.preventDefault()
-                  }
-                  onTouchStart={handleTouchStart}
-                  onTouchEnd={handleTouchEnd}
-                  onMouseDown={handleMouseDown}
-                  onMouseUp={handleMouseUp}
-                  className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
-                >
-                  <WatchedMediaCard
+                {groupItems.map((media) => (
+                  <div
                     key={media.id}
-                    media={media}
-                    onShowDetails={onShowDetails}
-                    closable={editing}
-                    onClose={() => removeBookmark(media.id)}
-                  />
-                </div>
-              ))}
+                    style={{ userSelect: "none" }}
+                    onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                      e.preventDefault()
+                    }
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
+                    className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                  >
+                    <WatchedMediaCard
+                      key={media.id}
+                      media={media}
+                      onShowDetails={onShowDetails}
+                      closable={editing}
+                      onClose={() => removeBookmark(media.id)}
+                    />
+                  </div>
+                ))}
 
-              <div className="md:w-12" />
+                <div className="md:w-12" />
+              </div>
+
+              {!isMobile && (
+                <CarouselNavButtons
+                  categorySlug={group}
+                  carouselRefs={carouselRefs}
+                />
+              )}
             </div>
-
-            {!isMobile && (
-              <CarouselNavButtons
-                categorySlug={group}
-                carouselRefs={carouselRefs}
-              />
-            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Regular Bookmarks Carousel */}
       {regularItems.length > 0 && (
