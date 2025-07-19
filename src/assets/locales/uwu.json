@@ -1069,11 +1069,11 @@
         "status": {
             "invalid_token": "Fwailed to fetch a 'VIP' stweam. Your twoken is invalid!",
             "success": "s-success",
-            "api_down": "Cannot weach FED API! :<"
+            "api_down": "Cannot weach an API! :<"
         },
         "onboarding": {
-            "title": "FED API (Pwivate) twoken",
-            "description": "bwing youw o-own FWEE febbox account to gain access to FED API (pwivate)O.o, the best s-souwce with 4k quawity, dowby atmos, skip intwo and the fwastest woad times! highwy wecommended o-option!"
+            "title": "Febbox twoken",
+            "description": "bwing youw o-own FWEE febbox account to gain access to excwusive swources! The best s-souwce with 4k quawity, dowby atmos, skip intwo and the fwastest woad times! highwy wecommended o-option!"
         }
     },
     "realdebrid": {
