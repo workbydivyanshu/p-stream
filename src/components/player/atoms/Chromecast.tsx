@@ -28,7 +28,12 @@ export function Chromecast({ className }: ChromecastProps) {
   useEffect(() => {
     const w = window as unknown as { cast?: typeof cast };
     const castFramework = w.cast?.framework;
-    if (!castFramework) return;
+
+    // If cast framework is not available (e.g., on Safari), hide the button
+    if (!castFramework) {
+      setCastHidden(true);
+      return;
+    }
 
     const context = castFramework.CastContext.getInstance();
     const updateVisibility = () => {
