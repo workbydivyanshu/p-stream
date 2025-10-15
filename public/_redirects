@@ -1,4 +1,3 @@
-/fed-api/* https://fed-api.pstream.mov/:splat 301
 /assets/* /assets/:splat 200
 /* /index.html 200
 ˜
