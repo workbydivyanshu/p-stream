@@ -9,6 +9,13 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-044</guid>
+      <title>FED is back! Apologies for the downtime!</title>
+      <description>FED API is back! We had some technical issues with our new FED updates, but we're back up now and everything should be working fine. Apologies for the inconvenience!</description>
+      <pubDate>Wed, 15 Oct 2025 16:22:00 MST</pubDate>
+      <category>announcement</category>
+    </item>
+    <item>
       <guid>notification-043</guid>
       <title>Manual Source Selection!</title>
       <description>I know many sources have been inconsistent recently, so to help with the trouble, we're introducing a new manual source selection setting! 
