@@ -434,11 +434,6 @@ export function CaptionsView({
           </div>
         )}
 
-        {/* Search input */}
-        <div className="mt-3">
-          <Input value={searchQuery} onInput={setSearchQuery} />
-        </div>
-
         <Menu.ScrollToActiveSection className="!pt-1 mt-2 pb-3">
           {/* Off button */}
           <CaptionOption
@@ -451,11 +446,18 @@ export function CaptionsView({
           {/* Custom upload option */}
           <CustomCaptionOption />
 
+          {/* Search input */}
+          {(sourceCaptions.length || externalCaptions.length) > 0 && (
+            <div className="mt-3">
+              <Input value={searchQuery} onInput={setSearchQuery} />
+            </div>
+          )}
+
           {/* No subtitles available message */}
           {!isLoadingExternalSubtitles &&
             sourceCaptions.length === 0 &&
             externalCaptions.length === 0 && (
-              <div className="p-4 mt-6 rounded-xl bg-video-context-light bg-opacity-10 text-center">
+              <div className="p-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
                 <div className="text-video-context-type-secondary">
                   {t("player.menus.subtitles.empty")}
                 </div>
@@ -464,7 +466,7 @@ export function CaptionsView({
 
           {/* Loading external subtitles */}
           {isLoadingExternalSubtitles && externalCaptions.length === 0 && (
-            <div className="p-4 mt-6 rounded-xl bg-video-context-light bg-opacity-10 text-center">
+            <div className="p-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
               <div className="text-video-context-type-secondary">
                 {t("player.menus.subtitles.loadingExternal")}
               </div>
