@@ -210,17 +210,18 @@ export function PlayerPart(props: PlayerPartProps) {
             <Player.Settings />
           </div>
           <div>
-            {isPWA && status === playerStatus.PLAYING ? (
-              <Widescreen />
-            ) : (
-              <div
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                className="select-none touch-none"
-                style={{ WebkitTapHighlightColor: "transparent" }}
-              >
-                {isHoldingFullscreen ? <Widescreen /> : <Player.Fullscreen />}
-              </div>
+            {status === playerStatus.PLAYING && (
+              <>
+                {isPWA && <Widescreen />}
+                <div
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                  className="select-none touch-none"
+                  style={{ WebkitTapHighlightColor: "transparent" }}
+                >
+                  {isHoldingFullscreen ? <Widescreen /> : <Player.Fullscreen />}
+                </div>
+              </>
             )}
           </div>
         </div>
