@@ -125,7 +125,7 @@ export const getDiscoverContent = () =>
 export const getNetworkContent = (tmdbId: string) =>
   fetchFromTrakt<TraktNetworkResponse>(`/network/${tmdbId}`);
 
-// Curated movie lists (replacing Letterboxd functionality)
+// Curated movie lists
 export const getNarrativeMovies = () => fetchFromTrakt("/narrative");
 export const getTopMovies = () => fetchFromTrakt("/top");
 export const getLifetimeMovies = () => fetchFromTrakt("/lifetime");
@@ -133,7 +133,7 @@ export const getNeverHeardMovies = () => fetchFromTrakt("/never");
 export const getLGBTQContent = () => fetchFromTrakt("/LGBTQ");
 export const getMindfuckMovies = () => fetchFromTrakt("/mindfuck");
 export const getTrueStoryMovies = () => fetchFromTrakt("/truestory");
-export const getGreatestTVShows = () => fetchFromTrakt("/greatesttv");
+// export const getGreatestTVShows = () => fetchFromTrakt("/greatesttv"); // We only have movies set up. TODO add a type for tv and add more tv routes.
 
 // Get all curated movie lists
 export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
@@ -173,11 +173,11 @@ export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
       slug: "truestory",
       endpoint: "/truestory",
     },
-    {
-      name: "Rolling Stone's 100 Greatest TV Shows",
-      slug: "greatesttv",
-      endpoint: "/greatesttv",
-    },
+    // {
+    //   name: "Rolling Stone's 100 Greatest TV Shows",
+    //   slug: "greatesttv",
+    //   endpoint: "/greatesttv",
+    // },
   ];
 
   const lists: CuratedMovieList[] = [];
