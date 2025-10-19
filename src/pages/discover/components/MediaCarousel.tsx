@@ -55,9 +55,27 @@ interface MediaCarouselProps {
 function MediaCardSkeleton() {
   return (
     <div className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto">
-      <div className="animate-pulse">
-        <div className="w-full aspect-[2/3] bg-mediaCard-hoverBackground rounded-lg" />
-        <div className="mt-2 h-4 bg-mediaCard-hoverBackground rounded w-3/4" />
+      <div className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300">
+        <div className="pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300">
+          <div className="animate-pulse">
+            {/* Poster skeleton - matches MediaCard poster dimensions exactly */}
+            <div className="relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground" />
+
+            {/* Title skeleton - matches MediaCard title dimensions */}
+            <div className="mb-1">
+              <div className="h-4 bg-mediaCard-hoverBackground rounded w-full mb-1" />
+              <div className="h-4 bg-mediaCard-hoverBackground rounded w-3/4 mb-1" />
+              <div className="h-4 bg-mediaCard-hoverBackground rounded w-1/2" />
+            </div>
+
+            {/* Dot list skeleton - matches MediaCard dot list */}
+            <div className="flex items-center gap-1">
+              <div className="h-3 bg-mediaCard-hoverBackground rounded w-12" />
+              <div className="h-1 w-1 bg-mediaCard-hoverBackground rounded-full" />
+              <div className="h-3 bg-mediaCard-hoverBackground rounded w-8" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
