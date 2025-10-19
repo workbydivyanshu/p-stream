@@ -3,6 +3,7 @@ import slugify from "slugify";
 import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
+import { SimpleCache } from "@/utils/cache";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { MediaItem } from "@/utils/mediaTypes";
 import { getProxyUrls } from "@/utils/proxyUrls";
@@ -162,6 +163,23 @@ const tmdbHeaders = {
   Authorization: `Bearer ${apiKey}`,
 };
 
+// Cache for TMDB API responses
+interface TMDBCacheKey {
+  url: string;
+  params: object;
+  language: string;
+}
+
+const tmdbCache = new SimpleCache<TMDBCacheKey, any>();
+tmdbCache.setCompare((a, b) => {
+  return (
+    a.url === b.url &&
+    JSON.stringify(a.params) === JSON.stringify(b.params) &&
+    a.language === b.language
+  );
+});
+tmdbCache.initialize();
+
 function abortOnTimeout(timeout: number): AbortSignal {
   const controller = new AbortController();
   setTimeout(() => controller.abort(), timeout);
@@ -186,6 +204,18 @@ export async function get<T>(url: string, params?: object): Promise<T> {
 
   if (!apiKey) throw new Error("TMDB API key not set");
 
+  // Check cache first
+  const cacheKey: TMDBCacheKey = {
+    url,
+    params: params || {},
+    language: formattedLanguage,
+  };
+
+  const cachedResult = tmdbCache.get(cacheKey);
+  if (cachedResult) {
+    return cachedResult as T;
+  }
+
   // directly writing parameters, otherwise it will start the first parameter in the proxied request as "&" instead of "?" because it doesnt understand its proxied
   const fullUrl = new URL(tmdbBaseUrl1 + url);
   const allParams = {
@@ -199,9 +229,11 @@ export async function get<T>(url: string, params?: object): Promise<T> {
     });
   }
 
+  let result: T;
+
   if (proxy && shouldProxyTmdb) {
     try {
-      return await mwFetch<T>(
+      result = await mwFetch<T>(
         `/?destination=${encodeURIComponent(fullUrl.toString())}`,
         {
           headers: tmdbHeaders,
@@ -211,24 +243,31 @@ export async function get<T>(url: string, params?: object): Promise<T> {
       );
     } catch (err) {
       console.error(err);
+      // Fall through to try direct connection
     }
   }
 
-  try {
-    return await mwFetch<T>(encodeURI(url), {
-      headers: tmdbHeaders,
-      baseURL: tmdbBaseUrl1,
-      params: allParams,
-      signal: abortOnTimeout(5000),
-    });
-  } catch (err) {
-    return mwFetch<T>(encodeURI(url), {
-      headers: tmdbHeaders,
-      baseURL: tmdbBaseUrl2,
-      params: allParams,
-      signal: abortOnTimeout(30000),
-    });
+  if (!result!) {
+    try {
+      result = await mwFetch<T>(encodeURI(url), {
+        headers: tmdbHeaders,
+        baseURL: tmdbBaseUrl1,
+        params: allParams,
+        signal: abortOnTimeout(5000),
+      });
+    } catch (err) {
+      result = await mwFetch<T>(encodeURI(url), {
+        headers: tmdbHeaders,
+        baseURL: tmdbBaseUrl2,
+        params: allParams,
+        signal: abortOnTimeout(30000),
+      });
+    }
   }
+
+  // Cache the result for 1 hour (3600 seconds)
+  tmdbCache.set(cacheKey, result, 3600);
+  return result;
 }
 
 export async function multiSearch(
