@@ -52,6 +52,7 @@ export function VerifyPassphrase(props: VerifyPassphraseProps) {
     enableCarouselView: store.enableCarouselView,
     sourceOrder: store.sourceOrder,
     enableSourceOrder: store.enableSourceOrder,
+    disabledSources: store.disabledSources,
     proxyTmdb: store.proxyTmdb,
     febboxKey: store.febboxKey,
     enableLowPerformanceMode: store.enableLowPerformanceMode,

@@ -21,8 +21,10 @@ export interface SettingsInput {
   forceCompactEpisodeView?: boolean;
   sourceOrder?: string[];
   enableSourceOrder?: boolean;
+  disabledSources?: string[];
   embedOrder?: string[];
   enableEmbedOrder?: boolean;
+  disabledEmbeds?: string[];
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;
@@ -48,8 +50,10 @@ export interface SettingsResponse {
   enableCarouselView?: boolean;
   sourceOrder?: string[];
   enableSourceOrder?: boolean;
+  disabledSources?: string[];
   embedOrder?: string[];
   enableEmbedOrder?: boolean;
+  disabledEmbeds?: string[];
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;

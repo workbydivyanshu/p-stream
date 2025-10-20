@@ -156,6 +156,9 @@ export function SettingsPage() {
     (s) => s.setEnableSourceOrder,
   );
 
+  const disabledSources = usePreferencesStore((s) => s.disabledSources);
+  const setDisabledSources = usePreferencesStore((s) => s.setDisabledSources);
+
   const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
   const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
 
@@ -259,6 +262,7 @@ export function SettingsPage() {
     enableDetailsModal,
     sourceOrder,
     enableSourceOrder,
+    disabledSources,
     proxyTmdb,
     enableSkipCredits,
     enableImageLogos,
@@ -323,6 +327,7 @@ export function SettingsPage() {
         state.enableImageLogos.changed ||
         state.sourceOrder.changed ||
         state.enableSourceOrder.changed ||
+        state.disabledSources.changed ||
         state.proxyTmdb.changed ||
         state.enableCarouselView.changed ||
         state.forceCompactEpisodeView.changed ||
@@ -346,6 +351,7 @@ export function SettingsPage() {
           enableImageLogos: state.enableImageLogos.state,
           sourceOrder: state.sourceOrder.state,
           enableSourceOrder: state.enableSourceOrder.state,
+          disabledSources: state.disabledSources.state,
           proxyTmdb: state.proxyTmdb.state,
           enableCarouselView: state.enableCarouselView.state,
           forceCompactEpisodeView: state.forceCompactEpisodeView.state,
@@ -381,6 +387,7 @@ export function SettingsPage() {
     setEnableImageLogos(state.enableImageLogos.state);
     setSourceOrder(state.sourceOrder.state);
     setEnableSourceOrder(state.enableSourceOrder.state);
+    setDisabledSources(state.disabledSources.state);
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
@@ -427,6 +434,7 @@ export function SettingsPage() {
     setEnableImageLogos,
     setSourceOrder,
     setEnableSourceOrder,
+    setDisabledSources,
     setAppLanguage,
     setTheme,
     setSubStyling,
@@ -491,6 +499,8 @@ export function SettingsPage() {
             setSourceOrder={state.sourceOrder.set}
             enableSourceOrder={state.enableSourceOrder.state}
             setenableSourceOrder={state.enableSourceOrder.set}
+            disabledSources={state.disabledSources.state}
+            setDisabledSources={state.disabledSources.set}
             enableLowPerformanceMode={state.enableLowPerformanceMode.state}
             setEnableLowPerformanceMode={state.enableLowPerformanceMode.set}
             enableHoldToBoost={state.enableHoldToBoost.state}

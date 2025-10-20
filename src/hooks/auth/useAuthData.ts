@@ -54,6 +54,8 @@ export function useAuthData() {
   const setEnableSourceOrder = usePreferencesStore(
     (s) => s.setEnableSourceOrder,
   );
+  const setDisabledSources = usePreferencesStore((s) => s.setDisabledSources);
+
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
 
   const setEnableLowPerformanceMode = usePreferencesStore(
@@ -179,6 +181,10 @@ export function useAuthData() {
         setEnableSourceOrder(settings.enableSourceOrder);
       }
 
+      if (settings.disabledSources !== undefined) {
+        setDisabledSources(settings.disabledSources);
+      }
+
       if (settings.proxyTmdb !== undefined) {
         setProxyTmdb(settings.proxyTmdb);
       }
@@ -224,6 +230,7 @@ export function useAuthData() {
       setEnableCarouselView,
       setSourceOrder,
       setEnableSourceOrder,
+      setDisabledSources,
       setProxyTmdb,
       setFebboxKey,
       setEnableLowPerformanceMode,

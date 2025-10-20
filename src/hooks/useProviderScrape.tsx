@@ -155,11 +155,23 @@ export function useScrape() {
 
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
+  const disabledSources = usePreferencesStore((s) => s.disabledSources);
   const preferredEmbedOrder = usePreferencesStore((s) => s.embedOrder);
   const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
+  const disabledEmbeds = usePreferencesStore((s) => s.disabledEmbeds);
 
   const startScraping = useCallback(
     async (media: ScrapeMedia) => {
+      // Filter out disabled sources from the source order
+      const filteredSourceOrder = enableSourceOrder
+        ? preferredSourceOrder.filter((id) => !disabledSources.includes(id))
+        : undefined;
+
+      // Filter out disabled embeds from the embed order
+      const filteredEmbedOrder = enableEmbedOrder
+        ? preferredEmbedOrder.filter((id) => !disabledEmbeds.includes(id))
+        : undefined;
+
       const providerApiUrl = getLoadbalancedProviderApiUrl();
       if (providerApiUrl && !isExtensionActiveCached()) {
         startScrape();
@@ -167,8 +179,8 @@ export function useScrape() {
         const conn = await connectServerSideEvents<RunOutput | "">(
           baseUrlMaker.scrapeAll(
             media,
-            enableSourceOrder ? preferredSourceOrder : undefined,
-            enableEmbedOrder ? preferredEmbedOrder : undefined,
+            filteredSourceOrder,
+            filteredEmbedOrder,
           ),
           ["completed", "noOutput"],
         );
@@ -187,10 +199,10 @@ export function useScrape() {
       const providers = getProviders();
       const output = await providers.runAll({
         media,
-        // Only pass sourceOrder if enableSourceOrder is true
-        sourceOrder: enableSourceOrder ? preferredSourceOrder : undefined,
+        // Only pass sourceOrder if enableSourceOrder is true, and filter out disabled sources
+        sourceOrder: filteredSourceOrder,
         // Only pass embedOrder if enableEmbedOrder is true
-        embedOrder: enableEmbedOrder ? preferredEmbedOrder : undefined,
+        embedOrder: filteredEmbedOrder,
         events: {
           init: initEvent,
           start: startEvent,
@@ -211,8 +223,10 @@ export function useScrape() {
       startScrape,
       preferredSourceOrder,
       enableSourceOrder,
+      disabledSources,
       preferredEmbedOrder,
       enableEmbedOrder,
+      disabledEmbeds,
     ],
   );
 

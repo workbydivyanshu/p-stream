@@ -59,6 +59,7 @@ export function useSettingsState(
   enableDetailsModal: boolean,
   sourceOrder: string[],
   enableSourceOrder: boolean,
+  disabledSources: string[],
   proxyTmdb: boolean,
   enableSkipCredits: boolean,
   enableImageLogos: boolean,
@@ -158,6 +159,12 @@ export function useSettingsState(
     resetEnableSourceOrder,
     enableSourceOrderChanged,
   ] = useDerived(enableSourceOrder);
+  const [
+    disabledSourcesState,
+    setDisabledSourcesState,
+    resetDisabledSources,
+    disabledSourcesChanged,
+  ] = useDerived(disabledSources);
   const [proxyTmdbState, setProxyTmdbState, resetProxyTmdb, proxyTmdbChanged] =
     useDerived(proxyTmdb);
   const [
@@ -223,6 +230,7 @@ export function useSettingsState(
     resetEnableImageLogos();
     resetSourceOrder();
     resetEnableSourceOrder();
+    resetDisabledSources();
     resetProxyTmdb();
     resetEnableCarouselView();
     resetForceCompactEpisodeView();
@@ -252,6 +260,7 @@ export function useSettingsState(
     enableImageLogosChanged ||
     sourceOrderChanged ||
     enableSourceOrderChanged ||
+    disabledSourcesChanged ||
     proxyTmdbChanged ||
     enableCarouselViewChanged ||
     forceCompactEpisodeViewChanged ||
@@ -358,6 +367,11 @@ export function useSettingsState(
       state: proxyTmdbState,
       set: setProxyTmdbState,
       changed: proxyTmdbChanged,
+    },
+    disabledSources: {
+      state: disabledSourcesState,
+      set: setDisabledSourcesState,
+      changed: disabledSourcesChanged,
     },
     enableCarouselView: {
       state: enableCarouselViewState,

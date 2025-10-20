@@ -144,12 +144,14 @@ export function SourceSelectionView({
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
+  const disabledSources = usePreferencesStore((s) => s.disabledSources);
 
   const sources = useMemo(() => {
     if (!metaType) return [];
     const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
-      .filter((v) => v.mediaTypes?.includes(metaType));
+      .filter((v) => v.mediaTypes?.includes(metaType))
+      .filter((v) => !disabledSources.includes(v.id));
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
       return allSources;
@@ -172,7 +174,7 @@ export function SourceSelectionView({
     orderedSources.push(...remainingSources);
 
     return orderedSources;
-  }, [metaType, preferredSourceOrder, enableSourceOrder]);
+  }, [metaType, preferredSourceOrder, enableSourceOrder, disabledSources]);
 
   return (
     <>
