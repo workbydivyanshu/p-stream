@@ -107,6 +107,7 @@ function VideoElement() {
       playsInline
       ref={videoEl}
       preload="metadata"
+      onContextMenu={(e) => e.preventDefault()}
     >
       {subtitleTrack}
     </video>
