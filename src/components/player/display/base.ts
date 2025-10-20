@@ -88,6 +88,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let automaticQuality = false;
   let preferenceQuality: SourceQuality | null = null;
   let lastVolume = 1;
+  let lastValidDuration = 0; // Store the last valid duration to prevent reset during source switches
+  let lastValidTime = 0; // Store the last valid time to prevent reset during source switches
 
   const languagePromises = new Map<
     string,
@@ -346,9 +348,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         videoElement?.muted ? 0 : (videoElement?.volume ?? 0),
       ),
     );
-    videoElement.addEventListener("timeupdate", () =>
-      emit("time", videoElement?.currentTime ?? 0),
-    );
+    videoElement.addEventListener("timeupdate", () => {
+      const currentTime = videoElement?.currentTime ?? 0;
+      // Only emit time if it's progressing forward or if we're seeking
+      // This prevents time from resetting to 0 during source switches
+      if (currentTime >= lastValidTime || isSeeking) {
+        lastValidTime = currentTime;
+        emit("time", currentTime);
+      }
+    });
     videoElement.addEventListener("loadedmetadata", () => {
       if (
         source?.type === "hls" &&
@@ -358,7 +366,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         emit("qualities", ["unknown"]);
         emit("changedquality", "unknown");
       }
-      emit("duration", videoElement?.duration ?? 0);
+      // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
+      const duration = videoElement?.duration ?? 0;
+      if (duration > 0) {
+        lastValidDuration = duration;
+        emit("duration", duration);
+      } else if (lastValidDuration > 0) {
+        // Keep the last valid duration if the new one is invalid
+        emit("duration", lastValidDuration);
+      }
     });
     videoElement.addEventListener("progress", () => {
       if (videoElement)
@@ -385,7 +401,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     });
 
     videoElement.addEventListener("durationchange", () => {
-      emit("duration", videoElement?.duration ?? 0);
+      // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
+      const duration = videoElement?.duration ?? 0;
+      if (duration > 0) {
+        lastValidDuration = duration;
+        emit("duration", duration);
+      } else if (lastValidDuration > 0) {
+        // Keep the last valid duration if the new one is invalid
+        emit("duration", lastValidDuration);
+      }
     });
   }
 
@@ -398,6 +422,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       hls.destroy();
       hls = null;
     }
+    // Reset the last valid duration and time when unloading source
+    lastValidDuration = 0;
+    lastValidTime = 0;
   }
 
   function destroyVideoElement() {
