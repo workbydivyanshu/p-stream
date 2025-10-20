@@ -159,6 +159,16 @@ export function SettingsPage() {
   const disabledSources = usePreferencesStore((s) => s.disabledSources);
   const setDisabledSources = usePreferencesStore((s) => s.setDisabledSources);
 
+  // These are commented because the EmbedOrderPart is on the admin page and not on the settings page.
+  const embedOrder = usePreferencesStore((s) => s.embedOrder);
+  // const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
+
+  const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
+  // const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
+
+  const disabledEmbeds = usePreferencesStore((s) => s.disabledEmbeds);
+  // const setDisabledEmbeds = usePreferencesStore((s) => s.setDisabledEmbeds);
+
   const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
   const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
 
@@ -194,6 +204,14 @@ export function SettingsPage() {
   const setEnableLowPerformanceMode = usePreferencesStore(
     (s) => s.setEnableLowPerformanceMode,
   );
+
+  // These are commented because the NativeSubtitlesPart is accessable though the atoms caption style menu and not on the settings page.
+  const enableNativeSubtitles = usePreferencesStore(
+    (s) => s.enableNativeSubtitles,
+  );
+  // const setEnableNativeSubtitles = usePreferencesStore(
+  //   (s) => s.setEnableNativeSubtitles,
+  // );
 
   const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
   const setEnableHoldToBoost = usePreferencesStore(
@@ -263,12 +281,16 @@ export function SettingsPage() {
     sourceOrder,
     enableSourceOrder,
     disabledSources,
+    embedOrder,
+    enableEmbedOrder,
+    disabledEmbeds,
     proxyTmdb,
     enableSkipCredits,
     enableImageLogos,
     enableCarouselView,
     forceCompactEpisodeView,
     enableLowPerformanceMode,
+    enableNativeSubtitles,
     enableHoldToBoost,
     homeSectionOrder,
     manualSourceSelection,

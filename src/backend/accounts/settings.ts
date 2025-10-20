@@ -29,6 +29,7 @@ export interface SettingsInput {
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;
   enableHoldToBoost?: boolean;
+  homeSectionOrder?: string[];
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
 }
@@ -48,6 +49,7 @@ export interface SettingsResponse {
   enableDetailsModal?: boolean;
   enableImageLogos?: boolean;
   enableCarouselView?: boolean;
+  forceCompactEpisodeView?: boolean;
   sourceOrder?: string[];
   enableSourceOrder?: boolean;
   disabledSources?: string[];
@@ -58,6 +60,7 @@ export interface SettingsResponse {
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;
   enableHoldToBoost?: boolean;
+  homeSectionOrder?: string[];
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
 }
