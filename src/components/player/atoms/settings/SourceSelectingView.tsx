@@ -21,6 +21,7 @@ export interface SourceSelectionViewProps {
 export interface EmbedSelectionViewProps {
   id: string;
   sourceId: string | null;
+  onBack?: () => void;
 }
 
 export function EmbedOption(props: {
@@ -60,7 +61,11 @@ export function EmbedOption(props: {
   );
 }
 
-export function EmbedSelectionView({ sourceId, id }: EmbedSelectionViewProps) {
+export function EmbedSelectionView({
+  sourceId,
+  id,
+  onBack,
+}: EmbedSelectionViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const { run, watching, notfound, loading, items, errored } =
@@ -126,7 +131,7 @@ export function EmbedSelectionView({ sourceId, id }: EmbedSelectionViewProps) {
 
   return (
     <>
-      <Menu.BackLink onClick={() => router.navigate("/source")}>
+      <Menu.BackLink onClick={onBack || (() => router.navigate("/source"))}>
         {sourceName}
       </Menu.BackLink>
       <Menu.Section>{content}</Menu.Section>
