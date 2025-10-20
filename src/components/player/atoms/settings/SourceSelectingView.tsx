@@ -11,6 +11,7 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 
 export interface SourceSelectionViewProps {
   id: string;
@@ -141,12 +142,37 @@ export function SourceSelectionView({
   const router = useOverlayRouter(id);
   const metaType = usePlayerStore((s) => s.meta?.type);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
+  const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
+  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
+
   const sources = useMemo(() => {
     if (!metaType) return [];
-    return getCachedMetadata()
+    const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
       .filter((v) => v.mediaTypes?.includes(metaType));
-  }, [metaType]);
+
+    if (!enableSourceOrder || preferredSourceOrder.length === 0) {
+      return allSources;
+    }
+
+    // Sort sources according to preferred order
+    const orderedSources = [];
+    const remainingSources = [...allSources];
+
+    // Add sources in preferred order
+    for (const sourceId of preferredSourceOrder) {
+      const sourceIndex = remainingSources.findIndex((s) => s.id === sourceId);
+      if (sourceIndex !== -1) {
+        orderedSources.push(remainingSources[sourceIndex]);
+        remainingSources.splice(sourceIndex, 1);
+      }
+    }
+
+    // Add remaining sources that weren't in the preferred order
+    orderedSources.push(...remainingSources);
+
+    return orderedSources;
+  }, [metaType, preferredSourceOrder, enableSourceOrder]);
 
   return (
     <>

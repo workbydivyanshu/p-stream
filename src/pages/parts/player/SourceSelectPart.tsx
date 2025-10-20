@@ -10,6 +10,7 @@ import {
 } from "@/components/player/hooks/useSourceSelection";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
+import { usePreferencesStore } from "@/stores/preferences";
 
 // Embed option component
 function EmbedOption(props: {
@@ -126,14 +127,38 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
     null,
   );
   const routerId = "manualSourceSelect";
+  const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
+  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
 
   const sources = useMemo(() => {
     const metaType = props.media.type;
     if (!metaType) return [];
-    return getCachedMetadata()
+    const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
       .filter((v) => v.mediaTypes?.includes(metaType));
-  }, [props.media.type]);
+
+    if (!enableSourceOrder || preferredSourceOrder.length === 0) {
+      return allSources;
+    }
+
+    // Sort sources according to preferred order
+    const orderedSources = [];
+    const remainingSources = [...allSources];
+
+    // Add sources in preferred order
+    for (const sourceId of preferredSourceOrder) {
+      const sourceIndex = remainingSources.findIndex((s) => s.id === sourceId);
+      if (sourceIndex !== -1) {
+        orderedSources.push(remainingSources[sourceIndex]);
+        remainingSources.splice(sourceIndex, 1);
+      }
+    }
+
+    // Add remaining sources that weren't in the preferred order
+    orderedSources.push(...remainingSources);
+
+    return orderedSources;
+  }, [props.media.type, preferredSourceOrder, enableSourceOrder]);
 
   if (selectedSourceId) {
     return (
