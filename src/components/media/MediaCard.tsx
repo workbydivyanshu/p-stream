@@ -1,7 +1,7 @@
 // I'm sorry this is so confusing 😭
 
 import classNames from "classnames";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -18,6 +18,69 @@ import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
 import { DetailsModal } from "../overlays/detailsModal";
 
+// Intersection Observer Hook
+function useIntersectionObserver(options: IntersectionObserverInit = {}) {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [hasIntersected, setHasIntersected] = useState(false);
+  const targetRef = useRef<Element | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setHasIntersected(true);
+        }
+      },
+      {
+        ...options,
+        rootMargin: options.rootMargin || "300px 0px",
+      },
+    );
+
+    const currentTarget = targetRef.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [options]);
+
+  return { targetRef, isIntersecting, hasIntersected };
+}
+
+// Skeleton Component
+function MediaCardSkeleton() {
+  return (
+    <div className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300">
+      <div className="pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300">
+        <div className="animate-pulse">
+          {/* Poster skeleton - matches MediaCard poster dimensions exactly */}
+          <div className="relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground" />
+
+          {/* Title skeleton - matches MediaCard title dimensions */}
+          <div className="mb-1">
+            <div className="h-4 bg-mediaCard-hoverBackground rounded w-full mb-1" />
+            <div className="h-4 bg-mediaCard-hoverBackground rounded w-3/4 mb-1" />
+            <div className="h-4 bg-mediaCard-hoverBackground rounded w-1/2" />
+          </div>
+
+          {/* Dot list skeleton - matches MediaCard dot list */}
+          <div className="flex items-center gap-1">
+            <div className="h-3 bg-mediaCard-hoverBackground rounded w-12" />
+            <div className="h-1 w-1 bg-mediaCard-hoverBackground rounded-full" />
+            <div className="h-3 bg-mediaCard-hoverBackground rounded w-8" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export interface MediaCardProps {
   media: MediaItem;
   linkable?: boolean;
@@ -31,6 +94,7 @@ export interface MediaCardProps {
   closable?: boolean;
   onClose?: () => void;
   onShowDetails?: (media: MediaItem) => void;
+  forceSkeleton?: boolean;
 }
 
 function checkReleased(media: MediaItem): boolean {
@@ -55,6 +119,7 @@ function MediaCardContent({
   closable,
   onClose,
   onShowDetails,
+  forceSkeleton,
 }: MediaCardProps) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -70,6 +135,22 @@ function MediaCardContent({
   const enableLowPerformanceMode = usePreferencesStore(
     (state) => state.enableLowPerformanceMode,
   );
+
+  // Intersection observer for lazy loading
+  const { targetRef } = useIntersectionObserver({
+    rootMargin: "300px",
+  });
+
+  // Show skeleton if forced or if media hasn't loaded yet (empty title/poster)
+  const shouldShowSkeleton = forceSkeleton || (!media.title && !media.poster);
+
+  if (shouldShowSkeleton) {
+    return (
+      <div ref={targetRef as React.RefObject<HTMLDivElement>}>
+        <MediaCardSkeleton />
+      </div>
+    );
+  }
 
   if (isReleased() && media.year) {
     dotListContent.push(media.year.toFixed());
@@ -218,7 +299,7 @@ function MediaCardContent({
 }
 
 export function MediaCard(props: MediaCardProps) {
-  const { media, onShowDetails } = props;
+  const { media, onShowDetails, forceSkeleton } = props;
   const [detailsData, setDetailsData] = useState<{
     id: number;
     type: "movie" | "show";
@@ -275,7 +356,11 @@ export function MediaCard(props: MediaCardProps) {
 
   const content = (
     <>
-      <MediaCardContent {...props} onShowDetails={handleShowDetails} />
+      <MediaCardContent
+        {...props}
+        onShowDetails={handleShowDetails}
+        forceSkeleton={forceSkeleton}
+      />
       {detailsData && <DetailsModal id="details" data={detailsData} />}
     </>
   );

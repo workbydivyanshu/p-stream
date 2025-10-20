@@ -23,62 +23,22 @@ import { MediaItem } from "@/utils/mediaTypes";
 import { CarouselNavButtons } from "./CarouselNavButtons";
 
 interface ContentConfig {
-  /** Primary content type to fetch */
   type: DiscoverContentType;
-  /** Fallback content type if primary fails */
   fallback?: DiscoverContentType;
 }
 
 interface MediaCarouselProps {
-  /** Content configuration for the carousel */
   content: ContentConfig;
-  /** Whether this is a TV show carousel */
   isTVShow: boolean;
-  /** Refs for carousel navigation */
   carouselRefs: React.MutableRefObject<{
     [key: string]: HTMLDivElement | null;
   }>;
-  /** Callback when media details should be shown */
   onShowDetails?: (media: MediaItem) => void;
-  /** Whether to show more content button/link */
   moreContent?: boolean;
-  /** Custom more content link */
   moreLink?: string;
-  /** Whether to show provider selection */
   showProviders?: boolean;
-  /** Whether to show genre selection */
   showGenres?: boolean;
-  /** Whether to show recommendations */
   showRecommendations?: boolean;
-}
-
-function MediaCardSkeleton() {
-  return (
-    <div className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto">
-      <div className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300">
-        <div className="pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300">
-          <div className="animate-pulse">
-            {/* Poster skeleton - matches MediaCard poster dimensions exactly */}
-            <div className="relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground" />
-
-            {/* Title skeleton - matches MediaCard title dimensions */}
-            <div className="mb-1">
-              <div className="h-4 bg-mediaCard-hoverBackground rounded w-full mb-1" />
-              <div className="h-4 bg-mediaCard-hoverBackground rounded w-3/4 mb-1" />
-              <div className="h-4 bg-mediaCard-hoverBackground rounded w-1/2" />
-            </div>
-
-            {/* Dot list skeleton - matches MediaCard dot list */}
-            <div className="flex items-center gap-1">
-              <div className="h-3 bg-mediaCard-hoverBackground rounded w-12" />
-              <div className="h-1 w-1 bg-mediaCard-hoverBackground rounded-full" />
-              <div className="h-3 bg-mediaCard-hoverBackground rounded w-8" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function MoreCard({ link }: { link: string }) {
@@ -364,10 +324,21 @@ export function MediaCarousel({
             <div className="md:w-12" />
             {Array(10)
               .fill(null)
-              .map(() => (
-                <MediaCardSkeleton
+              .map((_, index) => (
+                <div
                   key={`skeleton-loading-${Math.random().toString(36).substring(2)}`}
-                />
+                  className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                >
+                  <MediaCard
+                    media={{
+                      id: `skeleton-${index}`,
+                      title: "",
+                      poster: "",
+                      type: isTVShow ? "show" : "movie",
+                    }}
+                    forceSkeleton
+                  />
+                </div>
               ))}
             <div className="md:w-12" />
           </div>
@@ -586,10 +557,21 @@ export function MediaCarousel({
               ))
             : Array(10)
                 .fill(null)
-                .map((_, _i) => (
-                  <MediaCardSkeleton
+                .map((_, index) => (
+                  <div
                     key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(2)}`}
-                  />
+                    className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                  >
+                    <MediaCard
+                      media={{
+                        id: `skeleton-${index}`,
+                        title: "",
+                        poster: "",
+                        type: isTVShow ? "show" : "movie",
+                      }}
+                      forceSkeleton
+                    />
+                  </div>
                 ))}
 
           {moreContent && generatedMoreLink && (

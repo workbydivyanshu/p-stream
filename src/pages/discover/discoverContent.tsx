@@ -13,7 +13,6 @@ import { MediaItem } from "@/utils/mediaTypes";
 
 import { DiscoverNavigation } from "./components/DiscoverNavigation";
 import type { FeaturedMedia } from "./components/FeaturedCarousel";
-import { LazyTabContent } from "./components/LazyTabContent";
 import { MediaCarousel } from "./components/MediaCarousel";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 
@@ -212,19 +211,19 @@ export function DiscoverContent() {
 
       <WideContainer ultraWide classNames="!px-0">
         {/* Movies Tab */}
-        <LazyTabContent isActive={isMoviesTab}>
+        <div style={{ display: isMoviesTab ? "block" : "none" }}>
           {renderMoviesContent()}
-        </LazyTabContent>
+        </div>
 
         {/* TV Shows Tab */}
-        <LazyTabContent isActive={isTVShowsTab}>
+        <div style={{ display: isTVShowsTab ? "block" : "none" }}>
           {renderTVShowsContent()}
-        </LazyTabContent>
+        </div>
 
         {/* Editor Picks Tab */}
-        <LazyTabContent isActive={isEditorPicksTab}>
+        <div style={{ display: isEditorPicksTab ? "block" : "none" }}>
           {renderEditorPicksContent()}
-        </LazyTabContent>
+        </div>
       </WideContainer>
 
       {/* View All Button */}
