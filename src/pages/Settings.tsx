@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAsyncFn } from "react-use";
+import { useAsyncFn, useWindowSize } from "react-use";
 
 import {
   base64ToBuffer,
@@ -13,6 +13,8 @@ import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
 import { getAllProviders } from "@/backend/providers/providers";
 import { Button } from "@/components/buttons/Button";
+import { SearchBarInput } from "@/components/form/SearchBar";
+import { ThinContainer } from "@/components/layout/ThinContainer";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { UserIcons } from "@/components/UserIcon";
 import { Heading1 } from "@/components/utils/Text";
@@ -39,16 +41,68 @@ import { usePreviewThemeStore, useThemeStore } from "@/stores/theme";
 import { SubPageLayout } from "./layouts/SubPageLayout";
 import { PreferencesPart } from "./parts/settings/PreferencesPart";
 
-function SettingsLayout(props: { children: React.ReactNode }) {
+function SettingsLayout(props: {
+  children: React.ReactNode;
+  searchQuery: string;
+  onSearchChange: (value: string, force: boolean) => void;
+  onSearchUnFocus: (newSearch?: string) => void;
+}) {
+  const { t } = useTranslation();
   const { isMobile } = useIsMobile();
+  const searchRef = useRef<HTMLInputElement>(null);
+  const { width: windowWidth, height: windowHeight } = useWindowSize();
+
+  // Dynamic offset calculation like HeroPart
+  const topSpacing = 16; // Base spacing
+  const [stickyOffset, setStickyOffset] = useState(topSpacing);
+
+  // Detect if running as a PWA on iOS
+  const isIOSPWA =
+    /iPad|iPhone|iPod/i.test(navigator.userAgent) &&
+    window.matchMedia("(display-mode: standalone)").matches;
+
+  const adjustedTopSpacing = isIOSPWA ? 60 : topSpacing;
+  const isLandscape = windowHeight < windowWidth && isIOSPWA;
+  const adjustedOffset = isLandscape ? -40 : 0;
+
+  useEffect(() => {
+    if (windowWidth > 1280) {
+      // On large screens the bar goes inline with the nav elements
+      setStickyOffset(adjustedTopSpacing);
+    } else {
+      // On smaller screens the bar goes below the nav elements
+      setStickyOffset(adjustedTopSpacing + 60 + adjustedOffset);
+    }
+  }, [adjustedOffset, adjustedTopSpacing, windowWidth]);
 
   return (
     <WideContainer ultraWide classNames="overflow-visible">
+      {/* Floating Search Bar - starts in sticky state */}
+      <div
+        className="fixed left-0 right-0 z-[500]"
+        style={{
+          top: `${stickyOffset}px`,
+        }}
+      >
+        <ThinContainer>
+          <SearchBarInput
+            ref={searchRef}
+            onChange={props.onSearchChange}
+            value={props.searchQuery}
+            onUnFocus={props.onSearchUnFocus}
+            placeholder={t("settings.search.placeholder")}
+            isSticky
+            hideTooltip
+          />
+        </ThinContainer>
+      </div>
+
       <div
         className={classNames(
           "grid gap-12",
           isMobile ? "grid-cols-1" : "lg:grid-cols-[280px,1fr]",
         )}
+        data-settings-content
       >
         <SidebarPart />
         <div>{props.children}</div>
@@ -102,6 +156,8 @@ export function AccountSettings(props: {
 }
 
 export function SettingsPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
@@ -117,6 +173,77 @@ export function SettingsPage() {
   const setTheme = useThemeStore((s) => s.setTheme);
   const previewTheme = usePreviewThemeStore((s) => s.previewTheme);
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
+
+  // Simple text search with highlighting
+  const handleSearchChange = useCallback((value: string, _force: boolean) => {
+    setSearchQuery(value);
+
+    // Remove existing highlights
+    const existingHighlights = document.querySelectorAll(".search-highlight");
+    existingHighlights.forEach((el) => {
+      const parent = el.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(el.textContent || ""), el);
+        parent.normalize();
+      }
+    });
+
+    if (value.trim()) {
+      // Find and highlight matching text
+      const walker = document.createTreeWalker(
+        document.querySelector("[data-settings-content]") || document.body,
+        NodeFilter.SHOW_TEXT,
+        null,
+      );
+
+      let node = walker.nextNode();
+
+      while (node) {
+        const text = node.textContent || "";
+        const lowerText = text.toLowerCase();
+        const lowerValue = value.toLowerCase();
+
+        if (lowerText.includes(lowerValue)) {
+          const regex = new RegExp(
+            `(${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+            "gi",
+          );
+          const highlightedText = text.replace(
+            regex,
+            '<span class="search-highlight bg-yellow-200 text-black px-1 rounded">$1</span>',
+          );
+
+          if (highlightedText !== text) {
+            const wrapper = document.createElement("div");
+            wrapper.innerHTML = highlightedText;
+            const parent = node.parentNode;
+            if (parent) {
+              while (wrapper.firstChild) {
+                parent.insertBefore(wrapper.firstChild, node);
+              }
+              parent.removeChild(node);
+            }
+          }
+        }
+        node = walker.nextNode();
+      }
+
+      // Scroll to first highlighted element
+      const firstHighlighted = document.querySelector(".search-highlight");
+      if (firstHighlighted) {
+        firstHighlighted.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }
+  }, []);
+
+  const handleSearchUnFocus = useCallback((newSearch?: string) => {
+    if (newSearch !== undefined) {
+      setSearchQuery(newSearch);
+    }
+  }, []);
 
   const appLanguage = useLanguageStore((s) => s.language);
   const setAppLanguage = useLanguageStore((s) => s.setLanguage);
@@ -476,7 +603,11 @@ export function SettingsPage() {
   return (
     <SubPageLayout>
       <PageTitle subpage k="global.pages.settings" />
-      <SettingsLayout>
+      <SettingsLayout
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        onSearchUnFocus={handleSearchUnFocus}
+      >
         <div id="settings-account">
           <Heading1 border className="!mb-0">
             {t("settings.account.title")}

@@ -882,6 +882,9 @@
     }
   },
   "settings": {
+    "search": {
+      "placeholder": "Search settings..."
+    },
     "account": {
       "accountDetails": {
         "deviceNameLabel": "Device name",
