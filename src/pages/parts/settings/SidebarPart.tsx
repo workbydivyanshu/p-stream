@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import Sticky from "react-sticky-el";
 import { useAsync } from "react-use";
 
 import { getBackendMeta } from "@/backend/accounts/meta";
+import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { SidebarLink, SidebarSection } from "@/components/layout/Sidebar";
 import { Divider } from "@/components/utils/Divider";
@@ -36,6 +38,7 @@ export function SidebarPart() {
   // eslint-disable-next-line no-restricted-globals
   const hostname = location.hostname;
   const [activeLink, setActiveLink] = useState("");
+  const navigate = useNavigate();
 
   const settingLinks = [
     {
@@ -203,6 +206,19 @@ export function SidebarPart() {
                   t("settings.sidebar.info.unknownVersion")
                 )}
               </p>
+            </div>
+
+            <div className="col-span-2 space-y-1">
+              <p className="text-type-dimmed font-medium">
+                {t("settings.account.admin.title")}
+              </p>
+              <Button
+                theme="secondary"
+                onClick={() => navigate("/admin")}
+                className="w-full !p-2 text-xs"
+              >
+                {t("settings.account.admin.text")}
+              </Button>
             </div>
           </div>
         </SidebarSection>

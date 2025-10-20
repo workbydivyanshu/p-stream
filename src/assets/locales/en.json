@@ -891,8 +891,7 @@
       },
       "admin": {
         "title": "Admin panel",
-        "text": "Utilize tools made for testing P-Stream's condition.",
-        "button": "Check it out"
+        "text": "Test P-Stream's condition."
       },
       "actions": {
         "delete": {
