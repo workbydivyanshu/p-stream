@@ -188,7 +188,7 @@ export const usePreferencesStore = create(
       },
       setHomeSectionOrder(v) {
         set((s) => {
-          s.homeSectionOrder = v;
+          s.homeSectionOrder = v.length > 0 ? v : ["watching", "bookmarks"];
         });
       },
       setManualSourceSelection(v) {

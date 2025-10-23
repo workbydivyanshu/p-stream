@@ -19,17 +19,17 @@ export interface SettingsInput {
   enableImageLogos?: boolean;
   enableCarouselView?: boolean;
   forceCompactEpisodeView?: boolean;
-  sourceOrder?: string[];
+  sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;
-  disabledSources?: string[];
-  embedOrder?: string[];
+  disabledSources?: string[] | null;
+  embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
-  disabledEmbeds?: string[];
+  disabledEmbeds?: string[] | null;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;
   enableHoldToBoost?: boolean;
-  homeSectionOrder?: string[];
+  homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
 }
@@ -50,17 +50,17 @@ export interface SettingsResponse {
   enableImageLogos?: boolean;
   enableCarouselView?: boolean;
   forceCompactEpisodeView?: boolean;
-  sourceOrder?: string[];
+  sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;
-  disabledSources?: string[];
-  embedOrder?: string[];
+  disabledSources?: string[] | null;
+  embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
-  disabledEmbeds?: string[];
+  disabledEmbeds?: string[] | null;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;
   enableHoldToBoost?: boolean;
-  homeSectionOrder?: string[];
+  homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
 }

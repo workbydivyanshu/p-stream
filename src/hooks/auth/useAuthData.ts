@@ -186,7 +186,7 @@ export function useAuthData() {
       }
 
       if (settings.sourceOrder !== undefined) {
-        setSourceOrder(settings.sourceOrder);
+        setSourceOrder(settings.sourceOrder ?? []);
       }
 
       if (settings.enableSourceOrder !== undefined) {
@@ -194,11 +194,11 @@ export function useAuthData() {
       }
 
       if (settings.disabledSources !== undefined) {
-        setDisabledSources(settings.disabledSources);
+        setDisabledSources(settings.disabledSources ?? []);
       }
 
       if (settings.embedOrder !== undefined) {
-        setEmbedOrder(settings.embedOrder);
+        setEmbedOrder(settings.embedOrder ?? []);
       }
 
       if (settings.enableEmbedOrder !== undefined) {
@@ -206,7 +206,7 @@ export function useAuthData() {
       }
 
       if (settings.disabledEmbeds !== undefined) {
-        setDisabledEmbeds(settings.disabledEmbeds);
+        setDisabledEmbeds(settings.disabledEmbeds ?? []);
       }
 
       if (settings.proxyTmdb !== undefined) {
@@ -234,7 +234,9 @@ export function useAuthData() {
       }
 
       if (settings.homeSectionOrder !== undefined) {
-        setHomeSectionOrder(settings.homeSectionOrder);
+        setHomeSectionOrder(
+          settings.homeSectionOrder ?? ["watching", "bookmarks"],
+        );
       }
 
       if (settings.manualSourceSelection !== undefined) {
