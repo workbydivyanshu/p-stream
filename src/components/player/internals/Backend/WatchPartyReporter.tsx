@@ -242,8 +242,8 @@ export function WatchPartyReporter() {
       }
     };
 
-    // Check every 3 seconds for episode changes
-    const interval = setInterval(checkForEpisodeChange, 3000);
+    // Check every 1.5 seconds for episode changes
+    const interval = setInterval(checkForEpisodeChange, 1500);
 
     // Initial check
     checkForEpisodeChange();
@@ -289,10 +289,10 @@ export function WatchPartyReporter() {
     // Check if state has changed meaningfully OR
     // it's been at least 2 seconds since last report
     const hasStateChanged = stateFingerprint !== lastReportedStateRef.current;
-    const timeThresholdMet = now - lastReportTime.current >= 10000; // Less frequent updates (10s)
+    const timeThresholdMet = now - lastReportTime.current >= 2000; // Update every 2 seconds
 
     // Always update more frequently if we're the host to ensure guests stay in sync
-    const shouldUpdateForHost = isHost && now - lastReportTime.current >= 1000;
+    const shouldUpdateForHost = isHost && now - lastReportTime.current >= 500; // Host updates every 500ms
 
     if (!hasStateChanged && !timeThresholdMet && !shouldUpdateForHost) return;
 

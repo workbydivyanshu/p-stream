@@ -298,8 +298,8 @@ export function useWatchPartySync(
     // Initial fetch
     refreshRoomData();
 
-    // Set up interval - refresh every 2 seconds
-    const interval = setInterval(refreshRoomData, 2000);
+    // Set up interval - refresh every 1 second for faster updates
+    const interval = setInterval(refreshRoomData, 1000);
 
     return () => {
       clearInterval(interval);
