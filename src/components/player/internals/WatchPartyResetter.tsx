@@ -24,6 +24,7 @@ export function WatchPartyResetter() {
     return `${meta.type}-${meta.tmdbId}`;
   }, [meta]);
 
+  // Handle media changes (when switching to a different show/movie)
   useEffect(() => {
     // If base media has changed (different show/movie), reset watch party
     if (
@@ -41,12 +42,19 @@ export function WatchPartyResetter() {
 
     // Update the ref with current base media
     previousBaseMediaRef.current = baseMediaId;
+  }, [baseMediaId, disable]);
 
-    // Also reset when component unmounts (player exited)
+  // Handle component unmount (player exited) - separate effect
+  useEffect(() => {
     return () => {
+      // Only disable when component actually unmounts
+      // eslint-disable-next-line no-console
+      console.log("WatchPartyResetter unmounting, disabling watch party");
       disable();
     };
-  }, [baseMediaId, disable]);
+    // Empty dependency array means this cleanup only runs on unmount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return null; // This component doesn't render anything
 }
