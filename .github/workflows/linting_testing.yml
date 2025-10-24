@@ -3,7 +3,10 @@ name: Linting and Testing
 on:
   push:
     branches:
-      - main
+      - production
+      - dev
+      - beta
+      - embed
   pull_request:
 
 jobs:
