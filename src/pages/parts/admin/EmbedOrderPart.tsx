@@ -7,18 +7,26 @@ import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { SortableListWithToggles } from "@/components/form/SortableListWithToggles";
 import { Heading2 } from "@/components/utils/Text";
-import { usePreferencesStore } from "@/stores/preferences";
 
-export function EmbedOrderPart() {
+interface EmbedOrderPartProps {
+  embedOrder: string[];
+  setEmbedOrder: (order: string[]) => void;
+  enableEmbedOrder: boolean;
+  setEnableEmbedOrder: (enabled: boolean) => void;
+  disabledEmbeds: string[];
+  setDisabledEmbeds: (disabled: string[]) => void;
+}
+
+export function EmbedOrderPart({
+  embedOrder,
+  setEmbedOrder,
+  enableEmbedOrder,
+  setEnableEmbedOrder,
+  disabledEmbeds,
+  setDisabledEmbeds,
+}: EmbedOrderPartProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const embedOrder = usePreferencesStore((s) => s.embedOrder);
-  const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
-  const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
-  const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
-  const disabledEmbeds = usePreferencesStore((s) => s.disabledEmbeds);
-  const setDisabledEmbeds = usePreferencesStore((s) => s.setDisabledEmbeds);
 
   const allEmbeds = getAllProviders().listEmbeds();
 
