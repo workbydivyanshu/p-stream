@@ -3,7 +3,7 @@ name: Deploying
 on:
   push:
     branches:
-      - production
+      - master
 
 jobs:
   build_pwa:
