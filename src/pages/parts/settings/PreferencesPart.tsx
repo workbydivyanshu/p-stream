@@ -70,14 +70,7 @@ export function PreferencesPart(props: {
   const navigate = useNavigate();
 
   const handleLowPerformanceModeToggle = () => {
-    const newMode = !props.enableLowPerformanceMode;
-    props.setEnableLowPerformanceMode(newMode);
-
-    // When enabling low performance mode, disable bandwidth-heavy features
-    if (newMode) {
-      props.setEnableThumbnails(false);
-      props.setEnableAutoplay(false);
-    }
+    props.setEnableLowPerformanceMode(!props.enableLowPerformanceMode);
   };
 
   const handleSourceToggle = (sourceId: string) => {

@@ -174,6 +174,11 @@ export const usePreferencesStore = create(
       setEnableLowPerformanceMode(v) {
         set((s) => {
           s.enableLowPerformanceMode = v;
+          // When enabling performance mode, disable bandwidth-heavy features
+          if (v) {
+            s.enableThumbnails = false;
+            s.enableAutoplay = false;
+          }
         });
       },
       setEnableNativeSubtitles(v) {

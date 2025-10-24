@@ -1,7 +1,6 @@
 import Hls from "hls.js";
 import { useCallback, useEffect, useRef } from "react";
 
-import { playerStatus } from "@/stores/player/slices/source";
 import { ThumbnailImage } from "@/stores/player/slices/thumbnails";
 import { usePlayerStore } from "@/stores/player/store";
 import { LoadableSource, selectQuality } from "@/stores/player/utils/qualities";
@@ -125,10 +124,11 @@ class ThumnbnailWorker {
 
 export function ThumbnailScraper() {
   const addImage = usePlayerStore((s) => s.thumbnails.addImage);
-  const status = usePlayerStore((s) => s.status);
   const resetImages = usePlayerStore((s) => s.thumbnails.resetImages);
   const meta = usePlayerStore((s) => s.meta);
   const source = usePlayerStore((s) => s.source);
+  const hasPlayedOnce = usePlayerStore((s) => s.mediaPlaying.hasPlayedOnce);
+  const duration = usePlayerStore((s) => s.progress.duration);
   const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
   const workerRef = useRef<ThumnbnailWorker | null>(null);
 
@@ -144,7 +144,8 @@ export function ThumbnailScraper() {
       });
     // dont interrupt existing working
     if (workerRef.current) return;
-    if (status !== playerStatus.PLAYING) return;
+    // Allow thumbnail generation when video is loaded and has duration
+    if (!hasPlayedOnce || duration <= 0) return;
     if (!inputStream) return;
     resetImages();
     const ins = new ThumnbnailWorker({
@@ -152,17 +153,17 @@ export function ThumbnailScraper() {
     });
     workerRef.current = ins;
     ins.start(inputStream.stream);
-  }, [source, addImage, resetImages, status]);
+  }, [source, addImage, resetImages, hasPlayedOnce, duration]);
 
   const startRef = useRef(start);
   useEffect(() => {
     startRef.current = start;
-  }, [start, status]);
+  }, [start]);
 
   // start worker with the stream
   useEffect(() => {
     if (enableThumbnails) startRef.current();
-  }, [sourceSeralized, enableThumbnails]);
+  }, [sourceSeralized, enableThumbnails, hasPlayedOnce, duration]);
 
   // destroy worker on unmount
   useEffect(() => {
@@ -186,7 +187,13 @@ export function ThumbnailScraper() {
       workerRef.current = null;
     }
     if (enableThumbnails) startRef.current();
-  }, [serializedMeta, sourceSeralized, status, enableThumbnails]);
+  }, [
+    serializedMeta,
+    sourceSeralized,
+    enableThumbnails,
+    hasPlayedOnce,
+    duration,
+  ]);
 
   return null;
 }
