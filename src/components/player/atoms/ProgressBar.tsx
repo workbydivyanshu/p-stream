@@ -22,7 +22,7 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
     offscreenLeft: 0,
     offscreenRight: 0,
   });
-  const ref = useRef<HTMLImageElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -37,7 +37,8 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
     });
   }, [props.at]);
 
-  if (!props.show || !currentThumbnail) return null;
+  if (!props.show) return null;
+
   return (
     <div className="flex flex-col items-center -translate-x-1/2 pointer-events-none">
       <div className="w-screen flex justify-center">
@@ -51,10 +52,12 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
               }px)`,
             }}
           >
-            <img
-              src={currentThumbnail.data}
-              className="h-24 border rounded-xl border-gray-800"
-            />
+            {currentThumbnail && (
+              <img
+                src={currentThumbnail.data}
+                className="h-24 border rounded-xl border-gray-800"
+              />
+            )}
             <p className="text-center mt-1">
               {formatSeconds(
                 Math.max(props.at, 0),
