@@ -12,6 +12,11 @@ import {
 } from "@/components/player/display/displayInterface";
 import { handleBuffered } from "@/components/player/utils/handleBuffered";
 import { getMediaErrorDetails } from "@/components/player/utils/mediaErrorDetails";
+import {
+  createM3U8ProxyUrl,
+  createMP4ProxyUrl,
+  isUrlAlreadyProxied,
+} from "@/components/player/utils/proxy";
 import { useLanguageStore } from "@/stores/language";
 import {
   LoadableSource,
@@ -579,7 +584,75 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     },
     startAirplay() {
       const videoPlayer = videoElement as any;
-      if (videoPlayer && videoPlayer.webkitShowPlaybackTargetPicker) {
+      if (!videoPlayer || !videoPlayer.webkitShowPlaybackTargetPicker) return;
+
+      if (!source) {
+        // No source loaded, just trigger Airplay
+        videoPlayer.webkitShowPlaybackTargetPicker();
+        return;
+      }
+
+      // Store the original URL to restore later
+      const originalUrl =
+        source?.type === "hls" ? hls?.url || source.url : videoPlayer.src;
+
+      let proxiedUrl: string | null = null;
+
+      if (source?.type === "hls") {
+        // Only proxy HLS streams if they need it:
+        // 1. Not already proxied AND
+        // 2. Has headers (either preferredHeaders or headers)
+        const allHeaders = {
+          ...source.preferredHeaders,
+          ...source.headers,
+        };
+        const hasHeaders = Object.keys(allHeaders).length > 0;
+
+        // Don't create proxy URL if it's already using the proxy
+        if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
+          proxiedUrl = createM3U8ProxyUrl(source.url, allHeaders);
+        } else {
+          proxiedUrl = source.url; // Already proxied or no headers needed
+        }
+      } else if (source?.type === "mp4") {
+        // TODO: Implement MP4 proxy for protected streams
+        const hasHeaders =
+          source.headers && Object.keys(source.headers).length > 0;
+        if (hasHeaders) {
+          // Use MP4 proxy for streams with headers
+          proxiedUrl = createMP4ProxyUrl(source.url, source.headers || {});
+        } else {
+          proxiedUrl = source.url;
+        }
+      }
+
+      if (proxiedUrl && proxiedUrl !== originalUrl) {
+        // Temporarily set the proxied URL for Airplay
+        if (source?.type === "hls") {
+          if (hls) {
+            hls.loadSource(proxiedUrl);
+          }
+        } else {
+          videoPlayer.src = proxiedUrl;
+        }
+
+        // Small delay to ensure the URL is set before triggering Airplay
+        setTimeout(() => {
+          videoPlayer.webkitShowPlaybackTargetPicker();
+
+          // Restore original URL after a short delay
+          setTimeout(() => {
+            if (source?.type === "hls") {
+              if (hls && originalUrl) {
+                hls.loadSource(originalUrl);
+              }
+            } else if (originalUrl) {
+              videoPlayer.src = originalUrl;
+            }
+          }, 1000);
+        }, 100);
+      } else {
+        // No proxying needed, just trigger Airplay
         videoPlayer.webkitShowPlaybackTargetPicker();
       }
     },
