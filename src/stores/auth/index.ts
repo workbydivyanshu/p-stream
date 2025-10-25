@@ -22,6 +22,7 @@ interface AuthStore {
   account: null | AccountWithToken;
   backendUrl: null | string;
   proxySet: null | string[];
+  settingsLoading: boolean;
   removeAccount(): void;
   setAccount(acc: AccountWithToken): void;
   updateDeviceName(deviceName: string): void;
@@ -29,6 +30,7 @@ interface AuthStore {
   setAccountProfile(acc: Account["profile"]): void;
   setBackendUrl(url: null | string): void;
   setProxySet(urls: null | string[]): void;
+  setSettingsLoading(loading: boolean): void;
 }
 
 export const useAuthStore = create(
@@ -37,6 +39,7 @@ export const useAuthStore = create(
       account: null,
       backendUrl: null,
       proxySet: null,
+      settingsLoading: false,
       setAccount(acc) {
         set((s) => {
           s.account = acc;
@@ -55,6 +58,11 @@ export const useAuthStore = create(
       setProxySet(urls) {
         set((s) => {
           s.proxySet = urls;
+        });
+      },
+      setSettingsLoading(loading) {
+        set((s) => {
+          s.settingsLoading = loading;
         });
       },
       setAccountProfile(profile) {

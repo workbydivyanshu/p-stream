@@ -8,6 +8,7 @@ import { usePreferencesStore } from "@/stores/preferences";
 export function useEmbedOrderState() {
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
+  const settingsLoaded = usePreferencesStore((s) => s._settingsLoaded);
 
   // Get current values from store
   const embedOrder = usePreferencesStore((s) => s.embedOrder);
@@ -51,7 +52,7 @@ export function useEmbedOrderState() {
 
   // Save changes to backend and update store
   const saveChanges = useCallback(async () => {
-    if (!account || !backendUrl) return;
+    if (!account || !backendUrl || !settingsLoaded) return;
 
     try {
       await updateSettings(backendUrl, account, {
@@ -71,6 +72,7 @@ export function useEmbedOrderState() {
   }, [
     account,
     backendUrl,
+    settingsLoaded,
     localEmbedOrder,
     localEnableEmbedOrder,
     localDisabledEmbeds,

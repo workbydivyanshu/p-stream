@@ -4,6 +4,7 @@ import { updateSettings } from "@/backend/accounts/settings";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
 import { useSubtitleStore } from "@/stores/subtitles";
+import { usePreferencesStore } from "@/stores/preferences";
 
 const syncIntervalMs = 5 * 1000;
 
@@ -12,11 +13,13 @@ export function SettingsSyncer() {
     (s) => s.importSubtitleLanguage,
   );
   const url = useBackendUrl();
+  const settingsLoading = useAuthStore((s) => s.settingsLoading);
 
   useEffect(() => {
     const interval = setInterval(() => {
       (async () => {
         if (!url) return;
+        if (settingsLoading) return; // Don't sync while settings are loading from backend
         const state = useSubtitleStore.getState();
         const user = useAuthStore.getState();
         if (state.lastSync.lastSelectedLanguage === state.lastSelectedLanguage)
@@ -33,7 +36,7 @@ export function SettingsSyncer() {
     return () => {
       clearInterval(interval);
     };
-  }, [importSubtitleLanguage, url]);
+  }, [importSubtitleLanguage, url, settingsLoading]);
 
   return null;
 }
