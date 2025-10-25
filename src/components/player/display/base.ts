@@ -350,9 +350,14 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     );
     videoElement.addEventListener("timeupdate", () => {
       const currentTime = videoElement?.currentTime ?? 0;
-      // Only emit time if it's progressing forward or if we're seeking
+      // Always emit time updates when seeking to prevent subtitle freezing
+      // Also emit when progressing forward or when time changes significantly
       // This prevents time from resetting to 0 during source switches
-      if (currentTime >= lastValidTime || isSeeking) {
+      if (
+        currentTime >= lastValidTime ||
+        isSeeking ||
+        Math.abs(currentTime - lastValidTime) > 0.1
+      ) {
         lastValidTime = currentTime;
         emit("time", currentTime);
       }
