@@ -4,7 +4,6 @@ import { updateSettings } from "@/backend/accounts/settings";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
 import { useSubtitleStore } from "@/stores/subtitles";
-import { usePreferencesStore } from "@/stores/preferences";
 
 const syncIntervalMs = 5 * 1000;
 
