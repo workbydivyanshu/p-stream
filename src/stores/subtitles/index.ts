@@ -36,9 +36,14 @@ export interface SubtitleStyling {
 
   /**
    * font style for text rendering
-   * "default" | "raised" | "depressed" | "uniform" | "dropShadow"
+   * "default" | "raised" | "depressed" | "Border" | "dropShadow"
    */
   fontStyle: string;
+
+  /**
+   * border thickness for Border font style, ranges between 0 and 10
+   */
+  borderThickness: number;
 }
 
 export interface SubtitleStore {
@@ -83,6 +88,7 @@ export const useSubtitleStore = create(
         bold: false,
         verticalPosition: 3,
         fontStyle: "default",
+        borderThickness: 1,
       },
       showDelayIndicator: false,
       resetSubtitleSpecificSettings() {
@@ -115,6 +121,11 @@ export const useSubtitleStore = create(
             );
           if (newStyling.fontStyle !== undefined)
             s.styling.fontStyle = newStyling.fontStyle;
+          if (newStyling.borderThickness !== undefined)
+            s.styling.borderThickness = Math.min(
+              10,
+              Math.max(0, newStyling.borderThickness),
+            );
         });
       },
       resetStyling() {
@@ -127,6 +138,7 @@ export const useSubtitleStore = create(
             bold: false,
             verticalPosition: 3,
             fontStyle: "default",
+            borderThickness: 1,
           };
         });
       },

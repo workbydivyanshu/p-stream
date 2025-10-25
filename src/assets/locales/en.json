@@ -1132,9 +1132,10 @@
         "default": "Default",
         "raised": "Raised",
         "depressed": "Depressed",
-        "uniform": "Uniform",
+        "Border": "Border",
         "dropShadow": "Drop Shadow"
-      }
+      },
+      "BorderThicknessLabel": "Border Thickness"
     },
     "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
   },

@@ -58,11 +58,25 @@ export function CaptionCue({
           textShadow:
             "0 -2px 0 rgba(0,0,0,0.8), 0 -1.5px 1.5px rgba(0,0,0,0.9)",
         };
-      case "uniform":
+      case "Border": {
+        const thickness = Math.max(
+          0.5,
+          Math.min(5, styling.borderThickness || 1),
+        );
+        const shadowColor = "rgba(0,0,0,0.8)";
         return {
-          textShadow:
-            "1.5px 1.5px 1.5px rgba(0,0,0,0.8), -1.5px -1.5px 1.5px rgba(0,0,0,0.8), 1.5px -1.5px 1.5px rgba(0,0,0,0.8), -1.5px 1.5px 1.5px rgba(0,0,0,0.8)",
+          textShadow: [
+            `${thickness}px ${thickness}px 0 ${shadowColor}`,
+            `-${thickness}px ${thickness}px 0 ${shadowColor}`,
+            `${thickness}px -${thickness}px 0 ${shadowColor}`,
+            `-${thickness}px -${thickness}px 0 ${shadowColor}`,
+            `${thickness}px 0 0 ${shadowColor}`,
+            `-${thickness}px 0 0 ${shadowColor}`,
+            `0 ${thickness}px 0 ${shadowColor}`,
+            `0 -${thickness}px 0 ${shadowColor}`,
+          ].join(", "),
         };
+      }
       case "dropShadow":
         return { textShadow: "2.5px 2.5px 4.5px rgba(0,0,0,0.9)" };
       case "default":

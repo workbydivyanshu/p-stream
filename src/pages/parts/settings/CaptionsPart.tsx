@@ -116,6 +116,7 @@ export function CaptionsPart(props: {
       bold: false,
       verticalPosition: 3,
       fontStyle: "default",
+      borderThickness: 1,
     });
   };
 
@@ -203,8 +204,8 @@ export function CaptionsPart(props: {
                         name: t("settings.subtitles.textStyle.depressed"),
                       },
                       {
-                        id: "uniform",
-                        name: t("settings.subtitles.textStyle.uniform"),
+                        id: "Border",
+                        name: t("settings.subtitles.textStyle.Border"),
                       },
                       {
                         id: "dropShadow",
@@ -227,6 +228,22 @@ export function CaptionsPart(props: {
                   />
                 </div>
               </div>
+              {props.styling.fontStyle === "Border" && (
+                <CaptionSetting
+                  label={t("settings.subtitles.BorderThicknessLabel")}
+                  max={10}
+                  min={0}
+                  onChange={(v) =>
+                    handleStylingChange({
+                      ...props.styling,
+                      borderThickness: v,
+                    })
+                  }
+                  value={props.styling.borderThickness}
+                  textTransformer={(s) => `${s}px`}
+                  decimalsAllowed={1}
+                />
+              )}
               <div className="flex justify-between items-center">
                 <Menu.FieldTitle>
                   {t("settings.subtitles.textBoldLabel")}

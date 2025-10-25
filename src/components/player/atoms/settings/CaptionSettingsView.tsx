@@ -428,6 +428,7 @@ export function CaptionSettingsView({
       backgroundBlur: 0.5,
       bold: false,
       fontStyle: "default",
+      borderThickness: 1,
     });
   };
 
@@ -531,8 +532,8 @@ export function CaptionSettingsView({
                     name: t("settings.subtitles.textStyle.depressed"),
                   },
                   {
-                    id: "uniform",
-                    name: t("settings.subtitles.textStyle.uniform"),
+                    id: "Border",
+                    name: t("settings.subtitles.textStyle.Border"),
                   },
                   {
                     id: "dropShadow",
@@ -553,6 +554,19 @@ export function CaptionSettingsView({
                 }
               />
             </div>
+            {styling.fontStyle === "Border" && (
+              <CaptionSetting
+                label={t("settings.subtitles.BorderThicknessLabel")}
+                max={10}
+                min={0}
+                onChange={(v) =>
+                  handleStylingChange({ ...styling, borderThickness: v })
+                }
+                value={styling.borderThickness}
+                textTransformer={(s) => `${s}px`}
+                decimalsAllowed={1}
+              />
+            )}
             <div className="flex justify-between items-center">
               <Menu.FieldTitle>
                 {t("settings.subtitles.textBoldLabel")}
