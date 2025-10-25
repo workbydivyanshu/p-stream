@@ -47,8 +47,13 @@ export function createMP4ProxyUrl(
  * @returns True if the URL is already proxied, false otherwise
  */
 export function isUrlAlreadyProxied(url: string): boolean {
-  // Check if URL contains the m3u8-proxy pattern
+  // Check if URL contains the m3u8-proxy pattern (Airplay format)
   if (url.includes("/m3u8-proxy?url=")) {
+    return true;
+  }
+
+  // Check if URL contains the destination pattern (Chromecast format)
+  if (url.includes("/?destination=")) {
     return true;
   }
 
