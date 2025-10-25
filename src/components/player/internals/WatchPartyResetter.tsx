@@ -29,7 +29,7 @@ export function WatchPartyResetter() {
     // If base media has changed (different show/movie), reset watch party
     if (
       baseMediaId &&
-      previousBaseMediaRef.current &&
+      previousBaseMediaRef.current !== null &&
       baseMediaId !== previousBaseMediaRef.current
     ) {
       // eslint-disable-next-line no-console
