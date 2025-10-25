@@ -121,6 +121,14 @@ const getShortcutGroups = (t: (key: string) => string): ShortcutGroup[] => [
         key: "Escape",
         description: t("global.keyboardShortcuts.shortcuts.closeOverlay"),
       },
+      {
+        key: "Shift",
+        description: t("global.keyboardShortcuts.shortcuts.copyLinkWithTime"),
+      },
+      {
+        key: "Shift",
+        description: t("global.keyboardShortcuts.shortcuts.widescreenMode"),
+      },
     ],
   },
 ];
