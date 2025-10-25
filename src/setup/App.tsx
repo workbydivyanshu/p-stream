@@ -11,6 +11,7 @@ import {
 
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
+import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
@@ -121,6 +122,7 @@ function App() {
     <Layout>
       <LanguageProvider />
       <NotificationModal id="notifications" />
+      <KeyboardCommandsModal id="keyboard-commands" />
       {!showDowntime && (
         <Routes>
           {/* functional routes */}
