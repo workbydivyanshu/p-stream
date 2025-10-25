@@ -1261,6 +1261,7 @@
     "cancel": "Cancel",
     "save": "Save",
     "emptyRoom": "No one is in this room yet",
+    "noHost": "No host in this watch party",
     "invalidRoom": "Unable to connect to this room",
     "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
     "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
