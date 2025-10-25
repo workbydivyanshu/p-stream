@@ -15,7 +15,6 @@ import { Input } from "@/components/player/internals/ContextMenu/Input";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import {
   captionIsVisible,
-  fixUTF8Encoding,
   parseSubtitles,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -205,15 +204,7 @@ export function CustomCaptionOption() {
           reader.addEventListener("load", (event) => {
             if (!event.target || typeof event.target.result !== "string")
               return;
-
-            // Ensure the data is in UTF-8 and fix any encoding issues
-            const encoder = new TextEncoder();
-            const decoder = new TextDecoder("utf-8");
-            const utf8Bytes = encoder.encode(event.target.result);
-            const utf8Data = decoder.decode(utf8Bytes);
-            const fixedData = fixUTF8Encoding(utf8Data);
-
-            const converted = convert(fixedData, "srt");
+            const converted = convert(event.target.result, "srt");
             setCaption({
               language: "custom",
               srtData: converted,
@@ -309,13 +300,7 @@ export function CaptionsView({
     reader.addEventListener("load", (e) => {
       if (!e.target || typeof e.target.result !== "string") return;
 
-      const encoder = new TextEncoder();
-      const decoder = new TextDecoder("utf-8");
-      const utf8Bytes = encoder.encode(e.target.result);
-      const utf8Data = decoder.decode(utf8Bytes);
-      const fixedData = fixUTF8Encoding(utf8Data);
-
-      const converted = convert(fixedData, "srt");
+      const converted = convert(e.target.result, "srt");
 
       setCaption({
         language: "custom",
@@ -324,7 +309,7 @@ export function CaptionsView({
       });
     });
 
-    reader.readAsText(firstFile, "utf-8");
+    reader.readAsText(firstFile);
   }
 
   // Render subtitle option
