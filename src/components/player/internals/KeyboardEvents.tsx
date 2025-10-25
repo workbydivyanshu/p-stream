@@ -17,6 +17,7 @@ export function KeyboardEvents() {
   const { isSeeking } = usePlayerStore((s) => s.interface);
   const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
   const time = usePlayerStore((s) => s.progress.time);
+  const duration = usePlayerStore((s) => s.progress.duration);
   const { setVolume, toggleMute } = useVolume();
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
 
@@ -58,6 +59,7 @@ export function KeyboardEvents() {
     isSeeking,
     isRolling,
     time,
+    duration,
     router,
     setDelay,
     delay,
@@ -87,6 +89,7 @@ export function KeyboardEvents() {
       isSeeking,
       isRolling,
       time,
+      duration,
       router,
       setDelay,
       delay,
@@ -114,6 +117,7 @@ export function KeyboardEvents() {
     isSeeking,
     isRolling,
     time,
+    duration,
     router,
     setDelay,
     delay,
@@ -259,6 +263,13 @@ export function KeyboardEvents() {
         dataRef.current.display?.setTime(dataRef.current.time + 1);
       if (k === "," && dataRef.current.mediaPlaying?.isPaused)
         dataRef.current.display?.setTime(dataRef.current.time - 1);
+
+      // Skip to percentage with number keys (0-9)
+      if (/^[0-9]$/.test(k) && dataRef.current.duration > 0) {
+        const percentage = parseInt(k, 10) * 10; // 0 = 0%, 1 = 10%, 2 = 20%, ..., 9 = 90%
+        const targetTime = (dataRef.current.duration * percentage) / 100;
+        dataRef.current.display?.setTime(targetTime);
+      }
 
       // Utils
       if (keyL === "f") dataRef.current.display?.toggleFullscreen();
