@@ -1,4 +1,3 @@
-import isEqual from "lodash.isequal";
 import {
   Dispatch,
   SetStateAction,
@@ -19,7 +18,9 @@ export function useDerived<T>(
     setOverwrite(undefined);
   }, [initial]);
   const changed = useMemo(
-    () => !isEqual(overwrite, initial) && overwrite !== undefined,
+    () =>
+      JSON.stringify(overwrite) !== JSON.stringify(initial) &&
+      overwrite !== undefined,
     [overwrite, initial],
   );
   const setter = useCallback<Dispatch<SetStateAction<T>>>(
