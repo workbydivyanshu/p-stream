@@ -183,7 +183,7 @@ export function ScrapingPartInterruptButton() {
 export function Tips() {
   const { t } = useTranslation();
   const [tip] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * 21) + 1;
+    const randomIndex = Math.floor(Math.random() * 11) + 1;
     return t(`player.scraping.tips.${randomIndex}`);
   });
 
