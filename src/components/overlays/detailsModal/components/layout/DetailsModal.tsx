@@ -66,6 +66,7 @@ export function DetailsModal({ id, data, minimal }: DetailsModalProps) {
             id: movieDetails.id,
             imdbId: movieDetails.external_ids?.imdb_id,
             logoUrl,
+            collection: movieDetails.belongs_to_collection,
           });
         } else {
           const showDetails = details as TMDBShowData & {

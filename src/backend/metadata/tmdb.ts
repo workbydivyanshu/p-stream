@@ -411,6 +411,10 @@ export function getMediaPoster(posterPath: string | null): string | undefined {
   if (posterPath) return imgUrl;
 }
 
+export async function getCollectionDetails(collectionId: number): Promise<any> {
+  return get<any>(`/collection/${collectionId}`);
+}
+
 export async function getEpisodes(
   id: string,
   season: number,

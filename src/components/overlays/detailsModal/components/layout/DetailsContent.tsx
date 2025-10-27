@@ -16,6 +16,7 @@ import { scrapeRottenTomatoes } from "@/utils/rottenTomatoesScraper";
 import { DetailsContentProps } from "../../types";
 import { EpisodeCarousel } from "../carousels/EpisodeCarousel";
 import { CastCarousel } from "../carousels/PeopleCarousel";
+import { CollectionOverlay } from "../overlays/CollectionOverlay";
 import { TrailerOverlay } from "../overlays/TrailerOverlay";
 import { DetailsBody } from "../sections/DetailsBody";
 import { DetailsInfo } from "../sections/DetailsInfo";
@@ -28,6 +29,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   );
   const [, setIsLoadingImdb] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [showCollection, setShowCollection] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [, copyToClipboard] = useCopyToClipboard();
   const [hasCopiedShare, setHasCopiedShare] = useState(false);
@@ -207,6 +209,20 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         />
       )}
 
+      {/* Collection Overlay */}
+      {showCollection && data.collection && (
+        <CollectionOverlay
+          collectionId={data.collection.id}
+          collectionName={data.collection.name}
+          onClose={() => setShowCollection(false)}
+          onMovieClick={(movieId) => {
+            setShowCollection(false);
+            // Optionally navigate to the movie details
+            window.location.href = `/media/tmdb-movie-${movieId}`;
+          }}
+        />
+      )}
+
       {/* Backdrop */}
       <div
         className="relative -mt-12 z-20"
@@ -320,6 +336,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
               imdbData={imdbData}
               rtData={rtData}
               provider={providerData}
+              onCollectionClick={() => setShowCollection(true)}
             />
           </div>
         </div>
