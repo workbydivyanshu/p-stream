@@ -11,24 +11,22 @@ import { TMDBMovieData } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { MediaCard } from "@/components/media/MediaCard";
-import { DetailsModal } from "@/components/overlays/detailsModal";
-import { useModal } from "@/components/overlays/Modal";
 import { Heading1 } from "@/components/utils/Text";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import { useDiscoverStore } from "@/stores/discover";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import { MediaCarousel } from "./components/MediaCarousel";
 
 export function DiscoverMore() {
-  const [detailsData, setDetailsData] = useState<any>();
   const [curatedLists, setCuratedLists] = useState<CuratedMovieList[]>([]);
   const [movieDetails, setMovieDetails] = useState<{
     [listSlug: string]: TMDBMovieData[];
   }>({});
-  const detailsModal = useModal("discover-details");
+  const { showModal } = useOverlayStack();
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const navigate = useNavigate();
   const { lastView } = useDiscoverStore();
@@ -65,11 +63,10 @@ export function DiscoverMore() {
   }, []);
 
   const handleShowDetails = async (media: MediaItem) => {
-    setDetailsData({
+    showModal("discover-details", {
       id: Number(media.id),
       type: media.type === "movie" ? "movie" : "show",
     });
-    detailsModal.show();
   };
 
   const handleBack = () => {
@@ -183,7 +180,6 @@ export function DiscoverMore() {
           </div>
         ))}
       </WideContainer>
-      {detailsData && <DetailsModal id="discover-details" data={detailsData} />}
     </SubPageLayout>
   );
 }

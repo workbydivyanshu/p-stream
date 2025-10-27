@@ -16,7 +16,6 @@ import { MediaItem } from "@/utils/mediaTypes";
 import { MediaBookmarkButton } from "./MediaBookmark";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
-import { DetailsModal } from "../overlays/detailsModal";
 
 // Intersection Observer Hook
 function useIntersectionObserver(options: IntersectionObserverInit = {}) {
@@ -300,10 +299,6 @@ function MediaCardContent({
 
 export function MediaCard(props: MediaCardProps) {
   const { media, onShowDetails, forceSkeleton } = props;
-  const [detailsData, setDetailsData] = useState<{
-    id: number;
-    type: "movie" | "show";
-  } | null>(null);
   const { showModal } = useOverlayStack();
   const enableDetailsModal = usePreferencesStore(
     (state) => state.enableDetailsModal,
@@ -335,11 +330,11 @@ export function MediaCard(props: MediaCardProps) {
       return;
     }
 
-    setDetailsData({
+    // Show modal with data through overlayStack
+    showModal("details", {
       id: Number(media.id),
       type: media.type === "movie" ? "movie" : "show",
     });
-    showModal("details");
   }, [media, showModal, onShowDetails]);
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -355,14 +350,11 @@ export function MediaCard(props: MediaCardProps) {
   };
 
   const content = (
-    <>
-      <MediaCardContent
-        {...props}
-        onShowDetails={handleShowDetails}
-        forceSkeleton={forceSkeleton}
-      />
-      {detailsData && <DetailsModal id="details" data={detailsData} />}
-    </>
+    <MediaCardContent
+      {...props}
+      onShowDetails={handleShowDetails}
+      forceSkeleton={forceSkeleton}
+    />
   );
 
   if (!canLink) {

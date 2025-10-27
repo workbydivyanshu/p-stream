@@ -23,8 +23,9 @@ import { DetailsSkeleton } from "./DetailsSkeleton";
 import { OverlayPortal } from "../../../OverlayDisplay";
 import { DetailsModalProps } from "../../types";
 
-export function DetailsModal({ id, data, minimal }: DetailsModalProps) {
-  const { hideModal, isModalVisible, modalStack } = useOverlayStack();
+export function DetailsModal({ id, data: _data, minimal }: DetailsModalProps) {
+  const { hideModal, isModalVisible, modalStack, getModalData } =
+    useOverlayStack();
   const [detailsData, setDetailsData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,9 +34,15 @@ export function DetailsModal({ id, data, minimal }: DetailsModalProps) {
 
   const hide = useCallback(() => hideModal(id), [hideModal, id]);
   const isShown = isModalVisible(id);
+  const modalData = getModalData(id);
+
+  // Only show modal if there's data to display
+  const shouldShow = Boolean(isShown && (modalData?.id || _data?.id));
 
   useEffect(() => {
     const fetchDetails = async () => {
+      // Use data from overlayStack or fallback to props for backward compatibility
+      const data = modalData || _data;
       if (!data?.id || !data?.type) return;
 
       setIsLoading(true);
@@ -113,22 +120,22 @@ export function DetailsModal({ id, data, minimal }: DetailsModalProps) {
       }
     };
 
-    if (isShown && data?.id) {
+    if (shouldShow) {
       fetchDetails();
     }
-  }, [isShown, data]);
+  }, [shouldShow, modalData, _data]);
 
   useEffect(() => {
-    if (isShown && !data?.id && !isLoading) {
+    if (isShown && !modalData?.id && !_data?.id && !isLoading) {
       hide();
     }
-  }, [isShown, data, isLoading, hide]);
+  }, [isShown, modalData, _data, isLoading, hide]);
 
   return (
     <OverlayPortal
       darken
       close={hide}
-      show={isShown}
+      show={shouldShow}
       durationClass="duration-500"
       zIndex={zIndex}
     >

@@ -1,13 +1,12 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
 import { WideContainer } from "@/components/layout/WideContainer";
-import { DetailsModal } from "@/components/overlays/detailsModal";
-import { useModal } from "@/components/overlays/Modal";
 import { useDiscoverStore } from "@/stores/discover";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
 
@@ -18,9 +17,8 @@ import { ScrollToTopButton } from "./components/ScrollToTopButton";
 
 export function DiscoverContent() {
   const { selectedCategory, setSelectedCategory } = useDiscoverStore();
-  const [detailsData, setDetailsData] = useState<any>();
   const navigate = useNavigate();
-  const detailsModal = useModal("discover-details");
+  const { showModal } = useOverlayStack();
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const progressItems = useProgressStore((state) => state.items);
 
@@ -34,11 +32,10 @@ export function DiscoverContent() {
   };
 
   const handleShowDetails = async (media: MediaItem | FeaturedMedia) => {
-    setDetailsData({
+    showModal("discover-details", {
       id: Number(media.id),
       type: media.type === "movie" ? "movie" : "show",
     });
-    detailsModal.show();
   };
 
   const movieProgressItems = Object.entries(progressItems || {}).filter(
@@ -240,7 +237,7 @@ export function DiscoverContent() {
 
       <ScrollToTopButton />
 
-      {detailsData && <DetailsModal id="discover-details" data={detailsData} />}
+      {/* DetailsModal is now managed by overlayStack */}
     </div>
   );
 }

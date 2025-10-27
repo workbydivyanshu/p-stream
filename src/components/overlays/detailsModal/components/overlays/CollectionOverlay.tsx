@@ -9,18 +9,19 @@ import { MediaCard } from "@/components/media/MediaCard";
 import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { MediaItem } from "@/utils/mediaTypes";
 
 // Simple carousel component for collection overlay
 interface SimpleCarouselProps {
   mediaItems: MediaItem[];
-  onShowDetails: (movieId: number) => void;
+  onShowDetails?: (media: MediaItem) => void;
   categorySlug?: string;
 }
 
 function SimpleCarousel({
   mediaItems,
-  onShowDetails,
+  onShowDetails: _onShowDetails,
   categorySlug = "collection",
 }: SimpleCarouselProps) {
   const { isMobile } = useIsMobile();
@@ -56,11 +57,7 @@ function SimpleCarousel({
             className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
             style={{ scrollSnapAlign: "start" }}
           >
-            <MediaCard
-              media={media}
-              onShowDetails={() => onShowDetails(Number(media.id))}
-              linkable
-            />
+            <MediaCard media={media} linkable onShowDetails={_onShowDetails} />
           </div>
         ))}
 
@@ -108,9 +105,10 @@ export function CollectionOverlay({
   collectionId,
   collectionName,
   onClose,
-  onMovieClick,
+  onMovieClick: _onMovieClick,
 }: CollectionOverlayProps) {
   const { t } = useTranslation();
+  const { showModal } = useOverlayStack();
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -161,6 +159,15 @@ export function CollectionOverlay({
         ? new Date(movie.release_date)
         : undefined,
     };
+  };
+
+  const handleShowDetails = (media: MediaItem) => {
+    // Show details modal and close collection overlay
+    showModal("details", {
+      id: Number(media.id),
+      type: media.type === "movie" ? "movie" : "show",
+    });
+    onClose();
   };
 
   return (
@@ -311,7 +318,7 @@ export function CollectionOverlay({
                   {!loading && !error && sortedMovies.length > 0 && (
                     <SimpleCarousel
                       mediaItems={sortedMovies.map(movieToMediaItem)}
-                      onShowDetails={onMovieClick}
+                      onShowDetails={handleShowDetails}
                       categorySlug="collection"
                     />
                   )}

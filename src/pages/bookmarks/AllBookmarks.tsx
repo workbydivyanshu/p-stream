@@ -12,7 +12,6 @@ import { SectionHeading } from "@/components/layout/SectionHeading";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
-import { DetailsModal } from "@/components/overlays/detailsModal";
 import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
 import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
@@ -58,18 +57,16 @@ export function AllBookmarks({ onShowDetails }: AllBookmarksProps) {
   const [tempGroupOrder, setTempGroupOrder] = useState<string[]>([]);
   const backendUrl = useBackendUrl();
   const account = useAuthStore((s) => s.account);
-  const [detailsData, setDetailsData] = useState<any>();
   const { showModal } = useOverlayStack();
 
   const handleShowDetails = async (media: MediaItem) => {
     if (onShowDetails) {
       onShowDetails(media);
     } else {
-      setDetailsData({
+      showModal("details", {
         id: Number(media.id),
         type: media.type === "movie" ? "movie" : "show",
       });
-      showModal("details");
     }
   };
 
@@ -431,8 +428,6 @@ export function AllBookmarks({ onShowDetails }: AllBookmarksProps) {
             setTempGroupOrder(newOrder);
           }}
         />
-
-        {detailsData && <DetailsModal id="details" data={detailsData} />}
       </WideContainer>
     </SubPageLayout>
   );

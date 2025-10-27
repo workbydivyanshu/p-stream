@@ -11,6 +11,7 @@ import {
 
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
+import { DetailsModal } from "@/components/overlays/detailsModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
@@ -39,6 +40,7 @@ import { RegisterPage } from "@/pages/Register";
 import { SupportPage } from "@/pages/Support";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
+import { useClearModalsOnNavigation } from "@/stores/interface/overlayStack";
 import { LanguageProvider } from "@/stores/language";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
@@ -103,6 +105,7 @@ function App() {
   useHistoryListener();
   useOnlineListener();
   useGlobalKeyboardEvents();
+  useClearModalsOnNavigation();
   const maintenance = false; // Shows maintance page
   const [showDowntime, setShowDowntime] = useState(maintenance);
 
@@ -123,6 +126,9 @@ function App() {
       <LanguageProvider />
       <NotificationModal id="notifications" />
       <KeyboardCommandsModal id="keyboard-commands" />
+      <DetailsModal id="details" />
+      <DetailsModal id="discover-details" />
+      <DetailsModal id="player-details" />
       {!showDowntime && (
         <Routes>
           {/* functional routes */}
