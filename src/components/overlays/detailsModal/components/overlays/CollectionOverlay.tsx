@@ -1,22 +1,82 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
-import { ThemeProvider } from "@/stores/theme";
-
-import {
-  getCollectionDetails,
-  getMediaBackdrop,
-  getMediaPoster,
-  mediaItemToId,
-} from "@/backend/metadata/tmdb";
+import { getCollectionDetails, getMediaPoster } from "@/backend/metadata/tmdb";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaCard } from "@/components/media/MediaCard";
-import { DetailsModal } from "@/components/overlays/detailsModal";
+import { Flare } from "@/components/utils/Flare";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
 import { MediaItem } from "@/utils/mediaTypes";
+
+// Simple carousel component for collection overlay
+interface SimpleCarouselProps {
+  mediaItems: MediaItem[];
+  onShowDetails: (movieId: number) => void;
+  categorySlug?: string;
+}
+
+function SimpleCarousel({
+  mediaItems,
+  onShowDetails,
+  categorySlug = "collection",
+}: SimpleCarouselProps) {
+  const { isMobile } = useIsMobile();
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
+    [categorySlug]: null,
+  });
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRefs.current[categorySlug] = carouselRef.current;
+    }
+  }, [categorySlug]);
+
+  if (mediaItems.length === 0) return null;
+
+  return (
+    <div className="relative">
+      {/* Carousel Container */}
+      <div
+        ref={carouselRef}
+        className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8"
+        style={{
+          scrollSnapType: "x mandatory",
+          scrollBehavior: "smooth",
+        }}
+      >
+        <div className="md:w-12" />
+
+        {mediaItems.map((media) => (
+          <div
+            key={media.id}
+            className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+            style={{ scrollSnapAlign: "start" }}
+          >
+            <MediaCard
+              media={media}
+              onShowDetails={() => onShowDetails(Number(media.id))}
+              linkable
+            />
+          </div>
+        ))}
+
+        <div className="md:w-12" />
+      </div>
+
+      {/* Navigation Buttons */}
+      {!isMobile && (
+        <CarouselNavButtons
+          categorySlug={categorySlug}
+          carouselRefs={carouselRefs}
+        />
+      )}
+    </div>
+  );
+}
 
 interface CollectionMovie {
   id: number;
@@ -51,14 +111,10 @@ export function CollectionOverlay({
   onMovieClick,
 }: CollectionOverlayProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedMovie, setSelectedMovie] = useState<MediaItem | null>(null);
-  const [isClosing, setIsClosing] = useState(false);
   const [sortOrder, setSortOrder] = useState<"release" | "rating">("release");
-  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -107,99 +163,52 @@ export function CollectionOverlay({
     };
   };
 
-  const handleClose = useCallback(() => {
-    setIsClosing(true);
-    setTimeout(() => {
-      onClose();
-    }, 200);
-  }, [onClose]);
-
-  const handleMovieClick = useCallback(
-    (media: MediaItem) => {
-      if (onMovieClick) {
-        onMovieClick(Number(media.id));
-      } else {
-        setSelectedMovie(media);
-        handleClose();
-
-        setTimeout(() => {
-          const mediaId = mediaItemToId(media);
-          navigate(`/media/${encodeURIComponent(mediaId)}`);
-        }, 250);
-      }
-    },
-    [handleClose, navigate, onMovieClick],
-  );
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleClose();
-      }
-    };
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [handleClose]);
-
-  return createPortal(
-    <ThemeProvider>
-      <div
-        ref={overlayRef}
+  return (
+    <div
+      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-opacity duration-300"
+      onClick={onClose}
+    >
+      <Flare.Base
         className={classNames(
-          "fixed inset-0 flex items-center justify-center p-4 sm:p-6 lg:p-8",
-          "transition-all duration-300",
-          isClosing ? "opacity-0" : "opacity-100",
+          "group -m-[0.705em] rounded-3xl bg-background-main transition-colors duration-300 focus:relative focus:z-10",
+          "w-full mx-4 p-6 bg-mediaCard-hoverBackground bg-opacity-60 backdrop-filter backdrop-blur-lg shadow-lg",
+          "max-w-7xl max-h-[90vh]",
         )}
-        style={{ zIndex: 9999 }}
       >
-        {/* Blur detail modal while collection overlay is open */}
-        <div
-          className={classNames(
-            "absolute inset-0 bg-black/70 backdrop-blur-xl",
-            "transition-opacity duration-300",
-            isClosing ? "opacity-0" : "opacity-100",
-          )}
-          onClick={handleClose}
-          aria-label="Close overlay"
-        />
-
-        <div
-          className={classNames(
-            "relative w-full max-w-7xl max-h-[90vh] z-10 pointer-events-auto",
-            "transition-all duration-300 ease-out",
-            isClosing
-              ? "scale-95 opacity-0"
-              : "scale-100 opacity-100 animate-[modalShow_0.3s_ease-out]",
-          )}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="relative w-full h-full">
-            <div className="rounded-2xl overflow-hidden bg-modal-background backdrop-blur-md border border-type-divider/10 shadow-2xl flex flex-col max-h-[90vh]">
-              <div className="relative flex-shrink-0 px-6 py-5 sm:px-8 sm:py-6 border-b border-type-divider/20 bg-gradient-to-b from-black/40 to-transparent">
+        <div className="transition-transform duration-300 overflow-hidden rounded-3xl">
+          <Flare.Light
+            flareSize={300}
+            cssColorVar="--colors-mediaCard-hoverAccent"
+            backgroundClass="bg-mediaCard-hoverBackground duration-100"
+            className="rounded-3xl bg-background-main group-hover:opacity-100"
+          />
+          <Flare.Child className="pointer-events-auto relative transition-transform duration-300">
+            <div
+              className="relative w-full h-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex-shrink-0 px-0 py-4 sm:px-8">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-type-emphasis mb-2 drop-shadow-lg">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 drop-shadow-lg">
                       {collectionName}
                     </h2>
                     <div className="flex items-center gap-4 flex-wrap">
                       {collection && (
-                        <p className="text-sm text-type-secondary">
-                          <span className="text-type-emphasis font-semibold">
+                        <p className="text-sm text-white/80">
+                          <span className="text-white font-semibold">
                             {collection.parts.length}
                           </span>{" "}
-                          {t(
-                            `media.types.movie${
-                              collection.parts.length !== 1 ? "s" : ""
-                            }`,
-                          )}
+                          {collection.parts.length > 1
+                            ? t("details.collection.movies")
+                            : t("details.collection.movie")}
                         </p>
                       )}
-
-                      {/* Sort controls */}
                       {!loading && !error && sortedMovies.length > 1 && (
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-type-dimmed">
-                            {t("media.sortBy")}:
+                          <span className="text-xs text-white/60">
+                            {t("details.collection.sortBy")}:
                           </span>
                           <button
                             type="button"
@@ -207,11 +216,11 @@ export function CollectionOverlay({
                             className={classNames(
                               "px-3 py-1 rounded-md text-xs font-medium transition-colors",
                               sortOrder === "release"
-                                ? "bg-pill-activeBackground text-type-emphasis"
-                                : "bg-pill-background hover:bg-pill-backgroundHover text-type-secondary",
+                                ? "bg-white/20 text-white"
+                                : "bg-white/10 hover:bg-white/20 text-white/70",
                             )}
                           >
-                            {t("media.releaseDate")}
+                            {t("details.collection.releaseDate")}
                           </button>
                           <button
                             type="button"
@@ -219,163 +228,99 @@ export function CollectionOverlay({
                             className={classNames(
                               "px-3 py-1 rounded-md text-xs font-medium transition-colors",
                               sortOrder === "rating"
-                                ? "bg-pill-activeBackground text-type-emphasis"
-                                : "bg-pill-background hover:bg-pill-backgroundHover text-type-secondary",
+                                ? "bg-white/20 text-white"
+                                : "bg-white/10 hover:bg-white/20 text-white/70",
                             )}
                           >
-                            {t("media.rating")}
+                            {t("details.collection.rating")}
                           </button>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <IconPatch
-                    icon={Icons.X}
-                    clickable
-                    onClick={handleClose}
-                    className="text-type-secondary hover:text-type-emphasis transition-colors"
-                  />
+                  <IconPatch icon={Icons.X} onClick={onClose} />
                 </div>
 
                 {/* Collection Overview */}
                 {collection?.overview && (
-                  <p className="text-sm text-type-secondary mt-4 line-clamp-3 max-w-4xl leading-relaxed">
+                  <p className="text-sm text-white/80 mt-4 line-clamp-3 max-w-4xl leading-relaxed">
                     {collection.overview}
                   </p>
                 )}
               </div>
 
-              <div
-                className={classNames(
-                  "flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-8",
-                  "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-type-divider/30",
-                  "[&:hover]:scrollbar-thumb-type-divider/50",
-                )}
-              >
-                {loading && (
-                  <div className="flex flex-col items-center justify-center py-20">
-                    <div className="relative">
-                      <div className="w-16 h-16 border-4 border-themePreview-primary/20 rounded-full" />
-                      <div className="absolute inset-0 w-16 h-16 border-4 border-themePreview-primary border-t-transparent rounded-full animate-spin" />
+              {/* Content */}
+              <div className="relative overflow-hidden md:pb-4">
+                <div className="overflow-y-auto max-h-[65vh] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20 hover:scrollbar-thumb-white/40">
+                  {loading && (
+                    <div className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8">
+                      <div className="md:w-12" />
+                      {Array(8)
+                        .fill(null)
+                        .map((_, index) => (
+                          <div
+                            key={`skeleton-loading-${Math.random().toString(36).substring(2)}`}
+                            className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                          >
+                            <MediaCard
+                              media={{
+                                id: `skeleton-${index}`,
+                                title: "",
+                                poster: "",
+                                type: "movie",
+                              }}
+                              forceSkeleton
+                            />
+                          </div>
+                        ))}
+                      <div className="md:w-12" />
                     </div>
-                    <p className="mt-6 text-type-secondary animate-pulse">
-                      {t("media.loading")}
-                    </p>
-                  </div>
-                )}
+                  )}
 
-                {/* Error State */}
-                {error && (
-                  <div className="flex flex-col items-center justify-center py-20">
-                    <div className="p-4 rounded-full bg-semantic-red-c100/10 mb-4">
-                      <Icon
-                        icon={Icons.CIRCLE_EXCLAMATION}
-                        className="text-semantic-red-c100 text-4xl"
-                      />
-                    </div>
-                    <p className="text-type-danger text-lg font-semibold mb-2">
-                      {t("media.errors.errorLoading")}
-                    </p>
-                    <p className="text-type-secondary text-sm">{error}</p>
-                  </div>
-                )}
-
-                {!loading && !error && sortedMovies.length === 0 && (
-                  <div className="flex flex-col items-center justify-center py-20">
-                    <div className="p-4 rounded-full bg-type-divider/10 mb-4">
-                      <Icon
-                        icon={Icons.FILM}
-                        className="text-type-dimmed text-4xl"
-                      />
-                    </div>
-                    <p className="text-type-secondary">
-                      {t("media.noMoviesInCollection")}
-                    </p>
-                  </div>
-                )}
-
-                {!loading && !error && sortedMovies.length > 0 && (
-                  <div className="grid grid-cols-2 gap-7 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 3xl:grid-cols-8 4xl:grid-cols-10 collection-grid">
-                    {sortedMovies.map((movie) => {
-                      const mediaItem = movieToMediaItem(movie);
-
-                      return (
-                        <MediaCard
-                          key={movie.id}
-                          media={mediaItem}
-                          onShowDetails={handleMovieClick}
-                          linkable
+                  {/* Error State */}
+                  {error && (
+                    <div className="flex flex-col items-center justify-center py-20">
+                      <div className="p-4 rounded-full bg-red-500/10 mb-4">
+                        <Icon
+                          icon={Icons.CIRCLE_EXCLAMATION}
+                          className="text-red-400 text-4xl"
                         />
-                      );
-                    })}
-                  </div>
-                )}
+                      </div>
+                      <p className="text-red-400 text-lg font-semibold mb-2">
+                        {t("media.errors.errorLoading")}
+                      </p>
+                      <p className="text-white/70 text-sm">{error}</p>
+                    </div>
+                  )}
+
+                  {!loading && !error && sortedMovies.length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-20">
+                      <div className="p-4 rounded-full bg-white/10 mb-4">
+                        <Icon
+                          icon={Icons.FILM}
+                          className="text-white/60 text-4xl"
+                        />
+                      </div>
+                      <p className="text-white/70">
+                        {t("media.noMoviesInCollection")}
+                      </p>
+                    </div>
+                  )}
+
+                  {!loading && !error && sortedMovies.length > 0 && (
+                    <SimpleCarousel
+                      mediaItems={sortedMovies.map(movieToMediaItem)}
+                      onShowDetails={onMovieClick}
+                      categorySlug="collection"
+                    />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </Flare.Child>
         </div>
-      </div>
-
-      {selectedMovie && (
-        <DetailsModal
-          id="collection-details"
-          data={{
-            id: Number(selectedMovie.id),
-            type: "movie",
-          }}
-        />
-      )}
-
-      <style>{`
-
-  .collection-grid .group.rounded-xl.bg-background-main {
-    position: relative;
-    overflow: hidden;
-    background-color: var(--colors-modal-background) !important;
-    border-radius: 12px;
-    border: none !important;
-  }
-
-  
-  .collection-grid .group.rounded-xl.bg-background-main > .flare-border {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    border: 2px solid var(--colors-flare, #A359EC);
-    box-shadow: 0 0 18px 3px var(--colors-flare, #A359EC);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  
-  .collection-grid .group.rounded-xl.bg-background-main:hover > .flare-border {
-    opacity: 1;
-  }
-
-  
-  .collection-grid .group > div.rounded-xl.bg-background-main {
-    background: transparent !important;
-  }
-
-  
-  .collection-grid .bookmark-button {
-    opacity: 0 !important;
-    transition: opacity 0.2s ease;
-  }
-
-  .collection-grid .group:hover .bookmark-button {
-    opacity: 1 !important;
-  }
-
-  @media (max-width: 1024px) {
-    .collection-grid .group:hover .bookmark-button {
-      opacity: 0 !important;
-    }
-  }
-      `}</style>
-    </ThemeProvider>,
-    document.body,
+      </Flare.Base>
+    </div>
   );
 }

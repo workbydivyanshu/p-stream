@@ -403,7 +403,14 @@
     "episode": "Episode",
     "airs": "Airs",
     "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer"
+    "trailer": "Trailer",
+    "collection": {
+      "movies": "Movies",
+      "movie": "Movie",
+      "sortBy": "Sort by",
+      "releaseDate": "Release Date",
+      "rating": "Rating"
+    }
   },
   "migration": {
     "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
