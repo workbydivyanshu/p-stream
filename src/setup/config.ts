@@ -2,7 +2,7 @@ import {
   APP_VERSION,
   BACKEND_URL,
   DISCORD_LINK,
-  // GITHUB_LINK,
+  GITHUB_LINK,
   TWITTER_LINK,
 } from "./constants";
 
@@ -28,7 +28,7 @@ interface Config {
   ALLOW_FEBBOX_KEY: boolean;
   ALLOW_REAL_DEBRID_KEY: boolean;
   SHOW_AD: boolean;
-  AD_CONTENT_URL: string;
+  AD_CONTENT_URL: string; // like <script src="https://umami.com/script.js"></script>
   TRACK_SCRIPT: string;
   BANNER_MESSAGE: string;
   BANNER_ID: string;
@@ -115,9 +115,9 @@ function getKey(key: keyof Config, defaultString?: string): string | null {
 export function conf(): RuntimeConfig {
   return {
     APP_VERSION,
-    GITHUB_LINK: getKey("GITHUB_LINK", ""),
+    GITHUB_LINK: getKey("GITHUB_LINK", GITHUB_LINK),
     DISCORD_LINK,
-    TWITTER_LINK,
+    TWITTER_LINK: getKey("TWITTER_LINK", TWITTER_LINK),
     DMCA_EMAIL: getKey("DMCA_EMAIL"),
     ONBOARDING_CHROME_EXTENSION_INSTALL_LINK: getKey(
       "ONBOARDING_CHROME_EXTENSION_INSTALL_LINK",
