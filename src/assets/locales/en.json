@@ -646,7 +646,7 @@
     },
     "menus": {
       "downloads": {
-        "button": "Atempt download",
+        "button": "Attempt download",
         "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
         "disclaimer": "Downloads are taken directly from the provider. P-Stream does not have control over how the downloads are provided.",
         "copyHlsPlaylist": "Copy HLS playlist link",
