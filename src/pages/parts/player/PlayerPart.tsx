@@ -180,9 +180,11 @@ export function PlayerPart(props: PlayerPartProps) {
             ) : null}
             {status === playerStatus.PLAYBACK_ERROR ||
             status === playerStatus.PLAYING ? (
-              <Player.Captions />
+              <>
+                <Player.Captions />
+                <Player.Settings />
+              </>
             ) : null}
-            <Player.Settings />
             {/* Fullscreen on when not shifting */}
             {!isShifting && <Player.Fullscreen />}
 
@@ -203,11 +205,13 @@ export function PlayerPart(props: PlayerPartProps) {
             )}
             <Player.Episodes inControl={inControl} />
             {status === playerStatus.PLAYING ? (
-              <div className="hidden ssm:block">
-                <Player.Captions />
-              </div>
+              <>
+                <div className="hidden ssm:block">
+                  <Player.Captions />
+                </div>
+                <Player.Settings />
+              </>
             ) : null}
-            <Player.Settings />
           </div>
           <div>
             {status === playerStatus.PLAYING && (
