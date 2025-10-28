@@ -193,7 +193,6 @@ export function PlaybackSettingsView({ id }: { id: string }) {
 
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
-  const settingsLoaded = usePreferencesStore((s) => s._settingsLoaded);
   const allowAutoplay = useMemo(() => isAutoplayAllowed(), []);
   const canShowAutoplay =
     !isInWatchParty && allowAutoplay && !enableLowPerformanceMode;
@@ -201,7 +200,7 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   // Save settings to backend
   const saveThumbnailSetting = useCallback(
     async (value: boolean) => {
-      if (!account || !backendUrl || !settingsLoaded) return;
+      if (!account || !backendUrl) return;
 
       try {
         await updateSettings(backendUrl, account, {
@@ -211,12 +210,12 @@ export function PlaybackSettingsView({ id }: { id: string }) {
         console.error("Failed to save thumbnail setting:", error);
       }
     },
-    [account, backendUrl, settingsLoaded],
+    [account, backendUrl],
   );
 
   const saveAutoplaySetting = useCallback(
     async (value: boolean) => {
-      if (!account || !backendUrl || !settingsLoaded) return;
+      if (!account || !backendUrl) return;
 
       try {
         await updateSettings(backendUrl, account, {
@@ -226,7 +225,7 @@ export function PlaybackSettingsView({ id }: { id: string }) {
         console.error("Failed to save autoplay setting:", error);
       }
     },
-    [account, backendUrl, settingsLoaded],
+    [account, backendUrl],
   );
 
   const setPlaybackRate = useCallback(

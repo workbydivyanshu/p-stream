@@ -27,7 +27,6 @@ export interface PreferencesStore {
   homeSectionOrder: string[];
   manualSourceSelection: boolean;
   enableDoubleClickToSeek: boolean;
-  _settingsLoaded: boolean;
 
   setEnableThumbnails(v: boolean): void;
   setEnableAutoplay(v: boolean): void;
@@ -53,7 +52,6 @@ export interface PreferencesStore {
   setHomeSectionOrder(v: string[]): void;
   setManualSourceSelection(v: boolean): void;
   setEnableDoubleClickToSeek(v: boolean): void;
-  setSettingsLoaded(loaded: boolean): void;
 }
 
 export const usePreferencesStore = create(
@@ -77,7 +75,6 @@ export const usePreferencesStore = create(
       proxyTmdb: false,
       febboxKey: null,
       realDebridKey: null,
-      _settingsLoaded: false,
       enableLowPerformanceMode: false,
       enableNativeSubtitles: false,
       enableHoldToBoost: true,
@@ -207,11 +204,6 @@ export const usePreferencesStore = create(
       setEnableDoubleClickToSeek(v) {
         set((s) => {
           s.enableDoubleClickToSeek = v;
-        });
-      },
-      setSettingsLoaded(loaded) {
-        set((s) => {
-          s._settingsLoaded = loaded;
         });
       },
     })),

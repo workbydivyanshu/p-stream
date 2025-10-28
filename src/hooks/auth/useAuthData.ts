@@ -33,7 +33,6 @@ export function useAuthData() {
   );
   const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
   const setRealDebridKey = usePreferencesStore((s) => s.setRealDebridKey);
-  const setSettingsLoaded = usePreferencesStore((s) => s.setSettingsLoaded);
 
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceItems = useProgressStore((s) => s.replaceItems);
@@ -110,14 +109,12 @@ export function useAuthData() {
     clearProgress();
     clearGroupOrder();
     setFebboxKey(null);
-    setSettingsLoaded(false);
   }, [
     removeAccount,
     clearBookmarks,
     clearProgress,
     clearGroupOrder,
     setFebboxKey,
-    setSettingsLoaded,
   ]);
 
   const syncData = useCallback(
@@ -218,10 +215,6 @@ export function useAuthData() {
 
       if (settings.febboxKey !== undefined) {
         setFebboxKey(settings.febboxKey);
-      } else {
-        // Only set to null if backend explicitly returns null/undefined
-        // Don't overwrite with defaults if backend doesn't have the setting
-        setFebboxKey(null);
       }
 
       if (settings.realDebridKey !== undefined) {
@@ -253,9 +246,6 @@ export function useAuthData() {
       if (settings.enableDoubleClickToSeek !== undefined) {
         setEnableDoubleClickToSeek(settings.enableDoubleClickToSeek);
       }
-
-      // Mark settings as loaded to prevent saving defaults
-      setSettingsLoaded(true);
     },
     [
       replaceBookmarks,
@@ -288,7 +278,6 @@ export function useAuthData() {
       setHomeSectionOrder,
       setManualSourceSelection,
       setEnableDoubleClickToSeek,
-      setSettingsLoaded,
     ],
   );
 

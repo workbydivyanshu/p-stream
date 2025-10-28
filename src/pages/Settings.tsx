@@ -9,7 +9,7 @@ import {
   encryptData,
 } from "@/backend/accounts/crypto";
 import { getSessions, updateSession } from "@/backend/accounts/sessions";
-import { updateSettings } from "@/backend/accounts/settings";
+import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
 import { getAllProviders } from "@/backend/providers/providers";
 import { Button } from "@/components/buttons/Button";
@@ -364,7 +364,6 @@ export function SettingsPage() {
   const account = useAuthStore((s) => s.account);
   const updateProfile = useAuthStore((s) => s.setAccountProfile);
   const updateDeviceName = useAuthStore((s) => s.updateDeviceName);
-  const settingsLoaded = usePreferencesStore((s) => s._settingsLoaded);
   const decryptedName = useMemo(() => {
     if (!account) return "";
     return decryptData(account.deviceName, base64ToBuffer(account.seed));
@@ -374,6 +373,21 @@ export function SettingsPage() {
 
   const { logout } = useAuth();
   const user = useAuthStore();
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (account && backendUrl) {
+        const settings = await getSettings(backendUrl, account);
+        if (settings.febboxKey) {
+          setFebboxKey(settings.febboxKey);
+        }
+        if (settings.realDebridKey) {
+          setRealDebridKey(settings.realDebridKey);
+        }
+      }
+    };
+    loadSettings();
+  }, [account, backendUrl, setFebboxKey, setRealDebridKey]);
 
   const state = useSettingsState(
     activeTheme,
@@ -445,7 +459,7 @@ export function SettingsPage() {
   );
 
   const saveChanges = useCallback(async () => {
-    if (account && backendUrl && settingsLoaded) {
+    if (account && backendUrl) {
       if (
         state.appLanguage.changed ||
         state.theme.changed ||
@@ -556,7 +570,6 @@ export function SettingsPage() {
   }, [
     account,
     backendUrl,
-    settingsLoaded,
     setEnableThumbnails,
     setFebboxKey,
     setRealDebridKey,
@@ -692,7 +705,7 @@ export function SettingsPage() {
       </SettingsLayout>
       <Transition
         animation="fade"
-        show={state.changed && settingsLoaded}
+        show={state.changed}
         className="bg-settings-saveBar-background border-t border-settings-card-border/50 py-4 transition-opacity w-full fixed bottom-0 flex justify-between flex-col md:flex-row px-8 items-start md:items-center gap-3 z-[999]"
       >
         <p className="text-type-danger">{t("settings.unsaved")}</p>

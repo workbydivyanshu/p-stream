@@ -12,13 +12,11 @@ export function SettingsSyncer() {
     (s) => s.importSubtitleLanguage,
   );
   const url = useBackendUrl();
-  const settingsLoading = useAuthStore((s) => s.settingsLoading);
 
   useEffect(() => {
     const interval = setInterval(() => {
       (async () => {
         if (!url) return;
-        if (settingsLoading) return; // Don't sync while settings are loading from backend
         const state = useSubtitleStore.getState();
         const user = useAuthStore.getState();
         if (state.lastSync.lastSelectedLanguage === state.lastSelectedLanguage)
@@ -35,7 +33,7 @@ export function SettingsSyncer() {
     return () => {
       clearInterval(interval);
     };
-  }, [importSubtitleLanguage, url, settingsLoading]);
+  }, [importSubtitleLanguage, url]);
 
   return null;
 }

@@ -9,7 +9,6 @@ const AUTH_CHECK_INTERVAL = 12 * 60 * 60 * 1000;
 export function useAuthRestore() {
   const { account } = useAuthStore();
   const { restore } = useAuth();
-  const setSettingsLoading = useAuthStore((s) => s.setSettingsLoading);
   const hasRestored = useRef(false);
 
   useInterval(() => {
@@ -18,13 +17,9 @@ export function useAuthRestore() {
 
   const result = useAsync(async () => {
     if (hasRestored.current || !account) return;
-    setSettingsLoading(true);
-    try {
-      await restore(account);
-    } finally {
-      setSettingsLoading(false);
+    await restore(account).finally(() => {
       hasRestored.current = true;
-    }
+    });
   }, []); // no deps because we don't want to it ever rerun after the first time
 
   return result;
