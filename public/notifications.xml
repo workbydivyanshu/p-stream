@@ -9,6 +9,32 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-046</guid>
+      <title>P-Stream v5.2.1 released!</title>
+      <description>Lots of great changes and improvements this time!
+
+- Added collection feature to the details modal (thanks @doug for the original idea)
+- Always show the time when hovering over progress bar instead of only with thumbnails
+- Added keyboard shortcut help menu (hold ` to show keyboard shortcuts)
+- Added the ability to press 0-9 to skip to 0-90% progress
+- Added new “Border” captions style with adjustable thickness
+- Low Peformance mode now disables Flare effects
+- Updated webkit interface to fix some Airplay issues (not fully working yet, help needed!)
+- Fixed subtitles freezing when scrubbing
+- Fixed embed order setting not saving correctly
+- Fixed playback settings menu on the player not saving or appying immedietly
+- Fixed Airplay button not appearing on some screen sizes
+- Fixed progress saving and showing values larger than 100%
+- Various other bug fixes and improvements
+
+P-Stream has partnered with Neon Next Generation Pty Ltd. for this release! They offer high quality kVM web and server hosting with a free virtual private container business plan! Check them out using the link below!
+      </description>
+      <link>https://neonnextgeneration.com/</link>
+      <pubDate>Tue, 28 Oct 2025 15:00:00 MST</pubDate>
+      <category>update</category>
+    </item>
+
+    <item>
       <guid>notification-045</guid>
       <title>P-Stream v5.2.0 released!</title>
       <description>Lots of great bug fixes this time around and a couple quality of life improvements!
