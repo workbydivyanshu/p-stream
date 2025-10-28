@@ -18,7 +18,6 @@ import {
   StatusCircle,
   StatusCircleProps,
 } from "@/components/player/internals/StatusCircle";
-import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
 import { Ol } from "@/components/utils/Ol";
@@ -44,215 +43,8 @@ import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
-import { RegionSelectorPart } from "../parts/settings/RegionSelectorPart";
-import {
-  Status,
-  testFebboxKey,
-  testRealDebridKey,
-} from "../parts/settings/SetupPart";
-
-async function getFebboxKeyStatus(febboxKey: string | null) {
-  if (febboxKey) {
-    const status: Status = await testFebboxKey(febboxKey);
-    return status;
-  }
-  return "unset";
-}
-
-export function FEDAPISetup() {
-  const { t } = useTranslation();
-  const febboxKey = usePreferencesStore((s) => s.febboxKey);
-  const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
-  const exampleModal = useModal("febbox-example");
-
-  // Initialize isExpanded based on whether febboxKey has a value
-  const [isExpanded, setIsExpanded] = useState(
-    febboxKey !== null && febboxKey !== "",
-  );
-
-  // Add a separate effect to set the initial state
-  useEffect(() => {
-    // If we have a valid key, make sure the section is expanded
-    if (febboxKey && febboxKey.length > 0) {
-      setIsExpanded(true);
-    }
-  }, [febboxKey]);
-
-  const [status, setStatus] = useState<Status>("unset");
-  const statusMap: Record<Status, StatusCircleProps["type"]> = {
-    error: "error",
-    success: "success",
-    unset: "noresult",
-    api_down: "error",
-    invalid_token: "error",
-  };
-
-  useEffect(() => {
-    const checkTokenStatus = async () => {
-      const result = await getFebboxKeyStatus(febboxKey);
-      setStatus(result);
-    };
-    checkTokenStatus();
-  }, [febboxKey]);
-
-  // Toggle handler that preserves the key
-  const toggleExpanded = () => {
-    if (isExpanded) {
-      // Store the key temporarily instead of setting to null
-      setFebboxKey("");
-      setIsExpanded(false);
-    } else {
-      setIsExpanded(true);
-    }
-  };
-
-  const [showVideo, setShowVideo] = useState(false);
-
-  if (conf().ALLOW_FEBBOX_KEY) {
-    return (
-      <>
-        <div className="mt-6">
-          <SettingsCard>
-            <div className="flex justify-between items-center gap-4">
-              <div className="my-3">
-                <p className="text-white font-bold mb-3">
-                  {t("fedapi.onboarding.title")}
-                </p>
-                <p className="max-w-[30rem] font-medium">
-                  <Trans i18nKey="fedapi.onboarding.description" />
-                </p>
-              </div>
-              <div>
-                <Toggle onClick={toggleExpanded} enabled={isExpanded} />
-              </div>
-            </div>
-            {isExpanded ? (
-              <>
-                <Divider marginClass="my-6 px-8 box-content -mx-8" />
-
-                <div className="my-3">
-                  <p className="max-w-[30rem] font-medium">
-                    {t("fedapi.setup.title")}
-                    <br />
-                    <div
-                      onClick={() => setShowVideo(!showVideo)}
-                      className="flex items-center justify-between p-1 px-2 my-2 w-fit border border-type-secondary rounded-lg cursor-pointer text-type-secondary hover:text-white transition-colors duration-200"
-                    >
-                      <span className="text-sm">
-                        {showVideo
-                          ? t("fedapi.setup.hideVideo")
-                          : t("fedapi.setup.showVideo")}
-                      </span>
-                      {showVideo ? (
-                        <Icon icon={Icons.CHEVRON_UP} className="pl-1" />
-                      ) : (
-                        <Icon icon={Icons.CHEVRON_DOWN} className="pl-1" />
-                      )}
-                    </div>
-                    {showVideo && (
-                      <>
-                        <div className="relative pt-[56.25%] mt-2">
-                          <iframe
-                            src="https://player.vimeo.com/video/1059834885?h=c3ab398d42&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
-                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                            className="absolute top-0 left-0 w-full h-full border border-type-secondary rounded-lg bg-black"
-                            title="P-Stream FED API Setup Tutorial"
-                          />
-                        </div>
-                        <br />
-                      </>
-                    )}
-                    <Trans i18nKey="fedapi.setup.step.1">
-                      <MwLink url="https://febbox.com" />
-                    </Trans>
-                    <br />
-                    <Trans i18nKey="fedapi.setup.step.2" />
-                    <br />
-                    <Trans i18nKey="fedapi.setup.step.3" />
-                    <br />
-                    <Trans i18nKey="fedapi.setup.step.4" />{" "}
-                    <button
-                      type="button"
-                      onClick={exampleModal.show}
-                      className="text-type-link hover:text-type-linkHover"
-                    >
-                      <Trans i18nKey="fedapi.setup.tokenExample.button" />
-                    </button>
-                    <br />
-                    <Trans i18nKey="fedapi.setup.step.5" />
-                  </p>
-                  <p className="text-type-danger mt-2">
-                    <Trans i18nKey="fedapi.setup.step.warning" />
-                  </p>
-                </div>
-
-                <Divider marginClass="my-6 px-8 box-content -mx-8" />
-                <p className="text-white font-bold mb-3">
-                  {t("fedapi.setup.tokenLabel")}
-                </p>
-                <div className="flex items-center w-full gap-4">
-                  <StatusCircle type={statusMap[status]} className="mx-2" />
-                  <AuthInputBox
-                    onChange={(newToken) => {
-                      setFebboxKey(newToken);
-                    }}
-                    value={febboxKey ?? ""}
-                    placeholder="eyJ0eXAi..."
-                    passwordToggleable
-                    className="flex-grow"
-                  />
-                  <RegionSelectorPart />
-                </div>
-                {status === "error" && (
-                  <p className="text-type-danger mt-4">
-                    {t("fedapi.status.failure")}
-                  </p>
-                )}
-                {status === "api_down" && (
-                  <p className="text-type-danger mt-4">
-                    {t(
-                      "fedapi.status.api_down",
-                      "Febbox API is currently unavailable. Please try again later.",
-                    )}
-                  </p>
-                )}
-                {status === "invalid_token" && (
-                  <p className="text-type-danger mt-4">
-                    {t(
-                      "fedapi.status.invalid_token",
-                      "Invalid token. Please check your Febbox UI token.",
-                    )}
-                  </p>
-                )}
-              </>
-            ) : null}
-          </SettingsCard>
-        </div>
-        <Modal id={exampleModal.id}>
-          <ModalCard>
-            <Heading2 className="!mt-0 !mb-4 !text-2xl">
-              {t("fedapi.setup.tokenExample.title")}
-            </Heading2>
-            <Paragraph className="!mt-1 !mb-6">
-              {t("fedapi.setup.tokenExample.description")}
-            </Paragraph>
-            <div className="bg-authentication-inputBg p-4 rounded-lg mb-6 font-mono text-sm break-all">
-              eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NDc1MTI2MTksIm5iZiI6MTc0NzUxMjYxOSwiZXhwIjoxNzc4NjE2NjM5LCJkYXRhIjp7InVpZCI6NTI1NTc3LCsudujeI6IjE4NTQ4NmEwMzBjMGNlMWJjY2IzYWJjMjI2OTYwYzQ4dhdhs.qkuTF2aVPu54S0RFJS_ca7rlHuGz_Fe6kWkBydYQoCg
-            </div>
-            <Paragraph className="!mt-1 !mb-6 text-type-danger">
-              {t("fedapi.setup.tokenExample.warning")}
-            </Paragraph>
-            <div className="flex justify-end">
-              <Button theme="secondary" onClick={exampleModal.hide}>
-                {t("fedapi.setup.tokenExample.close")}
-              </Button>
-            </div>
-          </ModalCard>
-        </Modal>
-      </>
-    );
-  }
-}
+import { FebboxSetup } from "../parts/settings/ConnectionsPart";
+import { Status, testRealDebridKey } from "../parts/settings/SetupPart";
 
 async function getRealDebridKeyStatus(realDebridKey: string | null) {
   if (realDebridKey) {
@@ -628,7 +420,13 @@ export function OnboardingPage() {
         </div>
 
         {/* <RealDebridSetup /> */}
-        <FEDAPISetup />
+        <div className="mt-6">
+          <FebboxSetup
+            febboxKey={usePreferencesStore((s) => s.febboxKey)}
+            setFebboxKey={usePreferencesStore((s) => s.setFebboxKey)}
+            mode="onboarding"
+          />
+        </div>
       </BiggerCenterContainer>
     </MinimalPageLayout>
   );

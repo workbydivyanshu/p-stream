@@ -46,7 +46,7 @@ interface BackendEditProps {
 
 interface FebboxKeyProps {
   febboxKey: string | null;
-  setFebboxKey: Dispatch<SetStateAction<string | null>>;
+  setFebboxKey: (value: string | null) => void;
 }
 
 interface RealDebridKeyProps {
@@ -236,19 +236,44 @@ async function getFebboxKeyStatus(febboxKey: string | null) {
   return "unset";
 }
 
-function FebboxKeyEdit({ febboxKey, setFebboxKey }: FebboxKeyProps) {
+interface FebboxSetupProps extends FebboxKeyProps {
+  mode: "onboarding" | "settings";
+}
+
+export function FebboxSetup({
+  febboxKey,
+  setFebboxKey,
+  mode,
+}: FebboxSetupProps) {
   const { t } = useTranslation();
   const [showVideo, setShowVideo] = useState(false);
   const user = useAuthStore();
   const preferences = usePreferencesStore();
-  const exampleModal = useModal("febbox-example-settings");
+  const exampleModal = useModal("febbox-example");
 
-  // Enable febbox token when account is loaded and we have a token
+  // Initialize expansion state for onboarding mode
+  const [isExpanded, setIsExpanded] = useState(
+    mode === "onboarding" && febboxKey !== null && febboxKey !== "",
+  );
+
+  // Expand when key is set in onboarding mode
   useEffect(() => {
-    if (user.account && febboxKey === null && preferences.febboxKey) {
+    if (mode === "onboarding" && febboxKey && febboxKey.length > 0) {
+      setIsExpanded(true);
+    }
+  }, [febboxKey, mode]);
+
+  // Enable febbox token when account is loaded in settings mode
+  useEffect(() => {
+    if (
+      mode === "settings" &&
+      user.account &&
+      febboxKey === null &&
+      preferences.febboxKey
+    ) {
       setFebboxKey(preferences.febboxKey);
     }
-  }, [user.account, febboxKey, preferences.febboxKey, setFebboxKey]);
+  }, [user.account, febboxKey, preferences.febboxKey, setFebboxKey, mode]);
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -267,6 +292,25 @@ function FebboxKeyEdit({ febboxKey, setFebboxKey }: FebboxKeyProps) {
     checkTokenStatus();
   }, [febboxKey]);
 
+  // Toggle handler based on mode
+  const toggleExpanded = () => {
+    if (mode === "onboarding") {
+      // Onboarding mode: expand/collapse, preserve key
+      if (isExpanded) {
+        setFebboxKey("");
+        setIsExpanded(false);
+      } else {
+        setIsExpanded(true);
+      }
+    } else {
+      // Settings mode: enable/disable
+      setFebboxKey(febboxKey === null ? "" : null);
+    }
+  };
+
+  // Determine if content is visible
+  const isVisible = mode === "onboarding" ? isExpanded : febboxKey !== null;
+
   if (conf().ALLOW_FEBBOX_KEY) {
     return (
       <>
@@ -282,12 +326,14 @@ function FebboxKeyEdit({ febboxKey, setFebboxKey }: FebboxKeyProps) {
             </div>
             <div>
               <Toggle
-                onClick={() => setFebboxKey((s) => (s === null ? "" : null))}
-                enabled={febboxKey !== null}
+                onClick={toggleExpanded}
+                enabled={
+                  mode === "onboarding" ? isExpanded : febboxKey !== null
+                }
               />
             </div>
           </div>
-          {febboxKey !== null ? (
+          {isVisible ? (
             <>
               <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
@@ -348,21 +394,27 @@ function FebboxKeyEdit({ febboxKey, setFebboxKey }: FebboxKeyProps) {
               </div>
 
               <Divider marginClass="my-6 px-8 box-content -mx-8" />
-              <p className="text-white font-bold">
-                {t("settings.connections.febbox.tokenLabel", "Token")}
+              <p className="text-white font-bold mb-3">
+                {mode === "settings"
+                  ? t("settings.connections.febbox.tokenLabel", "Token")
+                  : t("fedapi.setup.tokenLabel")}
               </p>
-              <div className="flex items-center w-full gap-4">
-                <StatusCircle type={statusMap[status]} className="mx-2" />
-                <AuthInputBox
-                  onChange={(newToken) => {
-                    setFebboxKey(newToken);
-                  }}
-                  value={febboxKey ?? ""}
-                  placeholder="eyJ0eXAi..."
-                  passwordToggleable
-                  className="flex-grow"
-                />
-                <RegionSelectorPart />
+              <div className="flex md:flex-row flex-col items-center w-full gap-4">
+                <div className="flex items-center w-full">
+                  <StatusCircle type={statusMap[status]} className="mx-2" />
+                  <AuthInputBox
+                    onChange={(newToken) => {
+                      setFebboxKey(newToken);
+                    }}
+                    value={febboxKey ?? ""}
+                    placeholder="eyJ0eXAi..."
+                    passwordToggleable
+                    className="flex-grow"
+                  />
+                </div>
+                <div className="flex items-center">
+                  <RegionSelectorPart />
+                </div>
               </div>
               {status === "error" && (
                 <p className="text-type-danger mt-4">
@@ -546,9 +598,10 @@ export function ConnectionsPart(
           realDebridKey={props.realDebridKey}
           setRealDebridKey={props.setRealDebridKey}
         />
-        <FebboxKeyEdit
+        <FebboxSetup
           febboxKey={props.febboxKey}
           setFebboxKey={props.setFebboxKey}
+          mode="settings"
         />
       </div>
     </div>
