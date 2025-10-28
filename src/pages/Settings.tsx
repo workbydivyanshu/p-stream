@@ -692,7 +692,7 @@ export function SettingsPage() {
       </SettingsLayout>
       <Transition
         animation="fade"
-        show={state.changed && settingsLoaded}
+        show={state.changed}
         className="bg-settings-saveBar-background border-t border-settings-card-border/50 py-4 transition-opacity w-full fixed bottom-0 flex justify-between flex-col md:flex-row px-8 items-start md:items-center gap-3 z-[999]"
       >
         <p className="text-type-danger">{t("settings.unsaved")}</p>
