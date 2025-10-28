@@ -4,6 +4,8 @@ import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
 
+export { getProgressPercentage } from "./utils";
+
 export interface ProgressItem {
   watched: number;
   duration: number;

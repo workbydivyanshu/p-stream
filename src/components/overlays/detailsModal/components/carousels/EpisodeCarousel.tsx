@@ -9,7 +9,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { hasAired } from "@/components/player/utils/aired";
 import { useBookmarkStore } from "@/stores/bookmarks";
-import { useProgressStore } from "@/stores/progress";
+import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 
 import { EpisodeCarouselProps } from "../../types";
 
@@ -170,9 +170,10 @@ export function EpisodeCarousel({
         const episodeProgress =
           progress[mediaId.toString()]?.episodes?.[episodeId];
         const percentage = episodeProgress
-          ? (episodeProgress.progress.watched /
-              episodeProgress.progress.duration) *
-            100
+          ? getProgressPercentage(
+              episodeProgress.progress.watched,
+              episodeProgress.progress.duration,
+            )
           : 0;
 
         // If watched (>90%), reset to 0%, otherwise set to 100%
@@ -282,9 +283,10 @@ export function EpisodeCarousel({
         const episodeProgress =
           progress[mediaId?.toString() ?? ""]?.episodes?.[episode.id];
         const percentage = episodeProgress
-          ? (episodeProgress.progress.watched /
-              episodeProgress.progress.duration) *
-            100
+          ? getProgressPercentage(
+              episodeProgress.progress.watched,
+              episodeProgress.progress.duration,
+            )
           : 0;
         const isAired = hasAired(episode.air_date);
         const isWatched = percentage > 90;
@@ -299,9 +301,10 @@ export function EpisodeCarousel({
         const episodeProgress =
           progress[mediaId?.toString() ?? ""]?.episodes?.[episode.id];
         const percentage = episodeProgress
-          ? (episodeProgress.progress.watched /
-              episodeProgress.progress.duration) *
-            100
+          ? getProgressPercentage(
+              episodeProgress.progress.watched,
+              episodeProgress.progress.duration,
+            )
           : 0;
         const isAired = hasAired(episode.air_date);
         const isWatched = percentage > 90;
@@ -378,9 +381,10 @@ export function EpisodeCarousel({
       const episodeProgress =
         progress[mediaId?.toString() ?? ""]?.episodes?.[episode.id];
       const percentage = episodeProgress
-        ? (episodeProgress.progress.watched /
-            episodeProgress.progress.duration) *
-          100
+        ? getProgressPercentage(
+            episodeProgress.progress.watched,
+            episodeProgress.progress.duration,
+          )
         : 0;
       const isAired = hasAired(episode.air_date);
       const isWatched = percentage > 90;
@@ -565,9 +569,10 @@ export function EpisodeCarousel({
                 const episodeProgress =
                   progress[mediaId?.toString() ?? ""]?.episodes?.[episode.id];
                 const percentage = episodeProgress
-                  ? (episodeProgress.progress.watched /
-                      episodeProgress.progress.duration) *
-                    100
+                  ? getProgressPercentage(
+                      episodeProgress.progress.watched,
+                      episodeProgress.progress.duration,
+                    )
                   : 0;
                 const isAired = hasAired(episode.air_date);
                 const isExpanded = expandedEpisodes[episode.id];

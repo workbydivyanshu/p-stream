@@ -13,6 +13,7 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useAuthStore } from "@/stores/auth";
+import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 import { useDownloadLink } from "./Downloads";
@@ -326,7 +327,7 @@ export function WatchPartyView({ id }: { id: string }) {
                               </span>
                               <span className="text-type-secondary">
                                 {user.player.duration > 0
-                                  ? `${Math.floor((user.player.time / user.player.duration) * 100)}%`
+                                  ? `${Math.floor(getProgressPercentage(user.player.time, user.player.duration))}%`
                                   : `${Math.floor(user.player.time)}s`}
                               </span>
                             </div>

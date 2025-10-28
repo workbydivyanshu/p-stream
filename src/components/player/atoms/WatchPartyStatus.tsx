@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
+import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 export function WatchPartyStatus() {
@@ -110,7 +111,7 @@ export function WatchPartyStatus() {
                 </span>
                 <span className="text-type-secondary">
                   {user.player.duration > 0
-                    ? `${Math.floor((user.player.time / user.player.duration) * 100)}%`
+                    ? `${Math.floor(getProgressPercentage(user.player.time, user.player.duration))}%`
                     : `${Math.floor(user.player.time)}s`}
                 </span>
               </div>

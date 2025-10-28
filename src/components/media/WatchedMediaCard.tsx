@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useProgressStore } from "@/stores/progress";
+import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import {
   ShowProgressResult,
   shouldShowProgress,
@@ -36,7 +36,10 @@ export function WatchedMediaCard(props: WatchedMediaCardProps) {
     [item],
   );
   const percentage = itemToDisplay?.show
-    ? (itemToDisplay.progress.watched / itemToDisplay.progress.duration) * 100
+    ? getProgressPercentage(
+        itemToDisplay.progress.watched,
+        itemToDisplay.progress.duration,
+      )
     : undefined;
 
   return (

@@ -26,7 +26,7 @@ import { SourceSelectPart } from "@/pages/parts/player/SourceSelectPart";
 import { useLastNonPlayerLink } from "@/stores/history";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePreferencesStore } from "@/stores/preferences";
-import { useProgressStore } from "@/stores/progress";
+import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { needsOnboarding } from "@/utils/onboarding";
 import { parseTimestamp } from "@/utils/timestamp";
 
@@ -107,16 +107,20 @@ export function RealPlayerView() {
 
       if (meta.type === "movie") {
         if (!item.progress) return false;
-        const percentage =
-          (item.progress.watched / item.progress.duration) * 100;
+        const percentage = getProgressPercentage(
+          item.progress.watched,
+          item.progress.duration,
+        );
         return percentage > 80;
       }
 
       if (meta.type === "show" && meta.episode?.tmdbId) {
         const episode = item.episodes?.[meta.episode.tmdbId];
         if (!episode) return false;
-        const percentage =
-          (episode.progress.watched / episode.progress.duration) * 100;
+        const percentage = getProgressPercentage(
+          episode.progress.watched,
+          episode.progress.duration,
+        );
         return percentage > 80;
       }
 
