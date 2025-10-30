@@ -22,7 +22,7 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
     offscreenLeft: 0,
     offscreenRight: 0,
   });
-  const ref = useRef<HTMLImageElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -50,7 +50,7 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
   return (
     <div className="flex flex-col items-center -translate-x-1/2 pointer-events-none">
       <div className="w-screen flex justify-center">
-        <div ref={ref as unknown as React.RefObject<HTMLDivElement>}>
+        <div ref={ref}>
           <div
             style={{
               transform: `translateX(${transformX}px)`,
