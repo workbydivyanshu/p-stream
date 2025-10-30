@@ -22,7 +22,7 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
     offscreenLeft: 0,
     offscreenRight: 0,
   });
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -37,19 +37,23 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
     });
   }, [props.at]);
 
+  // Keep time label width consistent and avoid recomputing
+  const formattedTime = useMemo(
+    () => formatSeconds(Math.max(props.at, 0), durationExceedsHour(props.at)),
+    [props.at],
+  );
+  const transformX =
+    offsets.offscreenLeft > 0 ? offsets.offscreenLeft : -offsets.offscreenRight;
+
   if (!props.show) return null;
 
   return (
     <div className="flex flex-col items-center -translate-x-1/2 pointer-events-none">
       <div className="w-screen flex justify-center">
-        <div ref={ref}>
+        <div ref={ref as unknown as React.RefObject<HTMLDivElement>}>
           <div
             style={{
-              transform: `translateX(${
-                offsets.offscreenLeft > 0
-                  ? offsets.offscreenLeft
-                  : -offsets.offscreenRight
-              }px)`,
+              transform: `translateX(${transformX}px)`,
             }}
           >
             {currentThumbnail && (
@@ -58,11 +62,8 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
                 className="h-24 border rounded-xl border-gray-800"
               />
             )}
-            <p className="text-center mt-1">
-              {formatSeconds(
-                Math.max(props.at, 0),
-                durationExceedsHour(props.at),
-              )}
+            <p className="mt-1 mx-auto text-center border rounded-xl border-gray-800 px-3 py-1 backdrop-blur-lg bg-black bg-opacity-20 w-max">
+              {formattedTime}
             </p>
           </div>
         </div>
