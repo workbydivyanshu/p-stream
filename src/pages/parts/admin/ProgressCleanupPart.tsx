@@ -2,6 +2,7 @@ import { ofetch } from "ofetch";
 import { useState } from "react";
 import { useAsyncFn } from "react-use";
 
+import { getAuthHeaders } from "@/backend/accounts/auth";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { Box } from "@/components/layout/Box";
@@ -20,9 +21,7 @@ async function cleanupProgressItems(
 ) {
   return ofetch<CleanupResponse>(`/users/${account.userId}/progress/cleanup`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${account.token}`,
-    },
+    headers: getAuthHeaders(account.token),
     baseURL: backendUrl,
   });
 }
