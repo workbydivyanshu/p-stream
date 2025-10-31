@@ -9,6 +9,16 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-047</guid>
+      <title>Halloween Movies List Added!</title>
+      <description>We've added a new list of Halloween movies to the site! You can find it in the "Discover All Lists" page or by pressing the link below! Happy Halloween! 🎃👻
+      </description>
+      <link>https://pstream.mov/discover/all</link>
+      <pubDate>Fri, 31 Oct 2025 16:40:00 MST</pubDate>
+      <category>Feature</category>
+    </item>
+
+    <item>
       <guid>notification-046</guid>
       <title>P-Stream v5.2.1 released!</title>
       <description>Lots of great changes and improvements this time!
