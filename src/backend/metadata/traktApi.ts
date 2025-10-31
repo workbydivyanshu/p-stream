@@ -133,11 +133,17 @@ export const getNeverHeardMovies = () => fetchFromTrakt("/never");
 export const getLGBTQContent = () => fetchFromTrakt("/LGBTQ");
 export const getMindfuckMovies = () => fetchFromTrakt("/mindfuck");
 export const getTrueStoryMovies = () => fetchFromTrakt("/truestory");
+export const getHalloweenMovies = () => fetchFromTrakt("/halloween");
 // export const getGreatestTVShows = () => fetchFromTrakt("/greatesttv"); // We only have movies set up. TODO add a type for tv and add more tv routes.
 
 // Get all curated movie lists
 export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
   const listConfigs = [
+    {
+      name: "Halloween Movies",
+      slug: "halloween",
+      endpoint: "/halloween",
+    },
     {
       name: "Letterboxd Top 250 Narrative Feature Films",
       slug: "narrative",
