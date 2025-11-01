@@ -3,259 +3,65 @@ import { useTranslation } from "react-i18next";
 
 import { get } from "@/backend/metadata/tmdb";
 import {
-  GENRE_TO_TRAKT_MAP,
   PROVIDER_TO_TRAKT_MAP,
-  TraktLatestResponse,
-  getActionReleases,
+  getAppleMovieReleases,
   getAppleTVReleases,
-  getDisneyReleases,
-  getDramaReleases,
-  getHBOReleases,
-  getHuluReleases,
+  getDisneyMovies,
+  getDisneyTVShows,
+  getHBOMovies,
+  getHBOTVShows,
+  getHuluMovies,
+  getHuluTVShows,
   getLatest4KReleases,
   getLatestReleases,
   getLatestTVReleases,
   getNetflixMovies,
   getNetflixTVShows,
-  getPrimeReleases,
-  paginateResults,
+  getParamountMovies,
+  getParamountTVShows,
+  getPrimeMovies,
+  getPrimeTVShows,
 } from "@/backend/metadata/traktApi";
+import { paginateResults } from "@/backend/metadata/traktFunctions";
+import type { TraktListResponse } from "@/backend/metadata/types/trakt";
+import {
+  EDITOR_PICKS_MOVIES,
+  EDITOR_PICKS_TV_SHOWS,
+  MOVIE_PROVIDERS,
+  TV_PROVIDERS,
+} from "@/pages/discover/types/discover";
+import type {
+  DiscoverContentType,
+  DiscoverMedia,
+  Genre,
+  MediaType,
+  Provider,
+  UseDiscoverMediaProps,
+  UseDiscoverMediaReturn,
+} from "@/pages/discover/types/discover";
 import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
 
-// Shuffle array utility
-const shuffleArray = <T>(array: T[]): T[] => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+// Re-export types for backward compatibility
+export type {
+  DiscoverContentType,
+  DiscoverMedia,
+  Genre,
+  MediaType,
+  Provider,
+  UseDiscoverMediaProps,
+  UseDiscoverMediaReturn,
 };
 
-// Editor Picks lists
-export const EDITOR_PICKS_MOVIES = shuffleArray([
-  { id: 9342, type: "movie" }, // The Mask of Zorro
-  { id: 293, type: "movie" }, // A River Runs Through It
-  { id: 370172, type: "movie" }, // No Time To Die
-  { id: 661374, type: "movie" }, // The Glass Onion
-  { id: 207, type: "movie" }, // Dead Poets Society
-  { id: 378785, type: "movie" }, // The Best of the Blues Brothers
-  { id: 335984, type: "movie" }, // Blade Runner 2049
-  { id: 13353, type: "movie" }, // It's the Great Pumpkin, Charlie Brown
-  { id: 27205, type: "movie" }, // Inception
-  { id: 106646, type: "movie" }, // The Wolf of Wall Street
-  { id: 334533, type: "movie" }, // Captain Fantastic
-  { id: 693134, type: "movie" }, // Dune: Part Two
-  { id: 765245, type: "movie" }, // Swan Song
-  { id: 264660, type: "movie" }, // Ex Machina
-  { id: 92591, type: "movie" }, // Bernie
-  { id: 976893, type: "movie" }, // Perfect Days
-  { id: 13187, type: "movie" }, // A Charlie Brown Christmas
-  { id: 11527, type: "movie" }, // Excalibur
-  { id: 120, type: "movie" }, // LOTR: The Fellowship of the Ring
-  { id: 157336, type: "movie" }, // Interstellar
-  { id: 762, type: "movie" }, // Monty Python and the Holy Grail
-  { id: 666243, type: "movie" }, // The Witcher: Nightmare of the Wolf
-  { id: 545611, type: "movie" }, // Everything Everywhere All at Once
-  { id: 329, type: "movie" }, // Jurrassic Park
-  { id: 330459, type: "movie" }, // Rogue One: A Star Wars Story
-  { id: 279, type: "movie" }, // Amadeus
-  { id: 823219, type: "movie" }, // Flow
-  { id: 22, type: "movie" }, // Pirates of the Caribbean: The Curse of the Black Pearl
-  { id: 18971, type: "movie" }, // Rosencrantz and Guildenstern Are Dead
-  { id: 26388, type: "movie" }, // Buried
-  { id: 152601, type: "movie" }, // Her
-  { id: 11886, type: "movie" }, // Robin Hood
-  { id: 1362, type: "movie" }, // The Hobbit 1977
-  { id: 578, type: "movie" }, // Jaws
-  { id: 78, type: "movie" }, // Blade Runner
-  { id: 348, type: "movie" }, // Alien
-  { id: 198184, type: "movie" }, // Chappie
-  { id: 405774, type: "movie" }, // Bird Box
-  { id: 333339, type: "movie" }, // Ready Player One
-]);
+// Re-export constants for backward compatibility
+export {
+  EDITOR_PICKS_MOVIES,
+  EDITOR_PICKS_TV_SHOWS,
+  MOVIE_PROVIDERS,
+  TV_PROVIDERS,
+};
 
-export const EDITOR_PICKS_TV_SHOWS = shuffleArray([
-  { id: 456, type: "show" }, // The Simpsons
-  { id: 73021, type: "show" }, // Disenchantment
-  { id: 1434, type: "show" }, // Family Guy
-  { id: 1695, type: "show" }, // Monk
-  { id: 1408, type: "show" }, // House
-  { id: 93740, type: "show" }, // Foundation
-  { id: 60625, type: "show" }, // Rick and Morty
-  { id: 1396, type: "show" }, // Breaking Bad
-  { id: 44217, type: "show" }, // Vikings
-  { id: 90228, type: "show" }, // Dune Prophecy
-  { id: 13916, type: "show" }, // Death Note
-  { id: 71912, type: "show" }, // The Witcher
-  { id: 61222, type: "show" }, // Bojack Horseman
-  { id: 93405, type: "show" }, // Squid Game
-  { id: 87108, type: "show" }, // Chernobyl
-  { id: 105248, type: "show" }, // Cyberpunk: Edgerunners
-  { id: 82738, type: "show" }, // IRODUKU: The World in Colors
-  { id: 615, type: "show" }, // Futurama
-  { id: 4625, type: "show" }, // The New Batman Adventures
-  { id: 513, type: "show" }, // Batman Beyond
-  { id: 110948, type: "show" }, // The Snoopy Show
-  { id: 110492, type: "show" }, // Peacemaker
-  { id: 125988, type: "show" }, // Silo
-  { id: 87917, type: "show" }, // For All Mankind
-  { id: 42009, type: "show" }, // Black Mirror
-  { id: 86831, type: "show" }, // Love, Death & Robots
-  { id: 261579, type: "show" }, // Secret Level
-]);
-
-/**
- * The type of content to fetch from various endpoints
- */
-export type DiscoverContentType =
-  | "popular"
-  | "topRated"
-  | "onTheAir"
-  | "nowPlaying"
-  | "latest"
-  | "latest4k"
-  | "latesttv"
-  | "genre"
-  | "provider"
-  | "editorPicks"
-  | "recommendations";
-
-/**
- * The type of media to fetch (movie or TV show)
- */
-export type MediaType = "movie" | "tv";
-
-/**
- * Props for the useDiscoverMedia hook
- */
-export interface UseDiscoverMediaProps {
-  /** The type of content to fetch */
-  contentType: DiscoverContentType;
-  /** Whether to fetch movies or TV shows */
-  mediaType: MediaType;
-  /** ID used for genre, provider, or recommendations */
-  id?: string;
-  /** Fallback content type if primary fails */
-  fallbackType?: DiscoverContentType;
-  /** Page number for paginated results */
-  page?: number;
-  /** Genre name for display in title */
-  genreName?: string;
-  /** Provider name for display in title */
-  providerName?: string;
-  /** Media title for recommendations display */
-  mediaTitle?: string;
-  /** Whether this is for a carousel view (limits results) */
-  isCarouselView?: boolean;
-}
-
-/**
- * Media item returned from discover endpoints
- */
-export interface DiscoverMedia {
-  /** TMDB ID of the media */
-  id: number;
-  /** Title for movies */
-  title: string;
-  /** Title for TV shows */
-  name?: string;
-  /** Poster image path */
-  poster_path: string;
-  /** Backdrop image path */
-  backdrop_path: string;
-  /** Release date for movies */
-  release_date?: string;
-  /** First air date for TV shows */
-  first_air_date?: string;
-  /** Media overview/description */
-  overview: string;
-  /** Average vote score (0-10) */
-  vote_average: number;
-  /** Number of votes */
-  vote_count: number;
-  /** Type of media (movie or show) */
-  type?: "movie" | "show";
-}
-
-/**
- * Return type of the useDiscoverMedia hook
- */
-export interface UseDiscoverMediaReturn {
-  /** Array of media items */
-  media: DiscoverMedia[];
-  /** Whether media is currently being fetched */
-  isLoading: boolean;
-  /** Error message if fetch failed */
-  error: string | null;
-  /** Whether there are more pages to load */
-  hasMore: boolean;
-  /** Function to refetch the current media */
-  refetch: () => Promise<void>;
-  /** Localized section title for the media carousel */
-  sectionTitle: string;
-}
-
-/**
- * Provider interface for streaming services
- */
-export interface Provider {
-  /** Provider name (e.g., "Netflix", "Hulu") */
-  name: string;
-  /** Provider ID from TMDB */
-  id: string;
-}
-
-/**
- * Genre interface for media categorization
- */
-export interface Genre {
-  /** Genre ID from TMDB */
-  id: number;
-  /** Genre name (e.g., "Action", "Drama") */
-  name: string;
-}
-
-// Static provider lists
-export const MOVIE_PROVIDERS: Provider[] = [
-  { name: "Netflix", id: "8" },
-  { name: "Apple TV+", id: "2" },
-  { name: "Amazon Prime Video", id: "10" },
-  { name: "Hulu", id: "15" },
-  { name: "Disney Plus", id: "337" },
-  { name: "Max", id: "1899" },
-  { name: "Paramount Plus", id: "531" },
-  { name: "Shudder", id: "99" },
-  { name: "Crunchyroll", id: "283" },
-  { name: "fuboTV", id: "257" },
-  { name: "AMC+", id: "526" },
-  { name: "Starz", id: "43" },
-  { name: "Lifetime", id: "157" },
-  { name: "National Geographic", id: "1964" },
-];
-
-export const TV_PROVIDERS: Provider[] = [
-  { name: "Netflix", id: "8" },
-  { name: "Apple TV+", id: "350" },
-  { name: "Amazon Prime Video", id: "10" },
-  { name: "Paramount Plus", id: "531" },
-  { name: "Hulu", id: "15" },
-  { name: "Max", id: "1899" },
-  { name: "Adult Swim", id: "318" },
-  { name: "Disney Plus", id: "337" },
-  { name: "Crunchyroll", id: "283" },
-  { name: "fuboTV", id: "257" },
-  { name: "Shudder", id: "99" },
-  { name: "Discovery +", id: "520" },
-  { name: "National Geographic", id: "1964" },
-  { name: "Fox", id: "328" },
-];
-
-/**
- * Hook for managing providers and genres
- */
 export function useDiscoverOptions(mediaType: MediaType) {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -364,10 +170,10 @@ export function useDiscoverMedia({
   );
 
   const fetchTraktMedia = useCallback(
-    async (traktFunction: () => Promise<TraktLatestResponse>) => {
+    async (traktFunction: () => Promise<TraktListResponse>) => {
       try {
         // Create a timeout promise
-        const timeoutPromise = new Promise<TraktLatestResponse>((_, reject) => {
+        const timeoutPromise = new Promise<TraktListResponse>((_, reject) => {
           setTimeout(() => reject(new Error("Trakt request timed out")), 3000);
         });
 
@@ -430,52 +236,49 @@ export function useDiscoverMedia({
   // Get Trakt function for provider
   const getTraktProviderFunction = useCallback(
     (providerId: string) => {
+      // Create the key based on provider ID and media type
+      const key = mediaType === "tv" ? `${providerId}tv` : providerId;
       const trakt =
-        PROVIDER_TO_TRAKT_MAP[providerId as keyof typeof PROVIDER_TO_TRAKT_MAP];
+        PROVIDER_TO_TRAKT_MAP[key as keyof typeof PROVIDER_TO_TRAKT_MAP];
+
       if (!trakt) return null;
 
-      // Handle TV vs Movies for Netflix
-      if (trakt === "netflix" && mediaType === "tv") {
-        return getNetflixTVShows;
-      }
-      if (trakt === "netflix" && mediaType === "movie") {
-        return getNetflixMovies;
-      }
-
-      // Map provider to corresponding Trakt function
+      // Map trakt endpoint to corresponding function
       switch (trakt) {
         case "appletv":
           return getAppleTVReleases;
-        case "prime":
-          return getPrimeReleases;
-        case "hulu":
-          return getHuluReleases;
-        case "disney":
-          return getDisneyReleases;
-        case "hbo":
-          return getHBOReleases;
+        case "applemovie":
+          return getAppleMovieReleases;
+        case "netflixmovies":
+          return getNetflixMovies;
+        case "netflixtv":
+          return getNetflixTVShows;
+        case "primemovies":
+          return getPrimeMovies;
+        case "primetv":
+          return getPrimeTVShows;
+        case "hulumovies":
+          return getHuluMovies;
+        case "hulutv":
+          return getHuluTVShows;
+        case "disneymovies":
+          return getDisneyMovies;
+        case "disneytv":
+          return getDisneyTVShows;
+        case "hbomovies":
+          return getHBOMovies;
+        case "hbotv":
+          return getHBOTVShows;
+        case "paramountmovies":
+          return getParamountMovies;
+        case "paramounttv":
+          return getParamountTVShows;
         default:
           return null;
       }
     },
     [mediaType],
   );
-
-  // Get Trakt function for genre
-  const getTraktGenreFunction = useCallback((genreId: string) => {
-    const trakt =
-      GENRE_TO_TRAKT_MAP[genreId as keyof typeof GENRE_TO_TRAKT_MAP];
-    if (!trakt) return null;
-
-    switch (trakt) {
-      case "action":
-        return getActionReleases;
-      case "drama":
-        return getDramaReleases;
-      default:
-        return null;
-    }
-  }, []);
 
   const fetchEditorPicks = useCallback(async () => {
     const picks =
@@ -515,7 +318,6 @@ export function useDiscoverMedia({
 
     const attemptFetch = async (type: DiscoverContentType) => {
       let data;
-      let traktGenreFunction;
       let traktProviderFunction;
 
       // Map content types to their endpoints and handling logic
@@ -566,46 +368,15 @@ export function useDiscoverMedia({
         case "genre":
           if (!id) throw new Error("Genre ID is required");
 
-          // Try to use Trakt genre endpoint if available
-          traktGenreFunction = getTraktGenreFunction(id);
-          if (traktGenreFunction) {
-            try {
-              data = await fetchTraktMedia(traktGenreFunction);
-              setSectionTitle(
-                mediaType === "movie"
-                  ? t("discover.carousel.title.movies", { category: genreName })
-                  : t("discover.carousel.title.tvshows", {
-                      category: genreName,
-                    }),
-              );
-            } catch (traktErr) {
-              console.error(
-                "Trakt genre fetch failed, falling back to TMDB:",
-                traktErr,
-              );
-              // Fall back to TMDB
-              data = await fetchTMDBMedia(`/discover/${mediaType}`, {
-                with_genres: id,
-              });
-              setSectionTitle(
-                mediaType === "movie"
-                  ? t("discover.carousel.title.movies", { category: genreName })
-                  : t("discover.carousel.title.tvshows", {
-                      category: genreName,
-                    }),
-              );
-            }
-          } else {
-            // Use TMDB if no Trakt endpoint exists for this genre
-            data = await fetchTMDBMedia(`/discover/${mediaType}`, {
-              with_genres: id,
-            });
-            setSectionTitle(
-              mediaType === "movie"
-                ? t("discover.carousel.title.movies", { category: genreName })
-                : t("discover.carousel.title.tvshows", { category: genreName }),
-            );
-          }
+          // Use TMDB for genres (Trakt genre endpoints removed)
+          data = await fetchTMDBMedia(`/discover/${mediaType}`, {
+            with_genres: id,
+          });
+          setSectionTitle(
+            mediaType === "movie"
+              ? t("discover.carousel.title.movies", { category: genreName })
+              : t("discover.carousel.title.tvshows", { category: genreName }),
+          );
           break;
 
         case "provider":
@@ -732,7 +503,6 @@ export function useDiscoverMedia({
     fetchEditorPicks,
     t,
     page,
-    getTraktGenreFunction,
     getTraktProviderFunction,
   ]);
 

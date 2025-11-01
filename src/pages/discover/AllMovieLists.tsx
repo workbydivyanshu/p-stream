@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-  CuratedMovieList,
   getCuratedMovieLists,
   getMovieDetailsForIds,
 } from "@/backend/metadata/traktApi";
 import { TMDBMovieData } from "@/backend/metadata/types/tmdb";
+import type { CuratedMovieList } from "@/backend/metadata/types/trakt";
 import { Icon, Icons } from "@/components/Icon";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { MediaCard } from "@/components/media/MediaCard";

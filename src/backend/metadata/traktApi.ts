@@ -1,94 +1,76 @@
+import { SimpleCache } from "@/utils/cache";
+
 import { getMediaDetails } from "./tmdb";
-import { MWMediaType } from "./types/mw";
 import { TMDBContentTypes, TMDBMovieData } from "./types/tmdb";
-
-export interface TraktLatestResponse {
-  movie_tmdb_ids: number[];
-  tv_tmdb_ids: number[];
-  count: number;
-}
-
-export interface TraktReleaseResponse {
-  tmdb_id: number;
-  title: string;
-  year?: number;
-  type: "movie" | "episode";
-  season?: number;
-  episode?: number;
-  quality?: string;
-  source?: string;
-  group?: string;
-  theatrical_release_date?: string;
-  digital_release_date?: string;
-}
-
-export interface PaginatedTraktResponse {
-  tmdb_ids: number[];
-  hasMore: boolean;
-  totalCount: number;
-}
-
-export type TraktContentType = "movie" | "episode";
+import type {
+  CuratedMovieList,
+  TraktListResponse,
+  TraktNetworkResponse,
+  TraktReleaseResponse,
+} from "./types/trakt";
 
 export const TRAKT_BASE_URL = "https://fed-airdate.pstream.mov";
 
-export interface TraktDiscoverResponse {
-  movie_tmdb_ids: number[];
-  tv_tmdb_ids: number[];
-  count: number;
+// Map provider names to their Trakt endpoints
+export const PROVIDER_TO_TRAKT_MAP = {
+  "8": "netflixmovies", // Netflix Movies
+  "8tv": "netflixtv", // Netflix TV Shows
+  "2": "applemovie", // Apple TV+ Movies
+  "2tv": "appletv", // Apple TV+ (both)
+  "10": "primemovies", // Prime Video Movies
+  "10tv": "primetv", // Prime Video TV Shows
+  "15": "hulumovies", // Hulu Movies
+  "15tv": "hulutv", // Hulu TV Shows
+  "337": "disneymovies", // Disney+ Movies
+  "337tv": "disneytv", // Disney+ TV Shows
+  "1899": "hbomovies", // Max Movies
+  "1899tv": "hbotv", // Max TV Shows
+  "531": "paramountmovies", // Paramount+ Movies
+  "531tv": "paramounttv", // Paramount+ TV Shows
+} as const;
+
+// Map provider names to their image filenames
+export const PROVIDER_TO_IMAGE_MAP: Record<string, string> = {
+  Max: "max",
+  "Prime Video": "prime",
+  Netflix: "netflix",
+  "Disney+": "disney",
+  Hulu: "hulu",
+  "Apple TV+": "appletv",
+  "Paramount+": "paramount",
+};
+
+// Cache for Trakt API responses
+interface TraktCacheKey {
+  endpoint: string;
 }
 
-export interface TraktNetworkResponse {
-  type: string;
-  platforms: string[];
-  count: number;
-}
-
-export interface CuratedMovieList {
-  listName: string;
-  listSlug: string;
-  tmdbIds: number[];
-  count: number;
-}
-
-// Pagination utility
-export function paginateResults(
-  results: TraktLatestResponse,
-  page: number,
-  pageSize: number = 20,
-  contentType: "movie" | "tv" | "both" = "both",
-): PaginatedTraktResponse {
-  let tmdbIds: number[];
-
-  if (contentType === "movie") {
-    tmdbIds = results.movie_tmdb_ids;
-  } else if (contentType === "tv") {
-    tmdbIds = results.tv_tmdb_ids;
-  } else {
-    // For 'both', combine movies and TV shows
-    tmdbIds = [...results.movie_tmdb_ids, ...results.tv_tmdb_ids];
-  }
-
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const paginatedIds = tmdbIds.slice(startIndex, endIndex);
-
-  return {
-    tmdb_ids: paginatedIds,
-    hasMore: endIndex < tmdbIds.length,
-    totalCount: tmdbIds.length,
-  };
-}
+const traktCache = new SimpleCache<TraktCacheKey, any>();
+traktCache.setCompare((a, b) => a.endpoint === b.endpoint);
+traktCache.initialize();
 
 // Base function to fetch from Trakt API
-async function fetchFromTrakt<T = TraktLatestResponse>(
+async function fetchFromTrakt<T = TraktListResponse>(
   endpoint: string,
 ): Promise<T> {
+  // Check cache first
+  const cacheKey: TraktCacheKey = { endpoint };
+  const cachedResult = traktCache.get(cacheKey);
+  if (cachedResult) {
+    return cachedResult as T;
+  }
+
+  // Make the API request
   const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch from ${endpoint}: ${response.statusText}`);
   }
-  return response.json();
+  const result = await response.json();
+
+  // Cache the result for 1 hour (3600 seconds)
+  traktCache.set(cacheKey, result, 3600);
+
+  return result as T;
 }
 
 // Release details
@@ -101,11 +83,25 @@ export async function getReleaseDetails(
   if (season !== undefined && episode !== undefined) {
     url += `/${season}/${episode}`;
   }
+
+  // Check cache first
+  const cacheKey: TraktCacheKey = { endpoint: url };
+  const cachedResult = traktCache.get(cacheKey);
+  if (cachedResult) {
+    return cachedResult as TraktReleaseResponse;
+  }
+
+  // Make the API request
   const response = await fetch(`${TRAKT_BASE_URL}${url}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch release details: ${response.statusText}`);
   }
-  return response.json();
+  const result = await response.json();
+
+  // Cache the result for 1 hour (3600 seconds)
+  traktCache.set(cacheKey, result, 3600);
+
+  return result as TraktReleaseResponse;
 }
 
 // Latest releases
@@ -115,32 +111,29 @@ export const getLatestTVReleases = () => fetchFromTrakt("/latesttv");
 
 // Streaming service releases
 export const getAppleTVReleases = () => fetchFromTrakt("/appletv");
+export const getAppleMovieReleases = () => fetchFromTrakt("/applemovie");
 export const getNetflixMovies = () => fetchFromTrakt("/netflixmovies");
 export const getNetflixTVShows = () => fetchFromTrakt("/netflixtv");
-export const getPrimeReleases = () => fetchFromTrakt("/prime");
-export const getHuluReleases = () => fetchFromTrakt("/hulu");
-export const getDisneyReleases = () => fetchFromTrakt("/disney");
-export const getHBOReleases = () => fetchFromTrakt("/hbo");
-
-// Genre-specific releases
-export const getActionReleases = () => fetchFromTrakt("/action");
-export const getDramaReleases = () => fetchFromTrakt("/drama");
+export const getPrimeMovies = () => fetchFromTrakt("/primemovies");
+export const getPrimeTVShows = () => fetchFromTrakt("/primetv");
+export const getHuluMovies = () => fetchFromTrakt("/hulumovies");
+export const getHuluTVShows = () => fetchFromTrakt("/hulutv");
+export const getDisneyMovies = () => fetchFromTrakt("/disneymovies");
+export const getDisneyTVShows = () => fetchFromTrakt("/disneytv");
+export const getHBOMovies = () => fetchFromTrakt("/hbomovies");
+export const getHBOTVShows = () => fetchFromTrakt("/hbotv");
+export const getParamountMovies = () => fetchFromTrakt("/paramountmovies");
+export const getParamountTVShows = () => fetchFromTrakt("/paramounttv");
 
 // Popular content
 export const getPopularTVShows = () => fetchFromTrakt("/populartv");
 export const getPopularMovies = () => fetchFromTrakt("/popularmovies");
 
-// Discovery content
+// Discovery content used for the featured carousel
 export const getDiscoverContent = () =>
-  fetchFromTrakt<TraktDiscoverResponse>("/discover");
+  fetchFromTrakt<TraktListResponse>("/discover");
 
-// Get only discover movies
-export const getDiscoverMovies = async (): Promise<number[]> => {
-  const response = await fetchFromTrakt<TraktDiscoverResponse>("/discover");
-  return response.movie_tmdb_ids;
-};
-
-// Network content
+// Network information
 export const getNetworkContent = (tmdbId: string) =>
   fetchFromTrakt<TraktNetworkResponse>(`/network/${tmdbId}`);
 
@@ -153,7 +146,7 @@ export const getLGBTQContent = () => fetchFromTrakt("/LGBTQ");
 export const getMindfuckMovies = () => fetchFromTrakt("/mindfuck");
 export const getTrueStoryMovies = () => fetchFromTrakt("/truestory");
 export const getHalloweenMovies = () => fetchFromTrakt("/halloween");
-// export const getGreatestTVShows = () => fetchFromTrakt("/greatesttv"); // We only have movies set up. TODO add a type for tv and add more tv routes.
+// export const getGreatestTVShows = () => fetchFromTrakt("/greatesttv"); // We only have movies set up. TODO add more tv routes for curated lists so we can have a new page.
 
 // Get all curated movie lists
 export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
@@ -257,40 +250,4 @@ export const getMovieDetailsForIds = async (
   }
 
   return movieDetails;
-};
-
-// Type conversion utilities
-export function convertToMediaType(type: TraktContentType): MWMediaType {
-  return type === "movie" ? MWMediaType.MOVIE : MWMediaType.SERIES;
-}
-
-export function convertFromMediaType(type: MWMediaType): TraktContentType {
-  return type === MWMediaType.MOVIE ? "movie" : "episode";
-}
-
-// Map provider names to their Trakt endpoints
-export const PROVIDER_TO_TRAKT_MAP = {
-  "8": "netflix", // Netflix
-  "2": "appletv", // Apple TV+
-  "10": "prime", // Prime Video
-  "15": "hulu", // Hulu
-  "337": "disney", // Disney+
-  "1899": "hbo", // Max
-} as const;
-
-// Map genres to their Trakt endpoints
-export const GENRE_TO_TRAKT_MAP = {
-  "28": "action", // Action
-  "18": "drama", // Drama
-} as const;
-
-// Map provider names to their image filenames
-export const PROVIDER_TO_IMAGE_MAP: Record<string, string> = {
-  Max: "max",
-  "Prime Video": "prime",
-  Netflix: "netflix",
-  "Disney+": "disney",
-  Hulu: "hulu",
-  "Apple TV+": "appletv",
-  "Paramount+": "paramount",
 };
