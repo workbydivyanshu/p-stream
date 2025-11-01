@@ -37,6 +37,14 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
     });
   }, [props.at]);
 
+  // Keep time label width consistent and avoid recomputing
+  const formattedTime = useMemo(
+    () => formatSeconds(Math.max(props.at, 0), durationExceedsHour(props.at)),
+    [props.at],
+  );
+  const transformX =
+    offsets.offscreenLeft > 0 ? offsets.offscreenLeft : -offsets.offscreenRight;
+
   if (!props.show) return null;
 
   return (
@@ -45,11 +53,7 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
         <div ref={ref}>
           <div
             style={{
-              transform: `translateX(${
-                offsets.offscreenLeft > 0
-                  ? offsets.offscreenLeft
-                  : -offsets.offscreenRight
-              }px)`,
+              transform: `translateX(${transformX}px)`,
             }}
           >
             {currentThumbnail && (
@@ -58,11 +62,8 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
                 className="h-24 border rounded-xl border-gray-800"
               />
             )}
-            <p className="text-center mt-1">
-              {formatSeconds(
-                Math.max(props.at, 0),
-                durationExceedsHour(props.at),
-              )}
+            <p className="mt-1 mx-auto text-center border rounded-xl border-gray-800 px-3 py-1 backdrop-blur-lg bg-black bg-opacity-20 w-max">
+              {formattedTime}
             </p>
           </div>
         </div>
