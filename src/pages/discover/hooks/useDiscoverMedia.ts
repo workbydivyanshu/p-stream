@@ -380,6 +380,7 @@ export function useDiscoverMedia({
           response,
           page,
           pageSize,
+          mediaType === "movie" ? "movie" : mediaType === "tv" ? "tv" : "both",
         );
 
         // For carousel views, we only need to fetch details for displayed items

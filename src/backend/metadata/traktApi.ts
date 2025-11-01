@@ -3,7 +3,8 @@ import { MWMediaType } from "./types/mw";
 import { TMDBContentTypes, TMDBMovieData } from "./types/tmdb";
 
 export interface TraktLatestResponse {
-  tmdb_ids: number[];
+  movie_tmdb_ids: number[];
+  tv_tmdb_ids: number[];
   count: number;
 }
 
@@ -55,15 +56,27 @@ export function paginateResults(
   results: TraktLatestResponse,
   page: number,
   pageSize: number = 20,
+  contentType: "movie" | "tv" | "both" = "both",
 ): PaginatedTraktResponse {
+  let tmdbIds: number[];
+
+  if (contentType === "movie") {
+    tmdbIds = results.movie_tmdb_ids;
+  } else if (contentType === "tv") {
+    tmdbIds = results.tv_tmdb_ids;
+  } else {
+    // For 'both', combine movies and TV shows
+    tmdbIds = [...results.movie_tmdb_ids, ...results.tv_tmdb_ids];
+  }
+
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const paginatedIds = results.tmdb_ids.slice(startIndex, endIndex);
+  const paginatedIds = tmdbIds.slice(startIndex, endIndex);
 
   return {
     tmdb_ids: paginatedIds,
-    hasMore: endIndex < results.tmdb_ids.length,
-    totalCount: results.tmdb_ids.length,
+    hasMore: endIndex < tmdbIds.length,
+    totalCount: tmdbIds.length,
   };
 }
 
@@ -120,6 +133,12 @@ export const getPopularMovies = () => fetchFromTrakt("/popularmovies");
 // Discovery content
 export const getDiscoverContent = () =>
   fetchFromTrakt<TraktDiscoverResponse>("/discover");
+
+// Get only discover movies
+export const getDiscoverMovies = async (): Promise<number[]> => {
+  const response = await fetchFromTrakt<TraktDiscoverResponse>("/discover");
+  return response.movie_tmdb_ids;
+};
 
 // Network content
 export const getNetworkContent = (tmdbId: string) =>
@@ -194,8 +213,8 @@ export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
       lists.push({
         listName: config.name,
         listSlug: config.slug,
-        tmdbIds: response.tmdb_ids.slice(0, 30), // Limit to first 30 items
-        count: Math.min(response.count, 30), // Update count to reflect the limit
+        tmdbIds: response.movie_tmdb_ids.slice(0, 30), // Limit to first 30 items
+        count: Math.min(response.movie_tmdb_ids.length, 30), // Update count to reflect the limit
       });
     } catch (error) {
       console.error(`Failed to fetch ${config.name}:`, error);
