@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
+import { getTurnstileToken } from "@/utils/turnstile";
 
 // Thanks Nemo for this API
 const BASE_URL = "https://fed-skips.pstream.mov";
@@ -20,8 +21,16 @@ export function useSkipTime() {
       if (!febboxKey) return;
 
       try {
+        const turnstileToken = await getTurnstileToken(
+          "0x4AAAAAAB6ocCCpurfWRZyC",
+        );
+
         const apiUrl = `${BASE_URL}/${meta.imdbId}/${meta.season?.number}/${meta.episode?.number}`;
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+          headers: {
+            "cf-turnstile-response": turnstileToken,
+          },
+        });
 
         if (!response.ok) {
           if (response.status === 500 && retries < MAX_RETRIES) {
