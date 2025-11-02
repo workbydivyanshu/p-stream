@@ -5,7 +5,6 @@ import { Player } from "@/components/player";
 import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
 import { UnreleasedEpisodeOverlay } from "@/components/player/atoms/UnreleasedEpisodeOverlay";
 import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
-import { Widescreen } from "@/components/player/atoms/Widescreen";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -185,14 +184,10 @@ export function PlayerPart(props: PlayerPartProps) {
                 <Player.Settings />
               </>
             ) : null}
-            {/* Fullscreen on when not shifting */}
-            {!isShifting && <Player.Fullscreen />}
-
-            {/* Expand button visible when shifting */}
-            {isShifting && (
-              <div>
-                <Widescreen />
-              </div>
+            {isShifting || isHoldingFullscreen ? (
+              <Player.Widescreen />
+            ) : (
+              <Player.Fullscreen />
             )}
           </div>
         </div>
@@ -221,7 +216,11 @@ export function PlayerPart(props: PlayerPartProps) {
                 className="select-none touch-none"
                 style={{ WebkitTapHighlightColor: "transparent" }}
               >
-                {isHoldingFullscreen ? <Widescreen /> : <Player.Fullscreen />}
+                {isHoldingFullscreen ? (
+                  <Player.Widescreen />
+                ) : (
+                  <Player.Fullscreen />
+                )}
               </div>
             )}
           </div>
