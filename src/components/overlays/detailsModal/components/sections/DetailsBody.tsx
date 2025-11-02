@@ -2,10 +2,8 @@ import classNames from "classnames";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 
-import {
-  TraktReleaseResponse,
-  getReleaseDetails,
-} from "@/backend/metadata/traktApi";
+import { getReleaseDetails } from "@/backend/metadata/traktApi";
+import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
 import { Button } from "@/components/buttons/Button";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { GroupDropdown } from "@/components/form/GroupDropdown";

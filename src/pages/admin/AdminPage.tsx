@@ -14,7 +14,6 @@ import { WorkerTestPart } from "@/pages/parts/admin/WorkerTestPart";
 
 import { BackendTestPart } from "../parts/admin/BackendTestPart";
 import { EmbedOrderPart } from "../parts/admin/EmbedOrderPart";
-import { ProgressCleanupPart } from "../parts/admin/ProgressCleanupPart";
 
 export function AdminPage() {
   const { t } = useTranslation();
@@ -51,7 +50,7 @@ export function AdminPage() {
           disabledEmbeds={embedOrderState.disabledEmbeds}
           setDisabledEmbeds={embedOrderState.setDisabledEmbeds}
         />
-        <ProgressCleanupPart />
+        {/* <ProgressCleanupPart /> */}
       </ThinContainer>
 
       <Transition
