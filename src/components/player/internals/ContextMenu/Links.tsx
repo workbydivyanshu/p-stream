@@ -80,6 +80,7 @@ export function Link(props: {
   clickable?: boolean;
   active?: boolean;
   onClick?: () => void;
+  onDoubleClick?: () => void;
   children?: ReactNode;
   className?: string;
   box?: boolean;
@@ -126,6 +127,7 @@ export function Link(props: {
       className={classes}
       style={props.box ? {} : styles}
       onClick={props.onClick}
+      onDoubleClick={props.onDoubleClick}
       data-active-link={props.active ? true : undefined}
       disabled={props.disabled}
     >
@@ -162,6 +164,7 @@ export function SelectableLink(props: {
   selected?: boolean;
   loading?: boolean;
   onClick?: () => void;
+  onDoubleClick?: () => void;
   children?: ReactNode;
   disabled?: boolean;
   error?: ReactNode;
@@ -187,6 +190,7 @@ export function SelectableLink(props: {
   return (
     <Link
       onClick={props.onClick}
+      onDoubleClick={props.onDoubleClick}
       clickable={!props.disabled}
       rightSide={rightContent}
       box={props.box}

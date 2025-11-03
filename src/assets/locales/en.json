@@ -736,6 +736,8 @@
       },
       "subtitles": {
         "customChoice": "Drop or upload file",
+        "pasteChoice": "Paste subtitle data",
+        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Customize",
         "previewLabel": "Subtitle preview:",
         "offChoice": "Off",

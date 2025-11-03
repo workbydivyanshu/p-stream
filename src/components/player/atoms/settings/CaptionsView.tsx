@@ -40,9 +40,11 @@ export function CaptionOption(props: {
   subtitleSource?: string;
   subtitleEncoding?: string;
   isHearingImpaired?: boolean;
+  onDoubleClick?: () => void;
 }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { t } = useTranslation();
 
   const tooltipContent = useMemo(() => {
     if (!props.subtitleUrl && !props.subtitleSource) return null;
@@ -107,6 +109,7 @@ export function CaptionOption(props: {
         loading={props.loading}
         error={props.error}
         onClick={props.onClick}
+        onDoubleClick={props.onDoubleClick}
       >
         <span
           data-active-link={props.selected ? true : undefined}
@@ -143,8 +146,13 @@ export function CaptionOption(props: {
         </span>
       </SelectableLink>
       {tooltipContent && showTooltip && (
-        <div className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-black/80 text-white/80 text-xs rounded-lg backdrop-blur-sm w-60 break-all whitespace-pre-line">
+        <div className="flex flex-col absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-black/80 text-white/80 text-xs rounded-lg backdrop-blur-sm w-60 break-all whitespace-pre-line">
           {tooltipContent}
+          {props.onDoubleClick && (
+            <span className="text-white/50 text-xs">
+              {t("player.menus.subtitles.doubleClickToCopy")}
+            </span>
+          )}
         </div>
       )}
     </div>
@@ -215,6 +223,63 @@ export function CustomCaptionOption() {
           reader.readAsText(e.target.files[0], "utf-8");
         }}
       />
+    </CaptionOption>
+  );
+}
+
+export function PasteCaptionOption() {
+  const { t } = useTranslation();
+  const setCaption = usePlayerStore((s) => s.setCaption);
+  const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handlePaste = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const clipboardText = await navigator.clipboard.readText();
+      const parsedData = JSON.parse(clipboardText);
+
+      // Validate the structure
+      if (!parsedData.id || !parsedData.url || !parsedData.language) {
+        throw new Error("Invalid subtitle data format");
+      }
+
+      // Check for CORS restrictions
+      if (parsedData.hasCorsRestrictions) {
+        throw new Error("Protected subtitle url, cannot be used");
+      }
+
+      // Fetch the subtitle content
+      const response = await fetch(parsedData.url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch subtitle: ${response.status}`);
+      }
+
+      const subtitleText = await response.text();
+
+      // Convert to SRT format
+      const converted = convert(subtitleText, "srt");
+
+      setCaption({
+        language: parsedData.language,
+        srtData: converted,
+        id: parsedData.id,
+      });
+      setCustomSubs();
+    } catch (err) {
+      console.error("Failed to paste subtitle:", err);
+      setError(err instanceof Error ? err.message : "Failed to paste subtitle");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <CaptionOption onClick={handlePaste} loading={isLoading} error={error}>
+      {t("player.menus.subtitles.pasteChoice")}
     </CaptionOption>
   );
 }
@@ -315,28 +380,54 @@ export function CaptionsView({
   // Render subtitle option
   const renderSubtitleOption = (
     v: CaptionListItem & { languageName: string },
-  ) => (
-    <CaptionOption
-      key={v.id}
-      countryCode={v.language}
-      selected={v.id === selectedCaptionId}
-      loading={v.id === currentlyDownloading && downloadReq.loading}
-      error={
-        v.id === currentlyDownloading && downloadReq.error
-          ? downloadReq.error.toString()
-          : undefined
+  ) => {
+    const handleDoubleClick = async () => {
+      const copyData = {
+        id: v.id,
+        url: v.url,
+        language: v.language,
+        type: v.type,
+        hasCorsRestrictions: v.needsProxy,
+        opensubtitles: v.opensubtitles,
+        display: v.display,
+        media: v.media,
+        isHearingImpaired: v.isHearingImpaired,
+        source: v.source,
+        encoding: v.encoding,
+      };
+
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(copyData, null, 2));
+        // Could add a toast notification here if needed
+      } catch (err) {
+        console.error("Failed to copy subtitle data:", err);
       }
-      onClick={() => startDownload(v.id)}
-      flag
-      subtitleUrl={v.url}
-      subtitleType={v.type}
-      subtitleSource={v.source}
-      subtitleEncoding={v.encoding}
-      isHearingImpaired={v.isHearingImpaired}
-    >
-      {v.languageName}
-    </CaptionOption>
-  );
+    };
+
+    return (
+      <CaptionOption
+        key={v.id}
+        countryCode={v.language}
+        selected={v.id === selectedCaptionId}
+        loading={v.id === currentlyDownloading && downloadReq.loading}
+        error={
+          v.id === currentlyDownloading && downloadReq.error
+            ? downloadReq.error.toString()
+            : undefined
+        }
+        onClick={() => startDownload(v.id)}
+        onDoubleClick={handleDoubleClick}
+        flag
+        subtitleUrl={v.url}
+        subtitleType={v.type}
+        subtitleSource={v.source}
+        subtitleEncoding={v.encoding}
+        isHearingImpaired={v.isHearingImpaired}
+      >
+        {v.languageName}
+      </CaptionOption>
+    );
+  };
 
   return (
     <>
@@ -431,11 +522,14 @@ export function CaptionsView({
           {/* Custom upload option */}
           <CustomCaptionOption />
 
+          {/* Paste subtitle option */}
+          <PasteCaptionOption />
+
+          <div className="h-1" />
+
           {/* Search input */}
           {(sourceCaptions.length || externalCaptions.length) > 0 && (
-            <div className="mt-3">
-              <Input value={searchQuery} onInput={setSearchQuery} />
-            </div>
+            <Input value={searchQuery} onInput={setSearchQuery} />
           )}
 
           {/* No subtitles available message */}
