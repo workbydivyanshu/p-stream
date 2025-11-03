@@ -10,6 +10,7 @@ import { Title } from "@/components/text/Title";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { ErrorContainer, ErrorLayout } from "@/pages/layouts/ErrorLayout";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 
 import { ErrorCardInModal } from "../errors/ErrorCard";
 
@@ -19,15 +20,20 @@ export function PlaybackErrorPart() {
   const modal = useModal("error");
   const settingsRouter = useOverlayRouter("settings");
   const hasOpenedSettings = useRef(false);
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
 
   // Automatically open the settings overlay when a playback error occurs
   useEffect(() => {
     if (playbackError && !hasOpenedSettings.current) {
       hasOpenedSettings.current = true;
+      // Reset the last successful source when a playback error occurs
+      setLastSuccessfulSource(null);
       settingsRouter.open();
       settingsRouter.navigate("/source");
     }
-  }, [playbackError, settingsRouter]);
+  }, [playbackError, settingsRouter, setLastSuccessfulSource]);
 
   const handleOpenSourcePicker = () => {
     settingsRouter.open();
