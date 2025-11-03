@@ -106,12 +106,16 @@ export function NextEpisodeButton(props: {
   const time = usePlayerStore((s) => s.progress.time);
   const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
   const enableSkipCredits = usePreferencesStore((s) => s.enableSkipCredits);
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
   const showingState = shouldShowNextEpisodeButton(time, duration);
   const status = usePlayerStore((s) => s.status);
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,
   );
   const updateItem = useProgressStore((s) => s.updateItem);
+  const sourceId = usePlayerStore((s) => s.sourceId);
 
   const isLastEpisode =
     !meta?.episode?.number || !meta?.episodes?.at(-1)?.number
@@ -147,6 +151,12 @@ export function NextEpisodeButton(props: {
 
   const loadNextEpisode = useCallback(() => {
     if (!meta || !nextEp) return;
+
+    // Store the current source as the last successful source
+    if (sourceId) {
+      setLastSuccessfulSource(sourceId);
+    }
+
     const metaCopy = { ...meta };
     metaCopy.episode = nextEp;
     metaCopy.season =
@@ -173,6 +183,8 @@ export function NextEpisodeButton(props: {
     updateItem,
     isLastEpisode,
     nextSeason,
+    sourceId,
+    setLastSuccessfulSource,
   ]);
 
   const startCurrentEpisodeFromBeginning = useCallback(() => {

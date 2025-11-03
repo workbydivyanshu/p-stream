@@ -21,6 +21,8 @@ export interface SettingsInput {
   forceCompactEpisodeView?: boolean;
   sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;
+  lastSuccessfulSource?: string | null;
+  enableLastSuccessfulSource?: boolean;
   disabledSources?: string[] | null;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
@@ -52,6 +54,8 @@ export interface SettingsResponse {
   forceCompactEpisodeView?: boolean;
   sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;
+  lastSuccessfulSource?: string | null;
+  enableLastSuccessfulSource?: boolean;
   disabledSources?: string[] | null;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;

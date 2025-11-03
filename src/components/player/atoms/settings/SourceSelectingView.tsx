@@ -144,6 +144,12 @@ export function SourceSelectionView({
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
+  const lastSuccessfulSource = usePreferencesStore(
+    (s) => s.lastSuccessfulSource,
+  );
+  const enableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.enableLastSuccessfulSource,
+  );
   const disabledSources = usePreferencesStore((s) => s.disabledSources);
 
   const sources = useMemo(() => {
@@ -154,12 +160,33 @@ export function SourceSelectionView({
       .filter((v) => !disabledSources.includes(v.id));
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
+      // Even without custom source order, prioritize last successful source if enabled
+      if (enableLastSuccessfulSource && lastSuccessfulSource) {
+        const lastSourceIndex = allSources.findIndex(
+          (s) => s.id === lastSuccessfulSource,
+        );
+        if (lastSourceIndex !== -1) {
+          const lastSource = allSources.splice(lastSourceIndex, 1)[0];
+          return [lastSource, ...allSources];
+        }
+      }
       return allSources;
     }
 
-    // Sort sources according to preferred order
+    // Sort sources according to preferred order, but prioritize last successful source
     const orderedSources = [];
     const remainingSources = [...allSources];
+
+    // First, add the last successful source if it exists, is available, and the feature is enabled
+    if (enableLastSuccessfulSource && lastSuccessfulSource) {
+      const lastSourceIndex = remainingSources.findIndex(
+        (s) => s.id === lastSuccessfulSource,
+      );
+      if (lastSourceIndex !== -1) {
+        orderedSources.push(remainingSources[lastSourceIndex]);
+        remainingSources.splice(lastSourceIndex, 1);
+      }
+    }
 
     // Add sources in preferred order
     for (const sourceId of preferredSourceOrder) {
@@ -174,7 +201,14 @@ export function SourceSelectionView({
     orderedSources.push(...remainingSources);
 
     return orderedSources;
-  }, [metaType, preferredSourceOrder, enableSourceOrder, disabledSources]);
+  }, [
+    metaType,
+    preferredSourceOrder,
+    enableSourceOrder,
+    disabledSources,
+    lastSuccessfulSource,
+    enableLastSuccessfulSource,
+  ]);
 
   return (
     <>

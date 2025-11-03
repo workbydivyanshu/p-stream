@@ -60,6 +60,8 @@ export function useSettingsState(
   enableDetailsModal: boolean,
   sourceOrder: string[],
   enableSourceOrder: boolean,
+  lastSuccessfulSource: string | null,
+  enableLastSuccessfulSource: boolean,
   disabledSources: string[],
   embedOrder: string[],
   enableEmbedOrder: boolean,
@@ -165,6 +167,18 @@ export function useSettingsState(
     enableSourceOrderChanged,
   ] = useDerived(enableSourceOrder);
   const [
+    lastSuccessfulSourceState,
+    setLastSuccessfulSourceState,
+    resetLastSuccessfulSource,
+    lastSuccessfulSourceChanged,
+  ] = useDerived(lastSuccessfulSource);
+  const [
+    enableLastSuccessfulSourceState,
+    setEnableLastSuccessfulSourceState,
+    resetEnableLastSuccessfulSource,
+    enableLastSuccessfulSourceChanged,
+  ] = useDerived(enableLastSuccessfulSource);
+  const [
     disabledSourcesState,
     setDisabledSourcesState,
     resetDisabledSources,
@@ -259,6 +273,8 @@ export function useSettingsState(
     resetEnableImageLogos();
     resetSourceOrder();
     resetEnableSourceOrder();
+    resetLastSuccessfulSource();
+    resetEnableLastSuccessfulSource();
     resetDisabledSources();
     resetEmbedOrder();
     resetEnableEmbedOrder();
@@ -293,6 +309,8 @@ export function useSettingsState(
     enableImageLogosChanged ||
     sourceOrderChanged ||
     enableSourceOrderChanged ||
+    lastSuccessfulSourceChanged ||
+    enableLastSuccessfulSourceChanged ||
     disabledSourcesChanged ||
     embedOrderChanged ||
     enableEmbedOrderChanged ||
@@ -399,6 +417,16 @@ export function useSettingsState(
       state: enableSourceOrderState,
       set: setEnableSourceOrderState,
       changed: enableSourceOrderChanged,
+    },
+    lastSuccessfulSource: {
+      state: lastSuccessfulSourceState,
+      set: setLastSuccessfulSourceState,
+      changed: lastSuccessfulSourceChanged,
+    },
+    enableLastSuccessfulSource: {
+      state: enableLastSuccessfulSourceState,
+      set: setEnableLastSuccessfulSourceState,
+      changed: enableLastSuccessfulSourceChanged,
     },
     proxyTmdb: {
       state: proxyTmdbState,

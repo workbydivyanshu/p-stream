@@ -282,6 +282,20 @@ export function SettingsPage() {
     (s) => s.setEnableSourceOrder,
   );
 
+  const lastSuccessfulSource = usePreferencesStore(
+    (s) => s.lastSuccessfulSource,
+  );
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
+
+  const enableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.enableLastSuccessfulSource,
+  );
+  const setEnableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setEnableLastSuccessfulSource,
+  );
+
   const disabledSources = usePreferencesStore((s) => s.disabledSources);
   const setDisabledSources = usePreferencesStore((s) => s.setDisabledSources);
 
@@ -406,6 +420,8 @@ export function SettingsPage() {
     enableDetailsModal,
     sourceOrder,
     enableSourceOrder,
+    lastSuccessfulSource,
+    enableLastSuccessfulSource,
     disabledSources,
     embedOrder,
     enableEmbedOrder,
@@ -475,6 +491,8 @@ export function SettingsPage() {
         state.enableImageLogos.changed ||
         state.sourceOrder.changed ||
         state.enableSourceOrder.changed ||
+        state.lastSuccessfulSource.changed ||
+        state.enableLastSuccessfulSource.changed ||
         state.disabledSources.changed ||
         state.proxyTmdb.changed ||
         state.enableCarouselView.changed ||
@@ -500,6 +518,8 @@ export function SettingsPage() {
           enableImageLogos: state.enableImageLogos.state,
           sourceOrder: state.sourceOrder.state,
           enableSourceOrder: state.enableSourceOrder.state,
+          lastSuccessfulSource: state.lastSuccessfulSource.state,
+          enableLastSuccessfulSource: state.enableLastSuccessfulSource.state,
           disabledSources: state.disabledSources.state,
           proxyTmdb: state.proxyTmdb.state,
           enableCarouselView: state.enableCarouselView.state,
@@ -537,6 +557,8 @@ export function SettingsPage() {
     setEnableImageLogos(state.enableImageLogos.state);
     setSourceOrder(state.sourceOrder.state);
     setEnableSourceOrder(state.enableSourceOrder.state);
+    setLastSuccessfulSource(state.lastSuccessfulSource.state);
+    setEnableLastSuccessfulSource(state.enableLastSuccessfulSource.state);
     setDisabledSources(state.disabledSources.state);
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
@@ -584,6 +606,8 @@ export function SettingsPage() {
     setEnableImageLogos,
     setSourceOrder,
     setEnableSourceOrder,
+    setLastSuccessfulSource,
+    setEnableLastSuccessfulSource,
     setDisabledSources,
     setAppLanguage,
     setTheme,
@@ -650,6 +674,8 @@ export function SettingsPage() {
             setSourceOrder={state.sourceOrder.set}
             enableSourceOrder={state.enableSourceOrder.state}
             setenableSourceOrder={state.enableSourceOrder.set}
+            enableLastSuccessfulSource={state.enableLastSuccessfulSource.state}
+            setEnableLastSuccessfulSource={state.enableLastSuccessfulSource.set}
             disabledSources={state.disabledSources.state}
             setDisabledSources={state.disabledSources.set}
             enableLowPerformanceMode={state.enableLowPerformanceMode.state}

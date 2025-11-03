@@ -14,6 +14,8 @@ export interface PreferencesStore {
   forceCompactEpisodeView: boolean;
   sourceOrder: string[];
   enableSourceOrder: boolean;
+  lastSuccessfulSource: string | null;
+  enableLastSuccessfulSource: boolean;
   disabledSources: string[];
   embedOrder: string[];
   enableEmbedOrder: boolean;
@@ -39,6 +41,8 @@ export interface PreferencesStore {
   setForceCompactEpisodeView(v: boolean): void;
   setSourceOrder(v: string[]): void;
   setEnableSourceOrder(v: boolean): void;
+  setLastSuccessfulSource(v: string | null): void;
+  setEnableLastSuccessfulSource(v: boolean): void;
   setDisabledSources(v: string[]): void;
   setEmbedOrder(v: string[]): void;
   setEnableEmbedOrder(v: boolean): void;
@@ -68,6 +72,8 @@ export const usePreferencesStore = create(
       forceCompactEpisodeView: false,
       sourceOrder: [],
       enableSourceOrder: false,
+      lastSuccessfulSource: null,
+      enableLastSuccessfulSource: true,
       disabledSources: [],
       embedOrder: [],
       enableEmbedOrder: false,
@@ -134,6 +140,16 @@ export const usePreferencesStore = create(
       setEnableSourceOrder(v) {
         set((s) => {
           s.enableSourceOrder = v;
+        });
+      },
+      setLastSuccessfulSource(v) {
+        set((s) => {
+          s.lastSuccessfulSource = v;
+        });
+      },
+      setEnableLastSuccessfulSource(v) {
+        set((s) => {
+          s.enableLastSuccessfulSource = v;
         });
       },
       setDisabledSources(v) {

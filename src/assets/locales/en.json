@@ -1107,7 +1107,10 @@
       "embedOrderEnableLabel": "Custom embed order",
       "manualSource": "Manual source selection",
       "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection"
+      "manualSourceLabel": "Manual source selection",
+      "lastSuccessfulSource": "Last successful source",
+      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
+      "lastSuccessfulSourceEnableLabel": "Enable last successful source"
     },
     "reset": "Reset",
     "save": "Save",
