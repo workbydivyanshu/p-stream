@@ -1,6 +1,7 @@
 import { DisplayInterface } from "@/components/player/display/displayInterface";
 import { playerStatus } from "@/stores/player/slices/source";
 import { MakeSlice } from "@/stores/player/slices/types";
+import { usePreferencesStore } from "@/stores/preferences";
 
 export interface DisplaySlice {
   display: DisplayInterface | null;
@@ -105,6 +106,8 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         s.status = playerStatus.PLAYBACK_ERROR;
         s.interface.error = err;
       });
+      // Reset last successful source on playback error
+      usePreferencesStore.getState().setLastSuccessfulSource(null);
     });
 
     set((s) => {

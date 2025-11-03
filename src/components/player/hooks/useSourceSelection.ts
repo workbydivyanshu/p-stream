@@ -22,6 +22,7 @@ import { convertRunoutputToSource } from "@/components/player/utils/convertRunou
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { metaToScrapeMedia } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 
 export function useEmbedScraping(
   routerId: string,
@@ -37,6 +38,12 @@ export function useEmbedScraping(
   const meta = usePlayerStore((s) => s.meta);
   const router = useOverlayRouter(routerId);
   const { report } = useReportProviders();
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
+  const enableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.enableLastSuccessfulSource,
+  );
 
   const [request, run] = useAsyncFn(async () => {
     const providerApiUrl = getLoadbalancedProviderApiUrl();
@@ -83,8 +90,21 @@ export function useEmbedScraping(
       convertProviderCaption(result.stream[0].captions),
       progress,
     );
+    // Save the last successful source when manually selected
+    if (enableLastSuccessfulSource) {
+      setLastSuccessfulSource(sourceId);
+    }
     router.close();
-  }, [embedId, sourceId, meta, router, report, setCaption]);
+  }, [
+    embedId,
+    sourceId,
+    meta,
+    router,
+    report,
+    setCaption,
+    enableLastSuccessfulSource,
+    setLastSuccessfulSource,
+  ]);
 
   return {
     run,
@@ -102,6 +122,12 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
   const progress = usePlayerStore((s) => s.progress.time);
   const router = useOverlayRouter(routerId);
   const { report } = useReportProviders();
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
+  const enableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.enableLastSuccessfulSource,
+  );
 
   const [request, run] = useAsyncFn(async () => {
     if (!sourceId || !meta) return null;
@@ -147,6 +173,10 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
         progress,
       );
       setSourceId(sourceId);
+      // Save the last successful source when manually selected
+      if (enableLastSuccessfulSource) {
+        setLastSuccessfulSource(sourceId);
+      }
       router.close();
       return null;
     }
@@ -203,10 +233,21 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
         convertProviderCaption(embedResult.stream[0].captions),
         progress,
       );
+      // Save the last successful source when manually selected
+      if (enableLastSuccessfulSource) {
+        setLastSuccessfulSource(sourceId);
+      }
       router.close();
     }
     return result.embeds;
-  }, [sourceId, meta, router, setCaption]);
+  }, [
+    sourceId,
+    meta,
+    router,
+    setCaption,
+    enableLastSuccessfulSource,
+    setLastSuccessfulSource,
+  ]);
 
   return {
     run,

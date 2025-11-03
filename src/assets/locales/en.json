@@ -1110,7 +1110,7 @@
       "manualSourceLabel": "Manual source selection",
       "lastSuccessfulSource": "Last successful source",
       "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Enable last successful source"
+      "lastSuccessfulSourceEnableLabel": "Last successful source"
     },
     "reset": "Reset",
     "save": "Save",
