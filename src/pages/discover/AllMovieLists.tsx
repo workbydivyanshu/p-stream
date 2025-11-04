@@ -38,13 +38,14 @@ export function DiscoverMore() {
         const lists = await getCuratedMovieLists();
         setCuratedLists(lists);
 
-        // Fetch movie details for each list
+        // Fetch movie details for each list one after another
         const details: { [listSlug: string]: TMDBMovieData[] } = {};
         for (const list of lists) {
           try {
             const movies = await getMovieDetailsForIds(list.tmdbIds, 50);
             if (movies.length > 0) {
               details[list.listSlug] = movies;
+              setMovieDetails({ ...details });
             }
           } catch (error) {
             console.error(
@@ -53,7 +54,6 @@ export function DiscoverMore() {
             );
           }
         }
-        setMovieDetails(details);
       } catch (error) {
         console.error("Failed to fetch curated lists:", error);
       }

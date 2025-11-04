@@ -227,27 +227,32 @@ export const getMovieDetailsForIds = async (
 
   // Process in smaller batches to avoid overwhelming the API
   const batchSize = 10;
+  const batchPromises: Promise<TMDBMovieData[]>[] = [];
+
   for (let i = 0; i < limitedIds.length; i += batchSize) {
     const batch = limitedIds.slice(i, i + batchSize);
-    const batchPromises = batch.map(async (id) => {
-      try {
-        const details = await getMediaDetails(
-          id.toString(),
-          TMDBContentTypes.MOVIE,
-        );
-        return details as TMDBMovieData;
-      } catch (error) {
-        console.error(`Failed to fetch movie details for ID ${id}:`, error);
-        return null;
-      }
-    });
-
-    const batchResults = await Promise.all(batchPromises);
-    const validResults = batchResults.filter(
-      (result): result is TMDBMovieData => result !== null,
+    const batchPromise = Promise.all(
+      batch.map(async (id) => {
+        try {
+          const details = await getMediaDetails(
+            id.toString(),
+            TMDBContentTypes.MOVIE,
+          );
+          return details as TMDBMovieData;
+        } catch (error) {
+          console.error(`Failed to fetch movie details for ID ${id}:`, error);
+          return null;
+        }
+      }),
+    ).then((batchResults) =>
+      batchResults.filter((result): result is TMDBMovieData => result !== null),
     );
-    movieDetails.push(...validResults);
+    batchPromises.push(batchPromise);
   }
+
+  // Process all batches in parallel
+  const batchResults = await Promise.all(batchPromises);
+  movieDetails.push(...batchResults.flat());
 
   return movieDetails;
 };
