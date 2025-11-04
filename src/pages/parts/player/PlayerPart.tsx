@@ -181,7 +181,7 @@ export function PlayerPart(props: PlayerPartProps) {
             status === playerStatus.PLAYING ? (
               <Player.Captions />
             ) : null}
-              <Player.Settings />
+            <Player.Settings />
             {isShifting || isHoldingFullscreen ? (
               <Player.Widescreen />
             ) : (
@@ -202,7 +202,7 @@ export function PlayerPart(props: PlayerPartProps) {
                 <Player.Captions />
               </div>
             ) : null}
-              <Player.Settings />
+            <Player.Settings />
           </div>
           <div>
             {status === playerStatus.PLAYING && (
