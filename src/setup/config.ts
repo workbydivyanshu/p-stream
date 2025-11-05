@@ -28,8 +28,8 @@ interface Config {
   ALLOW_FEBBOX_KEY: boolean;
   ALLOW_REAL_DEBRID_KEY: boolean;
   SHOW_AD: boolean;
-  AD_CONTENT_URL: string; // like <script src="https://umami.com/script.js"></script>
-  TRACK_SCRIPT: string;
+  AD_CONTENT_URL: string;
+  TRACK_SCRIPT: string; // like <script src="https://umami.com/script.js"></script>
   BANNER_MESSAGE: string;
   BANNER_ID: string;
 }
