@@ -10,11 +10,8 @@ import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
 import { EditGroupModal } from "@/components/overlays/EditGroupModal";
-import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
 import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
-import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
 import { useProgressStore } from "@/stores/progress";
@@ -42,19 +39,15 @@ export function BookmarksPart({
   const progressItems = useProgressStore((s) => s.items);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
   const groupOrder = useGroupOrderStore((s) => s.groupOrder);
-  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
   const [editing, setEditing] = useState(false);
   const [gridRef] = useAutoAnimate<HTMLDivElement>();
-  const editOrderModal = useModal("bookmark-edit-order");
   const editBookmarkModal = useModal("bookmark-edit");
   const editGroupModal = useModal("bookmark-edit-group");
   const [editingBookmarkId, setEditingBookmarkId] = useState<string | null>(
     null,
   );
   const [editingGroupName, setEditingGroupName] = useState<string | null>(null);
-  const backendUrl = useBackendUrl();
-  const account = useAuthStore((s) => s.account);
   const modifyBookmarks = useBookmarkStore((s) => s.modifyBookmarks);
   const modifyBookmarksByGroup = useBookmarkStore(
     (s) => s.modifyBookmarksByGroup,
@@ -118,21 +111,6 @@ export function BookmarksPart({
     return { groupedItems: grouped, regularItems: regular };
   }, [items, bookmarks, progressItems]);
 
-  // group sorting
-  const allGroups = useMemo(() => {
-    const groups = new Set<string>();
-
-    Object.values(bookmarks).forEach((bookmark) => {
-      if (Array.isArray(bookmark.group)) {
-        bookmark.group.forEach((group) => groups.add(group));
-      }
-    });
-
-    groups.add("bookmarks");
-
-    return Array.from(groups);
-  }, [bookmarks]);
-
   const sortedSections = useMemo(() => {
     const sections: Array<{
       type: "grouped" | "regular";
@@ -189,32 +167,6 @@ export function BookmarksPart({
     onItemsChange(items.length > 0);
   }, [items, onItemsChange]);
 
-  const handleEditGroupOrder = () => {
-    editOrderModal.show();
-  };
-
-  const handleReorderClick = () => {
-    handleEditGroupOrder();
-    // Keep editing state active by setting it to true
-    setEditing(true);
-  };
-
-  const handleCancelOrder = () => {
-    editOrderModal.hide();
-  };
-
-  const handleSaveOrderClick = (newOrder: string[]) => {
-    setGroupOrder(newOrder);
-    editOrderModal.hide();
-
-    // Save to backend
-    if (backendUrl && account) {
-      useGroupOrderStore
-        .getState()
-        .saveGroupOrderToBackend(backendUrl, account);
-    }
-  };
-
   const handleEditBookmark = (bookmarkId: string) => {
     setEditingBookmarkId(bookmarkId);
     editBookmarkModal.show();
@@ -266,15 +218,6 @@ export function BookmarksPart({
                 }
               >
                 <div className="flex items-center gap-2">
-                  {editing && allGroups.length > 1 && (
-                    <EditButtonWithText
-                      editing={editing}
-                      onEdit={handleReorderClick}
-                      id="edit-group-order-button"
-                      text={t("home.bookmarks.groups.reorder.button")}
-                      secondaryText={t("home.bookmarks.groups.reorder.done")}
-                    />
-                  )}
                   {editing && section.group && (
                     <EditButtonWithText
                       editing={editing}
@@ -323,15 +266,6 @@ export function BookmarksPart({
               icon={Icons.BOOKMARK}
             >
               <div className="flex items-center gap-2">
-                {editing && allGroups.length > 1 && (
-                  <EditButtonWithText
-                    editing={editing}
-                    onEdit={handleReorderClick}
-                    id="edit-group-order-button"
-                    text={t("home.bookmarks.groups.reorder.button")}
-                    secondaryText={t("home.bookmarks.groups.reorder.done")}
-                  />
-                )}
                 <EditButton
                   editing={editing}
                   onEdit={setEditing}
@@ -362,14 +296,6 @@ export function BookmarksPart({
           </div>
         );
       })}
-
-      {/* Edit Order Modal */}
-      <EditGroupOrderModal
-        id={editOrderModal.id}
-        isShown={editOrderModal.isShown}
-        onCancel={handleCancelOrder}
-        onSave={handleSaveOrderClick}
-      />
 
       {/* Edit Bookmark Modal */}
       <EditBookmarkModal

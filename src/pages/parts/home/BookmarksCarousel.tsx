@@ -9,14 +9,11 @@ import { SectionHeading } from "@/components/layout/SectionHeading";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
 import { EditGroupModal } from "@/components/overlays/EditGroupModal";
-import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
 import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
 import { Flare } from "@/components/utils/Flare";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
-import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
 import { useProgressStore } from "@/stores/progress";
@@ -92,8 +89,6 @@ export function BookmarksCarousel({
   let isScrolling = false;
   const [editing, setEditing] = useState(false);
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
-  const backendUrl = useBackendUrl();
-  const account = useAuthStore((s) => s.account);
 
   // Editing modals
   const editBookmarkModal = useModal("bookmark-edit-carousel");
@@ -107,11 +102,6 @@ export function BookmarksCarousel({
     (s) => s.modifyBookmarksByGroup,
   );
 
-  // Group order editing state
-  const groupOrder = useGroupOrderStore((s) => s.groupOrder);
-  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
-  const editOrderModal = useModal("bookmark-edit-order-carousel");
-
   const { isMobile } = useIsMobile();
 
   const bookmarksLength = useBookmarkStore(
@@ -120,6 +110,7 @@ export function BookmarksCarousel({
 
   const progressItems = useProgressStore((state) => state.items);
   const bookmarks = useBookmarkStore((state) => state.bookmarks);
+  const groupOrder = useGroupOrderStore((s) => s.groupOrder);
 
   const items = useMemo(() => {
     let output: MediaItem[] = [];
@@ -179,22 +170,6 @@ export function BookmarksCarousel({
     return { groupedItems: grouped, regularItems: regular };
   }, [items, bookmarks, progressItems]);
 
-  // group sorting
-  const allGroups = useMemo(() => {
-    const groups = new Set<string>();
-
-    Object.values(bookmarks).forEach((bookmark) => {
-      if (Array.isArray(bookmark.group)) {
-        bookmark.group.forEach((group) => groups.add(group));
-      }
-    });
-
-    groups.add("bookmarks");
-
-    return Array.from(groups);
-  }, [bookmarks]);
-
-  // Create a unified list of sections including both grouped and regular bookmarks
   const sortedSections = useMemo(() => {
     const sections: Array<{
       type: "grouped" | "regular";
@@ -272,32 +247,6 @@ export function BookmarksCarousel({
     }
   };
 
-  const handleEditGroupOrder = () => {
-    editOrderModal.show();
-  };
-
-  const handleReorderClick = () => {
-    handleEditGroupOrder();
-    // Keep editing state active by setting it to true
-    setEditing(true);
-  };
-
-  const handleCancelOrder = () => {
-    editOrderModal.hide();
-  };
-
-  const handleSaveOrderClick = (newOrder: string[]) => {
-    setGroupOrder(newOrder);
-    editOrderModal.hide();
-
-    // Save to backend
-    if (backendUrl && account) {
-      useGroupOrderStore
-        .getState()
-        .saveGroupOrderToBackend(backendUrl, account);
-    }
-  };
-
   const handleEditBookmark = (bookmarkId: string) => {
     setEditingBookmarkId(bookmarkId);
     editBookmarkModal.show();
@@ -353,15 +302,6 @@ export function BookmarksCarousel({
                 className="ml-4 md:ml-12 mt-2 -mb-5"
               >
                 <div className="mr-4 md:mr-8 flex items-center gap-2">
-                  {editing && allGroups.length > 1 && (
-                    <EditButtonWithText
-                      editing={editing}
-                      onEdit={handleReorderClick}
-                      id="edit-group-order-button-carousel"
-                      text={t("home.bookmarks.groups.reorder.button")}
-                      secondaryText={t("home.bookmarks.groups.reorder.done")}
-                    />
-                  )}
                   {editing && section.group && (
                     <EditButtonWithText
                       editing={editing}
@@ -438,15 +378,6 @@ export function BookmarksCarousel({
               className="ml-4 md:ml-12 mt-2 -mb-5"
             >
               <div className="mr-4 md:mr-8 flex items-center gap-2">
-                {editing && allGroups.length > 1 && (
-                  <EditButtonWithText
-                    editing={editing}
-                    onEdit={handleReorderClick}
-                    id="edit-group-order-button-carousel"
-                    text={t("home.bookmarks.groups.reorder.button")}
-                    secondaryText={t("home.bookmarks.groups.reorder.done")}
-                  />
-                )}
                 <EditButton
                   editing={editing}
                   onEdit={setEditing}
@@ -510,14 +441,6 @@ export function BookmarksCarousel({
           </div>
         );
       })}
-
-      {/* Edit Order Modal */}
-      <EditGroupOrderModal
-        id={editOrderModal.id}
-        isShown={editOrderModal.isShown}
-        onCancel={handleCancelOrder}
-        onSave={handleSaveOrderClick}
-      />
 
       {/* Edit Bookmark Modal */}
       <EditBookmarkModal
