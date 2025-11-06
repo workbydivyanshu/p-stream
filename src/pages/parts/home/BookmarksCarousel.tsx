@@ -8,6 +8,8 @@ import { Item } from "@/components/form/SortableList";
 import { Icon, Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
+import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
+import { EditGroupModal } from "@/components/overlays/EditGroupModal";
 import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
 import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
@@ -93,6 +95,18 @@ export function BookmarksCarousel({
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
   const backendUrl = useBackendUrl();
   const account = useAuthStore((s) => s.account);
+
+  // Editing modals
+  const editBookmarkModal = useModal("bookmark-edit-carousel");
+  const editGroupModal = useModal("bookmark-edit-group-carousel");
+  const [editingBookmarkId, setEditingBookmarkId] = useState<string | null>(
+    null,
+  );
+  const [editingGroupName, setEditingGroupName] = useState<string | null>(null);
+  const modifyBookmarks = useBookmarkStore((s) => s.modifyBookmarks);
+  const modifyBookmarksByGroup = useBookmarkStore(
+    (s) => s.modifyBookmarksByGroup,
+  );
 
   // Group order editing state
   const groupOrder = useGroupOrderStore((s) => s.groupOrder);
@@ -328,6 +342,38 @@ export function BookmarksCarousel({
     }
   };
 
+  const handleEditBookmark = (bookmarkId: string) => {
+    setEditingBookmarkId(bookmarkId);
+    editBookmarkModal.show();
+  };
+
+  const handleSaveBookmark = (bookmarkId: string, changes: any) => {
+    modifyBookmarks([bookmarkId], changes);
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
+  };
+
+  const handleEditGroup = (groupName: string) => {
+    setEditingGroupName(groupName);
+    editGroupModal.show();
+  };
+
+  const handleSaveGroup = (oldGroupName: string, newGroupName: string) => {
+    modifyBookmarksByGroup({ oldGroupName, newGroupName });
+    editGroupModal.hide();
+    setEditingGroupName(null);
+  };
+
+  const handleCancelEditBookmark = () => {
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
+  };
+
+  const handleCancelEditGroup = () => {
+    editGroupModal.hide();
+    setEditingGroupName(null);
+  };
+
   const categorySlug = "bookmarks";
   const SKELETON_COUNT = 10;
 
@@ -358,6 +404,17 @@ export function BookmarksCarousel({
                       id="edit-group-order-button-carousel"
                       text={t("home.bookmarks.groups.reorder.button")}
                       secondaryText={t("home.bookmarks.groups.reorder.done")}
+                    />
+                  )}
+                  {editing && section.group && (
+                    <EditButtonWithText
+                      editing={editing}
+                      onEdit={() => handleEditGroup(section.group!)}
+                      id="edit-group-button"
+                      text={t("home.bookmarks.groups.editGroup.title")}
+                      secondaryText={t(
+                        "home.bookmarks.groups.editGroup.cancel",
+                      )}
                     />
                   )}
                   <EditButton
@@ -394,6 +451,8 @@ export function BookmarksCarousel({
                           onShowDetails={onShowDetails}
                           closable={editing}
                           onClose={() => removeBookmark(media.id)}
+                          editable={editing}
+                          onEdit={() => handleEditBookmark(media.id)}
                         />
                       </div>
                     ))}
@@ -467,6 +526,8 @@ export function BookmarksCarousel({
                             onShowDetails={onShowDetails}
                             closable={editing}
                             onClose={() => removeBookmark(media.id)}
+                            editable={editing}
+                            onEdit={() => handleEditBookmark(media.id)}
                           />
                         </div>
                       ))
@@ -505,6 +566,24 @@ export function BookmarksCarousel({
           const newOrder = newItems.map((item) => item.id);
           setTempGroupOrder(newOrder);
         }}
+      />
+
+      {/* Edit Bookmark Modal */}
+      <EditBookmarkModal
+        id={editBookmarkModal.id}
+        isShown={editBookmarkModal.isShown}
+        bookmarkId={editingBookmarkId}
+        onCancel={handleCancelEditBookmark}
+        onSave={handleSaveBookmark}
+      />
+
+      {/* Edit Group Modal */}
+      <EditGroupModal
+        id={editGroupModal.id}
+        isShown={editGroupModal.isShown}
+        groupName={editingGroupName}
+        onCancel={handleCancelEditGroup}
+        onSave={handleSaveGroup}
       />
     </>
   );

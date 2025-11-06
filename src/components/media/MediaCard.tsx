@@ -94,6 +94,8 @@ export interface MediaCardProps {
   onClose?: () => void;
   onShowDetails?: (media: MediaItem) => void;
   forceSkeleton?: boolean;
+  editable?: boolean;
+  onEdit?: () => void;
 }
 
 function checkReleased(media: MediaItem): boolean {
@@ -119,6 +121,8 @@ function MediaCardContent({
   onClose,
   onShowDetails,
   forceSkeleton,
+  editable,
+  onEdit,
 }: MediaCardProps) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -284,6 +288,24 @@ function MediaCardContent({
               <Icon
                 className="text-xs font-semibold text-type-secondary"
                 icon={Icons.ELLIPSIS}
+              />
+            </button>
+          </div>
+        )}
+        {editable && closable && (
+          <div className="absolute bottom-0 translate-y-1 right-1">
+            <button
+              className="media-more-button p-2"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onEdit?.();
+              }}
+            >
+              <Icon
+                className="text-xs font-semibold text-type-secondary"
+                icon={Icons.EDIT}
               />
             </button>
           </div>

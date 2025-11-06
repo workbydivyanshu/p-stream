@@ -9,6 +9,8 @@ import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
+import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
+import { EditGroupModal } from "@/components/overlays/EditGroupModal";
 import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
 import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
@@ -46,9 +48,19 @@ export function BookmarksPart({
   const [editing, setEditing] = useState(false);
   const [gridRef] = useAutoAnimate<HTMLDivElement>();
   const editOrderModal = useModal("bookmark-edit-order");
+  const editBookmarkModal = useModal("bookmark-edit");
+  const editGroupModal = useModal("bookmark-edit-group");
   const [tempGroupOrder, setTempGroupOrder] = useState<string[]>([]);
+  const [editingBookmarkId, setEditingBookmarkId] = useState<string | null>(
+    null,
+  );
+  const [editingGroupName, setEditingGroupName] = useState<string | null>(null);
   const backendUrl = useBackendUrl();
   const account = useAuthStore((s) => s.account);
+  const modifyBookmarks = useBookmarkStore((s) => s.modifyBookmarks);
+  const modifyBookmarksByGroup = useBookmarkStore(
+    (s) => s.modifyBookmarksByGroup,
+  );
 
   const items = useMemo(() => {
     let output: MediaItem[] = [];
@@ -248,6 +260,38 @@ export function BookmarksPart({
     }
   };
 
+  const handleEditBookmark = (bookmarkId: string) => {
+    setEditingBookmarkId(bookmarkId);
+    editBookmarkModal.show();
+  };
+
+  const handleSaveBookmark = (bookmarkId: string, changes: any) => {
+    modifyBookmarks([bookmarkId], changes);
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
+  };
+
+  const handleEditGroup = (groupName: string) => {
+    setEditingGroupName(groupName);
+    editGroupModal.show();
+  };
+
+  const handleSaveGroup = (oldGroupName: string, newGroupName: string) => {
+    modifyBookmarksByGroup({ oldGroupName, newGroupName });
+    editGroupModal.hide();
+    setEditingGroupName(null);
+  };
+
+  const handleCancelEditBookmark = () => {
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
+  };
+
+  const handleCancelEditGroup = () => {
+    editGroupModal.hide();
+    setEditingGroupName(null);
+  };
+
   if (items.length === 0) return null;
 
   return (
@@ -276,6 +320,17 @@ export function BookmarksPart({
                       secondaryText={t("home.bookmarks.groups.reorder.done")}
                     />
                   )}
+                  {editing && section.group && (
+                    <EditButtonWithText
+                      editing={editing}
+                      onEdit={() => handleEditGroup(section.group!)}
+                      id="edit-group-button"
+                      text={t("home.bookmarks.groups.editGroup.title")}
+                      secondaryText={t(
+                        "home.bookmarks.groups.editGroup.cancel",
+                      )}
+                    />
+                  )}
                   <EditButton
                     editing={editing}
                     onEdit={setEditing}
@@ -290,12 +345,15 @@ export function BookmarksPart({
                     onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
                       e.preventDefault()
                     }
+                    className="relative group"
                   >
                     <WatchedMediaCard
                       media={v}
                       closable={editing}
                       onClose={() => removeBookmark(v.id)}
                       onShowDetails={onShowDetails}
+                      editable={editing}
+                      onEdit={() => handleEditBookmark(v.id)}
                     />
                   </div>
                 ))}
@@ -333,12 +391,15 @@ export function BookmarksPart({
                   onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
                     e.preventDefault()
                   }
+                  className="relative group"
                 >
                   <WatchedMediaCard
                     media={v}
                     closable={editing}
                     onClose={() => removeBookmark(v.id)}
                     onShowDetails={onShowDetails}
+                    editable={editing}
+                    onEdit={() => handleEditBookmark(v.id)}
                   />
                 </div>
               ))}
@@ -358,6 +419,24 @@ export function BookmarksPart({
           const newOrder = newItems.map((item) => item.id);
           setTempGroupOrder(newOrder);
         }}
+      />
+
+      {/* Edit Bookmark Modal */}
+      <EditBookmarkModal
+        id={editBookmarkModal.id}
+        isShown={editBookmarkModal.isShown}
+        bookmarkId={editingBookmarkId}
+        onCancel={handleCancelEditBookmark}
+        onSave={handleSaveBookmark}
+      />
+
+      {/* Edit Group Modal */}
+      <EditGroupModal
+        id={editGroupModal.id}
+        isShown={editGroupModal.isShown}
+        groupName={editingGroupName}
+        onCancel={handleCancelEditGroup}
+        onSave={handleSaveGroup}
       />
     </div>
   );

@@ -3,6 +3,11 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
+import {
+  ProgressModificationOptions,
+  ProgressModificationResult,
+  modifyProgressItems,
+} from "@/utils/progressModifications";
 
 export { getProgressPercentage } from "./utils";
 
@@ -63,6 +68,10 @@ export interface ProgressStore {
   updateItem(ops: UpdateItemOptions): void;
   removeItem(id: string): void;
   replaceItems(items: Record<string, ProgressMediaItem>): void;
+  modifyProgressItems(
+    progressIds: string[],
+    options: ProgressModificationOptions,
+  ): ProgressModificationResult;
   clear(): void;
   clearUpdateQueue(): void;
   removeUpdateItem(id: string): void;
@@ -174,6 +183,44 @@ export const useProgressStore = create(
         set((s) => {
           s.updateQueue = [...s.updateQueue.filter((v) => v.id !== id)];
         });
+      },
+      modifyProgressItems(
+        progressIds: string[],
+        options: ProgressModificationOptions,
+      ): ProgressModificationResult {
+        let result: ProgressModificationResult = {
+          modifiedIds: [],
+          hasChanges: false,
+        };
+
+        set((s) => {
+          const { modifiedProgressItems, result: modificationResult } =
+            modifyProgressItems(s.items, progressIds, options);
+          s.items = modifiedProgressItems;
+          result = modificationResult;
+
+          // Add to update queue for modified progress items
+          if (result.hasChanges) {
+            result.modifiedIds.forEach((progressId) => {
+              const progressItem = s.items[progressId];
+              if (progressItem) {
+                updateId += 1;
+                s.updateQueue.push({
+                  id: updateId.toString(),
+                  action: "upsert",
+                  tmdbId: progressId,
+                  title: progressItem.title,
+                  year: progressItem.year,
+                  poster: progressItem.poster,
+                  type: progressItem.type,
+                  progress: progressItem.progress,
+                });
+              }
+            });
+          }
+        });
+
+        return result;
       },
     })),
     {

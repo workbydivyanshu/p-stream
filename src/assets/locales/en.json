@@ -297,7 +297,27 @@
           "description": "Drag and drop to reorder your bookmark groups",
           "cancel": "Cancel",
           "save": "Save"
+        },
+        "editGroup": {
+          "title": "Edit Group",
+          "description": "Edit the name and icon of your bookmark group",
+          "cancel": "Cancel",
+          "save": "Save",
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group"
         }
+      },
+      "edit": {
+        "title": "Edit Bookmark",
+        "description": "Edit the details for this bookmark",
+        "cancel": "Cancel",
+        "save": "Save",
+        "groupsLabel": "Groups",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter a title for your bookmark",
+        "yearLabel": "Year",
+        "yearPlaceholder": "Enter a year for your bookmark"
       }
     },
     "continueWatching": {
