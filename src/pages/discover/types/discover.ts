@@ -23,6 +23,7 @@ export interface UseDiscoverMediaProps {
   providerName?: string;
   mediaTitle?: string;
   isCarouselView?: boolean;
+  enabled?: boolean;
 }
 
 export interface DiscoverMedia {

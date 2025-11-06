@@ -115,9 +115,11 @@ export function MediaCarousel({
     }));
 
   // Set up intersection observer for lazy loading
-  const { targetRef, isIntersecting } = useIntersectionObserver({
-    rootMargin: "300px",
-  });
+  const { targetRef, isIntersecting, hasIntersected } = useIntersectionObserver(
+    {
+      rootMargin: "300px",
+    },
+  );
 
   // Handle provider/genre selection
   const handleProviderChange = React.useCallback((id: string, name: string) => {
@@ -195,7 +197,7 @@ export function MediaCarousel({
     content.type,
   ]);
 
-  // Fetch media using our hook
+  // Fetch media using our hook - only when carousel has been visible
   const { media, sectionTitle } = useDiscoverMedia({
     contentType,
     mediaType,
@@ -205,6 +207,7 @@ export function MediaCarousel({
     providerName: selectedProviderName,
     mediaTitle: selectedRecommendationTitle,
     isCarouselView: true,
+    enabled: hasIntersected,
   });
 
   // Find active button
