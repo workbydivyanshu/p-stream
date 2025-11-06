@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 
 import { EditButton } from "@/components/buttons/EditButton";
 import { EditButtonWithText } from "@/components/buttons/EditButtonWithText";
-import { Item } from "@/components/form/SortableList";
 import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
@@ -50,7 +49,6 @@ export function BookmarksPart({
   const editOrderModal = useModal("bookmark-edit-order");
   const editBookmarkModal = useModal("bookmark-edit");
   const editGroupModal = useModal("bookmark-edit-group");
-  const [tempGroupOrder, setTempGroupOrder] = useState<string[]>([]);
   const [editingBookmarkId, setEditingBookmarkId] = useState<string | null>(
     null,
   );
@@ -135,41 +133,6 @@ export function BookmarksPart({
     return Array.from(groups);
   }, [bookmarks]);
 
-  const sortableItems = useMemo(() => {
-    const currentOrder = editOrderModal.isShown ? tempGroupOrder : groupOrder;
-
-    if (currentOrder.length === 0) {
-      return allGroups.map((group) => {
-        const { name } = parseGroupString(group);
-        return {
-          id: group,
-          name: group === "bookmarks" ? t("home.bookmarks.sectionTitle") : name,
-        } as Item;
-      });
-    }
-
-    const orderMap = new Map(
-      currentOrder.map((group, index) => [group, index]),
-    );
-    const sortedGroups = allGroups.sort((groupA, groupB) => {
-      const orderA = orderMap.has(groupA)
-        ? orderMap.get(groupA)!
-        : Number.MAX_SAFE_INTEGER;
-      const orderB = orderMap.has(groupB)
-        ? orderMap.get(groupB)!
-        : Number.MAX_SAFE_INTEGER;
-      return orderA - orderB;
-    });
-
-    return sortedGroups.map((group) => {
-      const { name } = parseGroupString(group);
-      return {
-        id: group,
-        name: group === "bookmarks" ? t("home.bookmarks.sectionTitle") : name,
-      } as Item;
-    });
-  }, [allGroups, t, editOrderModal.isShown, tempGroupOrder, groupOrder]);
-
   const sortedSections = useMemo(() => {
     const sections: Array<{
       type: "grouped" | "regular";
@@ -221,20 +184,12 @@ export function BookmarksPart({
 
     return sections;
   }, [groupedItems, regularItems, groupOrder]);
-  // kill me
 
   useEffect(() => {
     onItemsChange(items.length > 0);
   }, [items, onItemsChange]);
 
   const handleEditGroupOrder = () => {
-    // Initialize with current order or default order
-    if (groupOrder.length === 0) {
-      const defaultOrder = allGroups.map((group) => group);
-      setTempGroupOrder(defaultOrder);
-    } else {
-      setTempGroupOrder([...groupOrder]);
-    }
     editOrderModal.show();
   };
 
@@ -248,8 +203,8 @@ export function BookmarksPart({
     editOrderModal.hide();
   };
 
-  const handleSaveOrderClick = () => {
-    setGroupOrder(tempGroupOrder);
+  const handleSaveOrderClick = (newOrder: string[]) => {
+    setGroupOrder(newOrder);
     editOrderModal.hide();
 
     // Save to backend
@@ -412,13 +367,8 @@ export function BookmarksPart({
       <EditGroupOrderModal
         id={editOrderModal.id}
         isShown={editOrderModal.isShown}
-        items={sortableItems}
         onCancel={handleCancelOrder}
         onSave={handleSaveOrderClick}
-        onItemsChange={(newItems) => {
-          const newOrder = newItems.map((item) => item.id);
-          setTempGroupOrder(newOrder);
-        }}
       />
 
       {/* Edit Bookmark Modal */}
