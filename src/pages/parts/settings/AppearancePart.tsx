@@ -252,14 +252,13 @@ export function AppearancePart(props: {
 
   // Group order modal
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
-  const groupOrder = useGroupOrderStore((s) => s.groupOrder);
   const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
   const editGroupOrderModal = useModal("bookmark-edit-order-settings");
   const backendUrl = useBackendUrl();
   const account = useAuthStore((s) => s.account);
 
   // Check if there are groups
-  const allGroups = useMemo(() => {
+  const hasGroups = useMemo(() => {
     const groups = new Set<string>();
 
     Object.values(bookmarks).forEach((bookmark) => {
@@ -270,10 +269,8 @@ export function AppearancePart(props: {
 
     groups.add("bookmarks");
 
-    return Array.from(groups);
+    return groups.size > 1;
   }, [bookmarks]);
-
-  const hasGroups = allGroups.length > 1;
 
   const {
     enableLowPerformanceMode,
