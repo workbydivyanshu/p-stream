@@ -1,3 +1,5 @@
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,13 +10,16 @@ import { Item } from "@/components/form/SortableList";
 import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
-import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
 import { EditGroupModal } from "@/components/overlays/EditGroupModal";
 import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
 import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import {
+  SortableMediaCard,
+  useBookmarkDragAndDrop,
+} from "@/hooks/useBookmarkDragAndDrop";
 import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
@@ -119,6 +124,14 @@ export function BookmarksPart({
 
     return { groupedItems: grouped, regularItems: regular };
   }, [items, bookmarks, progressItems]);
+
+  // Drag and drop hook
+  const { sensors, orderedItems, orderedGroupedItems, handleDragEnd } =
+    useBookmarkDragAndDrop({
+      editing,
+      items,
+      groupedItems,
+    });
 
   // group sorting
   const allGroups = useMemo(() => {
@@ -338,26 +351,47 @@ export function BookmarksPart({
                   />
                 </div>
               </SectionHeading>
-              <MediaGrid>
-                {section.items.map((v) => (
-                  <div
-                    key={v.id}
-                    onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                      e.preventDefault()
-                    }
-                    className="relative group"
-                  >
-                    <WatchedMediaCard
-                      media={v}
-                      closable={editing}
-                      onClose={() => removeBookmark(v.id)}
-                      onShowDetails={onShowDetails}
-                      editable={editing}
-                      onEdit={() => handleEditBookmark(v.id)}
-                    />
-                  </div>
-                ))}
-              </MediaGrid>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={(e) => handleDragEnd(e, section.group)}
+              >
+                <SortableContext
+                  items={
+                    editing && orderedGroupedItems[section.group || ""]
+                      ? orderedGroupedItems[section.group || ""].map(
+                          (item) => item.id,
+                        )
+                      : section.items.map((item) => item.id)
+                  }
+                  strategy={rectSortingStrategy}
+                >
+                  <MediaGrid>
+                    {(editing && orderedGroupedItems[section.group || ""]
+                      ? orderedGroupedItems[section.group || ""]
+                      : section.items
+                    ).map((v) => (
+                      <div
+                        key={v.id}
+                        onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                          e.preventDefault()
+                        }
+                        className="relative group"
+                      >
+                        <SortableMediaCard
+                          media={v}
+                          closable={editing}
+                          onClose={() => removeBookmark(v.id)}
+                          onShowDetails={onShowDetails}
+                          editable={editing}
+                          onEdit={() => handleEditBookmark(v.id)}
+                          isEditing={editing}
+                        />
+                      </div>
+                    ))}
+                  </MediaGrid>
+                </SortableContext>
+              </DndContext>
             </div>
           );
         } // regular items
@@ -384,26 +418,59 @@ export function BookmarksPart({
                 />
               </div>
             </SectionHeading>
-            <MediaGrid ref={gridRef}>
-              {section.items.map((v) => (
-                <div
-                  key={v.id}
-                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                    e.preventDefault()
-                  }
-                  className="relative group"
-                >
-                  <WatchedMediaCard
-                    media={v}
-                    closable={editing}
-                    onClose={() => removeBookmark(v.id)}
-                    onShowDetails={onShowDetails}
-                    editable={editing}
-                    onEdit={() => handleEditBookmark(v.id)}
-                  />
-                </div>
-              ))}
-            </MediaGrid>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(e) => handleDragEnd(e)}
+            >
+              <SortableContext
+                items={
+                  editing
+                    ? orderedItems
+                        .filter((item) => {
+                          const bookmark = bookmarks[item.id];
+                          return (
+                            !Array.isArray(bookmark?.group) ||
+                            bookmark.group.length === 0
+                          );
+                        })
+                        .map((item) => item.id)
+                    : section.items.map((item) => item.id)
+                }
+                strategy={rectSortingStrategy}
+              >
+                <MediaGrid ref={gridRef}>
+                  {(editing
+                    ? orderedItems.filter((item) => {
+                        const bookmark = bookmarks[item.id];
+                        return (
+                          !Array.isArray(bookmark?.group) ||
+                          bookmark.group.length === 0
+                        );
+                      })
+                    : section.items
+                  ).map((v) => (
+                    <div
+                      key={v.id}
+                      onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                        e.preventDefault()
+                      }
+                      className="relative group"
+                    >
+                      <SortableMediaCard
+                        media={v}
+                        closable={editing}
+                        onClose={() => removeBookmark(v.id)}
+                        onShowDetails={onShowDetails}
+                        editable={editing}
+                        onEdit={() => handleEditBookmark(v.id)}
+                        isEditing={editing}
+                      />
+                    </div>
+                  ))}
+                </MediaGrid>
+              </SortableContext>
+            </DndContext>
           </div>
         );
       })}

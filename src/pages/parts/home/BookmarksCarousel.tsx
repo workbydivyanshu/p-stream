@@ -1,3 +1,5 @@
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -7,7 +9,6 @@ import { EditButtonWithText } from "@/components/buttons/EditButtonWithText";
 import { Item } from "@/components/form/SortableList";
 import { Icon, Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
-import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
 import { EditGroupModal } from "@/components/overlays/EditGroupModal";
 import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
@@ -15,6 +16,10 @@ import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
 import { Flare } from "@/components/utils/Flare";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import {
+  SortableMediaCard,
+  useBookmarkDragAndDrop,
+} from "@/hooks/useBookmarkDragAndDrop";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
 import { useAuthStore } from "@/stores/auth";
@@ -180,6 +185,14 @@ export function BookmarksCarousel({
 
     return { groupedItems: grouped, regularItems: regular };
   }, [items, bookmarks, progressItems]);
+
+  // Drag and drop hook
+  const { sensors, orderedItems, orderedGroupedItems, handleDragEnd } =
+    useBookmarkDragAndDrop({
+      editing,
+      items,
+      groupedItems,
+    });
 
   // group sorting
   const allGroups = useMemo(() => {
@@ -435,27 +448,50 @@ export function BookmarksCarousel({
                 >
                   <div className="md:w-12" />
 
-                  {section.items
-                    .slice(0, MAX_ITEMS_PER_SECTION)
-                    .map((media) => (
-                      <div
-                        key={media.id}
-                        onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                          e.preventDefault()
-                        }
-                        className="relative mt-4 group cursor-pointer rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
-                      >
-                        <WatchedMediaCard
-                          key={media.id}
-                          media={media}
-                          onShowDetails={onShowDetails}
-                          closable={editing}
-                          onClose={() => removeBookmark(media.id)}
-                          editable={editing}
-                          onEdit={() => handleEditBookmark(media.id)}
-                        />
-                      </div>
-                    ))}
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={(e) => handleDragEnd(e, section.group)}
+                  >
+                    <SortableContext
+                      items={
+                        editing && orderedGroupedItems[section.group || ""]
+                          ? orderedGroupedItems[section.group || ""]
+                              .slice(0, MAX_ITEMS_PER_SECTION)
+                              .map((item) => item.id)
+                          : section.items
+                              .slice(0, MAX_ITEMS_PER_SECTION)
+                              .map((item) => item.id)
+                      }
+                      strategy={rectSortingStrategy}
+                    >
+                      {(editing && orderedGroupedItems[section.group || ""]
+                        ? orderedGroupedItems[section.group || ""]
+                        : section.items
+                      )
+                        .slice(0, MAX_ITEMS_PER_SECTION)
+                        .map((media) => (
+                          <div
+                            key={media.id}
+                            onContextMenu={(
+                              e: React.MouseEvent<HTMLDivElement>,
+                            ) => e.preventDefault()}
+                            className="relative mt-4 group cursor-pointer rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                          >
+                            <SortableMediaCard
+                              key={media.id}
+                              media={media}
+                              onShowDetails={onShowDetails}
+                              closable={editing}
+                              onClose={() => removeBookmark(media.id)}
+                              editable={editing}
+                              onEdit={() => handleEditBookmark(media.id)}
+                              isEditing={editing}
+                            />
+                          </div>
+                        ))}
+                    </SortableContext>
+                  </DndContext>
 
                   {section.items.length > MAX_ITEMS_PER_SECTION && (
                     <MoreBookmarksCard />
@@ -509,33 +545,71 @@ export function BookmarksCarousel({
               >
                 <div className="md:w-12" />
 
-                {section.items.length > 0
-                  ? section.items
-                      .slice(0, MAX_ITEMS_PER_SECTION)
-                      .map((media) => (
-                        <div
-                          key={media.id}
-                          onContextMenu={(
-                            e: React.MouseEvent<HTMLDivElement>,
-                          ) => e.preventDefault()}
-                          className="relative mt-4 group cursor-pointer rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
-                        >
-                          <WatchedMediaCard
+                {section.items.length > 0 ? (
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={(e) => handleDragEnd(e)}
+                  >
+                    <SortableContext
+                      items={
+                        editing
+                          ? orderedItems
+                              .filter((item) => {
+                                const bookmark = bookmarks[item.id];
+                                return (
+                                  !Array.isArray(bookmark?.group) ||
+                                  bookmark.group.length === 0
+                                );
+                              })
+                              .slice(0, MAX_ITEMS_PER_SECTION)
+                              .map((item) => item.id)
+                          : section.items
+                              .slice(0, MAX_ITEMS_PER_SECTION)
+                              .map((item) => item.id)
+                      }
+                      strategy={rectSortingStrategy}
+                    >
+                      {(editing
+                        ? orderedItems.filter((item) => {
+                            const bookmark = bookmarks[item.id];
+                            return (
+                              !Array.isArray(bookmark?.group) ||
+                              bookmark.group.length === 0
+                            );
+                          })
+                        : section.items
+                      )
+                        .slice(0, MAX_ITEMS_PER_SECTION)
+                        .map((media) => (
+                          <div
                             key={media.id}
-                            media={media}
-                            onShowDetails={onShowDetails}
-                            closable={editing}
-                            onClose={() => removeBookmark(media.id)}
-                            editable={editing}
-                            onEdit={() => handleEditBookmark(media.id)}
-                          />
-                        </div>
-                      ))
-                  : Array.from({ length: SKELETON_COUNT }).map(() => (
-                      <MediaCardSkeleton
-                        key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(7)}`}
-                      />
-                    ))}
+                            onContextMenu={(
+                              e: React.MouseEvent<HTMLDivElement>,
+                            ) => e.preventDefault()}
+                            className="relative mt-4 group cursor-pointer rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                          >
+                            <SortableMediaCard
+                              key={media.id}
+                              media={media}
+                              onShowDetails={onShowDetails}
+                              closable={editing}
+                              onClose={() => removeBookmark(media.id)}
+                              editable={editing}
+                              onEdit={() => handleEditBookmark(media.id)}
+                              isEditing={editing}
+                            />
+                          </div>
+                        ))}
+                    </SortableContext>
+                  </DndContext>
+                ) : (
+                  Array.from({ length: SKELETON_COUNT }).map(() => (
+                    <MediaCardSkeleton
+                      key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(7)}`}
+                    />
+                  ))
+                )}
 
                 {section.items.length > MAX_ITEMS_PER_SECTION && (
                   <MoreBookmarksCard />

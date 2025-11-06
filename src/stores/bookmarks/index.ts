@@ -54,6 +54,7 @@ export interface BookmarkStore {
   modifyBookmarksByGroup(
     options: BulkGroupModificationOptions,
   ): BookmarkModificationResult;
+  updateBookmarkOrder(bookmarkIds: string[]): void;
   clear(): void;
   clearUpdateQueue(): void;
   removeUpdateItem(id: string): void;
@@ -276,6 +277,21 @@ export const useBookmarkStore = create(
         });
 
         return result;
+      },
+      updateBookmarkOrder(bookmarkIds: string[]) {
+        set((s) => {
+          const baseTime = Date.now();
+          bookmarkIds.forEach((bookmarkId, index) => {
+            const bookmark = s.bookmarks[bookmarkId];
+            if (bookmark) {
+              // Update timestamp to reflect order (earlier items have higher timestamps)
+              // This ensures they appear first when sorted by date descending
+              // Note: We don't add to update queue here to avoid quota errors.
+              // Order is persisted locally via updatedAt timestamps.
+              bookmark.updatedAt = baseTime - index;
+            }
+          });
+        });
       },
     })),
     {
