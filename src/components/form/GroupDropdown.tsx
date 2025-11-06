@@ -149,7 +149,7 @@ export function GroupDropdown({
                 type="text"
                 value={newGroup}
                 onChange={(e) => setNewGroup(e.target.value)}
-                className="flex-1 px-2 py-1 rounded bg-background-main text-white border border-background-secondary text-xs min-w-0 placeholder:text-type-secondary"
+                className="flex-1 px-2 py-1 rounded bg-background-main text-white border border-background-secondary outline-none text-xs min-w-0 placeholder:text-type-secondary"
                 placeholder="Group name"
                 autoFocus
                 onKeyDown={(e) => {

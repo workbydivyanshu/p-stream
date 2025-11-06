@@ -116,7 +116,7 @@ export function EditBookmarkModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder={t("home.bookmarks.edit.titlePlaceholder")}
-              className="w-full px-3 py-2 bg-background-main border border-background-secondary rounded-lg text-white text-sm placeholder:text-type-secondary"
+              className="w-full px-3 py-2 bg-background-main outline-none rounded text-sm text-white"
             />
           </div>
 
@@ -134,7 +134,7 @@ export function EditBookmarkModal({
                 )
               }
               placeholder={t("home.bookmarks.edit.yearPlaceholder")}
-              className="w-full px-3 py-2 bg-background-main border border-background-secondary rounded-lg text-white text-sm placeholder:text-type-secondary"
+              className="w-full px-3 py-2 bg-background-main outline-none rounded text-sm text-white"
             />
           </div>
 

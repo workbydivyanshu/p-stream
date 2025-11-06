@@ -120,7 +120,7 @@ export function EditGroupModal({
                   handleSave();
                 }
               }}
-              className="w-full px-3 py-2 bg-background-main border border-border rounded text-sm"
+              className="w-full px-3 py-2 bg-background-main outline-none rounded text-sm"
               autoFocus
             />
             {newGroupName.trim().length > 0 && (
