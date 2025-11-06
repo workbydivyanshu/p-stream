@@ -6,6 +6,7 @@ import { getCollectionDetails, getMediaPoster } from "@/backend/metadata/tmdb";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaCard } from "@/components/media/MediaCard";
+import { UserIcons } from "@/components/UserIcon";
 import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
@@ -168,6 +169,14 @@ export function CollectionOverlay({
   const handleBookmarkCollection = () => {
     if (!collection?.parts) return;
 
+    // Get all available user icons and select one randomly
+    const userIconList = Object.values(UserIcons);
+    const randomIcon =
+      userIconList[Math.floor(Math.random() * userIconList.length)];
+
+    // Format the group name with the random icon
+    const groupName = `[${randomIcon}]${collectionName}`;
+
     collection.parts.forEach((movie) => {
       const year = movie.release_date
         ? new Date(movie.release_date).getFullYear()
@@ -184,7 +193,7 @@ export function CollectionOverlay({
         poster: getMediaPoster(movie.poster_path) || "/placeholder.png",
       };
 
-      addBookmarkWithGroups(meta, [collectionName]);
+      addBookmarkWithGroups(meta, [groupName]);
     });
   };
 
