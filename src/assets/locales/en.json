@@ -1128,9 +1128,9 @@
       "manualSource": "Manual source selection",
       "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
       "manualSourceLabel": "Manual source selection",
-      "lastSuccessfulSource": "Last successful source",
+      "lastSuccessfulSource": "Last used source",
       "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last successful source"
+      "lastSuccessfulSourceEnableLabel": "Last used source"
     },
     "reset": "Reset",
     "save": "Save",

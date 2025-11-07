@@ -73,7 +73,7 @@ export const usePreferencesStore = create(
       sourceOrder: [],
       enableSourceOrder: false,
       lastSuccessfulSource: null,
-      enableLastSuccessfulSource: true,
+      enableLastSuccessfulSource: false,
       disabledSources: [],
       embedOrder: [],
       enableEmbedOrder: false,
