@@ -116,7 +116,7 @@ export function CaptionsPart(props: {
       backgroundBlur: 0.5,
       backgroundBlurEnabled: !isFirefox,
       bold: false,
-      verticalPosition: 3,
+      verticalPosition: 1,
       fontStyle: "default",
       borderThickness: 1,
     });
@@ -331,23 +331,6 @@ export function CaptionsPart(props: {
                     type="button"
                     className={classNames(
                       "px-3 py-1 rounded transition-colors duration-100",
-                      props.styling.verticalPosition === 3
-                        ? "bg-video-context-buttonFocus"
-                        : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
-                    )}
-                    onClick={() =>
-                      handleStylingChange({
-                        ...props.styling,
-                        verticalPosition: 3,
-                      })
-                    }
-                  >
-                    {t("settings.subtitles.default")}
-                  </button>
-                  <button
-                    type="button"
-                    className={classNames(
-                      "px-3 py-1 rounded transition-colors duration-100",
                       props.styling.verticalPosition === 1
                         ? "bg-video-context-buttonFocus"
                         : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
@@ -360,6 +343,23 @@ export function CaptionsPart(props: {
                     }
                   >
                     {t("settings.subtitles.low")}
+                  </button>
+                  <button
+                    type="button"
+                    className={classNames(
+                      "px-3 py-1 rounded transition-colors duration-100",
+                      props.styling.verticalPosition === 3
+                        ? "bg-video-context-buttonFocus"
+                        : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                    )}
+                    onClick={() =>
+                      handleStylingChange({
+                        ...props.styling,
+                        verticalPosition: 3,
+                      })
+                    }
+                  >
+                    {t("settings.subtitles.high")}
                   </button>
                 </div>
               </div>

@@ -1159,8 +1159,8 @@
       "title": "Subtitles",
       "textBoldLabel": "Bold text",
       "verticalPositionLabel": "Vertical position",
-      "default": "Default",
-      "low": "Low",
+      "high": "High",
+      "low": "Default",
       "textStyle": {
         "title": "Text style",
         "default": "Default",

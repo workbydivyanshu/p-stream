@@ -12,6 +12,7 @@ import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
+import { isFirefox } from "@/utils/detectFeatures";
 
 export function ColorOption(props: {
   color: string;
@@ -423,10 +424,12 @@ export function CaptionSettingsView({
   const resetSubStyling = () => {
     subtitleStore.updateStyling({
       color: "#ffffff",
-      backgroundOpacity: 0.5,
-      size: 1,
-      backgroundBlur: 0.5,
+      backgroundOpacity: 0.25,
+      size: 0.75,
+      backgroundBlur: 0.25,
+      backgroundBlurEnabled: !isFirefox,
       bold: false,
+      verticalPosition: 1,
       fontStyle: "default",
       borderThickness: 1,
     });
@@ -639,23 +642,6 @@ export function CaptionSettingsView({
                   type="button"
                   className={classNames(
                     "px-3 py-1 rounded transition-colors duration-100",
-                    styling.verticalPosition === 3
-                      ? "bg-video-context-buttonFocus"
-                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
-                  )}
-                  onClick={() =>
-                    handleStylingChange({
-                      ...styling,
-                      verticalPosition: 3,
-                    })
-                  }
-                >
-                  {t("settings.subtitles.default")}
-                </button>
-                <button
-                  type="button"
-                  className={classNames(
-                    "px-3 py-1 rounded transition-colors duration-100",
                     styling.verticalPosition === 1
                       ? "bg-video-context-buttonFocus"
                       : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
@@ -668,6 +654,23 @@ export function CaptionSettingsView({
                   }
                 >
                   {t("settings.subtitles.low")}
+                </button>
+                <button
+                  type="button"
+                  className={classNames(
+                    "px-3 py-1 rounded transition-colors duration-100",
+                    styling.verticalPosition === 3
+                      ? "bg-video-context-buttonFocus"
+                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                  )}
+                  onClick={() =>
+                    handleStylingChange({
+                      ...styling,
+                      verticalPosition: 3,
+                    })
+                  }
+                >
+                  {t("settings.subtitles.high")}
                 </button>
               </div>
             </div>

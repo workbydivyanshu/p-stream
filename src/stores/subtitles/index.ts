@@ -94,7 +94,7 @@ export const useSubtitleStore = create(
         backgroundBlur: 0.5,
         backgroundBlurEnabled: !isFirefox,
         bold: false,
-        verticalPosition: 3,
+        verticalPosition: 1,
         fontStyle: "default",
         borderThickness: 1,
       },
@@ -147,7 +147,7 @@ export const useSubtitleStore = create(
             backgroundBlur: 0.5,
             backgroundBlurEnabled: !isFirefox,
             bold: false,
-            verticalPosition: 3,
+            verticalPosition: 1,
             fontStyle: "default",
             borderThickness: 1,
           };
