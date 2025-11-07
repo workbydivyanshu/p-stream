@@ -28,6 +28,23 @@ export function CaptionPreview(props: {
   onToggle: () => void;
 }) {
   const { t } = useTranslation();
+  const { fullscreen, show, onToggle } = props;
+
+  useEffect(() => {
+    if (!fullscreen || !show) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onToggle();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [fullscreen, show, onToggle]);
+
   return (
     <div
       className={classNames({
