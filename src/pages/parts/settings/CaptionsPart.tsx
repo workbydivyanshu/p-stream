@@ -33,7 +33,7 @@ export function CaptionPreview(props: {
       className={classNames({
         "pointer-events-none overflow-hidden w-full rounded": true,
         "aspect-video relative": !props.fullscreen,
-        "fixed inset-0 z-[60]": props.fullscreen,
+        "fixed inset-0 z-[999]": props.fullscreen,
       })}
     >
       {props.fullscreen && props.show ? (
