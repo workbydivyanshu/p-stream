@@ -103,7 +103,6 @@ function VideoElement() {
     <video
       id="video-element"
       className="absolute inset-0 w-full h-screen bg-black"
-      style={{ isolation: "isolate" }}
       autoPlay
       playsInline
       ref={videoEl}

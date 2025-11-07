@@ -98,7 +98,6 @@ export function CaptionCue({
           styling.backgroundBlur !== 0
             ? `blur(${Math.floor(styling.backgroundBlur * 64)}px)`
             : "none",
-        isolation: styling.backgroundBlur !== 0 ? "isolate" : "auto",
         fontWeight: styling.bold ? "bold" : "normal",
         ...textEffectStyles,
       }}

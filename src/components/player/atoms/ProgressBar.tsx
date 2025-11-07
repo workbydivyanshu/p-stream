@@ -62,10 +62,7 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
                 className="h-24 border rounded-xl border-gray-800"
               />
             )}
-            <p
-              className="mt-1 mx-auto text-center border rounded-xl border-gray-800 px-3 py-1 backdrop-blur-lg bg-black bg-opacity-20 w-max"
-              style={{ isolation: "isolate" }}
-            >
+            <p className="mt-1 mx-auto text-center border rounded-xl border-gray-800 px-3 py-1 backdrop-blur-lg bg-black bg-opacity-20 w-max">
               {formattedTime}
             </p>
           </div>
