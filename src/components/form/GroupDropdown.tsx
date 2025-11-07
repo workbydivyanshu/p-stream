@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Icon, Icons } from "@/components/Icon";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
 
+import { Button } from "../buttons/Button";
+
 interface GroupDropdownProps {
   groups: string[];
   currentGroups: string[];
@@ -122,6 +124,7 @@ export function GroupDropdown({
           )}
           {groups.map((group) => {
             const { icon, name } = parseGroupString(group);
+            const isChecked = currentGroups.includes(group);
             return (
               <label
                 key={group}
@@ -129,11 +132,27 @@ export function GroupDropdown({
               >
                 <input
                   type="checkbox"
-                  checked={currentGroups.includes(group)}
+                  checked={isChecked}
                   onChange={() => handleToggleGroup(group)}
-                  className="accent-type-link"
+                  className="sr-only"
                 />
-                <span className="w-5 h-5 flex items-center justify-center ml-1">
+                <div
+                  className={`relative w-4 h-4 rounded border-2 transition-all duration-200 flex items-center justify-center ${
+                    isChecked
+                      ? "bg-buttons-purple border-buttons-purple"
+                      : "border-background-secondary hover:border-buttons-purple/50"
+                  }`}
+                >
+                  <Icon
+                    icon={Icons.CHECKMARK}
+                    className={`w-4 h-4 transition-all duration-200 ${
+                      isChecked
+                        ? "text-white opacity-100 scale-75"
+                        : "opacity-0"
+                    }`}
+                  />
+                </div>
+                <span className="w-4 h-4 flex items-center justify-center ml-1">
                   <UserIcon
                     icon={icon}
                     className="inline-block w-full h-full"
@@ -158,15 +177,14 @@ export function GroupDropdown({
                 }}
                 style={{ minWidth: 0 }}
               />
-              <button
-                type="button"
-                className="text-type-link font-bold px-2 py-1 min-w-[2.5rem]"
+              <Button
+                theme="purple"
                 onClick={() => handleCreate(newGroup, selectedIcon)}
                 disabled={!newGroup.trim()}
-                style={{ flexShrink: 0 }}
+                className="h-6 w-6 min-w-12 md:min-w-6 justify-center items-center"
               >
-                {t("home.bookmarks.groups.dropdown.addButton")}
-              </button>
+                <Icon icon={Icons.PLUS} className="text-white w-4 h-4" />
+              </Button>
             </div>
             {newGroup.trim().length > 0 && (
               <div className="flex items-center gap-2 flex-wrap pt-2 w-full justify-center">
