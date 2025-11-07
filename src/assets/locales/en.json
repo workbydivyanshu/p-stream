@@ -286,7 +286,6 @@
         "dropdown": {
           "placeholderButton": "Add to group",
           "empty": "No groups yet",
-          "addButton": "Add",
           "removeFromGroup": "Remove from group",
           "removeAll": "Remove all"
         },
