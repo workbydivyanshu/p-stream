@@ -82,6 +82,13 @@ export function useWatchPartySync(
   // Get watch party state
   const { roomCode, isHost, enabled, enableAsGuest } = useWatchPartyStore();
 
+  // Reset URL parameter checking when watch party is disabled
+  useEffect(() => {
+    if (!enabled) {
+      syncStateRef.current.checkedUrlParams = false;
+    }
+  }, [enabled]);
+
   // Check URL parameters for watch party code
   useEffect(() => {
     if (syncStateRef.current.checkedUrlParams) return;
