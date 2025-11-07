@@ -265,7 +265,12 @@ export function KeyboardEvents() {
         dataRef.current.display?.setTime(dataRef.current.time - 1);
 
       // Skip to percentage with number keys (0-9)
-      if (/^[0-9]$/.test(k) && dataRef.current.duration > 0) {
+      if (
+        /^[0-9]$/.test(k) &&
+        dataRef.current.duration > 0 &&
+        !evt.ctrlKey &&
+        !evt.metaKey
+      ) {
         const percentage = parseInt(k, 10) * 10; // 0 = 0%, 1 = 10%, 2 = 20%, ..., 9 = 90%
         const targetTime = (dataRef.current.duration * percentage) / 100;
         dataRef.current.display?.setTime(targetTime);
