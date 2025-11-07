@@ -85,7 +85,7 @@ export function GroupDropdown({
     <div ref={dropdownRef} className="relative min-w-[200px]">
       <button
         type="button"
-        className="w-full px-3 py-2 text-xs bg-background-main border border-background-secondary rounded-lg text-white flex justify-between items-center hover:bg-mediaCard-hoverBackground transition-colors"
+        className="w-full px-3 py-2 text-xs bg-background-main border border-background-secondary rounded-xl text-white flex justify-between items-center hover:bg-mediaCard-hoverBackground transition-colors"
         onClick={() => setOpen((v) => !v)}
       >
         {currentGroups.length > 0 ? (
@@ -116,7 +116,7 @@ export function GroupDropdown({
         </span>
       </button>
       {open && (
-        <div className="absolute min-w-full z-[150] mt-1 end-0 bg-background-main border border-background-secondary rounded-lg shadow-lg py-1 pb-3 text-sm">
+        <div className="absolute min-w-full z-[150] mt-1 end-0 bg-background-main border border-background-secondary rounded-xl shadow-lg py-1 pb-3 text-sm">
           {groups.length === 0 && !showInput && (
             <div className="px-4 py-2 text-type-secondary">
               {t("home.bookmarks.groups.dropdown.empty")}
@@ -128,7 +128,7 @@ export function GroupDropdown({
             return (
               <label
                 key={group}
-                className="flex items-center gap-2 mx-1 px-3 py-2 hover:bg-mediaCard-hoverBackground rounded-md cursor-pointer transition-colors text-type-link/80"
+                className="flex items-center gap-2 mx-1 px-3 py-2 hover:bg-mediaCard-hoverBackground rounded-lg cursor-pointer transition-colors text-type-link/80"
               >
                 <input
                   type="checkbox"
