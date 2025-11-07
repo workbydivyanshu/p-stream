@@ -19,6 +19,7 @@ import { Transition } from "@/components/utils/Transition";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
+import { isFirefox } from "@/utils/detectFeatures";
 
 export function CaptionPreview(props: {
   fullscreen?: boolean;
@@ -113,6 +114,7 @@ export function CaptionsPart(props: {
       backgroundOpacity: 0.5,
       size: 1,
       backgroundBlur: 0.5,
+      backgroundBlurEnabled: !isFirefox,
       bold: false,
       verticalPosition: 3,
       fontStyle: "default",
@@ -158,19 +160,41 @@ export function CaptionsPart(props: {
                 value={props.styling.backgroundOpacity * 100}
                 textTransformer={(s) => `${s}%`}
               />
-              <CaptionSetting
-                label={t("settings.subtitles.backgroundBlurLabel")}
-                max={100}
-                min={0}
-                onChange={(v) =>
-                  handleStylingChange({
-                    ...props.styling,
-                    backgroundBlur: v / 100,
-                  })
-                }
-                value={props.styling.backgroundBlur * 100}
-                textTransformer={(s) => `${s}%`}
-              />
+              <div className="flex justify-between items-center">
+                <Menu.FieldTitle>
+                  {t("settings.subtitles.backgroundBlurEnabledLabel")}
+                </Menu.FieldTitle>
+                <div className="flex justify-center items-center">
+                  <Toggle
+                    enabled={props.styling.backgroundBlurEnabled}
+                    onClick={() =>
+                      handleStylingChange({
+                        ...props.styling,
+                        backgroundBlurEnabled:
+                          !props.styling.backgroundBlurEnabled,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <span className="text-xs text-type-secondary">
+                {t("settings.subtitles.backgroundBlurEnabledDescription")}
+              </span>
+              {props.styling.backgroundBlurEnabled && (
+                <CaptionSetting
+                  label={t("settings.subtitles.backgroundBlurLabel")}
+                  max={100}
+                  min={0}
+                  onChange={(v) =>
+                    handleStylingChange({
+                      ...props.styling,
+                      backgroundBlur: v / 100,
+                    })
+                  }
+                  value={props.styling.backgroundBlur * 100}
+                  textTransformer={(s) => `${s}%`}
+                />
+              )}
               <CaptionSetting
                 label={t("settings.subtitles.textSizeLabel")}
                 max={200}

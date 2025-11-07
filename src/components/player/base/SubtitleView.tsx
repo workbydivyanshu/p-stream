@@ -95,7 +95,7 @@ export function CaptionCue({
         fontSize: `${(1.5 * styling.size).toFixed(2)}em`,
         backgroundColor: `rgba(0,0,0,${styling.backgroundOpacity.toFixed(2)})`,
         backdropFilter:
-          styling.backgroundBlur !== 0
+          styling.backgroundBlurEnabled && styling.backgroundBlur !== 0
             ? `blur(${Math.floor(styling.backgroundBlur * 64)}px)`
             : "none",
         fontWeight: styling.bold ? "bold" : "normal",

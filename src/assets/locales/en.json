@@ -1150,7 +1150,9 @@
     },
     "subtitles": {
       "backgroundLabel": "Background opacity",
-      "backgroundBlurLabel": "Background blur",
+      "backgroundBlurEnabledLabel": "Background blur",
+      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurLabel": "Background blur intensity",
       "colorLabel": "Color",
       "previewQuote": "Convinced life is meaningless, I lack the courage of my conviction.",
       "textSizeLabel": "Text size",

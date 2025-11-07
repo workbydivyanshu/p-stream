@@ -493,16 +493,37 @@ export function CaptionSettingsView({
               value={styling.backgroundOpacity * 100}
               textTransformer={(s) => `${s}%`}
             />
-            <CaptionSetting
-              label={t("settings.subtitles.backgroundBlurLabel")}
-              max={100}
-              min={0}
-              onChange={(v) =>
-                handleStylingChange({ ...styling, backgroundBlur: v / 100 })
-              }
-              value={styling.backgroundBlur * 100}
-              textTransformer={(s) => `${s}%`}
-            />
+            <div className="flex justify-between items-center">
+              <Menu.FieldTitle>
+                {t("settings.subtitles.backgroundBlurEnabledLabel")}
+              </Menu.FieldTitle>
+              <div className="flex justify-center items-center">
+                <Toggle
+                  enabled={styling.backgroundBlurEnabled}
+                  onClick={() =>
+                    handleStylingChange({
+                      ...styling,
+                      backgroundBlurEnabled: !styling.backgroundBlurEnabled,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <span className="text-xs text-type-secondary">
+              {t("settings.subtitles.backgroundBlurEnabledDescription")}
+            </span>
+            {styling.backgroundBlurEnabled && (
+              <CaptionSetting
+                label={t("settings.subtitles.backgroundBlurLabel")}
+                max={100}
+                min={0}
+                onChange={(v) =>
+                  handleStylingChange({ ...styling, backgroundBlur: v / 100 })
+                }
+                value={styling.backgroundBlur * 100}
+                textTransformer={(s) => `${s}%`}
+              />
+            )}
             <CaptionSetting
               label={t("settings.subtitles.textSizeLabel")}
               max={200}
