@@ -43,11 +43,15 @@ import { AppInfoPart } from "./parts/settings/AppInfoPart";
 import { PreferencesPart } from "./parts/settings/PreferencesPart";
 
 function SettingsLayout(props: {
+  className?: string;
   children: React.ReactNode;
   searchQuery: string;
   onSearchChange: (value: string, force: boolean) => void;
   onSearchUnFocus: (newSearch?: string) => void;
+  selectedCategory: string | null;
+  setSelectedCategory: (category: string | null) => void;
 }) {
+  const { className } = props;
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
   const searchRef = useRef<HTMLInputElement>(null);
@@ -105,8 +109,12 @@ function SettingsLayout(props: {
         )}
         data-settings-content
       >
-        <SidebarPart />
-        <div>{props.children}</div>
+        <SidebarPart
+          selectedCategory={props.selectedCategory}
+          setSelectedCategory={props.setSelectedCategory}
+          searchQuery={props.searchQuery}
+        />
+        <div className={className}>{props.children}</div>
         <div className="block lg:hidden">
           <AppInfoPart />
         </div>
@@ -161,15 +169,29 @@ export function AccountSettings(props: {
 
 export function SettingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
+      const categoryId = hash.substring(1); // Remove the # symbol
+      // Check if it's a valid settings category
+      const validCategories = [
+        "settings-account",
+        "settings-preferences",
+        "settings-appearance",
+        "settings-captions",
+        "settings-connection",
+      ];
+      if (validCategories.includes(categoryId)) {
+        setSelectedCategory(categoryId);
+      }
       const element = document.querySelector(hash);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { t } = useTranslation();
@@ -181,6 +203,10 @@ export function SettingsPage() {
   // Simple text search with highlighting
   const handleSearchChange = useCallback((value: string, _force: boolean) => {
     setSearchQuery(value);
+    // When searching, clear category selection to show all sections
+    if (value.trim()) {
+      setSelectedCategory(null);
+    }
 
     // Remove existing highlights
     const existingHighlights = document.querySelectorAll(".search-highlight");
@@ -637,103 +663,134 @@ export function SettingsPage() {
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
         onSearchUnFocus={handleSearchUnFocus}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        className="space-y-28"
       >
-        <div id="settings-account">
-          <Heading1 border className="!mb-0">
-            {t("settings.account.title")}
-          </Heading1>
-          {user.account && state.profile.state ? (
-            <AccountSettings
-              account={user.account}
-              deviceName={state.deviceName.state}
-              setDeviceName={state.deviceName.set}
-              colorA={state.profile.state.colorA}
-              setColorA={(v) => {
-                state.profile.set((s) => (s ? { ...s, colorA: v } : undefined));
-              }}
-              colorB={state.profile.state.colorB}
-              setColorB={(v) =>
-                state.profile.set((s) => (s ? { ...s, colorB: v } : undefined))
+        {(searchQuery.trim() ||
+          !selectedCategory ||
+          selectedCategory === "settings-account") && (
+          <div id="settings-account">
+            <Heading1 border className="!mb-0">
+              {t("settings.account.title")}
+            </Heading1>
+            {user.account && state.profile.state ? (
+              <AccountSettings
+                account={user.account}
+                deviceName={state.deviceName.state}
+                setDeviceName={state.deviceName.set}
+                colorA={state.profile.state.colorA}
+                setColorA={(v) => {
+                  state.profile.set((s) =>
+                    s ? { ...s, colorA: v } : undefined,
+                  );
+                }}
+                colorB={state.profile.state.colorB}
+                setColorB={(v) =>
+                  state.profile.set((s) =>
+                    s ? { ...s, colorB: v } : undefined,
+                  )
+                }
+                userIcon={state.profile.state.icon as any}
+                setUserIcon={(v) =>
+                  state.profile.set((s) => (s ? { ...s, icon: v } : undefined))
+                }
+              />
+            ) : (
+              <RegisterCalloutPart />
+            )}
+          </div>
+        )}
+        {(searchQuery.trim() ||
+          !selectedCategory ||
+          selectedCategory === "settings-preferences") && (
+          <div id="settings-preferences">
+            <PreferencesPart
+              language={state.appLanguage.state}
+              setLanguage={state.appLanguage.set}
+              enableThumbnails={state.enableThumbnails.state}
+              setEnableThumbnails={state.enableThumbnails.set}
+              enableAutoplay={state.enableAutoplay.state}
+              setEnableAutoplay={state.enableAutoplay.set}
+              enableSkipCredits={state.enableSkipCredits.state}
+              setEnableSkipCredits={state.enableSkipCredits.set}
+              sourceOrder={availableSources}
+              setSourceOrder={state.sourceOrder.set}
+              enableSourceOrder={state.enableSourceOrder.state}
+              setenableSourceOrder={state.enableSourceOrder.set}
+              enableLastSuccessfulSource={
+                state.enableLastSuccessfulSource.state
               }
-              userIcon={state.profile.state.icon as any}
-              setUserIcon={(v) =>
-                state.profile.set((s) => (s ? { ...s, icon: v } : undefined))
+              setEnableLastSuccessfulSource={
+                state.enableLastSuccessfulSource.set
               }
+              disabledSources={state.disabledSources.state}
+              setDisabledSources={state.disabledSources.set}
+              enableLowPerformanceMode={state.enableLowPerformanceMode.state}
+              setEnableLowPerformanceMode={state.enableLowPerformanceMode.set}
+              enableHoldToBoost={state.enableHoldToBoost.state}
+              setEnableHoldToBoost={state.enableHoldToBoost.set}
+              manualSourceSelection={state.manualSourceSelection.state}
+              setManualSourceSelection={state.manualSourceSelection.set}
+              enableDoubleClickToSeek={state.enableDoubleClickToSeek.state}
+              setEnableDoubleClickToSeek={state.enableDoubleClickToSeek.set}
             />
-          ) : (
-            <RegisterCalloutPart />
-          )}
-        </div>
-        <div id="settings-preferences" className="mt-28">
-          <PreferencesPart
-            language={state.appLanguage.state}
-            setLanguage={state.appLanguage.set}
-            enableThumbnails={state.enableThumbnails.state}
-            setEnableThumbnails={state.enableThumbnails.set}
-            enableAutoplay={state.enableAutoplay.state}
-            setEnableAutoplay={state.enableAutoplay.set}
-            enableSkipCredits={state.enableSkipCredits.state}
-            setEnableSkipCredits={state.enableSkipCredits.set}
-            sourceOrder={availableSources}
-            setSourceOrder={state.sourceOrder.set}
-            enableSourceOrder={state.enableSourceOrder.state}
-            setenableSourceOrder={state.enableSourceOrder.set}
-            enableLastSuccessfulSource={state.enableLastSuccessfulSource.state}
-            setEnableLastSuccessfulSource={state.enableLastSuccessfulSource.set}
-            disabledSources={state.disabledSources.state}
-            setDisabledSources={state.disabledSources.set}
-            enableLowPerformanceMode={state.enableLowPerformanceMode.state}
-            setEnableLowPerformanceMode={state.enableLowPerformanceMode.set}
-            enableHoldToBoost={state.enableHoldToBoost.state}
-            setEnableHoldToBoost={state.enableHoldToBoost.set}
-            manualSourceSelection={state.manualSourceSelection.state}
-            setManualSourceSelection={state.manualSourceSelection.set}
-            enableDoubleClickToSeek={state.enableDoubleClickToSeek.state}
-            setEnableDoubleClickToSeek={state.enableDoubleClickToSeek.set}
-          />
-        </div>
-        <div id="settings-appearance" className="mt-28">
-          <AppearancePart
-            active={previewTheme ?? "default"}
-            inUse={activeTheme ?? "default"}
-            setTheme={setThemeWithPreview}
-            enableDiscover={state.enableDiscover.state}
-            setEnableDiscover={state.enableDiscover.set}
-            enableFeatured={state.enableFeatured.state}
-            setEnableFeatured={state.enableFeatured.set}
-            enableDetailsModal={state.enableDetailsModal.state}
-            setEnableDetailsModal={state.enableDetailsModal.set}
-            enableImageLogos={state.enableImageLogos.state}
-            setEnableImageLogos={state.enableImageLogos.set}
-            enableCarouselView={state.enableCarouselView.state}
-            setEnableCarouselView={state.enableCarouselView.set}
-            forceCompactEpisodeView={state.forceCompactEpisodeView.state}
-            setForceCompactEpisodeView={state.forceCompactEpisodeView.set}
-            homeSectionOrder={state.homeSectionOrder.state}
-            setHomeSectionOrder={state.homeSectionOrder.set}
-            enableLowPerformanceMode={state.enableLowPerformanceMode.state}
-          />
-        </div>
-        <div id="settings-captions" className="mt-28">
-          <CaptionsPart
-            styling={state.subtitleStyling.state}
-            setStyling={state.subtitleStyling.set}
-          />
-        </div>
-        <div id="settings-connection" className="mt-28">
-          <ConnectionsPart
-            backendUrl={state.backendUrl.state}
-            setBackendUrl={state.backendUrl.set}
-            proxyUrls={state.proxyUrls.state}
-            setProxyUrls={state.proxyUrls.set}
-            febboxKey={state.febboxKey.state}
-            setFebboxKey={state.febboxKey.set}
-            realDebridKey={state.realDebridKey.state}
-            setRealDebridKey={state.realDebridKey.set}
-            proxyTmdb={state.proxyTmdb.state}
-            setProxyTmdb={state.proxyTmdb.set}
-          />
-        </div>
+          </div>
+        )}
+        {(searchQuery.trim() ||
+          !selectedCategory ||
+          selectedCategory === "settings-appearance") && (
+          <div id="settings-appearance">
+            <AppearancePart
+              active={previewTheme ?? "default"}
+              inUse={activeTheme ?? "default"}
+              setTheme={setThemeWithPreview}
+              enableDiscover={state.enableDiscover.state}
+              setEnableDiscover={state.enableDiscover.set}
+              enableFeatured={state.enableFeatured.state}
+              setEnableFeatured={state.enableFeatured.set}
+              enableDetailsModal={state.enableDetailsModal.state}
+              setEnableDetailsModal={state.enableDetailsModal.set}
+              enableImageLogos={state.enableImageLogos.state}
+              setEnableImageLogos={state.enableImageLogos.set}
+              enableCarouselView={state.enableCarouselView.state}
+              setEnableCarouselView={state.enableCarouselView.set}
+              forceCompactEpisodeView={state.forceCompactEpisodeView.state}
+              setForceCompactEpisodeView={state.forceCompactEpisodeView.set}
+              homeSectionOrder={state.homeSectionOrder.state}
+              setHomeSectionOrder={state.homeSectionOrder.set}
+              enableLowPerformanceMode={state.enableLowPerformanceMode.state}
+            />
+          </div>
+        )}
+        {(searchQuery.trim() ||
+          !selectedCategory ||
+          selectedCategory === "settings-captions") && (
+          <div id="settings-captions">
+            <CaptionsPart
+              styling={state.subtitleStyling.state}
+              setStyling={state.subtitleStyling.set}
+            />
+          </div>
+        )}
+        {(searchQuery.trim() ||
+          !selectedCategory ||
+          selectedCategory === "settings-connection") && (
+          <div id="settings-connection">
+            <ConnectionsPart
+              backendUrl={state.backendUrl.state}
+              setBackendUrl={state.backendUrl.set}
+              proxyUrls={state.proxyUrls.state}
+              setProxyUrls={state.proxyUrls.set}
+              febboxKey={state.febboxKey.state}
+              setFebboxKey={state.febboxKey.set}
+              realDebridKey={state.realDebridKey.state}
+              setRealDebridKey={state.realDebridKey.set}
+              proxyTmdb={state.proxyTmdb.state}
+              setProxyTmdb={state.proxyTmdb.set}
+            />
+          </div>
+        )}
       </SettingsLayout>
       <Transition
         animation="fade"

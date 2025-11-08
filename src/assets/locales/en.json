@@ -942,6 +942,9 @@
     "search": {
       "placeholder": "Search settings..."
     },
+    "all": {
+      "title": "All Settings"
+    },
     "account": {
       "accountDetails": {
         "deviceNameLabel": "Device name",
