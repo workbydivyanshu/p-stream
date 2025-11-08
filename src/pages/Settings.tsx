@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAsyncFn, useWindowSize } from "react-use";
+import { useAsyncFn } from "react-use";
 
 import {
   base64ToBuffer,
@@ -33,6 +33,7 @@ import { RegisterCalloutPart } from "@/pages/parts/settings/RegisterCalloutPart"
 import { SidebarPart } from "@/pages/parts/settings/SidebarPart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
+import { useBannerSize } from "@/stores/banner";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -56,30 +57,13 @@ function SettingsLayout(props: {
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
   const searchRef = useRef<HTMLInputElement>(null);
-  const { width: windowWidth, height: windowHeight } = useWindowSize();
+  const bannerSize = useBannerSize();
 
-  // Dynamic offset calculation like HeroPart
-  const topSpacing = 16; // Base spacing
-  const [stickyOffset, setStickyOffset] = useState(topSpacing);
-
-  // Detect if running as a PWA on iOS
-  const isIOSPWA =
-    /iPad|iPhone|iPod/i.test(navigator.userAgent) &&
-    window.matchMedia("(display-mode: standalone)").matches;
-
-  const adjustedTopSpacing = isIOSPWA ? 60 : topSpacing;
-  const isLandscape = windowHeight < windowWidth && isIOSPWA;
-  const adjustedOffset = isLandscape ? -40 : 0;
-
-  useEffect(() => {
-    if (windowWidth > 1280) {
-      // On large screens the bar goes inline with the nav elements
-      setStickyOffset(adjustedTopSpacing);
-    } else {
-      // On smaller screens the bar goes below the nav elements
-      setStickyOffset(adjustedTopSpacing + 60 + adjustedOffset);
-    }
-  }, [adjustedOffset, adjustedTopSpacing, windowWidth]);
+  // Navbar height is 80px (h-20)
+  const navbarHeight = 80;
+  // On desktop: inline with navbar (same top position + 14px adjustment)
+  // On mobile: below navbar (navbar height + banner)
+  const topOffset = isMobile ? navbarHeight + bannerSize : bannerSize + 14;
 
   return (
     <WideContainer ultraWide classNames="overflow-visible">
@@ -87,7 +71,7 @@ function SettingsLayout(props: {
       <div
         className="fixed left-0 right-0 z-50"
         style={{
-          top: `${stickyOffset}px`,
+          top: `${topOffset}px`,
         }}
       >
         <ThinContainer>
