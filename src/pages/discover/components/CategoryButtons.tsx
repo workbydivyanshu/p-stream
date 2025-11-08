@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useState } from "react";
+
 import { Icon, Icons } from "@/components/Icon";
 
 interface CategoryButtonsProps {
@@ -15,34 +17,84 @@ export function CategoryButtons({
   isMobile,
   showAlwaysScroll,
 }: CategoryButtonsProps) {
-  const renderScrollButton = (direction: "left" | "right") => (
-    <div>
-      <button
-        type="button"
-        className="flex items-center rounded-full px-4 text-white py-3"
-        onClick={() => {
-          const element = document.getElementById(
-            `button-carousel-${categoryType}`,
-          );
-          if (element) {
-            element.scrollBy({
-              left: direction === "left" ? -200 : 200,
-              behavior: "smooth",
-            });
-          }
-        }}
-      >
-        <Icon
-          icon={direction === "left" ? Icons.CHEVRON_LEFT : Icons.CHEVRON_RIGHT}
-          className="text-2xl rtl:-scale-x-100"
-        />
-      </button>
-    </div>
-  );
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollState = useCallback(() => {
+    const element = document.getElementById(`button-carousel-${categoryType}`);
+    if (!element) {
+      setCanScrollLeft(false);
+      setCanScrollRight(false);
+      return;
+    }
+
+    const { scrollLeft, scrollWidth, clientWidth } = element;
+    const isAtStart = scrollLeft <= 1;
+    const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 1;
+
+    setCanScrollLeft(!isAtStart);
+    setCanScrollRight(!isAtEnd);
+  }, [categoryType]);
+
+  useEffect(() => {
+    const element = document.getElementById(`button-carousel-${categoryType}`);
+    if (!element) return;
+
+    updateScrollState();
+
+    element.addEventListener("scroll", updateScrollState);
+    window.addEventListener("resize", updateScrollState);
+
+    return () => {
+      element.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [categoryType, updateScrollState]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      updateScrollState();
+    }, 0);
+    return () => clearTimeout(timeoutId);
+  }, [categories, categoryType, updateScrollState]);
+
+  const renderScrollButton = (direction: "left" | "right") => {
+    const shouldShow = direction === "left" ? canScrollLeft : canScrollRight;
+
+    if (!shouldShow && !showAlwaysScroll && !isMobile) return null;
+
+    return (
+      <div>
+        <button
+          type="button"
+          className="flex items-center rounded-full px-4 text-white py-3"
+          onClick={() => {
+            const element = document.getElementById(
+              `button-carousel-${categoryType}`,
+            );
+            if (element) {
+              element.scrollBy({
+                left: direction === "left" ? -200 : 200,
+                behavior: "smooth",
+              });
+            }
+          }}
+        >
+          <Icon
+            icon={
+              direction === "left" ? Icons.CHEVRON_LEFT : Icons.CHEVRON_RIGHT
+            }
+            className="text-2xl rtl:-scale-x-100"
+          />
+        </button>
+      </div>
+    );
+  };
 
   return (
     <div className="flex overflow-x-auto">
-      {(showAlwaysScroll || isMobile) && renderScrollButton("left")}
+      {(showAlwaysScroll || isMobile || canScrollLeft) &&
+        renderScrollButton("left")}
 
       <div
         id={`button-carousel-${categoryType}`}
@@ -62,7 +114,8 @@ export function CategoryButtons({
         </div>
       </div>
 
-      {(showAlwaysScroll || isMobile) && renderScrollButton("right")}
+      {(showAlwaysScroll || isMobile || canScrollRight) &&
+        renderScrollButton("right")}
     </div>
   );
 }

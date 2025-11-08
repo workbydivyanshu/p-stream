@@ -45,6 +45,39 @@ export function EpisodeCarousel({
   const updateItem = useProgressStore((s) => s.updateItem);
   const confirmModal = useModal("season-watch-confirm");
 
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollState = () => {
+    if (!carouselRef.current) {
+      setCanScrollLeft(false);
+      setCanScrollRight(false);
+      return;
+    }
+
+    const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+    const isAtStart = scrollLeft <= 1;
+    const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 1;
+
+    setCanScrollLeft(!isAtStart);
+    setCanScrollRight(!isAtEnd);
+  };
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    updateScrollState();
+
+    carousel.addEventListener("scroll", updateScrollState);
+    window.addEventListener("resize", updateScrollState);
+
+    return () => {
+      carousel.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, []);
+
   const handleScroll = (direction: "left" | "right") => {
     if (!carouselRef.current) return;
 
@@ -530,15 +563,17 @@ export function EpisodeCarousel({
       {/* Episodes Carousel */}
       <div className="relative">
         {/* Left scroll button */}
-        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 px-4 hidden lg:block">
-          <button
-            type="button"
-            className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
-            onClick={() => handleScroll("left")}
-          >
-            <Icon icon={Icons.CHEVRON_LEFT} className="text-white/80" />
-          </button>
-        </div>
+        {canScrollLeft && (
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 px-4 hidden lg:block">
+            <button
+              type="button"
+              className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
+              onClick={() => handleScroll("left")}
+            >
+              <Icon icon={Icons.CHEVRON_LEFT} className="text-white/80" />
+            </button>
+          </div>
+        )}
 
         <div
           ref={carouselRef}
@@ -783,15 +818,17 @@ export function EpisodeCarousel({
         </div>
 
         {/* Right scroll button */}
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 px-4 hidden lg:block">
-          <button
-            type="button"
-            className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
-            onClick={() => handleScroll("right")}
-          >
-            <Icon icon={Icons.CHEVRON_RIGHT} className="text-white/80" />
-          </button>
-        </div>
+        {canScrollRight && (
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 px-4 hidden lg:block">
+            <button
+              type="button"
+              className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
+              onClick={() => handleScroll("right")}
+            >
+              <Icon icon={Icons.CHEVRON_RIGHT} className="text-white/80" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
