@@ -193,7 +193,7 @@ export function PlayerPart(props: PlayerPartProps) {
           <div />
           <div className="flex justify-center space-x-3">
             {/* Disable PiP for iOS PWA */}
-            {!isPWA && !isIOS && status === playerStatus.PLAYING && (
+            {!(isPWA && isIOS) && status === playerStatus.PLAYING && (
               <Player.Pip />
             )}
             <Player.Episodes inControl={inControl} />
