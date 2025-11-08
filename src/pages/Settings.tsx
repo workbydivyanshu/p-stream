@@ -175,7 +175,7 @@ export function SettingsPage() {
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
-      const categoryId = hash.substring(1); // Remove the # symbol
+      const hashId = hash.substring(1); // Remove the # symbol
       // Check if it's a valid settings category
       const validCategories = [
         "settings-account",
@@ -184,15 +184,111 @@ export function SettingsPage() {
         "settings-captions",
         "settings-connection",
       ];
-      if (validCategories.includes(categoryId)) {
+
+      // Map sub-section hashes to their parent categories
+      const subSectionToCategory: Record<string, string> = {
+        "source-order": "settings-preferences",
+      };
+
+      // Check if it's a sub-section hash
+      if (subSectionToCategory[hashId]) {
+        const categoryId = subSectionToCategory[hashId];
         setSelectedCategory(categoryId);
-      }
-      const element = document.querySelector(hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        // Wait for the section to render, then scroll
+        setTimeout(() => {
+          const element = document.querySelector(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      } else if (validCategories.includes(hashId)) {
+        // It's a category hash
+        setSelectedCategory(hashId);
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // Try to find the element anyway (might be a sub-section)
+        const element = document.querySelector(hash);
+        if (element) {
+          // Find which category this element belongs to
+          const parentSection = element.closest('[id^="settings-"]');
+          if (parentSection) {
+            const categoryId = parentSection.id;
+            if (validCategories.includes(categoryId)) {
+              setSelectedCategory(categoryId);
+              setTimeout(() => {
+                element.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+            }
+          } else {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Handle hash changes after initial load
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const hashId = hash.substring(1);
+        const validCategories = [
+          "settings-account",
+          "settings-preferences",
+          "settings-appearance",
+          "settings-captions",
+          "settings-connection",
+        ];
+        const subSectionToCategory: Record<string, string> = {
+          "source-order": "settings-preferences",
+        };
+
+        if (subSectionToCategory[hashId]) {
+          const categoryId = subSectionToCategory[hashId];
+          setSelectedCategory(categoryId);
+          setTimeout(() => {
+            const element = document.querySelector(hash);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }, 100);
+        } else if (validCategories.includes(hashId)) {
+          setSelectedCategory(hashId);
+          setTimeout(() => {
+            const element = document.querySelector(hash);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }, 100);
+        } else {
+          const element = document.querySelector(hash);
+          if (element) {
+            const parentSection = element.closest('[id^="settings-"]');
+            if (parentSection) {
+              const categoryId = parentSection.id;
+              if (validCategories.includes(categoryId)) {
+                setSelectedCategory(categoryId);
+                setTimeout(() => {
+                  element.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+              }
+            } else {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
   }, []);
 
   // Scroll to top when category changes (but not on initial load or when searching)

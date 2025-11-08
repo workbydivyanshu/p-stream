@@ -217,7 +217,9 @@ export function SourceSelectionView({
         rightSide={
           <button
             type="button"
-            onClick={() => window.open("/settings#source-order")}
+            onClick={() => {
+              window.location.href = "/settings#source-order";
+            }}
             className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
           >
             {t("player.menus.sources.editOrder")}
