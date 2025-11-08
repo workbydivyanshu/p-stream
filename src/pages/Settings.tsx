@@ -39,6 +39,7 @@ import { useSubtitleStore } from "@/stores/subtitles";
 import { usePreviewThemeStore, useThemeStore } from "@/stores/theme";
 
 import { SubPageLayout } from "./layouts/SubPageLayout";
+import { AppInfoPart } from "./parts/settings/AppInfoPart";
 import { PreferencesPart } from "./parts/settings/PreferencesPart";
 
 function SettingsLayout(props: {
@@ -106,6 +107,9 @@ function SettingsLayout(props: {
       >
         <SidebarPart />
         <div>{props.children}</div>
+        <div className="block lg:hidden">
+          <AppInfoPart />
+        </div>
       </div>
     </WideContainer>
   );
