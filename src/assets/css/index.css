@@ -427,3 +427,19 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 .google-cast-button:not(.casting) google-cast-launcher {
   @apply brightness-[500];
 }
+
+/* Image fade-in on load */
+img:not([src=""]) {
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* Fade in when image has loaded class */
+img.loaded {
+  opacity: 1;
+}
+
+/* For images that are already cached/loaded, show them immediately */
+img[complete]:not([src=""]) {
+  opacity: 1;
+}
