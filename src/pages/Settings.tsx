@@ -37,6 +37,7 @@ import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { usePreviewThemeStore, useThemeStore } from "@/stores/theme";
+import { scrollToElement, scrollToHash } from "@/utils/scroll";
 
 import { SubPageLayout } from "./layouts/SubPageLayout";
 import { AppInfoPart } from "./parts/settings/AppInfoPart";
@@ -195,19 +196,11 @@ export function SettingsPage() {
         const categoryId = subSectionToCategory[hashId];
         setSelectedCategory(categoryId);
         // Wait for the section to render, then scroll
-        setTimeout(() => {
-          const element = document.querySelector(hash);
-          if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 100);
+        scrollToHash(hash, { delay: 100 });
       } else if (validCategories.includes(hashId)) {
         // It's a category hash
         setSelectedCategory(hashId);
-        const element = document.querySelector(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
+        scrollToHash(hash);
       } else {
         // Try to find the element anyway (might be a sub-section)
         const element = document.querySelector(hash);
@@ -218,12 +211,10 @@ export function SettingsPage() {
             const categoryId = parentSection.id;
             if (validCategories.includes(categoryId)) {
               setSelectedCategory(categoryId);
-              setTimeout(() => {
-                element.scrollIntoView({ behavior: "smooth" });
-              }, 100);
+              scrollToHash(hash, { delay: 100 });
             }
           } else {
-            element.scrollIntoView({ behavior: "smooth" });
+            scrollToHash(hash);
           }
         }
       }
@@ -251,20 +242,10 @@ export function SettingsPage() {
         if (subSectionToCategory[hashId]) {
           const categoryId = subSectionToCategory[hashId];
           setSelectedCategory(categoryId);
-          setTimeout(() => {
-            const element = document.querySelector(hash);
-            if (element) {
-              element.scrollIntoView({ behavior: "smooth" });
-            }
-          }, 100);
+          scrollToHash(hash, { delay: 100 });
         } else if (validCategories.includes(hashId)) {
           setSelectedCategory(hashId);
-          setTimeout(() => {
-            const element = document.querySelector(hash);
-            if (element) {
-              element.scrollIntoView({ behavior: "smooth" });
-            }
-          }, 100);
+          scrollToHash(hash, { delay: 100 });
         } else {
           const element = document.querySelector(hash);
           if (element) {
@@ -273,12 +254,10 @@ export function SettingsPage() {
               const categoryId = parentSection.id;
               if (validCategories.includes(categoryId)) {
                 setSelectedCategory(categoryId);
-                setTimeout(() => {
-                  element.scrollIntoView({ behavior: "smooth" });
-                }, 100);
+                scrollToHash(hash, { delay: 100 });
               }
             } else {
-              element.scrollIntoView({ behavior: "smooth" });
+              scrollToHash(hash);
             }
           }
         }
@@ -372,13 +351,10 @@ export function SettingsPage() {
       }
 
       // Scroll to first highlighted element
-      const firstHighlighted = document.querySelector(".search-highlight");
-      if (firstHighlighted) {
-        firstHighlighted.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
+      scrollToElement(".search-highlight", {
+        behavior: "smooth",
+        block: "center",
+      });
     }
   }, []);
 

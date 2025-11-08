@@ -20,6 +20,7 @@ import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
+import { scrollToElement } from "@/utils/scroll";
 
 import { hasAired } from "../utils/aired";
 
@@ -832,7 +833,7 @@ export function EpisodesView({
         carouselRef.current.scrollLeft += scrollPosition;
       } else {
         // vertical scroll
-        activeEpisodeRef.current.scrollIntoView({
+        scrollToElement(activeEpisodeRef.current, {
           behavior: "smooth",
           block: "center",
         });
