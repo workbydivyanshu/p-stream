@@ -170,6 +170,7 @@ export function AccountSettings(props: {
 export function SettingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const prevCategoryRef = useRef<string | null>(null);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -193,6 +194,22 @@ export function SettingsPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Scroll to top when category changes (but not on initial load or when searching)
+  useEffect(() => {
+    if (
+      prevCategoryRef.current !== null &&
+      prevCategoryRef.current !== selectedCategory &&
+      !searchQuery.trim()
+    ) {
+      // Only scroll to top if we're actually switching categories (not initial load)
+      // Use requestAnimationFrame to ensure DOM has updated
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+    prevCategoryRef.current = selectedCategory;
+  }, [selectedCategory, searchQuery]);
 
   const { t } = useTranslation();
   const activeTheme = useThemeStore((s) => s.theme);

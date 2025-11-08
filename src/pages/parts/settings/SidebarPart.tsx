@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Sticky from "react-sticky-el";
 
 import { Icons } from "@/components/Icon";
 import { SidebarLink, SidebarSection } from "@/components/layout/Sidebar";
@@ -8,8 +7,6 @@ import { Divider } from "@/components/utils/Divider";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 import { AppInfoPart } from "./AppInfoPart";
-
-const rem = 16;
 
 export function SidebarPart(props: {
   selectedCategory: string | null;
@@ -54,36 +51,46 @@ export function SidebarPart(props: {
   useEffect(() => {
     // Only track active link when searching (to show all sections)
     if (props.searchQuery.trim()) {
+      let ticking = false;
       const recheck = () => {
-        const windowHeight =
-          window.innerHeight || document.documentElement.clientHeight;
-        const centerTarget = windowHeight / 4;
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const windowHeight =
+              window.innerHeight || document.documentElement.clientHeight;
+            const centerTarget = windowHeight / 4;
 
-        const viewList = settingLinks
-          .map((link) => {
-            const el = document.getElementById(link.id);
-            if (!el) return { distance: Infinity, link: link.id };
-            const rect = el.getBoundingClientRect();
-            const distanceTop = Math.abs(centerTarget - rect.top);
-            const distanceBottom = Math.abs(centerTarget - rect.bottom);
-            const distance = Math.min(distanceBottom, distanceTop);
-            return { distance, link: link.id };
-          })
-          .sort((a, b) => a.distance - b.distance);
+            const viewList = settingLinks
+              .map((link) => {
+                const el = document.getElementById(link.id);
+                if (!el) return { distance: Infinity, link: link.id };
+                const rect = el.getBoundingClientRect();
+                const distanceTop = Math.abs(centerTarget - rect.top);
+                const distanceBottom = Math.abs(centerTarget - rect.bottom);
+                const distance = Math.min(distanceBottom, distanceTop);
+                return { distance, link: link.id };
+              })
+              .sort((a, b) => a.distance - b.distance);
 
-        // Check if user has scrolled past the bottom of the page
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-          setActiveLink(settingLinks[settingLinks.length - 1].id);
-          return;
+            // Check if user has scrolled past the bottom of the page
+            if (
+              window.innerHeight + window.scrollY >=
+              document.body.offsetHeight
+            ) {
+              setActiveLink(settingLinks[settingLinks.length - 1].id);
+            } else {
+              // shortest distance to the part of the screen we want is the active link
+              setActiveLink(viewList[0]?.link ?? "");
+            }
+            ticking = false;
+          });
+          ticking = true;
         }
-        // shortest distance to the part of the screen we want is the active link
-        setActiveLink(viewList[0]?.link ?? "");
       };
-      document.addEventListener("scroll", recheck);
+      window.addEventListener("scroll", recheck, { passive: true });
       recheck();
 
       return () => {
-        document.removeEventListener("scroll", recheck);
+        window.removeEventListener("scroll", recheck);
       };
     }
     // When not searching, set active link to selected category
@@ -101,12 +108,18 @@ export function SidebarPart(props: {
 
   return (
     <div className="text-settings-sidebar-type-inactive sidebar-boundary">
-      <Sticky
-        topOffset={-6 * rem}
-        stickyClassName="pt-[6rem]"
-        disabled={isMobile}
-        hideOnBoundaryHit={false}
-        boundaryElement=".sidebar-boundary"
+      <div
+        className={
+          isMobile ? "" : "sticky top-32 self-start will-change-transform"
+        }
+        style={
+          isMobile
+            ? undefined
+            : {
+                // Use CSS transform for better performance
+                transform: "translateZ(0)",
+              }
+        }
       >
         <SidebarSection title={t("global.pages.settings")}>
           <SidebarLink
@@ -137,7 +150,7 @@ export function SidebarPart(props: {
         <div className="hidden lg:block">
           <AppInfoPart />
         </div>
-      </Sticky>
+      </div>
     </div>
   );
 }
