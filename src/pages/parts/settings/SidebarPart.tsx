@@ -146,8 +146,8 @@ export function SidebarPart(props: {
             </SidebarLink>
           ))}
         </SidebarSection>
-        <Divider />
         <div className="hidden lg:block">
+          <Divider />
           <AppInfoPart />
         </div>
       </div>

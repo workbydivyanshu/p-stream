@@ -17,6 +17,7 @@ import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { UserIcons } from "@/components/UserIcon";
+import { Divider } from "@/components/utils/Divider";
 import { Heading1 } from "@/components/utils/Text";
 import { Transition } from "@/components/utils/Transition";
 import { useAuth } from "@/hooks/auth/useAuth";
@@ -101,6 +102,7 @@ function SettingsLayout(props: {
         />
         <div className={className}>{props.children}</div>
         <div className="block lg:hidden">
+          <Divider />
           <AppInfoPart />
         </div>
       </div>
