@@ -29,6 +29,9 @@ export function useGlobalKeyboardEvents() {
         return;
       }
 
+      // Cancel if command or alt is pressed
+      if (event.metaKey || event.altKey) return;
+
       // Handle backtick (`) key hold for keyboard commands
       if (event.key === "`") {
         // Prevent default browser behavior (console opening in some browsers)
@@ -40,7 +43,7 @@ export function useGlobalKeyboardEvents() {
           // Show modal after 500ms hold
           holdTimeoutRef.current = setTimeout(() => {
             showKeyboardCommands();
-          }, 500);
+          }, 150);
         }
       }
 
