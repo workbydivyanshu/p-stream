@@ -90,7 +90,7 @@ function QueryView() {
 
   useEffect(() => {
     if (query) {
-      navigate(`/browse/${query}`, { replace: true });
+      navigate(`/browse/${encodeURIComponent(query)}`, { replace: true });
     } else {
       navigate("/", { replace: true });
     }
