@@ -82,6 +82,12 @@ class ThumnbnailWorker {
   }
 
   start(source: LoadableSource) {
+    // afari has extremely strict security policies around canvas operations with video content. When the thumbnail generation tries to:
+    // Load cross-origin video content into an off-screen <video> element
+    // Draw video frames to a <canvas> using drawImage()
+    // Extract image data with canvas.toDataURL()
+    // Safari marks the canvas as "tainted" and throws a security error, preventing the thumbnail generation entirely.
+    // While still technically possible to generate thumbnails in Safari, it's not worth the effort to fight their strict CORS policies and we just don't support it.
     if (isSafari) return false;
     const el = document.createElement("video");
     el.setAttribute("muted", "true");
