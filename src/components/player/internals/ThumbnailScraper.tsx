@@ -13,11 +13,15 @@ import { processCdnLink } from "@/utils/cdn";
 import { isSafari } from "@/utils/detectFeatures";
 
 function makeQueue(thumbnails: number): number[] {
-  const output = [];
-  for (let i = 0; i < thumbnails; i += 1) {
-    output.push(i / (thumbnails - 1));
+  // Create a shuffled array of indices to ensure even distribution
+  const indices = Array.from({ length: thumbnails }, (_, i) => i);
+  for (let i = indices.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
   }
-  return output;
+
+  // Convert shuffled indices to evenly distributed positions
+  return indices.map((i) => i / (thumbnails - 1));
 }
 
 function selectLowestQuality(source: SourceSliceSource): LoadableSource {
