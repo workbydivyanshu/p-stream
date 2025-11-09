@@ -181,7 +181,11 @@ export function CaptionDelay(props: {
                 setIsFocused(true);
               }}
             >
-              {textTransformer(props.value.toFixed(props.decimalsAllowed ?? 0))}
+              {textTransformer(
+                props.value.toFixed(props.decimalsAllowed ?? 0) === "-0.0"
+                  ? "0.0"
+                  : props.value.toFixed(props.decimalsAllowed ?? 0),
+              )}
             </button>
           )}
 
