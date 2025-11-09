@@ -481,6 +481,7 @@ export function SettingsPage() {
         state.forceCompactEpisodeView.changed ||
         state.enableLowPerformanceMode.changed ||
         state.enableHoldToBoost.changed ||
+        state.homeSectionOrder.changed ||
         state.manualSourceSelection.changed ||
         state.enableDoubleClickToSeek
       ) {
@@ -505,6 +506,7 @@ export function SettingsPage() {
           forceCompactEpisodeView: state.forceCompactEpisodeView.state,
           enableLowPerformanceMode: state.enableLowPerformanceMode.state,
           enableHoldToBoost: state.enableHoldToBoost.state,
+          homeSectionOrder: state.homeSectionOrder.state,
           manualSourceSelection: state.manualSourceSelection.state,
           enableDoubleClickToSeek: state.enableDoubleClickToSeek.state,
         });

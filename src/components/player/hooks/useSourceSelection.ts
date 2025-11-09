@@ -22,6 +22,21 @@ import { convertRunoutputToSource } from "@/components/player/utils/convertRunou
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { metaToScrapeMedia } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
+import { useProgressStore } from "@/stores/progress";
+
+function getSavedProgress(items: Record<string, any>, meta: any): number {
+  const item = items[meta?.tmdbId ?? ""];
+  if (!item || !meta) return 0;
+  if (meta.type === "movie") {
+    if (!item.progress) return 0;
+    return item.progress.watched;
+  }
+
+  const ep = item.episodes[meta.episode?.tmdbId ?? ""];
+  if (!ep) return 0;
+  return ep.progress.watched;
+}
 
 export function useEmbedScraping(
   routerId: string,
@@ -33,8 +48,8 @@ export function useEmbedScraping(
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setSourceId = usePlayerStore((s) => s.setSourceId);
   const setEmbedId = usePlayerStore((s) => (s as any).setEmbedId);
-  const progress = usePlayerStore((s) => s.progress.time);
   const meta = usePlayerStore((s) => s.meta);
+  const progressItems = useProgressStore((s) => s.items);
   const router = useOverlayRouter(routerId);
   const { report } = useReportProviders();
 
@@ -81,7 +96,7 @@ export function useEmbedScraping(
     setSource(
       convertRunoutputToSource({ stream: result.stream[0] }),
       convertProviderCaption(result.stream[0].captions),
-      progress,
+      getSavedProgress(progressItems, meta),
     );
     router.close();
   }, [embedId, sourceId, meta, router, report, setCaption]);
@@ -99,7 +114,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setSourceId = usePlayerStore((s) => s.setSourceId);
   const setEmbedId = usePlayerStore((s) => (s as any).setEmbedId);
-  const progress = usePlayerStore((s) => s.progress.time);
+  const progressItems = useProgressStore((s) => s.items);
   const router = useOverlayRouter(routerId);
   const { report } = useReportProviders();
 
@@ -144,7 +159,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       setSource(
         convertRunoutputToSource({ stream: result.stream[0] }),
         convertProviderCaption(result.stream[0].captions),
-        progress,
+        getSavedProgress(progressItems, meta),
       );
       setSourceId(sourceId);
       router.close();
@@ -201,7 +216,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       setSource(
         convertRunoutputToSource({ stream: embedResult.stream[0] }),
         convertProviderCaption(embedResult.stream[0].captions),
-        progress,
+        getSavedProgress(progressItems, meta),
       );
       router.close();
     }

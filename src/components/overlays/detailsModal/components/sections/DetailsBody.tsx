@@ -103,10 +103,8 @@ export function DetailsBody({
 
     if (hasDigitalRelease) {
       const digitalReleaseDate = new Date(releaseInfo.digital_release_date!);
-      const twoDaysAfter = new Date(digitalReleaseDate);
-      twoDaysAfter.setDate(twoDaysAfter.getDate() + 2);
 
-      if (new Date() >= twoDaysAfter) {
+      if (new Date() >= digitalReleaseDate) {
         return <span className="text-green-400">HD</span>;
       }
     }
@@ -115,10 +113,8 @@ export function DetailsBody({
       const theatricalReleaseDate = new Date(
         releaseInfo.theatrical_release_date!,
       );
-      const fortyFiveDaysAfter = new Date(theatricalReleaseDate);
-      fortyFiveDaysAfter.setDate(fortyFiveDaysAfter.getDate() + 45);
 
-      if (new Date() >= fortyFiveDaysAfter) {
+      if (new Date() >= theatricalReleaseDate) {
         return (
           <div className="px-2 py-1 rounded-lg backdrop-blur-sm bg-gray-600/40">
             <span className="text-green-400">HD</span>
