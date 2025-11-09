@@ -231,6 +231,7 @@ export function PasteCaptionOption() {
   const { t } = useTranslation();
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
+  const setDelay = useSubtitleStore((s) => s.setDelay);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -269,6 +270,13 @@ export function PasteCaptionOption() {
         id: parsedData.id,
       });
       setCustomSubs();
+
+      // Set delay if included in the pasted data, otherwise reset to 0
+      if (parsedData.delay !== undefined) {
+        setDelay(parsedData.delay);
+      } else {
+        setDelay(0);
+      }
     } catch (err) {
       console.error("Failed to paste subtitle:", err);
       setError(err instanceof Error ? err.message : "Failed to paste subtitle");
@@ -394,6 +402,7 @@ export function CaptionsView({
         isHearingImpaired: v.isHearingImpaired,
         source: v.source,
         encoding: v.encoding,
+        delay,
       };
 
       try {
