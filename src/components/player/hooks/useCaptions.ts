@@ -23,11 +23,13 @@ export function useCaptions() {
 
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
+  const source = usePlayerStore((s) => s.source);
 
   const getSubtitleTracks = usePlayerStore((s) => s.display?.getSubtitleTracks);
   const setSubtitlePreference = usePlayerStore(
     (s) => s.display?.setSubtitlePreference,
   );
+  const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
 
   const captions = useMemo(
     () =>
@@ -82,6 +84,11 @@ export function useCaptions() {
       setCaption(captionToSet);
       resetSubtitleSpecificSettings();
       setLanguage(caption.language);
+
+      // Use native tracks for MP4 streams instead of custom rendering
+      if (source?.type === "file") {
+        setCaptionAsTrack(true);
+      }
     },
     [
       setIsOpenSubtitles,
@@ -91,6 +98,8 @@ export function useCaptions() {
       resetSubtitleSpecificSettings,
       getSubtitleTracks,
       setSubtitlePreference,
+      source,
+      setCaptionAsTrack,
     ],
   );
 

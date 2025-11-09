@@ -87,6 +87,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let videoElement: HTMLVideoElement | null = null;
   let containerElement: HTMLElement | null = null;
   let isFullscreen = false;
+  let isPictureInPicture = false;
   let isPausedBeforeSeeking = false;
   let isSeeking = false;
   let startAt = 0;
@@ -326,6 +327,16 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     vid.currentTime = startAt;
   }
 
+  function webkitPresentationModeChange() {
+    if (!videoElement) return;
+    const webkitPlayer = videoElement as any;
+    const isInWebkitPip =
+      webkitPlayer.webkitPresentationMode === "picture-in-picture";
+    isPictureInPicture = isInWebkitPip;
+    // Use native tracks in WebKit PiP mode for iOS compatibility
+    emit("needstrack", isInWebkitPip);
+  }
+
   function setSource() {
     if (!videoElement || !source) return;
     setupSource(videoElement, source);
@@ -406,6 +417,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         }
       },
     );
+    videoElement.addEventListener(
+      "webkitpresentationmodechanged",
+      webkitPresentationModeChange,
+    );
     videoElement.addEventListener("ratechange", () => {
       if (videoElement) emit("playbackrate", videoElement.playbackRate);
     });
@@ -453,6 +468,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   }
   fscreen.addEventListener("fullscreenchange", fullscreenChange);
 
+  function pictureInPictureChange() {
+    isPictureInPicture = !!document.pictureInPictureElement;
+    // Use native tracks in PiP mode for better compatibility with iOS and other platforms
+    emit("needstrack", isPictureInPicture);
+  }
+
+  document.addEventListener("enterpictureinpicture", pictureInPictureChange);
+  document.addEventListener("leavepictureinpicture", pictureInPictureChange);
+
   return {
     on,
     off,
@@ -462,6 +486,14 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     destroy: () => {
       destroyVideoElement();
       fscreen.removeEventListener("fullscreenchange", fullscreenChange);
+      document.removeEventListener(
+        "enterpictureinpicture",
+        pictureInPictureChange,
+      );
+      document.removeEventListener(
+        "leavepictureinpicture",
+        pictureInPictureChange,
+      );
     },
     load(ops) {
       if (!ops.source) unloadSource();
