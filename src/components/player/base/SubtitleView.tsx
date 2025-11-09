@@ -11,7 +11,7 @@ import { usePlayerStore } from "@/stores/player/store";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
 
 const wordOverrides: Record<string, string> = {
-  i: "I",
+  // Example: i: "I", but in polish "i" is "and" so this is disabled.
 };
 
 export function CaptionCue({
