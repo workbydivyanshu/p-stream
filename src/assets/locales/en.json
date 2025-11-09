@@ -8,7 +8,7 @@
       "general": "General",
       "search": "Search & Content Availability",
       "playback": "Playback Issues",
-      "connections": "Connections and Sources",
+      "connections": "Connections",
       "language": "Language & Subtitle Settings"
     },
     "q1": {
@@ -1085,7 +1085,7 @@
           "title": "You haven't gone through setup"
         }
       },
-      "title": "Connections and Sources",
+      "title": "Connections",
       "workers": {
         "addButton": "Add new worker",
         "description": "To make the application function, all traffic is routed through proxies. Enable this if you want to bring your own workers. <0>Instructions.</0>",
