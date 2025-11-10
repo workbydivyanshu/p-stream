@@ -30,7 +30,7 @@ Additions:
 
 Fixes:
 - Fixed watch progress getting reset when using manual source selection.
-- Encoded all search queries so it's now possble to search for movies and shows with special characters like "V/H/S".
+- Encoded all search queries so it's now possible to search for movies and shows with special characters like "V/H/S".
 - Fixed native subtitles not being displayed correctly and not showing in PiP and for mp4 streams.
 - Fixed the PiP button not displaying on mobile devices anymore.
 - Reworked the discover page to load much faster and more efficiently.
