@@ -4,6 +4,7 @@ import subsrt from "subsrt-ts";
 import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
 import { Caption } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
 
 import {
@@ -30,6 +31,9 @@ export function useCaptions() {
     (s) => s.display?.setSubtitlePreference,
   );
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
+  const enableNativeSubtitles = usePreferencesStore(
+    (s) => s.enableNativeSubtitles,
+  );
 
   const captions = useMemo(
     () =>
@@ -86,8 +90,11 @@ export function useCaptions() {
       setLanguage(caption.language);
 
       // Use native tracks for MP4 streams instead of custom rendering
-      if (source?.type === "file") {
+      if (source?.type === "file" && enableNativeSubtitles) {
         setCaptionAsTrack(true);
+      } else {
+        // For HLS sources or when native subtitles are disabled, use custom rendering
+        setCaptionAsTrack(false);
       }
     },
     [
@@ -100,6 +107,7 @@ export function useCaptions() {
       setSubtitlePreference,
       source,
       setCaptionAsTrack,
+      enableNativeSubtitles,
     ],
   );
 
