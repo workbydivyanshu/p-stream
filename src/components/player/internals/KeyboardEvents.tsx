@@ -174,6 +174,11 @@ export function KeyboardEvents() {
         !dataRef.current.isInWatchParty &&
         dataRef.current.enableHoldToBoost
       ) {
+        // Skip if it's a repeated event
+        if (evt.repeat) {
+          return;
+        }
+        
         // Skip if a button is targeted
         if (
           evt.target &&
@@ -234,6 +239,11 @@ export function KeyboardEvents() {
         k === " " &&
         (!dataRef.current.enableHoldToBoost || dataRef.current.isInWatchParty)
       ) {
+        // Skip if it's a repeated event
+        if (evt.repeat) {
+          return;
+        }
+        
         // Skip if a button is targeted
         if (
           evt.target &&
