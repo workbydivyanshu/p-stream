@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
 import { useSkipTracking } from "@/components/player/hooks/useSkipTracking";
-import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player/store";
 
 /**
@@ -16,7 +15,6 @@ export function SkipTracker() {
 
   // Player metadata for context
   const meta = usePlayerStore((s) => s.meta);
-  const account = useAuthStore((s) => s.account);
   const turnstileToken = "";
 
   const sendSkipAnalytics = useCallback(async () => {
@@ -34,15 +32,13 @@ export function SkipTracker() {
           content_type: meta?.type,
           season_id: meta?.season?.tmdbId,
           episode_id: meta?.episode?.tmdbId,
-          user_id: account?.userId,
-          session_id: `session_${Date.now()}`,
           turnstile_token: turnstileToken ?? "",
         }),
       });
     } catch (error) {
       console.error("Failed to send skip analytics:", error);
     }
-  }, [latestSkip, meta, account]);
+  }, [latestSkip, meta]);
 
   useEffect(() => {
     if (!latestSkip || !meta) return;
