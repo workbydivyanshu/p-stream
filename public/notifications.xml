@@ -18,7 +18,7 @@ Additions:
 - Added a new "Last Used Source" setting. This will automatically prioritize the source that successfully provided content for the previous episode.
 - Improved thumbnail generation to be more accurate. Now generates 127 thumbnails instead of 63, and generates them randomly rather than sequentially.
 - Added the ability to copy a specific subtitle with its delay value to your clipboard and a paste button to paste it as the current subtitle. Great for moving subtitles between sources!
-- Reworked the settigns page to be more user friendly on mobile devices. It's now broken into seperate pages for each section.
+- Reworked the settings page to be more user friendly on mobile devices. It's now broken into seperate pages for each section.
 - Added a subtle fade in effect to all images being loaded.
 - Added new toggle to disable the caption background blur effect. This fixes flickering on some browsers with HDR content.
 - Added the ability to bookmark an entire movie collection at once as a group.
