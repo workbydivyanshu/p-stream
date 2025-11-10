@@ -7,6 +7,7 @@ interface SkipEvent {
   endTime: number;
   skipDuration: number;
   timestamp: number;
+  confidence: number; // 0.0-1.0 confidence score
   meta?: {
     title: string;
     type: string;
@@ -23,6 +24,31 @@ interface SkipTrackingResult {
   latestSkip: SkipEvent | null;
   /** Clear the skip history */
   clearHistory: () => void;
+  /** Add a manual skip event (e.g., from skip intro button) */
+  addSkipEvent: (event: Omit<SkipEvent, "timestamp">) => void;
+}
+
+/**
+ * Calculate confidence score for automatic skip detection
+ * Based on skip duration and timing within the video
+ */
+function calculateSkipConfidence(
+  skipDuration: number,
+  startTime: number,
+  duration: number,
+): number {
+  // Duration confidence: longer skips are more confident
+  // 30s = 0.5, 60s = 0.75, 90s+ = 0.85
+  const durationConfidence = Math.min(0.85, 0.5 + (skipDuration - 30) * 0.01);
+
+  // Timing confidence: earlier skips are more confident
+  // Start time as percentage of total duration
+  const startPercentage = startTime / duration;
+  // Higher confidence for earlier starts (0% = 1.0, 20% = 0.8)
+  const timingConfidence = Math.max(0.7, 1.0 - startPercentage * 0.75);
+
+  // Combine factors (weighted average)
+  return durationConfidence * 0.6 + timingConfidence * 0.4;
 }
 
 /**
@@ -58,6 +84,23 @@ export function useSkipTracking(
     skipSessionStartRef.current = 0;
     sessionTotalRef.current = 0;
   }, []);
+
+  const addSkipEvent = useCallback(
+    (event: Omit<SkipEvent, "timestamp">) => {
+      const skipEvent: SkipEvent = {
+        ...event,
+        timestamp: Date.now(),
+      };
+
+      setSkipHistory((prev) => {
+        const newHistory = [...prev, skipEvent];
+        return newHistory.length > maxHistory
+          ? newHistory.slice(newHistory.length - maxHistory)
+          : newHistory;
+      });
+    },
+    [maxHistory],
+  );
 
   const detectSkip = useCallback(() => {
     const now = Date.now();
@@ -123,6 +166,11 @@ export function useSkipTracking(
         endTime: currentTime,
         skipDuration: sessionTotalRef.current,
         timestamp: now,
+        confidence: calculateSkipConfidence(
+          sessionTotalRef.current,
+          skipSessionStartRef.current,
+          duration,
+        ),
         meta: meta
           ? {
               title:
@@ -170,5 +218,6 @@ export function useSkipTracking(
     latestSkip:
       skipHistory.length > 0 ? skipHistory[skipHistory.length - 1] : null,
     clearHistory,
+    addSkipEvent,
   };
 }

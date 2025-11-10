@@ -32,6 +32,7 @@ export function SkipTracker() {
           content_type: meta?.type,
           season_id: meta?.season?.tmdbId,
           episode_id: meta?.episode?.tmdbId,
+          confidence: latestSkip.confidence,
           turnstile_token: turnstileToken ?? "",
         }),
       });

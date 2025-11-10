@@ -2,8 +2,8 @@ import classNames from "classnames";
 import { useCallback } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
+import { useSkipTracking } from "@/components/player/hooks/useSkipTracking";
 import { Transition } from "@/components/utils/Transition";
-import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player/store";
 
 function shouldShowSkipButton(
@@ -49,7 +49,7 @@ export function SkipIntroButton(props: {
   const status = usePlayerStore((s) => s.status);
   const display = usePlayerStore((s) => s.display);
   const meta = usePlayerStore((s) => s.meta);
-  const account = useAuthStore((s) => s.account);
+  const { addSkipEvent } = useSkipTracking(30);
   const showingState = shouldShowSkipButton(time, props.skipTime);
   const animation = showingState === "hover" ? "slide-up" : "fade";
   let bottom = "bottom-[calc(6rem+env(safe-area-inset-bottom))]";
@@ -59,32 +59,6 @@ export function SkipIntroButton(props: {
       : "bottom-[calc(3rem+env(safe-area-inset-bottom))]";
   }
 
-  const sendSkipAnalytics = useCallback(
-    async (startTime: number, endTime: number, skipDuration: number) => {
-      try {
-        await fetch("https://skips.pstream.mov/send", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            start_time: startTime,
-            end_time: endTime,
-            skip_duration: skipDuration,
-            content_id: meta?.tmdbId,
-            content_type: meta?.type,
-            season_id: meta?.season?.tmdbId,
-            episode_id: meta?.episode?.tmdbId,
-            user_id: account?.userId,
-            session_id: `session_${Date.now()}`,
-            turnstile_token: "",
-          }),
-        });
-      } catch (error) {
-        console.error("Failed to send skip analytics:", error);
-      }
-    },
-    [meta, account],
-  );
-
   const handleSkip = useCallback(() => {
     if (typeof props.skipTime === "number" && display) {
       const startTime = time;
@@ -93,12 +67,30 @@ export function SkipIntroButton(props: {
 
       display.setTime(props.skipTime);
 
-      // Send analytics for intro skip button usage
+      // Add manual skip event with high confidence (user explicitly clicked skip intro)
+      addSkipEvent({
+        startTime,
+        endTime,
+        skipDuration,
+        confidence: 0.95, // High confidence for explicit user action
+        meta: meta
+          ? {
+              title:
+                meta.type === "show" && meta.episode
+                  ? `${meta.title} - S${meta.season?.number || 0}E${meta.episode.number || 0}`
+                  : meta.title,
+              type: meta.type === "movie" ? "Movie" : "TV Show",
+              tmdbId: meta.tmdbId,
+              seasonNumber: meta.season?.number,
+              episodeNumber: meta.episode?.number,
+            }
+          : undefined,
+      });
+
       // eslint-disable-next-line no-console
       console.log(`Skip intro button used: ${skipDuration}s total`);
-      sendSkipAnalytics(startTime, endTime, skipDuration);
     }
-  }, [props.skipTime, display, time, sendSkipAnalytics]);
+  }, [props.skipTime, display, time, addSkipEvent, meta]);
   if (!props.inControl) return null;
 
   let show = false;
