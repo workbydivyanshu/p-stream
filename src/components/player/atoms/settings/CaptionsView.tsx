@@ -227,7 +227,7 @@ export function CustomCaptionOption() {
   );
 }
 
-export function PasteCaptionOption() {
+export function PasteCaptionOption(props: { selected?: boolean }) {
   const { t } = useTranslation();
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
@@ -267,7 +267,7 @@ export function PasteCaptionOption() {
       setCaption({
         language: parsedData.language,
         srtData: converted,
-        id: parsedData.id,
+        id: "pasted-caption",
       });
       setCustomSubs();
 
@@ -286,7 +286,12 @@ export function PasteCaptionOption() {
   };
 
   return (
-    <CaptionOption onClick={handlePaste} loading={isLoading} error={error}>
+    <CaptionOption
+      onClick={handlePaste}
+      loading={isLoading}
+      error={error}
+      selected={props.selected}
+    >
       {t("player.menus.subtitles.pasteChoice")}
     </CaptionOption>
   );
@@ -532,7 +537,9 @@ export function CaptionsView({
           <CustomCaptionOption />
 
           {/* Paste subtitle option */}
-          <PasteCaptionOption />
+          <PasteCaptionOption
+            selected={selectedCaptionId === "pasted-caption"}
+          />
 
           <div className="h-1" />
 
