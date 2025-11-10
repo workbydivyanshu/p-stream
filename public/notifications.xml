@@ -14,7 +14,7 @@
       <description>Lots of quality of life improvements and changes and a huge number of bugs fixed!
 
 Additions:
-- Made the skip intro button avaliable to all users, not just those with a febbox token. Though the one with febbox is still the best quality!
+- Made the skip intro button available to all users, not just those with a febbox token. Though the one with febbox is still the best quality!
 - Added a new "Last Used Source" setting. This will automatically prioritize the source that successfully provided content for the previous episode.
 - Improved thumbnail generation to be more accurate. Now generates 127 thumbnails instead of 63, and generates them randomly rather than sequentially.
 - Added the ability to copy a specific subtitle with its delay value to your clipboard and a paste button to paste it as the current subtitle. Great for moving subtitles between sources!
