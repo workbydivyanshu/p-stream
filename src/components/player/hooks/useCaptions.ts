@@ -25,6 +25,7 @@ export function useCaptions() {
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
   const source = usePlayerStore((s) => s.source);
+  const selectedCaption = usePlayerStore((s) => s.caption.selected);
 
   const getSubtitleTracks = usePlayerStore((s) => s.display?.getSubtitleTracks);
   const setSubtitlePreference = usePlayerStore(
@@ -86,7 +87,12 @@ export function useCaptions() {
 
       setIsOpenSubtitles(!!caption.opensubtitles);
       setCaption(captionToSet);
-      resetSubtitleSpecificSettings();
+
+      // Only reset subtitle settings if selecting a different caption
+      if (selectedCaption?.id !== caption.id) {
+        resetSubtitleSpecificSettings();
+      }
+
       setLanguage(caption.language);
 
       // Use native tracks for MP4 streams instead of custom rendering
@@ -108,6 +114,7 @@ export function useCaptions() {
       source,
       setCaptionAsTrack,
       enableNativeSubtitles,
+      selectedCaption,
     ],
   );
 
