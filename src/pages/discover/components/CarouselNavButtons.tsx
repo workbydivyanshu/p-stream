@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
-
 import { Icon, Icons } from "@/components/Icon";
 import { Flare } from "@/components/utils/Flare";
 
@@ -13,12 +11,9 @@ interface CarouselNavButtonsProps {
 interface NavButtonProps {
   direction: "left" | "right";
   onClick: () => void;
-  visible: boolean;
 }
 
-function NavButton({ direction, onClick, visible }: NavButtonProps) {
-  if (!visible) return null;
-
+function NavButton({ direction, onClick }: NavButtonProps) {
   return (
     <button
       type="button"
@@ -48,40 +43,6 @@ export function CarouselNavButtons({
   categorySlug,
   carouselRefs,
 }: CarouselNavButtonsProps) {
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const updateScrollState = useCallback(() => {
-    const carousel = carouselRefs.current[categorySlug];
-    if (!carousel) {
-      setCanScrollLeft(false);
-      setCanScrollRight(false);
-      return;
-    }
-
-    const { scrollLeft, scrollWidth, clientWidth } = carousel;
-    const isAtStart = scrollLeft <= 1;
-    const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 1;
-
-    setCanScrollLeft(!isAtStart);
-    setCanScrollRight(!isAtEnd);
-  }, [categorySlug, carouselRefs]);
-
-  useEffect(() => {
-    const carousel = carouselRefs.current[categorySlug];
-    if (!carousel) return;
-
-    updateScrollState();
-
-    carousel.addEventListener("scroll", updateScrollState);
-    window.addEventListener("resize", updateScrollState);
-
-    return () => {
-      carousel.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
-    };
-  }, [categorySlug, carouselRefs, updateScrollState]);
-
   const handleScroll = (direction: "left" | "right") => {
     const carousel = carouselRefs.current[categorySlug];
     if (!carousel) return;
@@ -115,16 +76,8 @@ export function CarouselNavButtons({
 
   return (
     <>
-      <NavButton
-        direction="left"
-        onClick={() => handleScroll("left")}
-        visible={canScrollLeft}
-      />
-      <NavButton
-        direction="right"
-        onClick={() => handleScroll("right")}
-        visible={canScrollRight}
-      />
+      <NavButton direction="left" onClick={() => handleScroll("left")} />
+      <NavButton direction="right" onClick={() => handleScroll("right")} />
     </>
   );
 }
