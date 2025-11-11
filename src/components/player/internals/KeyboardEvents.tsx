@@ -178,7 +178,7 @@ export function KeyboardEvents() {
         if (evt.repeat) {
           return;
         }
-        
+
         // Skip if a button is targeted
         if (
           evt.target &&
@@ -243,7 +243,7 @@ export function KeyboardEvents() {
         if (evt.repeat) {
           return;
         }
-        
+
         // Skip if a button is targeted
         if (
           evt.target &&
