@@ -4,16 +4,14 @@ import { useTranslation } from "react-i18next";
 
 import { EditButton } from "@/components/buttons/EditButton";
 import { EditButtonWithText } from "@/components/buttons/EditButtonWithText";
-import { Item } from "@/components/form/SortableList";
 import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
-import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
+import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
+import { EditGroupModal } from "@/components/overlays/EditGroupModal";
 import { useModal } from "@/components/overlays/Modal";
 import { UserIcon, UserIcons } from "@/components/UserIcon";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
-import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
 import { useProgressStore } from "@/stores/progress";
@@ -41,14 +39,19 @@ export function BookmarksPart({
   const progressItems = useProgressStore((s) => s.items);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
   const groupOrder = useGroupOrderStore((s) => s.groupOrder);
-  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
   const [editing, setEditing] = useState(false);
   const [gridRef] = useAutoAnimate<HTMLDivElement>();
-  const editOrderModal = useModal("bookmark-edit-order");
-  const [tempGroupOrder, setTempGroupOrder] = useState<string[]>([]);
-  const backendUrl = useBackendUrl();
-  const account = useAuthStore((s) => s.account);
+  const editBookmarkModal = useModal("bookmark-edit");
+  const editGroupModal = useModal("bookmark-edit-group");
+  const [editingBookmarkId, setEditingBookmarkId] = useState<string | null>(
+    null,
+  );
+  const [editingGroupName, setEditingGroupName] = useState<string | null>(null);
+  const modifyBookmarks = useBookmarkStore((s) => s.modifyBookmarks);
+  const modifyBookmarksByGroup = useBookmarkStore(
+    (s) => s.modifyBookmarksByGroup,
+  );
 
   const items = useMemo(() => {
     let output: MediaItem[] = [];
@@ -108,56 +111,6 @@ export function BookmarksPart({
     return { groupedItems: grouped, regularItems: regular };
   }, [items, bookmarks, progressItems]);
 
-  // group sorting
-  const allGroups = useMemo(() => {
-    const groups = new Set<string>();
-
-    Object.values(bookmarks).forEach((bookmark) => {
-      if (Array.isArray(bookmark.group)) {
-        bookmark.group.forEach((group) => groups.add(group));
-      }
-    });
-
-    groups.add("bookmarks");
-
-    return Array.from(groups);
-  }, [bookmarks]);
-
-  const sortableItems = useMemo(() => {
-    const currentOrder = editOrderModal.isShown ? tempGroupOrder : groupOrder;
-
-    if (currentOrder.length === 0) {
-      return allGroups.map((group) => {
-        const { name } = parseGroupString(group);
-        return {
-          id: group,
-          name: group === "bookmarks" ? t("home.bookmarks.sectionTitle") : name,
-        } as Item;
-      });
-    }
-
-    const orderMap = new Map(
-      currentOrder.map((group, index) => [group, index]),
-    );
-    const sortedGroups = allGroups.sort((groupA, groupB) => {
-      const orderA = orderMap.has(groupA)
-        ? orderMap.get(groupA)!
-        : Number.MAX_SAFE_INTEGER;
-      const orderB = orderMap.has(groupB)
-        ? orderMap.get(groupB)!
-        : Number.MAX_SAFE_INTEGER;
-      return orderA - orderB;
-    });
-
-    return sortedGroups.map((group) => {
-      const { name } = parseGroupString(group);
-      return {
-        id: group,
-        name: group === "bookmarks" ? t("home.bookmarks.sectionTitle") : name,
-      } as Item;
-    });
-  }, [allGroups, t, editOrderModal.isShown, tempGroupOrder, groupOrder]);
-
   const sortedSections = useMemo(() => {
     const sections: Array<{
       type: "grouped" | "regular";
@@ -209,43 +162,41 @@ export function BookmarksPart({
 
     return sections;
   }, [groupedItems, regularItems, groupOrder]);
-  // kill me
 
   useEffect(() => {
     onItemsChange(items.length > 0);
   }, [items, onItemsChange]);
 
-  const handleEditGroupOrder = () => {
-    // Initialize with current order or default order
-    if (groupOrder.length === 0) {
-      const defaultOrder = allGroups.map((group) => group);
-      setTempGroupOrder(defaultOrder);
-    } else {
-      setTempGroupOrder([...groupOrder]);
-    }
-    editOrderModal.show();
+  const handleEditBookmark = (bookmarkId: string) => {
+    setEditingBookmarkId(bookmarkId);
+    editBookmarkModal.show();
   };
 
-  const handleReorderClick = () => {
-    handleEditGroupOrder();
-    // Keep editing state active by setting it to true
-    setEditing(true);
+  const handleSaveBookmark = (bookmarkId: string, changes: any) => {
+    modifyBookmarks([bookmarkId], changes);
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
   };
 
-  const handleCancelOrder = () => {
-    editOrderModal.hide();
+  const handleEditGroup = (groupName: string) => {
+    setEditingGroupName(groupName);
+    editGroupModal.show();
   };
 
-  const handleSaveOrderClick = () => {
-    setGroupOrder(tempGroupOrder);
-    editOrderModal.hide();
+  const handleSaveGroup = (oldGroupName: string, newGroupName: string) => {
+    modifyBookmarksByGroup({ oldGroupName, newGroupName });
+    editGroupModal.hide();
+    setEditingGroupName(null);
+  };
 
-    // Save to backend
-    if (backendUrl && account) {
-      useGroupOrderStore
-        .getState()
-        .saveGroupOrderToBackend(backendUrl, account);
-    }
+  const handleCancelEditBookmark = () => {
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
+  };
+
+  const handleCancelEditGroup = () => {
+    editGroupModal.hide();
+    setEditingGroupName(null);
   };
 
   if (items.length === 0) return null;
@@ -267,13 +218,15 @@ export function BookmarksPart({
                 }
               >
                 <div className="flex items-center gap-2">
-                  {editing && allGroups.length > 1 && (
+                  {editing && section.group && (
                     <EditButtonWithText
                       editing={editing}
-                      onEdit={handleReorderClick}
-                      id="edit-group-order-button"
-                      text={t("home.bookmarks.groups.reorder.button")}
-                      secondaryText={t("home.bookmarks.groups.reorder.done")}
+                      onEdit={() => handleEditGroup(section.group!)}
+                      id="edit-group-button"
+                      text={t("home.bookmarks.groups.editGroup.title")}
+                      secondaryText={t(
+                        "home.bookmarks.groups.editGroup.cancel",
+                      )}
                     />
                   )}
                   <EditButton
@@ -290,12 +243,15 @@ export function BookmarksPart({
                     onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
                       e.preventDefault()
                     }
+                    className="relative group"
                   >
                     <WatchedMediaCard
                       media={v}
                       closable={editing}
                       onClose={() => removeBookmark(v.id)}
                       onShowDetails={onShowDetails}
+                      editable={editing}
+                      onEdit={() => handleEditBookmark(v.id)}
                     />
                   </div>
                 ))}
@@ -310,15 +266,6 @@ export function BookmarksPart({
               icon={Icons.BOOKMARK}
             >
               <div className="flex items-center gap-2">
-                {editing && allGroups.length > 1 && (
-                  <EditButtonWithText
-                    editing={editing}
-                    onEdit={handleReorderClick}
-                    id="edit-group-order-button"
-                    text={t("home.bookmarks.groups.reorder.button")}
-                    secondaryText={t("home.bookmarks.groups.reorder.done")}
-                  />
-                )}
                 <EditButton
                   editing={editing}
                   onEdit={setEditing}
@@ -333,12 +280,15 @@ export function BookmarksPart({
                   onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
                     e.preventDefault()
                   }
+                  className="relative group"
                 >
                   <WatchedMediaCard
                     media={v}
                     closable={editing}
                     onClose={() => removeBookmark(v.id)}
                     onShowDetails={onShowDetails}
+                    editable={editing}
+                    onEdit={() => handleEditBookmark(v.id)}
                   />
                 </div>
               ))}
@@ -347,17 +297,22 @@ export function BookmarksPart({
         );
       })}
 
-      {/* Edit Order Modal */}
-      <EditGroupOrderModal
-        id={editOrderModal.id}
-        isShown={editOrderModal.isShown}
-        items={sortableItems}
-        onCancel={handleCancelOrder}
-        onSave={handleSaveOrderClick}
-        onItemsChange={(newItems) => {
-          const newOrder = newItems.map((item) => item.id);
-          setTempGroupOrder(newOrder);
-        }}
+      {/* Edit Bookmark Modal */}
+      <EditBookmarkModal
+        id={editBookmarkModal.id}
+        isShown={editBookmarkModal.isShown}
+        bookmarkId={editingBookmarkId}
+        onCancel={handleCancelEditBookmark}
+        onSave={handleSaveBookmark}
+      />
+
+      {/* Edit Group Modal */}
+      <EditGroupModal
+        id={editGroupModal.id}
+        isShown={editGroupModal.isShown}
+        groupName={editingGroupName}
+        onCancel={handleCancelEditGroup}
+        onSave={handleSaveGroup}
       />
     </div>
   );

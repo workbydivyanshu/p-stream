@@ -253,7 +253,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
         />
       </div>
       <Transition animation="slide-down" show={open}>
-        <div className="rounded-lg absolute w-64 bg-dropdown-altBackground top-full mt-3 right-0">
+        <div className="rounded-xl absolute w-64 bg-dropdown-altBackground top-full mt-3 right-0">
           {deviceName && bufferSeed ? (
             <DropdownLink className="text-white" href="/settings">
               <UserAvatar />

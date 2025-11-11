@@ -155,6 +155,12 @@ export function useScrape() {
 
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
+  const lastSuccessfulSource = usePreferencesStore(
+    (s) => s.lastSuccessfulSource,
+  );
+  const enableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.enableLastSuccessfulSource,
+  );
   const disabledSources = usePreferencesStore((s) => s.disabledSources);
   const preferredEmbedOrder = usePreferencesStore((s) => s.embedOrder);
   const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
@@ -162,10 +168,28 @@ export function useScrape() {
 
   const startScraping = useCallback(
     async (media: ScrapeMedia) => {
-      // Filter out disabled sources from the source order
-      const filteredSourceOrder = enableSourceOrder
+      // Create source order that prioritizes last successful source
+      let filteredSourceOrder = enableSourceOrder
         ? preferredSourceOrder.filter((id) => !disabledSources.includes(id))
         : undefined;
+
+      // If we have a last successful source and the feature is enabled, prioritize it
+      if (enableLastSuccessfulSource && lastSuccessfulSource) {
+        // Get all available sources (either from custom order or default)
+        const availableSources = filteredSourceOrder || [];
+
+        // If the last successful source is not disabled and exists in available sources,
+        // move it to the front
+        if (
+          !disabledSources.includes(lastSuccessfulSource) &&
+          availableSources.includes(lastSuccessfulSource)
+        ) {
+          filteredSourceOrder = [
+            lastSuccessfulSource,
+            ...availableSources.filter((id) => id !== lastSuccessfulSource),
+          ];
+        }
+      }
 
       // Filter out disabled embeds from the embed order
       const filteredEmbedOrder = enableEmbedOrder
@@ -223,6 +247,8 @@ export function useScrape() {
       startScrape,
       preferredSourceOrder,
       enableSourceOrder,
+      lastSuccessfulSource,
+      enableLastSuccessfulSource,
       disabledSources,
       preferredEmbedOrder,
       enableEmbedOrder,

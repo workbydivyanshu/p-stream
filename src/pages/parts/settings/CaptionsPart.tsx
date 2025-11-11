@@ -19,6 +19,7 @@ import { Transition } from "@/components/utils/Transition";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
+import { isFirefox } from "@/utils/detectFeatures";
 
 export function CaptionPreview(props: {
   fullscreen?: boolean;
@@ -27,12 +28,29 @@ export function CaptionPreview(props: {
   onToggle: () => void;
 }) {
   const { t } = useTranslation();
+  const { fullscreen, show, onToggle } = props;
+
+  useEffect(() => {
+    if (!fullscreen || !show) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onToggle();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [fullscreen, show, onToggle]);
+
   return (
     <div
       className={classNames({
         "pointer-events-none overflow-hidden w-full rounded": true,
         "aspect-video relative": !props.fullscreen,
-        "fixed inset-0 z-[60]": props.fullscreen,
+        "fixed inset-0 z-[999]": props.fullscreen,
       })}
     >
       {props.fullscreen && props.show ? (
@@ -113,8 +131,9 @@ export function CaptionsPart(props: {
       backgroundOpacity: 0.5,
       size: 1,
       backgroundBlur: 0.5,
+      backgroundBlurEnabled: !isFirefox,
       bold: false,
-      verticalPosition: 3,
+      verticalPosition: 1,
       fontStyle: "default",
       borderThickness: 1,
     });
@@ -158,19 +177,41 @@ export function CaptionsPart(props: {
                 value={props.styling.backgroundOpacity * 100}
                 textTransformer={(s) => `${s}%`}
               />
-              <CaptionSetting
-                label={t("settings.subtitles.backgroundBlurLabel")}
-                max={100}
-                min={0}
-                onChange={(v) =>
-                  handleStylingChange({
-                    ...props.styling,
-                    backgroundBlur: v / 100,
-                  })
-                }
-                value={props.styling.backgroundBlur * 100}
-                textTransformer={(s) => `${s}%`}
-              />
+              <div className="flex justify-between items-center">
+                <Menu.FieldTitle>
+                  {t("settings.subtitles.backgroundBlurEnabledLabel")}
+                </Menu.FieldTitle>
+                <div className="flex justify-center items-center">
+                  <Toggle
+                    enabled={props.styling.backgroundBlurEnabled}
+                    onClick={() =>
+                      handleStylingChange({
+                        ...props.styling,
+                        backgroundBlurEnabled:
+                          !props.styling.backgroundBlurEnabled,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <span className="text-xs text-type-secondary">
+                {t("settings.subtitles.backgroundBlurEnabledDescription")}
+              </span>
+              {props.styling.backgroundBlurEnabled && (
+                <CaptionSetting
+                  label={t("settings.subtitles.backgroundBlurLabel")}
+                  max={100}
+                  min={0}
+                  onChange={(v) =>
+                    handleStylingChange({
+                      ...props.styling,
+                      backgroundBlur: v / 100,
+                    })
+                  }
+                  value={props.styling.backgroundBlur * 100}
+                  textTransformer={(s) => `${s}%`}
+                />
+              )}
               <CaptionSetting
                 label={t("settings.subtitles.textSizeLabel")}
                 max={200}
@@ -307,23 +348,6 @@ export function CaptionsPart(props: {
                     type="button"
                     className={classNames(
                       "px-3 py-1 rounded transition-colors duration-100",
-                      props.styling.verticalPosition === 3
-                        ? "bg-video-context-buttonFocus"
-                        : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
-                    )}
-                    onClick={() =>
-                      handleStylingChange({
-                        ...props.styling,
-                        verticalPosition: 3,
-                      })
-                    }
-                  >
-                    {t("settings.subtitles.default")}
-                  </button>
-                  <button
-                    type="button"
-                    className={classNames(
-                      "px-3 py-1 rounded transition-colors duration-100",
                       props.styling.verticalPosition === 1
                         ? "bg-video-context-buttonFocus"
                         : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
@@ -336,6 +360,23 @@ export function CaptionsPart(props: {
                     }
                   >
                     {t("settings.subtitles.low")}
+                  </button>
+                  <button
+                    type="button"
+                    className={classNames(
+                      "px-3 py-1 rounded transition-colors duration-100",
+                      props.styling.verticalPosition === 3
+                        ? "bg-video-context-buttonFocus"
+                        : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                    )}
+                    onClick={() =>
+                      handleStylingChange({
+                        ...props.styling,
+                        verticalPosition: 3,
+                      })
+                    }
+                  >
+                    {t("settings.subtitles.high")}
                   </button>
                 </div>
               </div>

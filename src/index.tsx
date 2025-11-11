@@ -37,10 +37,12 @@ import {
   isExtensionActiveCached,
 } from "./backend/extension/messaging";
 import { initializeChromecast } from "./setup/chromecast";
+import { initializeImageFadeIn } from "./setup/imageFadeIn";
 import { initializeOldStores } from "./stores/__old/migrations";
 
 // initialize
 initializeChromecast();
+initializeImageFadeIn();
 
 function LoadingScreen(props: { type: "user" | "lazy" }) {
   const mapping = {

@@ -6,9 +6,11 @@ import { getCollectionDetails, getMediaPoster } from "@/backend/metadata/tmdb";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaCard } from "@/components/media/MediaCard";
+import { UserIcons } from "@/components/UserIcon";
 import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
+import { useBookmarkStore } from "@/stores/bookmarks";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { MediaItem } from "@/utils/mediaTypes";
 
@@ -109,6 +111,9 @@ export function CollectionOverlay({
 }: CollectionOverlayProps) {
   const { t } = useTranslation();
   const { showModal } = useOverlayStack();
+  const addBookmarkWithGroups = useBookmarkStore(
+    (s) => s.addBookmarkWithGroups,
+  );
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -161,6 +166,37 @@ export function CollectionOverlay({
     };
   };
 
+  const handleBookmarkCollection = () => {
+    if (!collection?.parts) return;
+
+    // Get all available user icons and select one randomly
+    const userIconList = Object.values(UserIcons);
+    const randomIcon =
+      userIconList[Math.floor(Math.random() * userIconList.length)];
+
+    // Format the group name with the random icon
+    const groupName = `[${randomIcon}]${collectionName}`;
+
+    collection.parts.forEach((movie) => {
+      const year = movie.release_date
+        ? new Date(movie.release_date).getFullYear()
+        : undefined;
+
+      // Skip movies without a release year
+      if (year === undefined) return;
+
+      const meta = {
+        tmdbId: movie.id.toString(),
+        type: "movie" as const,
+        title: movie.title,
+        releaseYear: year,
+        poster: getMediaPoster(movie.poster_path) || "/placeholder.png",
+      };
+
+      addBookmarkWithGroups(meta, [groupName]);
+    });
+  };
+
   const handleShowDetails = (media: MediaItem) => {
     // Show details modal and close collection overlay
     showModal("details", {
@@ -203,14 +239,28 @@ export function CollectionOverlay({
                     </h2>
                     <div className="flex items-center gap-4 flex-wrap">
                       {collection && (
-                        <p className="text-sm text-white/80">
-                          <span className="text-white font-semibold">
-                            {collection.parts.length}
-                          </span>{" "}
-                          {collection.parts.length > 1
-                            ? t("details.collection.movies")
-                            : t("details.collection.movie")}
-                        </p>
+                        <>
+                          <p className="text-sm text-white/80">
+                            <span className="text-white font-semibold">
+                              {collection.parts.length}
+                            </span>{" "}
+                            {collection.parts.length > 1
+                              ? t("details.collection.movies")
+                              : t("details.collection.movie")}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={handleBookmarkCollection}
+                            className="flex items-center gap-2 px-3 py-1 rounded-md text-xs font-medium bg-white/10 hover:bg-white/20 text-white/70 transition-colors"
+                            title={`Bookmark entire ${collectionName} collection`}
+                          >
+                            <Icon
+                              icon={Icons.BOOKMARK_OUTLINE}
+                              className="text-xs"
+                            />
+                            <span>Bookmark All</span>
+                          </button>
+                        </>
                       )}
                       {!loading && !error && sortedMovies.length > 1 && (
                         <div className="flex items-center gap-2">

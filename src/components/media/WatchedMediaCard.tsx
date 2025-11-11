@@ -24,6 +24,8 @@ export interface WatchedMediaCardProps {
   closable?: boolean;
   onClose?: () => void;
   onShowDetails?: (media: MediaItem) => void;
+  editable?: boolean;
+  onEdit?: () => void;
 }
 
 export function WatchedMediaCard(props: WatchedMediaCardProps) {
@@ -51,6 +53,8 @@ export function WatchedMediaCard(props: WatchedMediaCardProps) {
       onClose={props.onClose}
       closable={props.closable}
       onShowDetails={props.onShowDetails}
+      editable={props.editable}
+      onEdit={props.onEdit}
     />
   );
 }

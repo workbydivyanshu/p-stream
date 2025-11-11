@@ -12,6 +12,7 @@ import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
+import { isFirefox } from "@/utils/detectFeatures";
 
 export function ColorOption(props: {
   color: string;
@@ -427,10 +428,12 @@ export function CaptionSettingsView({
   const resetSubStyling = () => {
     subtitleStore.updateStyling({
       color: "#ffffff",
-      backgroundOpacity: 0.5,
-      size: 1,
-      backgroundBlur: 0.5,
+      backgroundOpacity: 0.25,
+      size: 0.75,
+      backgroundBlur: 0.25,
+      backgroundBlurEnabled: !isFirefox,
       bold: false,
+      verticalPosition: 1,
       fontStyle: "default",
       borderThickness: 1,
     });
@@ -497,16 +500,37 @@ export function CaptionSettingsView({
               value={styling.backgroundOpacity * 100}
               textTransformer={(s) => `${s}%`}
             />
-            <CaptionSetting
-              label={t("settings.subtitles.backgroundBlurLabel")}
-              max={100}
-              min={0}
-              onChange={(v) =>
-                handleStylingChange({ ...styling, backgroundBlur: v / 100 })
-              }
-              value={styling.backgroundBlur * 100}
-              textTransformer={(s) => `${s}%`}
-            />
+            <div className="flex justify-between items-center">
+              <Menu.FieldTitle>
+                {t("settings.subtitles.backgroundBlurEnabledLabel")}
+              </Menu.FieldTitle>
+              <div className="flex justify-center items-center">
+                <Toggle
+                  enabled={styling.backgroundBlurEnabled}
+                  onClick={() =>
+                    handleStylingChange({
+                      ...styling,
+                      backgroundBlurEnabled: !styling.backgroundBlurEnabled,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <span className="text-xs text-type-secondary">
+              {t("settings.subtitles.backgroundBlurEnabledDescription")}
+            </span>
+            {styling.backgroundBlurEnabled && (
+              <CaptionSetting
+                label={t("settings.subtitles.backgroundBlurLabel")}
+                max={100}
+                min={0}
+                onChange={(v) =>
+                  handleStylingChange({ ...styling, backgroundBlur: v / 100 })
+                }
+                value={styling.backgroundBlur * 100}
+                textTransformer={(s) => `${s}%`}
+              />
+            )}
             <CaptionSetting
               label={t("settings.subtitles.textSizeLabel")}
               max={200}
@@ -622,23 +646,6 @@ export function CaptionSettingsView({
                   type="button"
                   className={classNames(
                     "px-3 py-1 rounded transition-colors duration-100",
-                    styling.verticalPosition === 3
-                      ? "bg-video-context-buttonFocus"
-                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
-                  )}
-                  onClick={() =>
-                    handleStylingChange({
-                      ...styling,
-                      verticalPosition: 3,
-                    })
-                  }
-                >
-                  {t("settings.subtitles.default")}
-                </button>
-                <button
-                  type="button"
-                  className={classNames(
-                    "px-3 py-1 rounded transition-colors duration-100",
                     styling.verticalPosition === 1
                       ? "bg-video-context-buttonFocus"
                       : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
@@ -651,6 +658,23 @@ export function CaptionSettingsView({
                   }
                 >
                   {t("settings.subtitles.low")}
+                </button>
+                <button
+                  type="button"
+                  className={classNames(
+                    "px-3 py-1 rounded transition-colors duration-100",
+                    styling.verticalPosition === 3
+                      ? "bg-video-context-buttonFocus"
+                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                  )}
+                  onClick={() =>
+                    handleStylingChange({
+                      ...styling,
+                      verticalPosition: 3,
+                    })
+                  }
+                >
+                  {t("settings.subtitles.high")}
                 </button>
               </div>
             </div>

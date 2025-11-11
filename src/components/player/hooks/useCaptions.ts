@@ -4,6 +4,7 @@ import subsrt from "subsrt-ts";
 import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
 import { Caption } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
 
 import {
@@ -23,10 +24,16 @@ export function useCaptions() {
 
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
+  const source = usePlayerStore((s) => s.source);
+  const selectedCaption = usePlayerStore((s) => s.caption.selected);
 
   const getSubtitleTracks = usePlayerStore((s) => s.display?.getSubtitleTracks);
   const setSubtitlePreference = usePlayerStore(
     (s) => s.display?.setSubtitlePreference,
+  );
+  const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
+  const enableNativeSubtitles = usePreferencesStore(
+    (s) => s.enableNativeSubtitles,
   );
 
   const captions = useMemo(
@@ -80,8 +87,21 @@ export function useCaptions() {
 
       setIsOpenSubtitles(!!caption.opensubtitles);
       setCaption(captionToSet);
-      resetSubtitleSpecificSettings();
+
+      // Only reset subtitle settings if selecting a different caption
+      if (selectedCaption?.id !== caption.id) {
+        resetSubtitleSpecificSettings();
+      }
+
       setLanguage(caption.language);
+
+      // Use native tracks for MP4 streams instead of custom rendering
+      if (source?.type === "file" && enableNativeSubtitles) {
+        setCaptionAsTrack(true);
+      } else {
+        // For HLS sources or when native subtitles are disabled, use custom rendering
+        setCaptionAsTrack(false);
+      }
     },
     [
       setIsOpenSubtitles,
@@ -91,6 +111,10 @@ export function useCaptions() {
       resetSubtitleSpecificSettings,
       getSubtitleTracks,
       setSubtitlePreference,
+      source,
+      setCaptionAsTrack,
+      enableNativeSubtitles,
+      selectedCaption,
     ],
   );
 

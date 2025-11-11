@@ -56,9 +56,19 @@ export function RealPlayerView() {
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
   );
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
   const router = useOverlayRouter("settings");
   const openedWatchPartyRef = useRef<boolean>(false);
   const progressItems = useProgressStore((s) => s.items);
+
+  // Reset last successful source when leaving the player
+  useEffect(() => {
+    return () => {
+      setLastSuccessfulSource(null);
+    };
+  }, [setLastSuccessfulSource]);
 
   const paramsData = JSON.stringify({
     media: params.media,

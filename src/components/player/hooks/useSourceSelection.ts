@@ -52,6 +52,12 @@ export function useEmbedScraping(
   const progressItems = useProgressStore((s) => s.items);
   const router = useOverlayRouter(routerId);
   const { report } = useReportProviders();
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
+  const enableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.enableLastSuccessfulSource,
+  );
 
   const [request, run] = useAsyncFn(async () => {
     const providerApiUrl = getLoadbalancedProviderApiUrl();
@@ -98,8 +104,21 @@ export function useEmbedScraping(
       convertProviderCaption(result.stream[0].captions),
       getSavedProgress(progressItems, meta),
     );
+    // Save the last successful source when manually selected
+    if (enableLastSuccessfulSource) {
+      setLastSuccessfulSource(sourceId);
+    }
     router.close();
-  }, [embedId, sourceId, meta, router, report, setCaption]);
+  }, [
+    embedId,
+    sourceId,
+    meta,
+    router,
+    report,
+    setCaption,
+    enableLastSuccessfulSource,
+    setLastSuccessfulSource,
+  ]);
 
   return {
     run,
@@ -117,6 +136,12 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
   const progressItems = useProgressStore((s) => s.items);
   const router = useOverlayRouter(routerId);
   const { report } = useReportProviders();
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
+  const enableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.enableLastSuccessfulSource,
+  );
 
   const [request, run] = useAsyncFn(async () => {
     if (!sourceId || !meta) return null;
@@ -162,6 +187,10 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
         getSavedProgress(progressItems, meta),
       );
       setSourceId(sourceId);
+      // Save the last successful source when manually selected
+      if (enableLastSuccessfulSource) {
+        setLastSuccessfulSource(sourceId);
+      }
       router.close();
       return null;
     }
@@ -218,10 +247,21 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
         convertProviderCaption(embedResult.stream[0].captions),
         getSavedProgress(progressItems, meta),
       );
+      // Save the last successful source when manually selected
+      if (enableLastSuccessfulSource) {
+        setLastSuccessfulSource(sourceId);
+      }
       router.close();
     }
     return result.embeds;
-  }, [sourceId, meta, router, setCaption]);
+  }, [
+    sourceId,
+    meta,
+    router,
+    setCaption,
+    enableLastSuccessfulSource,
+    setLastSuccessfulSource,
+  ]);
 
   return {
     run,

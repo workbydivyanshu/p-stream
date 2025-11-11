@@ -1,11 +1,18 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { SortableList } from "@/components/form/SortableList";
 import { Icon, Icons } from "@/components/Icon";
+import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
+import { useModal } from "@/components/overlays/Modal";
 import { Heading1 } from "@/components/utils/Text";
+import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useAuthStore } from "@/stores/auth";
+import { useBookmarkStore } from "@/stores/bookmarks";
+import { useGroupOrderStore } from "@/stores/groupOrder";
 
 const availableThemes = [
   {
@@ -243,6 +250,28 @@ export function AppearancePart(props: {
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
 
+  // Group order modal
+  const bookmarks = useBookmarkStore((s) => s.bookmarks);
+  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
+  const editGroupOrderModal = useModal("bookmark-edit-order-settings");
+  const backendUrl = useBackendUrl();
+  const account = useAuthStore((s) => s.account);
+
+  // Check if there are groups
+  const hasGroups = useMemo(() => {
+    const groups = new Set<string>();
+
+    Object.values(bookmarks).forEach((bookmark) => {
+      if (Array.isArray(bookmark.group)) {
+        bookmark.group.forEach((group) => groups.add(group));
+      }
+    });
+
+    groups.add("bookmarks");
+
+    return groups.size > 1;
+  }, [bookmarks]);
+
   const {
     enableLowPerformanceMode,
     setEnableDiscover,
@@ -310,6 +339,26 @@ export function AppearancePart(props: {
       checkScrollPosition(); // Update masks after scrolling
     }
   }, [props.active]);
+
+  const handleEditGroupOrder = () => {
+    editGroupOrderModal.show();
+  };
+
+  const handleCancelGroupOrder = () => {
+    editGroupOrderModal.hide();
+  };
+
+  const handleSaveGroupOrder = (newOrder: string[]) => {
+    setGroupOrder(newOrder);
+    editGroupOrderModal.hide();
+
+    // Save to backend
+    if (backendUrl && account) {
+      useGroupOrderStore
+        .getState()
+        .saveGroupOrderToBackend(backendUrl, account);
+    }
+  };
 
   return (
     <div className="space-y-12">
@@ -500,6 +549,17 @@ export function AppearancePart(props: {
                 }}
               />
             </div>
+            {hasGroups && (
+              <div className="mt-4 max-w-[25rem]">
+                <Button
+                  theme="secondary"
+                  onClick={handleEditGroupOrder}
+                  className="w-full"
+                >
+                  {t("settings.appearance.options.homeSectionOrderGroups")}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -533,6 +593,14 @@ export function AppearancePart(props: {
           </div>
         </div>
       </div>
+
+      {/* Edit Group Order Modal */}
+      <EditGroupOrderModal
+        id={editGroupOrderModal.id}
+        isShown={editGroupOrderModal.isShown}
+        onCancel={handleCancelGroupOrder}
+        onSave={handleSaveGroupOrder}
+      />
     </div>
   );
 }

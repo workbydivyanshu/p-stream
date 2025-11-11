@@ -58,6 +58,12 @@ export function useAuthData() {
   const setEnableSourceOrder = usePreferencesStore(
     (s) => s.setEnableSourceOrder,
   );
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
+  const setEnableLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setEnableLastSuccessfulSource,
+  );
   const setDisabledSources = usePreferencesStore((s) => s.setDisabledSources);
   const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
   const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
@@ -193,6 +199,14 @@ export function useAuthData() {
         setEnableSourceOrder(settings.enableSourceOrder);
       }
 
+      if (settings.lastSuccessfulSource !== undefined) {
+        setLastSuccessfulSource(settings.lastSuccessfulSource);
+      }
+
+      if (settings.enableLastSuccessfulSource !== undefined) {
+        setEnableLastSuccessfulSource(settings.enableLastSuccessfulSource);
+      }
+
       if (settings.disabledSources !== undefined) {
         setDisabledSources(settings.disabledSources ?? []);
       }
@@ -265,6 +279,8 @@ export function useAuthData() {
       setForceCompactEpisodeView,
       setSourceOrder,
       setEnableSourceOrder,
+      setLastSuccessfulSource,
+      setEnableLastSuccessfulSource,
       setDisabledSources,
       setEmbedOrder,
       setEnableEmbedOrder,

@@ -66,7 +66,7 @@ export function AdsPart(): JSX.Element | null {
                     <button
                       onClick={dismissAd}
                       type="button"
-                      className="absolute z-50 -top-2 -right-2 w-6 h-6 bg-mediaCard-hoverBackground rounded-full flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      className="absolute z-20 -top-2 -right-2 w-6 h-6 bg-mediaCard-hoverBackground rounded-full flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                       aria-label="Dismiss ad"
                     >
                       <Icon
@@ -95,7 +95,7 @@ export function AdsPart(): JSX.Element | null {
                     <button
                       onClick={dismissAd}
                       type="button"
-                      className="absolute z-50 -top-2 -right-2 w-6 h-6 bg-mediaCard-hoverBackground rounded-full flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      className="absolute z-20 -top-2 -right-2 w-6 h-6 bg-mediaCard-hoverBackground rounded-full flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                       aria-label="Dismiss ad"
                     >
                       <Icon

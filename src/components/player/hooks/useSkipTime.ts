@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 
+import { proxiedFetch } from "@/backend/helpers/fetch";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getTurnstileToken } from "@/utils/turnstile";
 
 // Thanks Nemo for this API
-const BASE_URL = "https://fed-skips.pstream.mov";
+const FED_SKIPS_BASE_URL = "https://fed-skips.pstream.mov";
+const VELORA_BASE_URL = "https://veloratv.ru/api/intro-end/confirmed";
 const MAX_RETRIES = 3;
 
 export function useSkipTime() {
@@ -15,17 +17,40 @@ export function useSkipTime() {
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
 
   useEffect(() => {
-    const fetchSkipTime = async (retries = 0): Promise<void> => {
-      if (!meta?.imdbId || meta.type === "movie") return;
-      if (!conf().ALLOW_FEBBOX_KEY) return;
-      if (!febboxKey) return;
+    const fetchVeloraSkipTime = async (): Promise<number | null> => {
+      if (!meta?.tmdbId) return null;
 
       try {
+        let apiUrl = `${VELORA_BASE_URL}?tmdbId=${meta.tmdbId}`;
+        if (meta.type !== "movie") {
+          apiUrl += `&season=${meta.season?.number}&episode=${meta.episode?.number}`;
+        }
+        const data = await proxiedFetch(apiUrl);
+
+        if (data.introSkippable && typeof data.introEnd === "number") {
+          return data.introEnd;
+        }
+
+        return null;
+      } catch (error) {
+        console.error("Error fetching velora skip time:", error);
+        return null;
+      }
+    };
+
+    const fetchFedSkipsTime = async (retries = 0): Promise<number | null> => {
+      if (!meta?.imdbId || meta.type === "movie") return null;
+      if (!conf().ALLOW_FEBBOX_KEY) return null;
+      if (!febboxKey) return null;
+
+      try {
+        const apiUrl = `${FED_SKIPS_BASE_URL}/${meta.imdbId}/${meta.season?.number}/${meta.episode?.number}`;
+
         const turnstileToken = await getTurnstileToken(
           "0x4AAAAAAB6ocCCpurfWRZyC",
         );
+        if (!turnstileToken) return null;
 
-        const apiUrl = `${BASE_URL}/${meta.imdbId}/${meta.season?.number}/${meta.episode?.number}`;
         const response = await fetch(apiUrl, {
           headers: {
             "cf-turnstile-response": turnstileToken,
@@ -34,9 +59,9 @@ export function useSkipTime() {
 
         if (!response.ok) {
           if (response.status === 500 && retries < MAX_RETRIES) {
-            return fetchSkipTime(retries + 1);
+            return fetchFedSkipsTime(retries + 1);
           }
-          throw new Error("API request failed");
+          throw new Error("Fed-skips API request failed");
         }
 
         const data = await response.json();
@@ -50,13 +75,26 @@ export function useSkipTime() {
 
         const skipTime = parseSkipTime(data.introSkipTime);
 
-        // eslint-disable-next-line no-console
-        console.log("Skip time:", skipTime);
-        setSkiptime(skipTime);
+        return skipTime;
       } catch (error) {
-        console.error("Error fetching skip time:", error);
-        setSkiptime(null);
+        console.error("Error fetching fed-skips time:", error);
+        return null;
       }
+    };
+
+    const fetchSkipTime = async (): Promise<void> => {
+      // If user has febbox key, prioritize Fed-skips (better quality)
+      if (febboxKey) {
+        const fedSkipsTime = await fetchFedSkipsTime();
+        if (fedSkipsTime !== null) {
+          setSkiptime(fedSkipsTime);
+          return;
+        }
+      }
+
+      // Fall back to Velora API (available to all users)
+      const veloraSkipTime = await fetchVeloraSkipTime();
+      setSkiptime(veloraSkipTime);
     };
 
     fetchSkipTime();

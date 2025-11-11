@@ -3,6 +3,13 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
+import {
+  BookmarkModificationOptions,
+  BookmarkModificationResult,
+  BulkGroupModificationOptions,
+  modifyBookmarks,
+  modifyBookmarksByGroup,
+} from "@/utils/bookmarkModifications";
 
 export interface BookmarkMediaItem {
   title: string;
@@ -40,6 +47,13 @@ export interface BookmarkStore {
   ): void;
   isEpisodeFavorited(showId: string, episodeId: string): boolean;
   getFavoriteEpisodes(showId: string): string[];
+  modifyBookmarks(
+    bookmarkIds: string[],
+    options: BookmarkModificationOptions,
+  ): BookmarkModificationResult;
+  modifyBookmarksByGroup(
+    options: BulkGroupModificationOptions,
+  ): BookmarkModificationResult;
   clear(): void;
   clearUpdateQueue(): void;
   removeUpdateItem(id: string): void;
@@ -185,6 +199,83 @@ export const useBookmarkStore = create(
       getFavoriteEpisodes(showId: string): string[] {
         const bookmark = useBookmarkStore.getState().bookmarks[showId];
         return bookmark?.favoriteEpisodes ?? [];
+      },
+      modifyBookmarks(
+        bookmarkIds: string[],
+        options: BookmarkModificationOptions,
+      ): BookmarkModificationResult {
+        let result: BookmarkModificationResult = {
+          modifiedIds: [],
+          hasChanges: false,
+        };
+
+        set((s) => {
+          const { modifiedBookmarks, result: modificationResult } =
+            modifyBookmarks(s.bookmarks, bookmarkIds, options);
+          s.bookmarks = modifiedBookmarks;
+          result = modificationResult;
+
+          // Add to update queue for modified bookmarks
+          if (result.hasChanges) {
+            result.modifiedIds.forEach((bookmarkId) => {
+              const bookmark = s.bookmarks[bookmarkId];
+              if (bookmark) {
+                updateId += 1;
+                s.updateQueue.push({
+                  id: updateId.toString(),
+                  action: "add",
+                  tmdbId: bookmarkId,
+                  title: bookmark.title,
+                  year: bookmark.year,
+                  poster: bookmark.poster,
+                  type: bookmark.type,
+                  group: bookmark.group,
+                  favoriteEpisodes: bookmark.favoriteEpisodes,
+                });
+              }
+            });
+          }
+        });
+
+        return result;
+      },
+      modifyBookmarksByGroup(
+        options: BulkGroupModificationOptions,
+      ): BookmarkModificationResult {
+        let result: BookmarkModificationResult = {
+          modifiedIds: [],
+          hasChanges: false,
+        };
+
+        set((s) => {
+          const { modifiedBookmarks, result: modificationResult } =
+            modifyBookmarksByGroup(s.bookmarks, options);
+          s.bookmarks = modifiedBookmarks;
+          result = modificationResult;
+
+          // Add to update queue for modified bookmarks
+          if (result.hasChanges) {
+            result.modifiedIds.forEach((bookmarkId) => {
+              const bookmark = s.bookmarks[bookmarkId];
+              if (bookmark) {
+                updateId += 1;
+                s.updateQueue.push({
+                  id: updateId.toString(),
+                  action: "add",
+                  tmdbId: bookmarkId,
+                  title: bookmark.title,
+                  year: bookmark.year,
+                  poster: bookmark.poster,
+                  type: bookmark.type,
+                  group: bookmark.group,
+                  favoriteEpisodes: bookmark.favoriteEpisodes,
+                });
+              }
+            });
+          }
+        });
+
+        return result;
       },
     })),
     {

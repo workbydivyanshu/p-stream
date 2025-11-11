@@ -9,6 +9,50 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-048</guid>
+      <title>P-Stream v5.3.0 released!</title>
+      <description>Lots of quality of life improvements and changes and a huge number of bugs fixed!
+
+Additions:
+- Made the skip intro button available to all users, not just those with a febbox token. Though the one with febbox is still the best quality!
+- Added a new "Last Used Source" setting. This will automatically prioritize the source that successfully provided content for the previous episode.
+- Improved thumbnail generation to be more accurate. Now generates 127 thumbnails instead of 63, and generates them randomly rather than sequentially.
+- Added the ability to copy a specific subtitle with its delay value to your clipboard and a paste button to paste it as the current subtitle. Great for moving subtitles between sources!
+- Reworked the settings page to be more user friendly on mobile devices. It's now broken into seperate pages for each section.
+- Added a subtle fade in effect to all images being loaded.
+- Added new toggle to disable the caption background blur effect. This fixes flickering on some browsers with HDR content.
+- Added the ability to bookmark an entire movie collection at once as a group.
+- Added the ability to rename and edit bookmark groups.
+- Added the ability to edit the title and year of a bookmark.
+- Moved reorder button to the settings page.
+- Hid arrow buttons on carousels when at the start or end of the carousel. (Thanks @Smith M.)
+- Added a border to the time stamp popup when hovering over the progress bar. (Thanks @Zisra)
+
+Fixes:
+- Fixed watch progress getting reset when using manual source selection.
+- Encoded all search queries so it's now possible to search for movies and shows with special characters like "V/H/S".
+- Fixed native subtitles not being displayed correctly and not showing in PiP and for mp4 streams.
+- Fixed the PiP button not displaying on mobile devices anymore.
+- Reworked the discover page to load much faster and more efficiently.
+- Fixed the febbox token input not fitting correctly on mobile devices.
+- Fixed finished and unwatched movies and episodes being saved, yet never being shown. They wont save anymore!
+- 0-9 keyboard shortcuts to skip to 0-90% progress no longer work when other keys are held down.
+- Fixed the search bar not being positioned correctly on mobile devices, especially within the PWA.
+- Fixed "i" being shown as "I" in subtitles, this was an issue with some languages that use lowercase "i" intentionally.
+- Fixed watch parties not able to be joined from the home page.
+- Updated the style of many outdated elements on the site. 
+- Various other minor bugs squashed!
+
+Thanks to everyone who has been testing the beta and providing feedback!
+
+P-Stream has partnered with Neon Next Generation Pty Ltd. for this release! They offer high quality web and server hosting with a free virtual private container business plan! Use code "pstream" for 25% off your first 3 months! (link below)
+      </description>
+      <link>https://neonnextgeneration.com</link>
+      <pubDate>Mon, 10 Nov 2025 13:00:00 MST</pubDate>
+      <category>Feature</category>
+    </item>
+
+    <item>
       <guid>notification-047</guid>
       <title>Halloween Movies List Added!</title>
       <description>We've added a new list of Halloween movies to the site! You can find it in the "Discover All Lists" page or by pressing the link below! Happy Halloween! 🎃👻

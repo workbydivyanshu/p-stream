@@ -157,7 +157,7 @@ export function DetailsModal({ id, data: _data, minimal }: DetailsModalProps) {
               flareSize={300}
               cssColorVar="--colors-mediaCard-hoverAccent"
               backgroundClass="bg-mediaCard-hoverBackground duration-100"
-              className="rounded-3xl bg-background-main group-hover:opacity-30 transition-opacity duration-300"
+              className="rounded-3xl bg-background-main group-hover:opacity-100 transition-opacity duration-300"
             />
             <div className="absolute right-4 top-4 z-50 pointer-events-auto">
               <button

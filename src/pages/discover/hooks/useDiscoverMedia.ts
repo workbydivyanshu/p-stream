@@ -112,6 +112,7 @@ export function useDiscoverMedia({
   providerName,
   mediaTitle,
   isCarouselView = false,
+  enabled = true,
 }: UseDiscoverMediaProps): UseDiscoverMediaReturn {
   const [media, setMedia] = useState<DiscoverMedia[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -512,8 +513,11 @@ export function useDiscoverMedia({
       setMedia([]);
       setCurrentContentType(contentType);
     }
-    fetchMedia();
-  }, [fetchMedia, contentType, currentContentType, page, id]);
+    // Only fetch when enabled
+    if (enabled) {
+      fetchMedia();
+    }
+  }, [fetchMedia, contentType, currentContentType, page, id, enabled]);
 
   return {
     media,

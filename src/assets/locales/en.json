@@ -286,7 +286,6 @@
         "dropdown": {
           "placeholderButton": "Add to group",
           "empty": "No groups yet",
-          "addButton": "Add",
           "removeFromGroup": "Remove from group",
           "removeAll": "Remove all"
         },
@@ -297,7 +296,27 @@
           "description": "Drag and drop to reorder your bookmark groups",
           "cancel": "Cancel",
           "save": "Save"
+        },
+        "editGroup": {
+          "title": "Edit Group",
+          "description": "Edit the name and icon of your bookmark group",
+          "cancel": "Cancel",
+          "save": "Save",
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group"
         }
+      },
+      "edit": {
+        "title": "Edit Bookmark",
+        "description": "Edit the details for this bookmark",
+        "cancel": "Cancel",
+        "save": "Save",
+        "groupsLabel": "Groups",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter a title for your bookmark",
+        "yearLabel": "Year",
+        "yearPlaceholder": "Enter a year for your bookmark"
       }
     },
     "continueWatching": {
@@ -736,6 +755,8 @@
       },
       "subtitles": {
         "customChoice": "Drop or upload file",
+        "pasteChoice": "Paste subtitle data",
+        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Customize",
         "previewLabel": "Subtitle preview:",
         "offChoice": "Off",
@@ -921,6 +942,9 @@
     "search": {
       "placeholder": "Search settings..."
     },
+    "all": {
+      "title": "All Settings"
+    },
     "account": {
       "accountDetails": {
         "deviceNameLabel": "Device name",
@@ -1020,7 +1044,8 @@
         "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
         "homeSectionOrder": "Home section order",
         "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes"
+        "forceCompactEpisodeViewLabel": "Compact episodes",
+        "homeSectionOrderGroups": "Reorder bookmark groups"
       },
       "sections": {
         "watching": "Currently Watching",
@@ -1105,7 +1130,10 @@
       "embedOrderEnableLabel": "Custom embed order",
       "manualSource": "Manual source selection",
       "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection"
+      "manualSourceLabel": "Manual source selection",
+      "lastSuccessfulSource": "Last used source",
+      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
+      "lastSuccessfulSourceEnableLabel": "Last used source"
     },
     "reset": "Reset",
     "save": "Save",
@@ -1125,15 +1153,17 @@
     },
     "subtitles": {
       "backgroundLabel": "Background opacity",
-      "backgroundBlurLabel": "Background blur",
+      "backgroundBlurEnabledLabel": "Background blur",
+      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurLabel": "Background blur intensity",
       "colorLabel": "Color",
       "previewQuote": "Convinced life is meaningless, I lack the courage of my conviction.",
       "textSizeLabel": "Text size",
       "title": "Subtitles",
       "textBoldLabel": "Bold text",
       "verticalPositionLabel": "Vertical position",
-      "default": "Default",
-      "low": "Low",
+      "high": "High",
+      "low": "Default",
       "textStyle": {
         "title": "Text style",
         "default": "Default",

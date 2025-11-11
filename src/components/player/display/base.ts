@@ -87,6 +87,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let videoElement: HTMLVideoElement | null = null;
   let containerElement: HTMLElement | null = null;
   let isFullscreen = false;
+  let isPictureInPicture = false;
   let isPausedBeforeSeeking = false;
   let isSeeking = false;
   let startAt = 0;
@@ -95,6 +96,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let lastVolume = 1;
   let lastValidDuration = 0; // Store the last valid duration to prevent reset during source switches
   let lastValidTime = 0; // Store the last valid time to prevent reset during source switches
+  let shouldAutoplayAfterLoad = false; // Flag to track if we should autoplay after loading completes
 
   const languagePromises = new Map<
     string,
@@ -326,6 +328,25 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     vid.currentTime = startAt;
   }
 
+  function webkitPresentationModeChange() {
+    if (!videoElement) return;
+    const webkitPlayer = videoElement as any;
+    const isInWebkitPip =
+      webkitPlayer.webkitPresentationMode === "picture-in-picture";
+    isPictureInPicture = isInWebkitPip;
+    // Use native tracks in WebKit PiP mode for iOS compatibility
+    emit("needstrack", isInWebkitPip);
+
+    // On iOS, entering PiP may allow autoplay that was previously blocked
+    if (isInWebkitPip && videoElement.paused && shouldAutoplayAfterLoad) {
+      shouldAutoplayAfterLoad = false;
+      videoElement.play().catch(() => {
+        // If still blocked, emit pause to show play button
+        emit("pause", undefined);
+      });
+    }
+  }
+
   function setSource() {
     if (!videoElement || !source) return;
     setupSource(videoElement, source);
@@ -345,7 +366,22 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     });
     videoElement.addEventListener("playing", () => emit("play", undefined));
     videoElement.addEventListener("pause", () => emit("pause", undefined));
-    videoElement.addEventListener("canplay", () => emit("loading", false));
+    videoElement.addEventListener("canplay", () => {
+      emit("loading", false);
+      // Attempt autoplay if this was an autoplay transition (startAt = 0)
+      if (shouldAutoplayAfterLoad && startAt === 0 && videoElement) {
+        shouldAutoplayAfterLoad = false; // Reset the flag
+        // Try to play - this will work on most platforms, but iOS may block it
+        const playPromise = videoElement.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Play was blocked (likely iOS), emit that we're not playing
+            // The AutoPlayStart component will show a play button
+            emit("pause", undefined);
+          });
+        }
+      }
+    });
     videoElement.addEventListener("waiting", () => emit("loading", true));
     videoElement.addEventListener("volumechange", () =>
       emit(
@@ -406,6 +442,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         }
       },
     );
+    videoElement.addEventListener(
+      "webkitpresentationmodechanged",
+      webkitPresentationModeChange,
+    );
     videoElement.addEventListener("ratechange", () => {
       if (videoElement) emit("playbackrate", videoElement.playbackRate);
     });
@@ -450,8 +490,45 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       !!(document as any).webkitFullscreenElement; // safari
     emit("fullscreen", isFullscreen);
     if (!isFullscreen) emit("needstrack", false);
+
+    // On iOS, entering fullscreen may allow autoplay that was previously blocked
+    if (
+      isFullscreen &&
+      videoElement &&
+      videoElement.paused &&
+      shouldAutoplayAfterLoad
+    ) {
+      shouldAutoplayAfterLoad = false;
+      videoElement.play().catch(() => {
+        // If still blocked, emit pause to show play button
+        emit("pause", undefined);
+      });
+    }
   }
   fscreen.addEventListener("fullscreenchange", fullscreenChange);
+
+  function pictureInPictureChange() {
+    isPictureInPicture = !!document.pictureInPictureElement;
+    // Use native tracks in PiP mode for better compatibility with iOS and other platforms
+    emit("needstrack", isPictureInPicture);
+
+    // Entering PiP may allow autoplay that was previously blocked
+    if (
+      isPictureInPicture &&
+      videoElement &&
+      videoElement.paused &&
+      shouldAutoplayAfterLoad
+    ) {
+      shouldAutoplayAfterLoad = false;
+      videoElement.play().catch(() => {
+        // If still blocked, emit pause to show play button
+        emit("pause", undefined);
+      });
+    }
+  }
+
+  document.addEventListener("enterpictureinpicture", pictureInPictureChange);
+  document.addEventListener("leavepictureinpicture", pictureInPictureChange);
 
   return {
     on,
@@ -462,6 +539,14 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     destroy: () => {
       destroyVideoElement();
       fscreen.removeEventListener("fullscreenchange", fullscreenChange);
+      document.removeEventListener(
+        "enterpictureinpicture",
+        pictureInPictureChange,
+      );
+      document.removeEventListener(
+        "leavepictureinpicture",
+        pictureInPictureChange,
+      );
     },
     load(ops) {
       if (!ops.source) unloadSource();
@@ -470,6 +555,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       source = ops.source;
       emit("loading", true);
       startAt = ops.startAt;
+      // Set autoplay flag if starting from beginning (indicates autoplay transition)
+      shouldAutoplayAfterLoad = ops.startAt === 0;
       setSource();
     },
     changeQuality(newAutomaticQuality, newPreferredQuality) {
