@@ -8,6 +8,7 @@ import {
 } from "@/components/player/utils/captions";
 import { Transition } from "@/components/utils/Transition";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
 
 const wordOverrides: Record<string, string> = {
@@ -151,12 +152,17 @@ export function SubtitleRenderer() {
 
 export function SubtitleView(props: { controlsShown: boolean }) {
   const caption = usePlayerStore((s) => s.caption.selected);
-  const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
+  const source = usePlayerStore((s) => s.source);
   const display = usePlayerStore((s) => s.display);
   const isCasting = display?.getType() === "casting";
   const styling = useSubtitleStore((s) => s.styling);
+  const enableNativeSubtitles = usePreferencesStore(
+    (s) => s.enableNativeSubtitles,
+  );
 
-  if (captionAsTrack || !caption || isCasting) return null;
+  // Hide custom captions when native subtitles are enabled
+  const shouldUseNativeTrack = enableNativeSubtitles && source !== null;
+  if (shouldUseNativeTrack || !caption || isCasting) return null;
 
   return (
     <Transition animation="slide-up" show>
