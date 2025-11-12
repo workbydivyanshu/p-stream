@@ -2,8 +2,6 @@
 
 [![P-Stream Image](.github/P-Stream.png)](https://docs.pstream.mov)
 
-**I _do not_ endorse piracy of any kind I simply enjoy programming and large user counts.**
-
 ## Quick Deploy
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fp-stream%2Fp-stream)
@@ -27,12 +25,7 @@
 
 ## Referrers
 
-- [FMHY (Voted as #1 multi-server streaming site of 2024)](https://fmhy.net)
-- [Piracy Subreddit Megathread](https://www.reddit.com/r/Piracy/s/iymSloEpXn)
-- [Toon's Instances](https://erynith.github.io/movie-web-instances)
-- [Entertainment Empire](https://discord.gg/8NSDNEMfja)
-- Search Engines: DuckDuckGo, Bing, Google
-- Rentry.co
+- [FMHY (Voted as #1 streaming site of 2024, 2025)](https://fmhy.net)
 
 ## Running Locally
 
