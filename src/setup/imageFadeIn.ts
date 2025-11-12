@@ -5,7 +5,7 @@
 export function initializeImageFadeIn() {
   // Handle images that are already loaded (cached)
   const handleExistingImages = () => {
-    const images = document.querySelectorAll("img:not(.loaded)");
+    const images = document.querySelectorAll(`img:not(.no-fade):not([src=""]`);
     images.forEach((img) => {
       const htmlImg = img as HTMLImageElement;
       if (htmlImg.complete && htmlImg.naturalHeight !== 0) {
@@ -35,7 +35,7 @@ export function initializeImageFadeIn() {
   // Also check periodically for images that might have loaded
   // This handles edge cases where the load event might not fire
   const checkInterval = setInterval(() => {
-    const images = document.querySelectorAll("img:not(.loaded)");
+    const images = document.querySelectorAll(`img:not(.no-fade):not([src=""]`);
     if (images.length === 0) {
       clearInterval(checkInterval);
       return;

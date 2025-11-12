@@ -411,7 +411,7 @@ export function CaptionsView({
       };
 
       try {
-        await navigator.clipboard.writeText(JSON.stringify(copyData, null, 2));
+        await navigator.clipboard.writeText(JSON.stringify(copyData));
         // Could add a toast notification here if needed
       } catch (err) {
         console.error("Failed to copy subtitle data:", err);
