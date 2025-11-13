@@ -151,6 +151,9 @@ export function SettingsMenu({ id }: { id: string }) {
         <Menu.ChevronLink onClick={() => router.navigate("/playback")}>
           {t("player.menus.settings.playbackItem")}
         </Menu.ChevronLink>
+        <Menu.ChevronLink onClick={() => router.navigate("/transcript")}>
+          Transcript
+        </Menu.ChevronLink>
       </Menu.Section>
     </Menu.Card>
   );
