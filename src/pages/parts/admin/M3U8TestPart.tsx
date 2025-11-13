@@ -6,15 +6,9 @@ import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
 import { Box } from "@/components/layout/Box";
-import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
 import { Heading2 } from "@/components/utils/Text";
 import { getM3U8ProxyUrls } from "@/utils/proxyUrls";
-
-interface M3U8Proxy {
-  id: string;
-  url: string;
-}
 
 export function M3U8ProxyItem(props: {
   name: string;
@@ -63,25 +57,12 @@ export function M3U8ProxyItem(props: {
 }
 
 export function M3U8TestPart() {
-  const defaultProxyList = useMemo(() => {
+  const m3u8ProxyList = useMemo(() => {
     return getM3U8ProxyUrls().map((v, ind) => ({
       id: ind.toString(),
       url: v,
     }));
   }, []);
-
-  // Load editable proxy list from localStorage
-  const [m3u8ProxyList, setM3u8ProxyList] = useState<M3U8Proxy[]>(() => {
-    const saved = localStorage.getItem("m3u8-proxy-list");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return defaultProxyList;
-      }
-    }
-    return defaultProxyList;
-  });
 
   // Load enabled proxies from localStorage
   const [enabledProxies, setEnabledProxies] = useState<Record<string, boolean>>(
@@ -98,11 +79,6 @@ export function M3U8TestPart() {
       return Object.fromEntries(m3u8ProxyList.map((proxy) => [proxy.id, true]));
     },
   );
-
-  // Save proxy list to localStorage
-  useEffect(() => {
-    localStorage.setItem("m3u8-proxy-list", JSON.stringify(m3u8ProxyList));
-  }, [m3u8ProxyList]);
 
   // Save enabled proxies to localStorage
   useEffect(() => {
@@ -130,9 +106,9 @@ export function M3U8TestPart() {
     setProxyState([]);
 
     const activeProxies = m3u8ProxyList.filter(
-      (proxy: M3U8Proxy) => enabledProxies[proxy.id],
+      (proxy) => enabledProxies[proxy.id],
     );
-    const proxyPromises = activeProxies.map(async (proxy: M3U8Proxy) => {
+    const proxyPromises = activeProxies.map(async (proxy) => {
       try {
         if (proxy.url.endsWith("/")) {
           updateProxy(proxy.id, {
@@ -177,76 +153,29 @@ export function M3U8TestPart() {
     }));
   };
 
-  const addProxy = () => {
-    const newId = Date.now().toString();
-    setM3u8ProxyList((prev: M3U8Proxy[]) => [...prev, { id: newId, url: "" }]);
-    setEnabledProxies((prev) => ({ ...prev, [newId]: true }));
-  };
-
-  const changeProxy = (id: string, url: string) => {
-    setM3u8ProxyList((prev: M3U8Proxy[]) =>
-      prev.map((proxy: M3U8Proxy) =>
-        proxy.id === id ? { ...proxy, url } : proxy,
-      ),
-    );
-  };
-
-  const removeProxy = (id: string) => {
-    setM3u8ProxyList((prev: M3U8Proxy[]) =>
-      prev.filter((proxy: M3U8Proxy) => proxy.id !== id),
-    );
-    setEnabledProxies((prev) => {
-      const newEnabled = { ...prev };
-      delete newEnabled[id];
-      return newEnabled;
-    });
-  };
-
-  const resetProxies = () => {
-    setM3u8ProxyList(defaultProxyList);
-    setEnabledProxies(
-      Object.fromEntries(
-        defaultProxyList.map((proxy: M3U8Proxy) => [proxy.id, true]),
-      ),
-    );
-  };
-
-  const allEnabled = m3u8ProxyList.every(
-    (proxy: M3U8Proxy) => enabledProxies[proxy.id],
-  );
-  const noneEnabled = m3u8ProxyList.every(
-    (proxy: M3U8Proxy) => !enabledProxies[proxy.id],
-  );
+  const allEnabled = m3u8ProxyList.every((proxy) => enabledProxies[proxy.id]);
+  const noneEnabled = m3u8ProxyList.every((proxy) => !enabledProxies[proxy.id]);
 
   const handleToggleAll = () => {
     if (allEnabled) {
       // Disable all
       setEnabledProxies(
-        Object.fromEntries(
-          m3u8ProxyList.map((proxy: M3U8Proxy) => [proxy.id, false]),
-        ),
+        Object.fromEntries(m3u8ProxyList.map((proxy) => [proxy.id, false])),
       );
     } else {
       // Enable all
       setEnabledProxies(
-        Object.fromEntries(
-          m3u8ProxyList.map((proxy: M3U8Proxy) => [proxy.id, true]),
-        ),
+        Object.fromEntries(m3u8ProxyList.map((proxy) => [proxy.id, true])),
       );
     }
   };
 
   const enabledCount = m3u8ProxyList.filter(
-    (proxy: M3U8Proxy) => enabledProxies[proxy.id],
+    (proxy) => enabledProxies[proxy.id],
   ).length;
 
   return (
     <>
-      <Heading2 className="!mb-0 mt-12">M3U8 Proxy Configuration</Heading2>
-      <Box>
-        <p className="text-white font-bold mb-3">M3U8 Proxy URLs</p>
-      </Box>
-
       <Heading2 className="!mb-0 mt-12">M3U8 Proxy tests</Heading2>
       <div className="flex items-center justify-between mb-8 mt-2">
         <p>
@@ -262,7 +191,7 @@ export function M3U8TestPart() {
         </Button>
       </div>
       <Box>
-        {m3u8ProxyList.map((v: M3U8Proxy, i: number) => {
+        {m3u8ProxyList.map((v, i) => {
           const s = proxyState.find((segment) => segment.id === v.id);
           const name = `M3U8 Proxy ${i + 1}`;
           const enabled = enabledProxies[v.id];
@@ -379,40 +308,6 @@ export function M3U8TestPart() {
               Test M3U8 proxies
             </Button>
           )}
-        </div>
-        <Divider />
-        <div className="my-6 space-y-2">
-          {m3u8ProxyList.length === 0 ? (
-            <p>No M3U8 proxies configured.</p>
-          ) : (
-            m3u8ProxyList.map((proxy: M3U8Proxy) => (
-              <div
-                key={proxy.id}
-                className="grid grid-cols-[1fr,auto] items-center gap-2"
-              >
-                <AuthInputBox
-                  value={proxy.url}
-                  onChange={(url) => changeProxy(proxy.id, url)}
-                  placeholder="https://"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeProxy(proxy.id)}
-                  className="h-full scale-90 hover:scale-100 rounded-full aspect-square bg-authentication-inputBg hover:bg-authentication-inputBgHover flex justify-center items-center transition-transform duration-200 hover:text-white cursor-pointer"
-                >
-                  <Icon className="text-xl" icon={Icons.X} />
-                </button>
-              </div>
-            ))
-          )}
-        </div>
-        <div className="flex gap-2">
-          <Button theme="purple" onClick={addProxy}>
-            Add Proxy
-          </Button>
-          <Button theme="secondary" onClick={resetProxies}>
-            Reset to Default
-          </Button>
         </div>
       </Box>
     </>
