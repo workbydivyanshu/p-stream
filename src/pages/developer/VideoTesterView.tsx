@@ -172,7 +172,7 @@ export default function VideoTesterView() {
                   <div className="flex-1 mb-4">
                     <div className="flex justify-between items-center gap-4">
                       <div className="my-3">
-                        <p className="text-white font-bold">Headers</p>
+                        <p className="text-white font-bold">Headers (Beta)</p>
                       </div>
                       <div>
                         <Toggle
