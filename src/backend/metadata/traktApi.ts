@@ -1,4 +1,5 @@
 import { SimpleCache } from "@/utils/cache";
+import { getTurnstileToken } from "@/utils/turnstile";
 
 import { getMediaDetails } from "./tmdb";
 import { TMDBContentTypes, TMDBMovieData } from "./types/tmdb";
@@ -60,8 +61,15 @@ async function fetchFromTrakt<T = TraktListResponse>(
     return cachedResult as T;
   }
 
-  // Make the API request
-  const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`);
+  // Get Turnstile token for verification
+  const turnstileToken = await getTurnstileToken("0x4AAAAAAB6ocCCpurfWRZyC");
+
+  // Make the API request with Turnstile token
+  const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`, {
+    headers: {
+      "cf-turnstile-response": turnstileToken,
+    },
+  });
   if (!response.ok) {
     throw new Error(`Failed to fetch from ${endpoint}: ${response.statusText}`);
   }
@@ -91,8 +99,15 @@ export async function getReleaseDetails(
     return cachedResult as TraktReleaseResponse;
   }
 
-  // Make the API request
-  const response = await fetch(`${TRAKT_BASE_URL}${url}`);
+  // Get Turnstile token for verification
+  const turnstileToken = await getTurnstileToken("0x4AAAAAAB6ocCCpurfWRZyC");
+
+  // Make the API request with Turnstile token
+  const response = await fetch(`${TRAKT_BASE_URL}${url}`, {
+    headers: {
+      "cf-turnstile-response": turnstileToken,
+    },
+  });
   if (!response.ok) {
     throw new Error(`Failed to fetch release details: ${response.statusText}`);
   }
