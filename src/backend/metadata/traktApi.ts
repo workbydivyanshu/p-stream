@@ -1,4 +1,6 @@
+import { conf } from "@/setup/config";
 import { SimpleCache } from "@/utils/cache";
+import { getTurnstileToken } from "@/utils/turnstile";
 
 import { getMediaDetails } from "./tmdb";
 import { TMDBContentTypes, TMDBMovieData } from "./types/tmdb";
@@ -10,6 +12,79 @@ import type {
 } from "./types/trakt";
 
 export const TRAKT_BASE_URL = "https://fed-airdate.pstream.mov";
+
+// Token cookie configuration
+const TOKEN_COOKIE_NAME = "turnstile_token";
+const TOKEN_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+/**
+ * Get turnstile token from cookie or fetch new one
+ */
+const getFreshTurnstileToken = async (): Promise<string> => {
+  const now = Date.now();
+
+  // Check if we have a valid cached token in cookie
+  if (typeof window !== "undefined") {
+    const cookies = document.cookie.split(";");
+    const tokenCookie = cookies.find((cookie) =>
+      cookie.trim().startsWith(`${TOKEN_COOKIE_NAME}=`),
+    );
+
+    if (tokenCookie) {
+      try {
+        const cookieValue = tokenCookie.split("=")[1];
+        const cookieData = JSON.parse(decodeURIComponent(cookieValue));
+        const { token, timestamp } = cookieData;
+
+        // Check if token is still valid (within 10 minutes)
+        if (token && timestamp && now - timestamp < TOKEN_CACHE_DURATION) {
+          return token;
+        }
+      } catch (error) {
+        // Invalid cookie format, continue to get new token
+        console.warn("Invalid turnstile token cookie:", error);
+      }
+    }
+  }
+
+  // Get new token from Cloudflare
+  try {
+    const token = await getTurnstileToken("0x4AAAAAAB6ocCCpurfWRZyC");
+
+    // Store token in cookie with expiration
+    if (typeof window !== "undefined") {
+      const expiresAt = new Date(now + TOKEN_CACHE_DURATION);
+      const cookieData = {
+        token,
+        timestamp: now,
+      };
+      const cookieValue = encodeURIComponent(JSON.stringify(cookieData));
+
+      document.cookie = `${TOKEN_COOKIE_NAME}=${cookieValue}; expires=${expiresAt.toUTCString()}; path=/; SameSite=Strict`;
+    }
+
+    return token;
+  } catch (error) {
+    throw new Error(`Failed to get turnstile token: ${error}`);
+  }
+};
+
+/**
+ * Validate turnstile token with server and store for 10 minutes within api.
+ */
+const validateAndStoreToken = async (token: string): Promise<void> => {
+  const response = await fetch(`${TRAKT_BASE_URL}/auth`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Token validation failed: ${response.statusText}`);
+  }
+};
 
 // Map provider names to their Trakt endpoints
 export const PROVIDER_TO_TRAKT_MAP = {
@@ -53,6 +128,10 @@ traktCache.initialize();
 async function fetchFromTrakt<T = TraktListResponse>(
   endpoint: string,
 ): Promise<T> {
+  if (!conf().USE_TRAKT) {
+    return null as T;
+  }
+
   // Check cache first
   const cacheKey: TraktCacheKey = { endpoint };
   const cachedResult = traktCache.get(cacheKey);
@@ -60,17 +139,58 @@ async function fetchFromTrakt<T = TraktListResponse>(
     return cachedResult as T;
   }
 
-  // Make the API request
-  const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch from ${endpoint}: ${response.statusText}`);
+  // Try up to 2 times: first with cached/fresh token, retry with forced fresh token if auth fails
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      // 1. Get turnstile token (cached or fresh)
+      const turnstileToken = await getFreshTurnstileToken();
+
+      // 2. Validate token with server and store for 10 minutes
+      await validateAndStoreToken(turnstileToken);
+
+      // 3. Make the API request with validated token
+      const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`, {
+        headers: {
+          "x-turnstile-token": turnstileToken,
+        },
+      });
+
+      if (!response.ok) {
+        // If auth error on first attempt, clear cookie and retry with fresh token
+        if (
+          (response.status === 401 || response.status === 403) &&
+          attempt === 0
+        ) {
+          // Clear the cookie to force fresh token on retry
+          if (typeof window !== "undefined") {
+            document.cookie = `${TOKEN_COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+          }
+          continue; // Try again
+        }
+        throw new Error(
+          `Failed to fetch from ${endpoint}: ${response.statusText}`,
+        );
+      }
+
+      const result = await response.json();
+
+      // Cache the result for 1 hour (3600 seconds)
+      traktCache.set(cacheKey, result, 3600);
+
+      return result as T;
+    } catch (error) {
+      // If this was the second attempt or not an auth error, throw
+      if (
+        attempt === 1 ||
+        !(error instanceof Error && error.message.includes("401"))
+      ) {
+        throw error;
+      }
+      // Otherwise, continue to retry
+    }
   }
-  const result = await response.json();
 
-  // Cache the result for 1 hour (3600 seconds)
-  traktCache.set(cacheKey, result, 3600);
-
-  return result as T;
+  throw new Error(`Failed to fetch from ${endpoint} after retries`);
 }
 
 // Release details
@@ -84,6 +204,10 @@ export async function getReleaseDetails(
     url += `/${season}/${episode}`;
   }
 
+  if (!conf().USE_TRAKT) {
+    return null as unknown as TraktReleaseResponse;
+  }
+
   // Check cache first
   const cacheKey: TraktCacheKey = { endpoint: url };
   const cachedResult = traktCache.get(cacheKey);
@@ -91,17 +215,58 @@ export async function getReleaseDetails(
     return cachedResult as TraktReleaseResponse;
   }
 
-  // Make the API request
-  const response = await fetch(`${TRAKT_BASE_URL}${url}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch release details: ${response.statusText}`);
+  // Try up to 2 times: first with cached/fresh token, retry with forced fresh token if auth fails
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      // 1. Get turnstile token (cached or fresh)
+      const turnstileToken = await getFreshTurnstileToken();
+
+      // 2. Validate token with server and store for 10 minutes
+      await validateAndStoreToken(turnstileToken);
+
+      // 3. Make the API request with validated token
+      const response = await fetch(`${TRAKT_BASE_URL}${url}`, {
+        headers: {
+          "x-turnstile-token": turnstileToken,
+        },
+      });
+
+      if (!response.ok) {
+        // If auth error on first attempt, clear cookie and retry with fresh token
+        if (
+          (response.status === 401 || response.status === 403) &&
+          attempt === 0
+        ) {
+          // Clear the cookie to force fresh token on retry
+          if (typeof window !== "undefined") {
+            document.cookie = `${TOKEN_COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+          }
+          continue; // Try again
+        }
+        throw new Error(
+          `Failed to fetch release details: ${response.statusText}`,
+        );
+      }
+
+      const result = await response.json();
+
+      // Cache the result for 1 hour (3600 seconds)
+      traktCache.set(cacheKey, result, 3600);
+
+      return result as TraktReleaseResponse;
+    } catch (error) {
+      // If this was the second attempt or not an auth error, throw
+      if (
+        attempt === 1 ||
+        !(error instanceof Error && error.message.includes("401"))
+      ) {
+        throw error;
+      }
+      // Otherwise, continue to retry
+    }
   }
-  const result = await response.json();
 
-  // Cache the result for 1 hour (3600 seconds)
-  traktCache.set(cacheKey, result, 3600);
-
-  return result as TraktReleaseResponse;
+  throw new Error(`Failed to fetch release details after retries`);
 }
 
 // Latest releases

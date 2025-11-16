@@ -32,6 +32,7 @@ interface Config {
   TRACK_SCRIPT: string; // like <script src="https://umami.com/script.js"></script>
   BANNER_MESSAGE: string;
   BANNER_ID: string;
+  USE_TRAKT: boolean;
 }
 
 export interface RuntimeConfig {
@@ -60,6 +61,7 @@ export interface RuntimeConfig {
   TRACK_SCRIPT: string | null;
   BANNER_MESSAGE: string | null;
   BANNER_ID: string | null;
+  USE_TRAKT: boolean;
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -91,6 +93,7 @@ const env: Record<keyof Config, undefined | string> = {
   TRACK_SCRIPT: import.meta.env.VITE_TRACK_SCRIPT,
   BANNER_MESSAGE: import.meta.env.VITE_BANNER_MESSAGE,
   BANNER_ID: import.meta.env.VITE_BANNER_ID,
+  USE_TRAKT: import.meta.env.VITE_USE_TRAKT,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -165,5 +168,6 @@ export function conf(): RuntimeConfig {
     TRACK_SCRIPT: getKey("TRACK_SCRIPT"),
     BANNER_MESSAGE: getKey("BANNER_MESSAGE"),
     BANNER_ID: getKey("BANNER_ID"),
+    USE_TRAKT: getKey("USE_TRAKT", "false") === "true",
   };
 }
