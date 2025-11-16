@@ -19,6 +19,7 @@ interface Config {
   BACKEND_URL: string;
   DISALLOWED_IDS: string;
   TURNSTILE_KEY: string;
+  ENABLE_TRAKT: string;
   CDN_REPLACEMENTS: string;
   HAS_ONBOARDING: string;
   ONBOARDING_CHROME_EXTENSION_INSTALL_LINK: string;
@@ -48,6 +49,7 @@ export interface RuntimeConfig {
   BACKEND_URL: string | null;
   DISALLOWED_IDS: string[];
   TURNSTILE_KEY: string | null;
+  ENABLE_TRAKT: boolean;
   CDN_REPLACEMENTS: Array<string[]>;
   HAS_ONBOARDING: boolean;
   ALLOW_AUTOPLAY: boolean;
@@ -81,6 +83,7 @@ const env: Record<keyof Config, undefined | string> = {
   BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
   DISALLOWED_IDS: import.meta.env.VITE_DISALLOWED_IDS,
   TURNSTILE_KEY: import.meta.env.VITE_TURNSTILE_KEY,
+  ENABLE_TRAKT: import.meta.env.VITE_ENABLE_TRAKT,
   CDN_REPLACEMENTS: import.meta.env.VITE_CDN_REPLACEMENTS,
   HAS_ONBOARDING: import.meta.env.VITE_HAS_ONBOARDING,
   ALLOW_AUTOPLAY: import.meta.env.VITE_ALLOW_AUTOPLAY,
@@ -142,6 +145,7 @@ export function conf(): RuntimeConfig {
     HAS_ONBOARDING: getKey("HAS_ONBOARDING", "false") === "true",
     ALLOW_AUTOPLAY: getKey("ALLOW_AUTOPLAY", "false") === "true",
     TURNSTILE_KEY: getKey("TURNSTILE_KEY"),
+    ENABLE_TRAKT: getKey("ENABLE_TRAKT", "false") === "true",
     DISALLOWED_IDS: getKey("DISALLOWED_IDS", "")
       .split(",")
       .map((v) => v.trim())
