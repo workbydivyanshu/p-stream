@@ -1,6 +1,4 @@
-import { conf } from "@/setup/config";
 import { SimpleCache } from "@/utils/cache";
-import { getTurnstileToken } from "@/utils/turnstile";
 
 import { getMediaDetails } from "./tmdb";
 import { TMDBContentTypes, TMDBMovieData } from "./types/tmdb";
@@ -51,129 +49,10 @@ const traktCache = new SimpleCache<TraktCacheKey, any>();
 traktCache.setCompare((a, b) => a.endpoint === b.endpoint);
 traktCache.initialize();
 
-// Authentication state - only track concurrent requests
-let isAuthenticating = false;
-let authToken: string | null = null;
-let tokenExpiry: Date | null = null;
-
-/**
- * Clears the authentication token
- */
-function clearAuthToken(): void {
-  authToken = null;
-  tokenExpiry = null;
-  localStorage.removeItem("trakt_auth_token");
-  localStorage.removeItem("trakt_token_expiry");
-}
-
-/**
- * Stores the authentication token in memory and localStorage
- */
-function storeAuthToken(token: string, expiresAt: string): void {
-  const expiryDate = new Date(expiresAt);
-  if (Number.isNaN(expiryDate.getTime())) {
-    console.error("Invalid expiry date format:", expiresAt);
-    return;
-  }
-
-  authToken = token;
-  tokenExpiry = expiryDate;
-
-  // Store in localStorage for persistence
-  localStorage.setItem("trakt_auth_token", token);
-  localStorage.setItem("trakt_token_expiry", expiresAt);
-}
-
-/**
- * Checks if user is authenticated by checking token validity
- */
-function isAuthenticated(): boolean {
-  // Check memory first
-  if (authToken && tokenExpiry && tokenExpiry > new Date()) {
-    return true;
-  }
-
-  // Check localStorage
-  const storedToken = localStorage.getItem("trakt_auth_token");
-  const storedExpiry = localStorage.getItem("trakt_token_expiry");
-
-  if (storedToken && storedExpiry) {
-    const expiryDate = new Date(storedExpiry);
-    if (expiryDate > new Date()) {
-      authToken = storedToken;
-      tokenExpiry = expiryDate;
-      return true;
-    }
-    // Token expired, clear it
-    clearAuthToken();
-  }
-
-  return false;
-}
-
-/**
- * Authenticates with the Trakt API using Cloudflare Turnstile
- * Stores the auth token for use in API requests
- */
-async function authenticateWithTurnstile(): Promise<void> {
-  // Prevent concurrent authentication attempts
-  if (isAuthenticating) {
-    // Wait for existing authentication to complete
-    await new Promise<void>((resolve) => {
-      const checkAuth = () => {
-        if (!isAuthenticating) {
-          resolve();
-        } else {
-          setTimeout(checkAuth, 100);
-        }
-      };
-      checkAuth();
-    });
-    return;
-  }
-
-  isAuthenticating = true;
-
-  try {
-    const turnstileToken = await getTurnstileToken("0x4AAAAAAB6ocCCpurfWRZyC");
-
-    // Authenticate with the API
-    const response = await fetch(`${TRAKT_BASE_URL}/auth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: turnstileToken,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Authentication failed: ${response.statusText}`);
-    }
-
-    const result = await response.json();
-
-    if (!result.success) {
-      throw new Error(result.message || "Authentication failed");
-    }
-
-    // Store the auth token
-    storeAuthToken(result.auth_token, result.expires_at);
-  } finally {
-    isAuthenticating = false;
-  }
-}
-
 // Base function to fetch from Trakt API
 async function fetchFromTrakt<T = TraktListResponse>(
   endpoint: string,
 ): Promise<T> {
-  // Check if Trakt is enabled
-  if (!conf().ENABLE_TRAKT) {
-    throw new Error("Trakt API is not enabled, using tmdb lists instead.");
-  }
-
   // Check cache first
   const cacheKey: TraktCacheKey = { endpoint };
   const cachedResult = traktCache.get(cacheKey);
@@ -181,49 +60,11 @@ async function fetchFromTrakt<T = TraktListResponse>(
     return cachedResult as T;
   }
 
-  // Ensure we're authenticated
-  if (!isAuthenticated()) {
-    await authenticateWithTurnstile();
-  }
-
-  // Make the API request with authorization header
-  const headers: Record<string, string> = {};
-  if (authToken) {
-    headers.Authorization = `Bearer ${authToken}`;
-  }
-
-  let response = await fetch(`${TRAKT_BASE_URL}${endpoint}`, {
-    headers,
-  });
-
-  // If request fails, try re-authenticating and retry once
+  // Make the API request
+  const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`);
   if (!response.ok) {
-    // If 401, clear token and re-authenticate
-    if (response.status === 401) {
-      clearAuthToken();
-    }
-
-    // Re-authenticate and retry
-    await authenticateWithTurnstile();
-
-    // Rebuild headers after re-authentication
-    const retryHeaders: Record<string, string> = {};
-    if (authToken) {
-      retryHeaders.Authorization = `Bearer ${authToken}`;
-    }
-
-    response = await fetch(`${TRAKT_BASE_URL}${endpoint}`, {
-      headers: retryHeaders,
-    });
-
-    // If retry also fails, throw error
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch from ${endpoint}: ${response.statusText}`,
-      );
-    }
+    throw new Error(`Failed to fetch from ${endpoint}: ${response.statusText}`);
   }
-
   const result = await response.json();
 
   // Cache the result for 1 hour (3600 seconds)
@@ -243,11 +84,6 @@ export async function getReleaseDetails(
     url += `/${season}/${episode}`;
   }
 
-  // Check if Trakt is enabled
-  if (!conf().ENABLE_TRAKT) {
-    throw new Error("Trakt API is not enabled");
-  }
-
   // Check cache first
   const cacheKey: TraktCacheKey = { endpoint: url };
   const cachedResult = traktCache.get(cacheKey);
@@ -255,49 +91,11 @@ export async function getReleaseDetails(
     return cachedResult as TraktReleaseResponse;
   }
 
-  // Ensure we're authenticated
-  if (!isAuthenticated()) {
-    await authenticateWithTurnstile();
-  }
-
-  // Make the API request with authorization header
-  const headers: Record<string, string> = {};
-  if (authToken) {
-    headers.Authorization = `Bearer ${authToken}`;
-  }
-
-  let response = await fetch(`${TRAKT_BASE_URL}${url}`, {
-    headers,
-  });
-
-  // If request fails, try re-authenticating and retry once
+  // Make the API request
+  const response = await fetch(`${TRAKT_BASE_URL}${url}`);
   if (!response.ok) {
-    // If 401, clear token and re-authenticate
-    if (response.status === 401) {
-      clearAuthToken();
-    }
-
-    // Re-authenticate and retry
-    await authenticateWithTurnstile();
-
-    // Rebuild headers after re-authentication
-    const retryHeaders: Record<string, string> = {};
-    if (authToken) {
-      retryHeaders.Authorization = `Bearer ${authToken}`;
-    }
-
-    response = await fetch(`${TRAKT_BASE_URL}${url}`, {
-      headers: retryHeaders,
-    });
-
-    // If retry also fails, throw error
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch release details: ${response.statusText}`,
-      );
-    }
+    throw new Error(`Failed to fetch release details: ${response.statusText}`);
   }
-
   const result = await response.json();
 
   // Cache the result for 1 hour (3600 seconds)
@@ -402,17 +200,17 @@ export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
 
   const lists: CuratedMovieList[] = [];
 
-  for (const listConfig of listConfigs) {
+  for (const config of listConfigs) {
     try {
-      const response = await fetchFromTrakt(listConfig.endpoint);
+      const response = await fetchFromTrakt(config.endpoint);
       lists.push({
-        listName: listConfig.name,
-        listSlug: listConfig.slug,
+        listName: config.name,
+        listSlug: config.slug,
         tmdbIds: response.movie_tmdb_ids.slice(0, 30), // Limit to first 30 items
         count: Math.min(response.movie_tmdb_ids.length, 30), // Update count to reflect the limit
       });
     } catch (error) {
-      console.error(`Failed to fetch ${listConfig.name}:`, error);
+      console.error(`Failed to fetch ${config.name}:`, error);
     }
   }
 
