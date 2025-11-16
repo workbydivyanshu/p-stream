@@ -19,8 +19,12 @@ const TOKEN_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 /**
  * Get turnstile token from cookie or fetch new one
+ * Returns an object indicating if the token was cached or freshly fetched
  */
-const getFreshTurnstileToken = async (): Promise<string> => {
+const getFreshTurnstileToken = async (): Promise<{
+  token: string;
+  isCached: boolean;
+}> => {
   const now = Date.now();
 
   // Check if we have a valid cached token in cookie
@@ -38,7 +42,7 @@ const getFreshTurnstileToken = async (): Promise<string> => {
 
         // Check if token is still valid (within 10 minutes)
         if (token && timestamp && now - timestamp < TOKEN_CACHE_DURATION) {
-          return token;
+          return { token, isCached: true };
         }
       } catch (error) {
         // Invalid cookie format, continue to get new token
@@ -63,7 +67,7 @@ const getFreshTurnstileToken = async (): Promise<string> => {
       document.cookie = `${TOKEN_COOKIE_NAME}=${cookieValue}; expires=${expiresAt.toUTCString()}; path=/; SameSite=Strict`;
     }
 
-    return token;
+    return { token, isCached: false };
   } catch (error) {
     throw new Error(`Failed to get turnstile token: ${error}`);
   }
@@ -143,10 +147,13 @@ async function fetchFromTrakt<T = TraktListResponse>(
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       // 1. Get turnstile token (cached or fresh)
-      const turnstileToken = await getFreshTurnstileToken();
+      const { token: turnstileToken, isCached } =
+        await getFreshTurnstileToken();
 
-      // 2. Validate token with server and store for 10 minutes
-      await validateAndStoreToken(turnstileToken);
+      // 2. Only validate with server if token wasn't cached (newly fetched)
+      if (!isCached) {
+        await validateAndStoreToken(turnstileToken);
+      }
 
       // 3. Make the API request with validated token
       const response = await fetch(`${TRAKT_BASE_URL}${endpoint}`, {
@@ -219,10 +226,13 @@ export async function getReleaseDetails(
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       // 1. Get turnstile token (cached or fresh)
-      const turnstileToken = await getFreshTurnstileToken();
+      const { token: turnstileToken, isCached } =
+        await getFreshTurnstileToken();
 
-      // 2. Validate token with server and store for 10 minutes
-      await validateAndStoreToken(turnstileToken);
+      // 2. Only validate with server if token wasn't cached (newly fetched)
+      if (!isCached) {
+        await validateAndStoreToken(turnstileToken);
+      }
 
       // 3. Make the API request with validated token
       const response = await fetch(`${TRAKT_BASE_URL}${url}`, {
