@@ -315,7 +315,6 @@ export const getNetworkContent = (tmdbId: string) =>
 // Curated movie lists
 export const getNarrativeMovies = () => fetchFromTrakt("/narrative");
 export const getTopMovies = () => fetchFromTrakt("/top");
-export const getLifetimeMovies = () => fetchFromTrakt("/lifetime");
 export const getNeverHeardMovies = () => fetchFromTrakt("/never");
 export const getLGBTQContent = () => fetchFromTrakt("/LGBTQ");
 export const getMindfuckMovies = () => fetchFromTrakt("/mindfuck");
@@ -340,11 +339,6 @@ export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
       name: "1001 Greatest Movies of All Time",
       slug: "top",
       endpoint: "/top",
-    },
-    {
-      name: "1001 Movies You Must See Before You Die",
-      slug: "lifetime",
-      endpoint: "/lifetime",
     },
     {
       name: "Great Movies You May Have Never Heard Of",
