@@ -947,6 +947,8 @@
     },
     "account": {
       "accountDetails": {
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
         "editProfile": "Edit",
@@ -1144,6 +1146,7 @@
         "backendVersion": "Backend version",
         "hostname": "Hostname",
         "insecure": "Insecure",
+        "nickname": "Nickname",
         "notLoggedIn": "You are not logged in",
         "secure": "Secure",
         "title": "App stats",

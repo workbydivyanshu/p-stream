@@ -8,9 +8,8 @@ import { ProgressMediaItem } from "@/stores/progress";
 export interface UserResponse {
   id: string;
   namespace: string;
-  name: string;
-  roles: string[];
-  createdAt: string;
+  nickname: string;
+  permissions: string[];
   profile: {
     colorA: string;
     colorB: string;
@@ -24,6 +23,7 @@ export interface UserEdit {
     colorB: string;
     icon: string;
   };
+  nickname?: string;
 }
 
 export interface BookmarkResponse {

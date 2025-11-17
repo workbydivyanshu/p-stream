@@ -101,6 +101,7 @@ export function useAuthData() {
         sessionId: loginResponse.session.id,
         deviceName: session.device,
         profile: user.profile,
+        nickname: user.nickname,
         seed,
       };
       setAccount(account);

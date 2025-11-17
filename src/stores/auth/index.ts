@@ -8,6 +8,7 @@ export interface Account {
     colorB: string;
     icon: string;
   };
+  nickname: string;
 }
 
 export type AccountWithToken = Account & {
@@ -25,7 +26,7 @@ interface AuthStore {
   removeAccount(): void;
   setAccount(acc: AccountWithToken): void;
   updateDeviceName(deviceName: string): void;
-  updateAccount(acc: Account): void;
+  updateAccount(acc: Partial<Account>): void;
   setAccountProfile(acc: Account["profile"]): void;
   setBackendUrl(url: null | string): void;
   setProxySet(urls: null | string[]): void;
