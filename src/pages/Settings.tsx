@@ -485,9 +485,9 @@ export function SettingsPage() {
   );
 
   const account = useAuthStore((s) => s.account);
-  const setAccount = useAuthStore((s) => s.setAccount);
   const updateProfile = useAuthStore((s) => s.setAccountProfile);
   const updateDeviceName = useAuthStore((s) => s.updateDeviceName);
+  const updateNickname = useAuthStore((s) => s.setAccountNickname);
   const decryptedName = useMemo(() => {
     if (!account) return "";
     return decryptData(account.deviceName, base64ToBuffer(account.seed));
@@ -656,14 +656,13 @@ export function SettingsPage() {
         await editUser(backendUrl, account, {
           nickname: state.nickname.state,
         });
-        // Update the account in the store
-        const updatedAccount = { ...account, nickname: state.nickname.state };
-        setAccount(updatedAccount);
+        updateNickname(state.nickname.state);
       }
-      if (state.profile.changed) {
+      if (state.profile.changed && state.profile.state) {
         await editUser(backendUrl, account, {
           profile: state.profile.state,
         });
+        updateProfile(state.profile.state);
       }
     }
 
@@ -734,7 +733,7 @@ export function SettingsPage() {
     setProxySet,
     updateDeviceName,
     updateProfile,
-    setAccount,
+    updateNickname,
     logout,
     setBackendUrl,
     setProxyTmdb,

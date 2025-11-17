@@ -28,6 +28,7 @@ interface AuthStore {
   updateDeviceName(deviceName: string): void;
   updateAccount(acc: Partial<Account>): void;
   setAccountProfile(acc: Account["profile"]): void;
+  setAccountNickname(nickname: string): void;
   setBackendUrl(url: null | string): void;
   setProxySet(urls: null | string[]): void;
 }
@@ -62,6 +63,13 @@ export const useAuthStore = create(
         set((s) => {
           if (s.account) {
             s.account.profile = profile;
+          }
+        });
+      },
+      setAccountNickname(nickname) {
+        set((s) => {
+          if (s.account) {
+            s.account.nickname = nickname;
           }
         });
       },
