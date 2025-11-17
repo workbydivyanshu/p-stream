@@ -257,7 +257,17 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           {deviceName && bufferSeed ? (
             <DropdownLink className="text-white" href="/settings">
               <UserAvatar />
-              {decryptData(deviceName, bufferSeed)}
+              {(() => {
+                try {
+                  return decryptData(deviceName, bufferSeed);
+                } catch (error) {
+                  console.warn(
+                    "Failed to decrypt device name in LinksDropdown, using fallback:",
+                    error,
+                  );
+                  return t("settings.account.unknownDevice");
+                }
+              })()}
             </DropdownLink>
           ) : (
             <DropdownLink href="/login" icon={Icons.RISING_STAR} highlight>

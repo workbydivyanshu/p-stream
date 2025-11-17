@@ -981,6 +981,7 @@
       },
       "devices": {
         "deviceNameLabel": "Device name",
+        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
         "title": "Devices"
