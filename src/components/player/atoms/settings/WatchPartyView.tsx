@@ -34,6 +34,14 @@ export function WatchPartyView({ id }: { id: string }) {
   const [validationError, setValidationError] = useState<string | null>(null);
   const account = useAuthStore((s) => s.account);
 
+  // Get display name for a user (nickname if it's the current user, otherwise truncated userId)
+  const getDisplayName = (userId: string) => {
+    if (account?.userId === userId && account?.nickname) {
+      return account.nickname;
+    }
+    return `${userId.substring(0, 8)}...`;
+  };
+
   const backendMeta = useAsync(async () => {
     if (!backendUrl) return;
     return getBackendMeta(backendUrl);
@@ -322,7 +330,7 @@ export function WatchPartyView({ id }: { id: string }) {
                                       : "text-type-secondary"
                                   }
                                 >
-                                  {user.userId.substring(0, 8)}...
+                                  {getDisplayName(user.userId)}
                                 </span>
                               </span>
                               <span className="text-type-secondary">
