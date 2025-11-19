@@ -311,6 +311,7 @@ export function useSettingsState(
     proxyUrlsChanged ||
     febboxKeyChanged ||
     debridTokenChanged ||
+    debridServiceChanged ||
     profileChanged ||
     enableThumbnailsChanged ||
     enableAutoplayChanged ||
