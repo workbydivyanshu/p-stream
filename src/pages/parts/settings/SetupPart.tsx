@@ -58,7 +58,7 @@ function testProxy(url: string) {
 }
 
 export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
-  const febboxApiTestUrl = `https://fed-api.pstream.mov/movie/412059`;
+  const febboxApiTestUrl = `https://fed-api.pstream.mov/movie/tt0325980`;
 
   if (!febboxKey) {
     return "unset";
