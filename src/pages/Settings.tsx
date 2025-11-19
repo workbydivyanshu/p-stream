@@ -516,9 +516,6 @@ export function SettingsPage() {
         if (settings.debridToken) {
           setdebridToken(settings.debridToken);
         }
-        if (settings.debridService) {
-          setdebridService(settings.debridService);
-        }
       }
     };
     loadSettings();
