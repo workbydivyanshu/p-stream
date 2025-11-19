@@ -9,6 +9,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
+import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
@@ -24,7 +25,7 @@ import {
   SetupPart,
   Status,
   testFebboxKey,
-  testRealDebridKey,
+  testdebridToken,
 } from "@/pages/parts/settings/SetupPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
@@ -49,9 +50,11 @@ interface FebboxKeyProps {
   setFebboxKey: (value: string | null) => void;
 }
 
-interface RealDebridKeyProps {
-  realDebridKey: string | null;
-  setRealDebridKey: Dispatch<SetStateAction<string | null>>;
+interface DebridProps {
+  debridToken: string | null;
+  setdebridToken: (value: string | null) => void;
+  debridService: string;
+  setdebridService: (value: string) => void;
 }
 
 function ProxyEdit({
@@ -460,33 +463,30 @@ export function FebboxSetup({
   }
 }
 
-async function getRealDebridKeyStatus(realDebridKey: string | null) {
-  if (realDebridKey) {
-    const status: Status = await testRealDebridKey(realDebridKey);
+async function getdebridTokenStatus(debridToken: string | null) {
+  if (debridToken) {
+    const status: Status = await testdebridToken(debridToken);
     return status;
   }
   return "unset";
 }
 
-function RealDebridKeyEdit({
-  realDebridKey,
-  setRealDebridKey,
-}: RealDebridKeyProps) {
+export function DebridEdit({
+  debridToken,
+  setdebridToken,
+  debridService,
+  setdebridService,
+}: DebridProps) {
   const { t } = useTranslation();
   const user = useAuthStore();
   const preferences = usePreferencesStore();
 
   // Enable Real Debrid token when account is loaded and we have a token
   useEffect(() => {
-    if (user.account && realDebridKey === null && preferences.realDebridKey) {
-      setRealDebridKey(preferences.realDebridKey);
+    if (user.account && debridToken === null && preferences.debridToken) {
+      setdebridToken(preferences.debridToken);
     }
-  }, [
-    user.account,
-    realDebridKey,
-    preferences.realDebridKey,
-    setRealDebridKey,
-  ]);
+  }, [user.account, debridToken, preferences.debridToken, setdebridToken]);
 
   const [status, setStatus] = useState<Status>("unset");
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
@@ -499,73 +499,78 @@ function RealDebridKeyEdit({
 
   useEffect(() => {
     const checkTokenStatus = async () => {
-      const result = await getRealDebridKeyStatus(realDebridKey);
+      const result = await getdebridTokenStatus(debridToken);
       setStatus(result);
     };
     checkTokenStatus();
-  }, [realDebridKey]);
+  }, [debridToken]);
 
-  if (conf().ALLOW_REAL_DEBRID_KEY) {
+  if (conf().ALLOW_DEBRID_KEY) {
     return (
       <SettingsCard>
         <div className="flex justify-between items-center gap-4">
           <div className="my-3">
-            <p className="text-white font-bold mb-3">{t("realdebrid.title")}</p>
-            <p className="max-w-[30rem] font-medium">
-              {t("realdebrid.description")}
-            </p>
-            <MwLink>
-              <a
-                href="https://real-debrid.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                real-debrid.com
-              </a>
-            </MwLink>
+            <p className="text-white font-bold mb-3">{t("debrid.title")}</p>
+            <Trans i18nKey="debrid.description">
+              <MwLink to="https://real-debrid.com/" />
+              {/* fifth's referral code */}
+              <MwLink to="https://torbox.app/subscription?referral=3f665ece-0405-4012-9db7-c6f90e8567e1" />
+            </Trans>
           </div>
           <div className="flex items-center gap-3">
             <Toggle
-              onClick={() => setRealDebridKey((s) => (s === null ? "" : null))}
-              enabled={realDebridKey !== null}
+              onClick={() => setdebridToken(debridToken === null ? "" : null)}
+              enabled={debridToken !== null}
             />
           </div>
         </div>
-        {realDebridKey !== null ? (
-          <>
-            <Divider marginClass="my-6 px-8 box-content -mx-8" />
-            <p className="text-white font-bold mb-3">
-              {t("realdebrid.tokenLabel")}
-            </p>
-            <div className="flex items-center w-full">
-              <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
-              <AuthInputBox
-                onChange={(newToken) => {
-                  setRealDebridKey(newToken);
-                }}
-                value={realDebridKey ?? ""}
-                placeholder="ABC123..."
-                passwordToggleable
-                className="flex-grow"
-              />
-            </div>
-            {status === "error" && (
-              <p className="text-type-danger mt-4">
-                {t("realdebrid.status.failure")}
-              </p>
-            )}
-            {status === "api_down" && (
-              <p className="text-type-danger mt-4">
-                {t("realdebrid.status.api_down")}
-              </p>
-            )}
-            {status === "invalid_token" && (
-              <p className="text-type-danger mt-4">
-                {t("realdebrid.status.invalid_token")}
-              </p>
-            )}
-          </>
-        ) : null}
+        <Divider marginClass="my-6 px-8 box-content -mx-8" />
+        <p className="text-white font-bold mb-3">{t("debrid.tokenLabel")}</p>
+        <div className="flex md:flex-row flex-col items-center w-full gap-4">
+          <div className="flex items-center w-full">
+            <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
+            <AuthInputBox
+              onChange={(newToken) => {
+                setdebridToken(newToken);
+              }}
+              value={debridToken ?? ""}
+              placeholder="ABC123..."
+              passwordToggleable
+              className="flex-grow"
+            />
+          </div>
+          <div className="flex items-center">
+            <Dropdown
+              options={[
+                {
+                  id: "realdebrid",
+                  name: t("debrid.serviceOptions.realdebrid"),
+                },
+                {
+                  id: "torbox",
+                  name: t("debrid.serviceOptions.torbox"),
+                },
+              ]}
+              selectedItem={{
+                id: debridService,
+                name: t(`debrid.serviceOptions.${debridService}`),
+              }}
+              setSelectedItem={(item) => setdebridService(item.id)}
+              direction="up"
+            />
+          </div>
+        </div>
+        {status === "error" && (
+          <p className="text-type-danger mt-4">{t("debrid.status.failure")}</p>
+        )}
+        {status === "api_down" && (
+          <p className="text-type-danger mt-4">{t("debrid.status.api_down")}</p>
+        )}
+        {status === "invalid_token" && (
+          <p className="text-type-danger mt-4">
+            {t("debrid.status.invalid_token")}
+          </p>
+        )}
       </SettingsCard>
     );
   }
@@ -573,10 +578,7 @@ function RealDebridKeyEdit({
 }
 
 export function ConnectionsPart(
-  props: BackendEditProps &
-    ProxyEditProps &
-    FebboxKeyProps &
-    RealDebridKeyProps,
+  props: BackendEditProps & ProxyEditProps & FebboxKeyProps & DebridProps,
 ) {
   const { t } = useTranslation();
   return (
@@ -594,14 +596,16 @@ export function ConnectionsPart(
           backendUrl={props.backendUrl}
           setBackendUrl={props.setBackendUrl}
         />
-        <RealDebridKeyEdit
-          realDebridKey={props.realDebridKey}
-          setRealDebridKey={props.setRealDebridKey}
-        />
         <FebboxSetup
           febboxKey={props.febboxKey}
           setFebboxKey={props.setFebboxKey}
           mode="settings"
+        />
+        <DebridEdit
+          debridToken={props.debridToken}
+          setdebridToken={props.setdebridToken}
+          debridService={props.debridService}
+          setdebridService={props.setdebridService}
         />
       </div>
     </div>

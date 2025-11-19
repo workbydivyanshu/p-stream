@@ -42,7 +42,7 @@ type SetupData = {
   proxy: Status;
   defaultProxy: Status;
   febboxKeyTest?: Status;
-  realDebridKeyTest?: Status;
+  debridTokenTest?: Status;
 };
 
 function testProxy(url: string) {
@@ -142,10 +142,10 @@ export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
   return "api_down";
 }
 
-export async function testRealDebridKey(
-  realDebridKey: string | null,
+export async function testdebridToken(
+  debridToken: string | null,
 ): Promise<Status> {
-  if (!realDebridKey) {
+  if (!debridToken) {
     return "unset";
   }
 
@@ -160,7 +160,7 @@ export async function testRealDebridKey(
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${realDebridKey}`,
+            Authorization: `Bearer ${debridToken}`,
             "Content-Type": "application/json",
           },
         },
@@ -191,10 +191,21 @@ export async function testRealDebridKey(
   return "api_down";
 }
 
+export async function testTorboxToken(
+  torboxToken: string | null,
+): Promise<Status> {
+  if (!torboxToken) {
+    return "unset";
+  }
+
+  // TODO: Implement Torbox token test
+  return "success";
+}
+
 function useIsSetup() {
   const proxyUrls = useAuthStore((s) => s.proxySet);
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
-  const realDebridKey = usePreferencesStore((s) => s.realDebridKey);
+  const debridToken = usePreferencesStore((s) => s.debridToken);
   const { loading, value } = useAsync(async (): Promise<SetupData> => {
     const extensionStatus: Status = (await isExtensionActive())
       ? "success"
@@ -210,7 +221,7 @@ function useIsSetup() {
     }
 
     const febboxKeyStatus: Status = await testFebboxKey(febboxKey);
-    const realDebridKeyStatus: Status = await testRealDebridKey(realDebridKey);
+    const debridTokenStatus: Status = await testdebridToken(debridToken);
 
     return {
       extension: extensionStatus,
@@ -219,23 +230,23 @@ function useIsSetup() {
       ...(conf().ALLOW_FEBBOX_KEY && {
         febboxKeyTest: febboxKeyStatus,
       }),
-      realDebridKeyTest: realDebridKeyStatus,
+      debridTokenTest: debridTokenStatus,
     };
-  }, [proxyUrls, febboxKey, realDebridKey]);
+  }, [proxyUrls, febboxKey, debridToken]);
 
   let globalState: Status = "unset";
   if (
     value?.extension === "success" ||
     value?.proxy === "success" ||
     value?.febboxKeyTest === "success" ||
-    value?.realDebridKeyTest === "success"
+    value?.debridTokenTest === "success"
   )
     globalState = "success";
   if (
     value?.proxy === "error" ||
     value?.extension === "error" ||
     value?.febboxKeyTest === "error" ||
-    value?.realDebridKeyTest === "error"
+    value?.debridTokenTest === "error"
   )
     globalState = "error";
 
@@ -375,9 +386,9 @@ export function SetupPart() {
           >
             {t("settings.connections.setup.items.default")}
           </SetupCheckList>
-          {conf().ALLOW_REAL_DEBRID_KEY && (
-            <SetupCheckList status={setupStates.realDebridKeyTest || "unset"}>
-              Real Debrid token
+          {conf().ALLOW_DEBRID_KEY && (
+            <SetupCheckList status={setupStates.debridTokenTest || "unset"}>
+              Debrid Service
             </SetupCheckList>
           )}
           {conf().ALLOW_FEBBOX_KEY && (

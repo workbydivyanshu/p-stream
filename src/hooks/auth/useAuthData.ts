@@ -32,7 +32,8 @@ export function useAuthData() {
     (s) => s.importSubtitleLanguage,
   );
   const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
-  const setRealDebridKey = usePreferencesStore((s) => s.setRealDebridKey);
+  const setdebridToken = usePreferencesStore((s) => s.setdebridToken);
+  const setdebridService = usePreferencesStore((s) => s.setdebridService);
 
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceItems = useProgressStore((s) => s.replaceItems);
@@ -232,8 +233,12 @@ export function useAuthData() {
         setFebboxKey(settings.febboxKey);
       }
 
-      if (settings.realDebridKey !== undefined) {
-        setRealDebridKey(settings.realDebridKey);
+      if (settings.debridToken !== undefined) {
+        setdebridToken(settings.debridToken);
+      }
+
+      if (settings.debridService !== undefined) {
+        setdebridService(settings.debridService);
       }
 
       if (settings.enableLowPerformanceMode !== undefined) {
@@ -288,7 +293,8 @@ export function useAuthData() {
       setDisabledEmbeds,
       setProxyTmdb,
       setFebboxKey,
-      setRealDebridKey,
+      setdebridToken,
+      setdebridService,
       setEnableLowPerformanceMode,
       setEnableNativeSubtitles,
       setEnableHoldToBoost,
