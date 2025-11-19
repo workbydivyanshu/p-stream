@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import classNames from "classnames";
+import { FetchError } from "ofetch";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -174,12 +175,32 @@ export async function testdebridToken(
 
       console.log("RD response did not indicate premium status");
       attempts += 1;
-      if (attempts === maxAttempts) {
+      if (attempts === maxAttempts || data?.error_code === 8) {
         return "invalid_token";
       }
       await sleep(3000);
     } catch (error) {
       console.error("RD API error:", error);
+
+      // Check if it's a FetchError with error_code 8 (bad_token)
+      if (error instanceof FetchError) {
+        try {
+          const errorData = error.data;
+          if (errorData?.error_code === 8) {
+            console.log("RD token is invalid (error_code 8)");
+            return "invalid_token";
+          }
+        } catch (parseError) {
+          console.error("Failed to parse RD error response:", parseError);
+        }
+
+        // For other HTTP errors (like 500, 502, etc.), treat as API down
+        if (error.statusCode && error.statusCode >= 500) {
+          console.log(`RD API down (status ${error.statusCode})`);
+          return "api_down";
+        }
+      }
+
       attempts += 1;
       if (attempts === maxAttempts) {
         return "api_down";
@@ -206,6 +227,7 @@ function useIsSetup() {
   const proxyUrls = useAuthStore((s) => s.proxySet);
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
   const debridToken = usePreferencesStore((s) => s.debridToken);
+  const debridService = usePreferencesStore((s) => s.debridService);
   const { loading, value } = useAsync(async (): Promise<SetupData> => {
     const extensionStatus: Status = (await isExtensionActive())
       ? "success"
@@ -221,7 +243,10 @@ function useIsSetup() {
     }
 
     const febboxKeyStatus: Status = await testFebboxKey(febboxKey);
-    const debridTokenStatus: Status = await testdebridToken(debridToken);
+    const debridTokenStatus: Status =
+      debridService === "torbox"
+        ? await testTorboxToken(debridToken)
+        : await testdebridToken(debridToken);
 
     return {
       extension: extensionStatus,
@@ -232,7 +257,7 @@ function useIsSetup() {
       }),
       debridTokenTest: debridTokenStatus,
     };
-  }, [proxyUrls, febboxKey, debridToken]);
+  }, [proxyUrls, febboxKey, debridToken, debridService]);
 
   let globalState: Status = "unset";
   if (

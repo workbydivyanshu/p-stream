@@ -298,6 +298,7 @@ export function OnboardingPage() {
             setdebridToken={usePreferencesStore((s) => s.setdebridToken)}
             debridService={usePreferencesStore((s) => s.debridService)}
             setdebridService={usePreferencesStore((s) => s.setdebridService)}
+            mode="onboarding"
           />
         </div>
       </BiggerCenterContainer>
