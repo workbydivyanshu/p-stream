@@ -1270,6 +1270,7 @@
   "debrid": {
     "title": "Debrid (Beta)",
     "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
+    "notice": "Notice: This may not work on all browsers, use Chrome for the best compatibility. If you hear no audio, use another source. :(",
     "tokenLabel": "API Key",
     "serviceOptions": {
       "realdebrid": "Real Debrid",

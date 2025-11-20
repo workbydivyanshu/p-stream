@@ -559,6 +559,9 @@ export function DebridEdit({
               {/* fifth's referral code */}
               <MwLink to="https://torbox.app/subscription?referral=3f665ece-0405-4012-9db7-c6f90e8567e1" />
             </Trans>
+            <p className="text-type-danger mt-2 max-w-[30rem]">
+              {t("debrid.notice")}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <Toggle onClick={toggleDebridExpanded} enabled={isDebridVisible} />
