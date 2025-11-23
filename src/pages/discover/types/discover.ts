@@ -47,6 +47,7 @@ export interface UseDiscoverMediaReturn {
   hasMore: boolean;
   refetch: () => Promise<void>;
   sectionTitle: string;
+  actualContentType: DiscoverContentType;
 }
 
 export interface Provider {

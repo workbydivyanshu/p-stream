@@ -97,6 +97,11 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
     setIsContentVisible(false);
   }, [isLoading, mediaItems, currentPage]);
 
+  // Scroll to top when entering the page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [contentType, mediaType, id]);
+
   const handleBack = () => {
     if (lastView) {
       navigate(lastView.url);
