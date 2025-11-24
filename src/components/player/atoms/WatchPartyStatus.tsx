@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
+import { useAuthStore } from "@/stores/auth";
 import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
@@ -13,6 +14,7 @@ export function WatchPartyStatus() {
   const [expanded, setExpanded] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [lastUserCount, setLastUserCount] = useState(1);
+  const account = useAuthStore((s) => s.account);
 
   const {
     roomUsers,
@@ -41,6 +43,14 @@ export function WatchPartyStatus() {
   // Toggle expanded state
   const handleToggleExpanded = () => {
     setExpanded(!expanded);
+  };
+
+  // Get display name for a user (nickname if it's the current user, otherwise truncated userId)
+  const getDisplayName = (userId: string) => {
+    if (account?.userId === userId && account?.nickname) {
+      return account.nickname;
+    }
+    return `${userId.substring(0, 12)}...`;
   };
 
   return (
@@ -106,7 +116,7 @@ export function WatchPartyStatus() {
                     className={`w-3 h-3 ${user.isHost ? "text-onboarding-best" : ""}`}
                   />
                   <span className={user.isHost ? "text-onboarding-best" : ""}>
-                    {user.userId.substring(0, 8)}...
+                    {getDisplayName(user.userId)}
                   </span>
                 </span>
                 <span className="text-type-secondary">

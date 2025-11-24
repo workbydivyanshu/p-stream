@@ -114,6 +114,8 @@ export function AccountSettings(props: {
   account: AccountWithToken;
   deviceName: string;
   setDeviceName: (s: string) => void;
+  nickname: string;
+  setNickname: (s: string) => void;
   colorA: string;
   setColorA: (s: string) => void;
   colorB: string;
@@ -136,6 +138,8 @@ export function AccountSettings(props: {
       <AccountEditPart
         deviceName={props.deviceName}
         setDeviceName={props.setDeviceName}
+        nickname={props.nickname}
+        setNickname={props.setNickname}
         colorA={props.colorA}
         setColorA={props.setColorA}
         colorB={props.colorB}
@@ -365,8 +369,10 @@ export function SettingsPage() {
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
   const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
 
-  const realDebridKey = usePreferencesStore((s) => s.realDebridKey);
-  const setRealDebridKey = usePreferencesStore((s) => s.setRealDebridKey);
+  const debridToken = usePreferencesStore((s) => s.debridToken);
+  const setdebridToken = usePreferencesStore((s) => s.setdebridToken);
+  const debridService = usePreferencesStore((s) => s.debridService);
+  const setdebridService = usePreferencesStore((s) => s.setdebridService);
 
   const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
   const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
@@ -483,10 +489,17 @@ export function SettingsPage() {
   const account = useAuthStore((s) => s.account);
   const updateProfile = useAuthStore((s) => s.setAccountProfile);
   const updateDeviceName = useAuthStore((s) => s.updateDeviceName);
+  const updateNickname = useAuthStore((s) => s.setAccountNickname);
   const decryptedName = useMemo(() => {
     if (!account) return "";
-    return decryptData(account.deviceName, base64ToBuffer(account.seed));
-  }, [account]);
+    try {
+      return decryptData(account.deviceName, base64ToBuffer(account.seed));
+    } catch (error) {
+      console.warn("Failed to decrypt device name, using fallback:", error);
+      // Return a fallback device name if decryption fails
+      return t("settings.account.devices.unknownDevice");
+    }
+  }, [account, t]);
 
   const backendUrl = useBackendUrl();
 
@@ -500,23 +513,25 @@ export function SettingsPage() {
         if (settings.febboxKey) {
           setFebboxKey(settings.febboxKey);
         }
-        if (settings.realDebridKey) {
-          setRealDebridKey(settings.realDebridKey);
+        if (settings.debridToken) {
+          setdebridToken(settings.debridToken);
         }
       }
     };
     loadSettings();
-  }, [account, backendUrl, setFebboxKey, setRealDebridKey]);
+  }, [account, backendUrl, setFebboxKey, setdebridToken, setdebridService]);
 
   const state = useSettingsState(
     activeTheme,
     appLanguage,
     subStyling,
     decryptedName,
+    account?.nickname || "",
     proxySet,
     backendUrlSetting,
     febboxKey,
-    realDebridKey,
+    debridToken,
+    debridService,
     account ? account.profile : undefined,
     enableThumbnails,
     enableAutoplay,
@@ -586,7 +601,8 @@ export function SettingsPage() {
         state.theme.changed ||
         state.proxyUrls.changed ||
         state.febboxKey.changed ||
-        state.realDebridKey.changed ||
+        state.debridToken.changed ||
+        state.debridService.changed ||
         state.enableThumbnails.changed ||
         state.enableAutoplay.changed ||
         state.enableSkipCredits.changed ||
@@ -613,7 +629,8 @@ export function SettingsPage() {
           applicationTheme: state.theme.state,
           proxyUrls: state.proxyUrls.state?.filter((v) => v !== "") ?? null,
           febboxKey: state.febboxKey.state,
-          realDebridKey: state.realDebridKey.state,
+          debridToken: state.debridToken.state,
+          debridService: state.debridService.state,
           enableThumbnails: state.enableThumbnails.state,
           enableAutoplay: state.enableAutoplay.state,
           enableSkipCredits: state.enableSkipCredits.state,
@@ -646,10 +663,17 @@ export function SettingsPage() {
         });
         updateDeviceName(newDeviceName);
       }
-      if (state.profile.changed) {
+      if (state.nickname.changed) {
+        await editUser(backendUrl, account, {
+          nickname: state.nickname.state,
+        });
+        updateNickname(state.nickname.state);
+      }
+      if (state.profile.changed && state.profile.state) {
         await editUser(backendUrl, account, {
           profile: state.profile.state,
         });
+        updateProfile(state.profile.state);
       }
     }
 
@@ -671,7 +695,8 @@ export function SettingsPage() {
     setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
     setEnableSourceOrder(state.enableSourceOrder.state);
     setFebboxKey(state.febboxKey.state);
-    setRealDebridKey(state.realDebridKey.state);
+    setdebridToken(state.debridToken.state);
+    setdebridService(state.debridService.state);
     setProxyTmdb(state.proxyTmdb.state);
     setEnableCarouselView(state.enableCarouselView.state);
     setForceCompactEpisodeView(state.forceCompactEpisodeView.state);
@@ -701,7 +726,8 @@ export function SettingsPage() {
     backendUrl,
     setEnableThumbnails,
     setFebboxKey,
-    setRealDebridKey,
+    setdebridToken,
+    setdebridService,
     state,
     setEnableAutoplay,
     setEnableSkipCredits,
@@ -720,6 +746,7 @@ export function SettingsPage() {
     setProxySet,
     updateDeviceName,
     updateProfile,
+    updateNickname,
     logout,
     setBackendUrl,
     setProxyTmdb,
@@ -754,6 +781,8 @@ export function SettingsPage() {
                 account={user.account}
                 deviceName={state.deviceName.state}
                 setDeviceName={state.deviceName.set}
+                nickname={state.nickname.state}
+                setNickname={state.nickname.set}
                 colorA={state.profile.state.colorA}
                 setColorA={(v) => {
                   state.profile.set((s) =>
@@ -859,8 +888,10 @@ export function SettingsPage() {
               setProxyUrls={state.proxyUrls.set}
               febboxKey={state.febboxKey.state}
               setFebboxKey={state.febboxKey.set}
-              realDebridKey={state.realDebridKey.state}
-              setRealDebridKey={state.realDebridKey.set}
+              debridToken={state.debridToken.state}
+              setdebridToken={state.debridToken.set}
+              debridService={state.debridService.state}
+              setdebridService={state.debridService.set}
               proxyTmdb={state.proxyTmdb.state}
               setProxyTmdb={state.proxyTmdb.set}
             />

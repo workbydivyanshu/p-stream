@@ -121,6 +121,8 @@ export function useDiscoverMedia({
   const [sectionTitle, setSectionTitle] = useState<string>("");
   const [currentContentType, setCurrentContentType] =
     useState<string>(contentType);
+  const [actualContentType, setActualContentType] =
+    useState<DiscoverContentType>(contentType);
 
   const { t } = useTranslation();
   const userLanguage = useLanguageStore((s) => s.language);
@@ -131,6 +133,7 @@ export function useDiscoverMedia({
     if (contentType !== currentContentType) {
       setMedia([]);
       setCurrentContentType(contentType);
+      setActualContentType(contentType); // Reset actual content type to original
     }
   }, [contentType, currentContentType]);
 
@@ -475,6 +478,7 @@ export function useDiscoverMedia({
         console.info(`Falling back from ${contentType} to ${fallbackType}`);
         try {
           const fallbackData = await attemptFetch(fallbackType);
+          setActualContentType(fallbackType); // Set actual content type to fallback
           setMedia((prevMedia) => {
             // If page is 1, replace the media array, otherwise append
             return page === 1
@@ -526,5 +530,6 @@ export function useDiscoverMedia({
     hasMore,
     refetch: fetchMedia,
     sectionTitle,
+    actualContentType,
   };
 }
