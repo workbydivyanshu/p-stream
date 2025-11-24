@@ -22,7 +22,8 @@ export interface PreferencesStore {
   disabledEmbeds: string[];
   proxyTmdb: boolean;
   febboxKey: string | null;
-  realDebridKey: string | null;
+  debridToken: string | null;
+  debridService: string;
   enableLowPerformanceMode: boolean;
   enableNativeSubtitles: boolean;
   enableHoldToBoost: boolean;
@@ -49,7 +50,8 @@ export interface PreferencesStore {
   setDisabledEmbeds(v: string[]): void;
   setProxyTmdb(v: boolean): void;
   setFebboxKey(v: string | null): void;
-  setRealDebridKey(v: string | null): void;
+  setdebridToken(v: string | null): void;
+  setdebridService(v: string): void;
   setEnableLowPerformanceMode(v: boolean): void;
   setEnableNativeSubtitles(v: boolean): void;
   setEnableHoldToBoost(v: boolean): void;
@@ -80,7 +82,8 @@ export const usePreferencesStore = create(
       disabledEmbeds: [],
       proxyTmdb: false,
       febboxKey: null,
-      realDebridKey: null,
+      debridToken: null,
+      debridService: "realdebrid",
       enableLowPerformanceMode: false,
       enableNativeSubtitles: false,
       enableHoldToBoost: true,
@@ -182,9 +185,14 @@ export const usePreferencesStore = create(
           s.febboxKey = v;
         });
       },
-      setRealDebridKey(v) {
+      setdebridToken(v) {
         set((s) => {
-          s.realDebridKey = v;
+          s.debridToken = v;
+        });
+      },
+      setdebridService(v) {
+        set((s) => {
+          s.debridService = v;
         });
       },
       setEnableLowPerformanceMode(v) {

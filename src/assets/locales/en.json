@@ -947,6 +947,8 @@
     },
     "account": {
       "accountDetails": {
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
         "editProfile": "Edit",
@@ -979,6 +981,7 @@
       },
       "devices": {
         "deviceNameLabel": "Device name",
+        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
         "title": "Devices"
@@ -1144,6 +1147,7 @@
         "backendVersion": "Backend version",
         "hostname": "Hostname",
         "insecure": "Insecure",
+        "nickname": "Nickname",
         "notLoggedIn": "You are not logged in",
         "secure": "Secure",
         "title": "App stats",
@@ -1263,14 +1267,19 @@
       "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
     }
   },
-  "realdebrid": {
-    "title": "Real Debrid (Beta)",
-    "description": "Enter your Real Debrid API key to access Real Debrid. Extension required.",
+  "debrid": {
+    "title": "Debrid (Beta)",
+    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
+    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
     "tokenLabel": "API Key",
+    "serviceOptions": {
+      "realdebrid": "Real Debrid",
+      "torbox": "TorBox"
+    },
     "status": {
-      "failure": "Failed to connect to Real Debrid. Please check your API key.",
-      "api_down": "Real Debrid API is currently unavailable. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Real Debrid requires a premium account."
+      "failure": "Failed to connect to Debrid. Please check your API key.",
+      "api_down": "Hmm, something went wrong. Please try again later.",
+      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
     }
   },
   "watchParty": {

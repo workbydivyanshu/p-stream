@@ -188,6 +188,16 @@ export function useAuth() {
         getGroupOrder(backendUrl, account),
       ]);
 
+      // Update account store with fresh user data (including nickname)
+      const { setAccount } = useAuthStore.getState();
+      if (account) {
+        setAccount({
+          ...account,
+          nickname: user.user.nickname,
+          profile: user.user.profile,
+        });
+      }
+
       syncData(
         user.user,
         user.session,

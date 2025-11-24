@@ -198,7 +198,7 @@ export function MediaCarousel({
   ]);
 
   // Fetch media using our hook - only when carousel has been visible
-  const { media, sectionTitle } = useDiscoverMedia({
+  const { media, sectionTitle, actualContentType } = useDiscoverMedia({
     contentType,
     mediaType,
     id: selectedProviderId || selectedGenreId || selectedRecommendationId,
@@ -298,7 +298,7 @@ export function MediaCarousel({
     if (showRecommendations && selectedRecommendationId) {
       return `${baseLink}/recommendations/${selectedRecommendationId}/${mediaType}`;
     }
-    return `${baseLink}/${content.type}/${mediaType}`;
+    return `${baseLink}/${actualContentType}/${mediaType}`;
   }, [
     moreLink,
     showProviders,
@@ -308,7 +308,7 @@ export function MediaCarousel({
     showRecommendations,
     selectedRecommendationId,
     mediaType,
-    content.type,
+    actualContentType,
   ]);
 
   // Loading state
