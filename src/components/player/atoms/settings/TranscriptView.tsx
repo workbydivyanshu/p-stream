@@ -17,7 +17,7 @@ import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
 import { wordOverrides } from "../../Player";
 
-export function TranscriptSettingsView({ id }: { id: string }) {
+export function TranscriptView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
   const display = usePlayerStore((s) => s.display);
   const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
@@ -47,7 +47,7 @@ export function TranscriptSettingsView({ id }: { id: string }) {
           .map((word) => wordOverrides[word] ?? word)
           .join(" ")
           .replaceAll(/ i'/g, " I'")
-          .replaceAll("\n", "");
+          .replaceAll(/\r?\n/g, "");
 
         return {
           key: makeQueId(i, start, end),
@@ -73,7 +73,7 @@ export function TranscriptSettingsView({ id }: { id: string }) {
     return fuse.search(searchQuery).map((r) => r.item);
   }, [transcriptItems, searchQuery]);
 
-  // Determine currently visible caption with small buffer
+  // Determine currently visible caption to highlight
   const { activeKey, nextKey } = useMemo(() => {
     if (parsedCaptions.length === 0)
       return {
@@ -85,36 +85,18 @@ export function TranscriptSettingsView({ id }: { id: string }) {
       captionIsVisible(start, end, delay, time),
     );
 
-    const startsSec = parsedCaptions.map((c) => c.start / 1000 + delay);
-    const endsSec = parsedCaptions.map((c) => c.end / 1000 + delay);
-
     // Next upcoming caption (first with start > now)
+    const startsSec = parsedCaptions.map((c) => c.start / 1000 + delay);
     const nextIdx = startsSec.findIndex((s) => s > time);
-    const prevIdx =
-      nextIdx === -1 ? parsedCaptions.length - 1 : Math.max(0, nextIdx - 1);
 
-    let key: string | null = null;
-
-    if (visibleIdx !== -1) {
-      const v = parsedCaptions[visibleIdx]!;
-      key = makeQueId(visibleIdx, v.start, v.end);
-    } else if (nextIdx !== -1) {
-      // If the gap between previous end and next start is < 2s, immediately jump to the next subtitle
-      const gap = startsSec[nextIdx]! - endsSec[Math.max(0, nextIdx - 1)]!;
-      if (nextIdx > 0 && gap < 2) {
-        const n = parsedCaptions[nextIdx]!;
-        key = makeQueId(nextIdx, n.start, n.end);
-      } else {
-        // Otherwise keep previous highlighted
-        const p = parsedCaptions[prevIdx]!;
-        key = makeQueId(prevIdx, p.start, p.end);
-      }
-    } else {
-      // No next item, so keep last highlighted
-      const lastIdx = parsedCaptions.length - 1;
-      const last = parsedCaptions[lastIdx]!;
-      key = makeQueId(lastIdx, last.start, last.end);
-    }
+    const key =
+      visibleIdx !== -1
+        ? makeQueId(
+            visibleIdx,
+            parsedCaptions[visibleIdx]!.start,
+            parsedCaptions[visibleIdx]!.end,
+          )
+        : null; // Show nothing during gaps
 
     let nextKeyLocal: string | null = null;
     if (nextIdx !== -1) {
@@ -137,14 +119,66 @@ export function TranscriptSettingsView({ id }: { id: string }) {
     return nextKey ?? activeKey;
   }, [filteredItems, searchQuery, time, nextKey, activeKey]);
 
-  // Auto-scroll
+  // Autoscroll with delay to prevent clashing with menu animation
+  const [didFirstScroll, setDidFirstScroll] = useState(false);
   useEffect(() => {
     if (!scrollTargetKey) return;
-    const el = document.querySelector<HTMLElement>(
-      `[data-que-id="${scrollTargetKey}"]`,
-    );
-    if (el) el.scrollIntoView({ block: "nearest", behavior: "instant" });
-  }, [scrollTargetKey]);
+    // Find nearest scrollable parent
+    const getScrollableParent = (node: HTMLElement | null): HTMLElement => {
+      let el: HTMLElement | null = node;
+      while (el && el.parentElement) {
+        const style = window.getComputedStyle(el);
+        if (/(auto|scroll)/.test(style.overflowY)) return el;
+        el = el.parentElement as HTMLElement;
+      }
+      return (
+        (document.scrollingElement as HTMLElement) ||
+        (document.documentElement as HTMLElement)
+      );
+    };
+
+    const scrollToStablePoint = (target: HTMLElement) => {
+      const container = getScrollableParent(target);
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+
+      const containerHeight = container.clientHeight || 452;
+      const desiredOffsetFromTop = Math.floor(containerHeight * 0.85); // ~3/4 down
+
+      // Current absolute position of target center within container's scroll space
+      const targetCenterAbs =
+        container.scrollTop +
+        (targetRect.top - containerRect.top) +
+        targetRect.height / 2;
+
+      // Desired scrollTop so that the target center sits at desired offset
+      let nextScrollTop = targetCenterAbs - desiredOffsetFromTop;
+
+      const maxScrollTop = Math.max(
+        0,
+        container.scrollHeight - containerHeight,
+      );
+      nextScrollTop = Math.max(0, Math.min(nextScrollTop, maxScrollTop));
+
+      container.scrollTo({ top: nextScrollTop, behavior: "smooth" });
+    };
+
+    const doScroll = () => {
+      const el = document.querySelector<HTMLElement>(
+        `[data-que-id="${scrollTargetKey}"]`,
+      );
+      if (el) scrollToStablePoint(el);
+    };
+
+    if (!didFirstScroll) {
+      const t = setTimeout(() => {
+        doScroll();
+        setDidFirstScroll(true);
+      }, 100);
+      return () => clearTimeout(t);
+    }
+    doScroll();
+  }, [scrollTargetKey, didFirstScroll]);
 
   const handleSeek = (seconds: number) => {
     display?.setTime(seconds);
@@ -156,7 +190,7 @@ export function TranscriptSettingsView({ id }: { id: string }) {
         Transcript
       </Menu.BackLink>
       <Menu.Section>
-        <div className="mt-2 mb-3">
+        <div className="sticky top-0 z-10 -mx-3 px-3 py-2 mb-2 bg-video-context-light bg-opacity-10 backdrop-blur-sm">
           <Input value={searchQuery} onInput={setSearchQuery} />
         </div>
 
@@ -179,7 +213,9 @@ export function TranscriptSettingsView({ id }: { id: string }) {
                   active={isActive}
                 >
                   <span className="mr-3 flex-none w-[4.5rem] h-[1.75rem] flex items-center justify-center px-0 leading-tight rounded-md bg-video-context-light bg-opacity-20 text-video-context-type-main font-normal whitespace-nowrap overflow-hidden text-sm">
-                    {formatSeconds(item.start, showHours)}
+                    {item.start < 0 || item.start > timeDuration
+                      ? "N/A"
+                      : formatSeconds(item.start, showHours)}
                   </span>
                   <span
                     className={
