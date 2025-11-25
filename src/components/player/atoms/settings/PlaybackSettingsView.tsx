@@ -308,6 +308,11 @@ export function PlaybackSettingsView({ id }: { id: string }) {
               {t("settings.preferences.thumbnailLabel")}
             </Menu.Link>
           )}
+          <Menu.ChevronLink
+            onClick={() => router.navigate("/playback/transcript")}
+          >
+            Transcript
+          </Menu.ChevronLink>
         </div>
       </Menu.Section>
     </>
