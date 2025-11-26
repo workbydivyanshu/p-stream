@@ -542,7 +542,9 @@ export function CaptionsView({
           />
 
           {selectedCaptionId && (
-            <Menu.ChevronLink onClick={() => router.navigate("/transcript")}>
+            <Menu.ChevronLink
+              onClick={() => router.navigate("/captions/transcript")}
+            >
               {t("player.menus.subtitles.transcriptChoice")}
             </Menu.ChevronLink>
           )}

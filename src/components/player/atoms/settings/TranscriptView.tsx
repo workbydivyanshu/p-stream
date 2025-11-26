@@ -153,27 +153,15 @@ export function TranscriptView({ id }: { id: string }) {
   const [didFirstScroll, setDidFirstScroll] = useState(false);
   useEffect(() => {
     if (!scrollTargetKey) return;
-    // Find nearest scrollable parent
-    const getScrollableParent = (node: HTMLElement | null): HTMLElement => {
-      let el: HTMLElement | null = node;
-      while (el && el.parentElement) {
-        const style = window.getComputedStyle(el);
-        if (/(auto|scroll)/.test(style.overflowY)) return el;
-        el = el.parentElement as HTMLElement;
-      }
-      return (
-        (document.scrollingElement as HTMLElement) ||
-        (document.documentElement as HTMLElement)
-      );
-    };
-
     const scrollToStablePoint = (target: HTMLElement) => {
-      const container = getScrollableParent(target);
+      const container = carouselRef.current;
+      if (!container) return;
+
       const containerRect = container.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
 
-      const containerHeight = container.clientHeight || 452;
-      const desiredOffsetFromTop = Math.floor(containerHeight * 0.85); // ~3/4 down
+      const containerHeight = container.clientHeight || 288; // 18rem = 288px
+      const desiredOffsetFromTop = Math.floor(containerHeight * 0.6); // half of the container height
 
       // Current absolute position of target center within container's scroll space
       const targetCenterAbs =

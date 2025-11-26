@@ -96,7 +96,12 @@ function SettingsOverlay({ id }: { id: string }) {
             <PlaybackSettingsView id={id} />
           </Menu.Card>
         </OverlayPage>
-        <OverlayPage id={id} path="/transcript" width={343} height={452}>
+        <OverlayPage
+          id={id}
+          path="/captions/transcript"
+          width={343}
+          height={452}
+        >
           <Menu.CardWithScrollable>
             <TranscriptView id={id} />
           </Menu.CardWithScrollable>
