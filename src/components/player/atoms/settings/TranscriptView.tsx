@@ -47,7 +47,7 @@ export function TranscriptView({ id }: { id: string }) {
           .map((word) => wordOverrides[word] ?? word)
           .join(" ")
           .replaceAll(/ i'/g, " I'")
-          .replaceAll(/\r?\n/g, "");
+          .replaceAll(/\r?\n/g, " ");
 
         return {
           key: makeQueId(i, start, end),
@@ -190,7 +190,7 @@ export function TranscriptView({ id }: { id: string }) {
         Transcript
       </Menu.BackLink>
       <Menu.Section>
-        <div className="sticky top-0 z-10 -mx-3 px-3 py-2 mb-2 bg-video-context-light bg-opacity-10 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 -mx-3 px-3 py-2 mb-2">
           <Input value={searchQuery} onInput={setSearchQuery} />
         </div>
 
