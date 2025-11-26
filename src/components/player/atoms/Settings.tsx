@@ -21,6 +21,7 @@ import { DownloadRoutes } from "./settings/Downloads";
 import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
 import { SettingsMenu } from "./settings/SettingsMenu";
+import { TranscriptView } from "./settings/TranscriptView";
 import { WatchPartyView } from "./settings/WatchPartyView";
 
 function SettingsOverlay({ id }: { id: string }) {
@@ -94,6 +95,16 @@ function SettingsOverlay({ id }: { id: string }) {
           <Menu.Card>
             <PlaybackSettingsView id={id} />
           </Menu.Card>
+        </OverlayPage>
+        <OverlayPage
+          id={id}
+          path="/captions/transcript"
+          width={343}
+          height={452}
+        >
+          <Menu.CardWithScrollable>
+            <TranscriptView id={id} />
+          </Menu.CardWithScrollable>
         </OverlayPage>
         <DownloadRoutes id={id} />
         <OverlayPage id={id} path="/watchparty" width={343} height={455}>

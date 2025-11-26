@@ -541,6 +541,14 @@ export function CaptionsView({
             selected={selectedCaptionId === "pasted-caption"}
           />
 
+          {selectedCaptionId && (
+            <Menu.ChevronLink
+              onClick={() => router.navigate("/captions/transcript")}
+            >
+              {t("player.menus.subtitles.transcriptChoice")}
+            </Menu.ChevronLink>
+          )}
+
           <div className="h-1" />
 
           {/* Search input */}

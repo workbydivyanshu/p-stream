@@ -11,7 +11,7 @@ import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
 
-const wordOverrides: Record<string, string> = {
+export const wordOverrides: Record<string, string> = {
   // Example: i: "I", but in polish "i" is "and" so this is disabled.
 };
 
@@ -104,7 +104,7 @@ export function CaptionCue({
       }}
     >
       <span
-        // its sanitised a few lines up
+        // Sanitised a few lines up
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: parsedHtml,
@@ -128,7 +128,7 @@ export function SubtitleRenderer() {
     [srtData, language],
   );
 
-  const visibileCaptions = useMemo(
+  const visibleCaptions = useMemo(
     () =>
       parsedCaptions.filter(({ start, end }) =>
         captionIsVisible(start, end, delay, videoTime),
@@ -138,7 +138,7 @@ export function SubtitleRenderer() {
 
   return (
     <div>
-      {visibileCaptions.map(({ start, end, content }, i) => (
+      {visibleCaptions.map(({ start, end, content }, i) => (
         <CaptionCue
           key={makeQueId(i, start, end)}
           text={content}
