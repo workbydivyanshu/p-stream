@@ -1,5 +1,6 @@
+import classNames from "classnames";
 import Fuse from "fuse.js";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Menu } from "@/components/player/internals/ContextMenu";
@@ -28,6 +29,9 @@ export function TranscriptView({ id }: { id: string }) {
   const { duration: timeDuration, time } = usePlayerStore((s) => s.progress);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAtTop, setIsAtTop] = useState(true);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const parsedCaptions = useMemo(
     () => (srtData ? parseSubtitles(srtData, language) : []),
@@ -121,6 +125,30 @@ export function TranscriptView({ id }: { id: string }) {
     return nextKey ?? activeKey;
   }, [filteredItems, searchQuery, time, nextKey, activeKey]);
 
+  const checkScrollPosition = () => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    setIsAtTop(container.scrollTop <= 0);
+    setIsAtBottom(
+      Math.abs(
+        container.scrollHeight - container.scrollTop - container.clientHeight,
+      ) < 2,
+    );
+  };
+
+  useEffect(() => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    container.addEventListener("scroll", checkScrollPosition);
+    checkScrollPosition(); // Check initial position
+
+    return () => {
+      container.removeEventListener("scroll", checkScrollPosition);
+    };
+  }, []);
+
   // Autoscroll with delay to prevent clashing with menu animation
   const [didFirstScroll, setDidFirstScroll] = useState(false);
   useEffect(() => {
@@ -192,11 +220,20 @@ export function TranscriptView({ id }: { id: string }) {
         {t("player.menus.subtitles.transcriptChoice")}
       </Menu.BackLink>
       <Menu.Section>
-        <div className="sticky top-0 z-10 -mx-3 px-3 py-2 mb-2">
-          <Input value={searchQuery} onInput={setSearchQuery} />
-        </div>
-
-        <div className="flex flex-col gap-1">
+        <Input value={searchQuery} onInput={setSearchQuery} />
+      </Menu.Section>
+      <div
+        ref={carouselRef}
+        className={classNames(
+          "max-h-[18rem] overflow-y-auto",
+          "vertical-carousel-container",
+          {
+            "hide-top-gradient": isAtTop,
+            "hide-bottom-gradient": isAtBottom,
+          },
+        )}
+      >
+        <div className="flex flex-col gap-1 pb-4">
           {filteredItems.map((item) => {
             const html = sanitize(item.raw.replaceAll(/\r?\n/g, "<br />"), {
               ALLOWED_TAGS: ["c", "b", "i", "u", "span", "ruby", "rt", "br"],
@@ -236,7 +273,7 @@ export function TranscriptView({ id }: { id: string }) {
             );
           })}
         </div>
-      </Menu.Section>
+      </div>
     </>
   );
 }
