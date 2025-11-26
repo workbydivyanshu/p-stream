@@ -1,5 +1,6 @@
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
@@ -18,6 +19,7 @@ import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 import { wordOverrides } from "../../Player";
 
 export function TranscriptView({ id }: { id: string }) {
+  const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const display = usePlayerStore((s) => s.display);
   const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
@@ -171,11 +173,11 @@ export function TranscriptView({ id }: { id: string }) {
     };
 
     if (!didFirstScroll) {
-      const t = setTimeout(() => {
+      const timeout = setTimeout(() => {
         doScroll();
         setDidFirstScroll(true);
       }, 100);
-      return () => clearTimeout(t);
+      return () => clearTimeout(timeout);
     }
     doScroll();
   }, [scrollTargetKey, didFirstScroll]);
@@ -186,8 +188,8 @@ export function TranscriptView({ id }: { id: string }) {
 
   return (
     <>
-      <Menu.BackLink onClick={() => router.navigate("/")}>
-        Transcript
+      <Menu.BackLink onClick={() => router.navigate("/captions")}>
+        {t("player.menus.subtitles.transcriptChoice")}
       </Menu.BackLink>
       <Menu.Section>
         <div className="sticky top-0 z-10 -mx-3 px-3 py-2 mb-2">

@@ -764,6 +764,7 @@
         "SourceChoice": "Source Subtitles",
         "OpenSubtitlesChoice": "External Subtitles",
         "loadingExternal": "Loading external subtitles...",
+        "transcriptChoice": "Transcript",
         "settings": {
           "backlink": "Custom subtitles",
           "delay": "Subtitle delay",
