@@ -458,6 +458,15 @@
         }
       }
     },
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "uploadDescription": "Data to upload:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      }
+    },
     "direct": {
       "title": "Direct migration",
       "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
@@ -478,11 +487,6 @@
     "download": {
       "title": "Download data",
       "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-      "items": {
-        "description": "Download includes:",
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress"
-      },
       "status": {
         "error": "Failed to download your data. 😿",
         "success": "Your data has been downloaded successfully! 🎉"
@@ -508,12 +512,8 @@
         "change": "Change file",
         "name": "File name"
       },
-      "dataPreview": "Preview:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress"
-      },
       "exportedOn": "Exported on",
+      "previewTitle": "Preview:",
       "button": {
         "import": "Import data",
         "processing": "Processing...",

@@ -11,7 +11,12 @@ import {
   keysFromSeed,
   signChallenge,
 } from "@/backend/accounts/crypto";
-import { importBookmarks, importProgress } from "@/backend/accounts/import";
+import {
+  importBookmarks,
+  importGroupOrder,
+  importProgress,
+  importSettings,
+} from "@/backend/accounts/import";
 // import { getLoginChallengeToken, loginAccount } from "@/backend/accounts/login";
 import { progressMediaItemToInputs } from "@/backend/accounts/progress";
 import {
@@ -30,7 +35,10 @@ import { useAuthData } from "@/hooks/auth/useAuthData";
 // import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { BookmarkMediaItem, useBookmarkStore } from "@/stores/bookmarks";
+import { useGroupOrderStore } from "@/stores/groupOrder";
+import { usePreferencesStore } from "@/stores/preferences";
 import { ProgressMediaItem, useProgressStore } from "@/stores/progress";
+import { useSubtitleStore } from "@/stores/subtitles";
 
 export interface RegistrationData {
   recaptchaToken?: string;
@@ -56,38 +64,101 @@ export function useMigration() {
   const currentAccount = useAuthStore((s) => s.account);
   const progress = useProgressStore((s) => s.items);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
+  const groupOrder = useGroupOrderStore((s) => s.groupOrder);
+  const preferences = usePreferencesStore.getState();
+  const subtitleLanguage = useSubtitleStore((s) => s.lastSelectedLanguage);
   const { login: userDataLogin } = useAuthData();
-
-  const importData = async (
-    backendUrl: string,
-    account: AccountWithToken,
-    progressItems: Record<string, ProgressMediaItem>,
-    bookmarkItems: Record<string, BookmarkMediaItem>,
-  ) => {
-    if (
-      Object.keys(progressItems).length === 0 &&
-      Object.keys(bookmarkItems).length === 0
-    ) {
-      return;
-    }
-
-    const progressInputs = Object.entries(progressItems).flatMap(
-      ([tmdbId, item]) => progressMediaItemToInputs(tmdbId, item),
-    );
-
-    const bookmarkInputs = Object.entries(bookmarkItems).map(([tmdbId, item]) =>
-      bookmarkMediaToInput(tmdbId, item),
-    );
-
-    await Promise.all([
-      importProgress(backendUrl, account, progressInputs),
-      importBookmarks(backendUrl, account, bookmarkInputs),
-    ]);
-  };
 
   const migrate = useCallback(
     async (backendUrl: string, recaptchaToken?: string) => {
       if (!currentAccount) return;
+
+      const importData = async (
+        backendUrlInner: string,
+        account: AccountWithToken,
+        progressItems: Record<string, ProgressMediaItem>,
+        bookmarkItems: Record<string, BookmarkMediaItem>,
+        groupOrderItems: string[],
+      ) => {
+        if (
+          Object.keys(progressItems).length === 0 &&
+          Object.keys(bookmarkItems).length === 0 &&
+          groupOrderItems.length === 0
+        ) {
+          return;
+        }
+
+        const progressInputs = Object.entries(progressItems).flatMap(
+          ([tmdbId, item]) => progressMediaItemToInputs(tmdbId, item),
+        );
+
+        const bookmarkInputs = Object.entries(bookmarkItems).map(
+          ([tmdbId, item]) => bookmarkMediaToInput(tmdbId, item),
+        );
+
+        const importPromises = [
+          importProgress(backendUrlInner, account, progressInputs),
+          importBookmarks(backendUrlInner, account, bookmarkInputs),
+        ];
+
+        // Import group order if it exists
+        if (groupOrderItems.length > 0) {
+          importPromises.push(
+            importGroupOrder(backendUrlInner, account, groupOrderItems),
+          );
+        }
+
+        // Import settings/preferences
+        importPromises.push(
+          importSettings(backendUrlInner, account, {
+            defaultSubtitleLanguage: subtitleLanguage || undefined,
+            febboxKey: preferences.febboxKey,
+            debridToken: preferences.debridToken,
+            debridService: preferences.debridService,
+            enableThumbnails: preferences.enableThumbnails,
+            enableAutoplay: preferences.enableAutoplay,
+            enableSkipCredits: preferences.enableSkipCredits,
+            enableDiscover: preferences.enableDiscover,
+            enableFeatured: preferences.enableFeatured,
+            enableDetailsModal: preferences.enableDetailsModal,
+            enableImageLogos: preferences.enableImageLogos,
+            enableCarouselView: preferences.enableCarouselView,
+            forceCompactEpisodeView: preferences.forceCompactEpisodeView,
+            sourceOrder:
+              preferences.sourceOrder.length > 0
+                ? preferences.sourceOrder
+                : undefined,
+            enableSourceOrder: preferences.enableSourceOrder,
+            lastSuccessfulSource: preferences.lastSuccessfulSource,
+            enableLastSuccessfulSource: preferences.enableLastSuccessfulSource,
+            disabledSources:
+              preferences.disabledSources.length > 0
+                ? preferences.disabledSources
+                : undefined,
+            embedOrder:
+              preferences.embedOrder.length > 0
+                ? preferences.embedOrder
+                : undefined,
+            enableEmbedOrder: preferences.enableEmbedOrder,
+            disabledEmbeds:
+              preferences.disabledEmbeds.length > 0
+                ? preferences.disabledEmbeds
+                : undefined,
+            proxyTmdb: preferences.proxyTmdb,
+            enableLowPerformanceMode: preferences.enableLowPerformanceMode,
+            enableNativeSubtitles: preferences.enableNativeSubtitles,
+            enableHoldToBoost: preferences.enableHoldToBoost,
+            homeSectionOrder:
+              preferences.homeSectionOrder.length > 0
+                ? preferences.homeSectionOrder
+                : undefined,
+            manualSourceSelection: preferences.manualSourceSelection,
+            enableDoubleClickToSeek: preferences.enableDoubleClickToSeek,
+          }),
+        );
+
+        await Promise.all(importPromises);
+      };
 
       const { challenge } = await getRegisterChallengeToken(
         backendUrl,
@@ -112,11 +183,19 @@ export function useMigration() {
         bytesToBase64(keys.seed),
       );
 
-      await importData(backendUrl, account, progress, bookmarks);
+      await importData(backendUrl, account, progress, bookmarks, groupOrder);
 
       return account;
     },
-    [currentAccount, userDataLogin, bookmarks, progress],
+    [
+      currentAccount,
+      userDataLogin,
+      bookmarks,
+      progress,
+      groupOrder,
+      preferences,
+      subtitleLanguage,
+    ],
   );
 
   return {

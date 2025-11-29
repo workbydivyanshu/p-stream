@@ -2,6 +2,14 @@ import { ChangeEvent, useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import { bookmarkMediaToInput } from "@/backend/accounts/bookmarks";
+import {
+  importBookmarks,
+  importGroupOrder,
+  importProgress,
+  importSettings,
+} from "@/backend/accounts/import";
+import { progressMediaItemToInputs } from "@/backend/accounts/progress";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
@@ -9,12 +17,17 @@ import { Stepper } from "@/components/layout/Stepper";
 import { CenterContainer } from "@/components/layout/ThinContainer";
 import { Divider } from "@/components/utils/Divider";
 import { Heading2, Paragraph } from "@/components/utils/Text";
-import { useAuth } from "@/hooks/auth/useAuth";
+import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { useAuthStore } from "@/stores/auth";
 import { BookmarkMediaItem, useBookmarkStore } from "@/stores/bookmarks";
+import { useGroupOrderStore } from "@/stores/groupOrder";
+import { useLanguageStore } from "@/stores/language";
+import { usePreferencesStore } from "@/stores/preferences";
 import { ProgressMediaItem, useProgressStore } from "@/stores/progress";
+import { useSubtitleStore } from "@/stores/subtitles";
+import { useThemeStore } from "@/stores/theme";
 
 interface UploadedData {
   account?: {
@@ -27,6 +40,10 @@ interface UploadedData {
   };
   bookmarks?: Record<string, BookmarkMediaItem>;
   progress?: Record<string, ProgressMediaItem>;
+  groupOrder?: string[];
+  settings?: any;
+  theme?: string | null;
+  language?: string;
   exportDate?: string;
 }
 
@@ -34,10 +51,15 @@ export function MigrationUploadPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore();
-  const { importData } = useAuth();
+  const backendUrl = useBackendUrl();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceProgress = useProgressStore((s) => s.replaceItems);
+  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
+  const preferencesStore = usePreferencesStore();
+  const subtitleStore = useSubtitleStore();
+  const setTheme = useThemeStore((s) => s.setTheme);
+  const setLanguage = useLanguageStore((s) => s.setLanguage);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [status, setStatus] = useState<
     "idle" | "success" | "error" | "processing"
@@ -133,7 +155,69 @@ export function MigrationUploadPage() {
     }
   };
 
-  const handleImport = useCallback(() => {
+  const handleBackendImport = useCallback(async () => {
+    if (!uploadedData || !user.account || !backendUrl) return;
+
+    const importPromises = [];
+
+    // Import progress
+    if (
+      uploadedData.progress &&
+      Object.keys(uploadedData.progress).length > 0
+    ) {
+      const progressInputs = Object.entries(uploadedData.progress).flatMap(
+        ([tmdbId, item]) => progressMediaItemToInputs(tmdbId, item),
+      );
+      importPromises.push(
+        importProgress(backendUrl, user.account, progressInputs),
+      );
+    }
+
+    // Import bookmarks
+    if (
+      uploadedData.bookmarks &&
+      Object.keys(uploadedData.bookmarks).length > 0
+    ) {
+      const bookmarkInputs = Object.entries(uploadedData.bookmarks).map(
+        ([tmdbId, item]) => bookmarkMediaToInput(tmdbId, item),
+      );
+      importPromises.push(
+        importBookmarks(backendUrl, user.account, bookmarkInputs),
+      );
+    }
+
+    // Import group order
+    let groupOrderToImport = uploadedData.groupOrder;
+    if (!groupOrderToImport || groupOrderToImport.length === 0) {
+      // Create group order from bookmarks if not provided
+      const allGroups = new Set<string>();
+      if (uploadedData.bookmarks) {
+        Object.values(uploadedData.bookmarks).forEach((bookmark: any) => {
+          if (Array.isArray(bookmark.group)) {
+            bookmark.group.forEach((group: string) => allGroups.add(group));
+          }
+        });
+      }
+      groupOrderToImport = Array.from(allGroups);
+    }
+
+    if (groupOrderToImport && groupOrderToImport.length > 0) {
+      importPromises.push(
+        importGroupOrder(backendUrl, user.account, groupOrderToImport),
+      );
+    }
+
+    // Import settings
+    if (uploadedData.settings) {
+      importPromises.push(
+        importSettings(backendUrl, user.account, uploadedData.settings),
+      );
+    }
+
+    return Promise.all(importPromises);
+  }, [uploadedData, user.account, backendUrl]);
+
+  const handleImport = useCallback(async () => {
     if (status === "processing") {
       return;
     }
@@ -150,24 +234,20 @@ export function MigrationUploadPage() {
       replaceProgress(uploadedData.progress);
     }
 
-    importData(
-      user.account,
-      uploadedData.progress || {},
-      uploadedData.bookmarks || {},
-    )
-      .then(() => {
-        setStatus("success");
-      })
-      .catch((error) => {
-        console.error("Error importing data:", error);
-        setStatus("error");
-      });
+    // Import all data types to backend
+    try {
+      await handleBackendImport();
+      setStatus("success");
+    } catch (error) {
+      console.error("Error importing data:", error);
+      setStatus("error");
+    }
   }, [
     replaceBookmarks,
     replaceProgress,
     uploadedData,
     user.account,
-    importData,
+    handleBackendImport,
     status,
   ]);
 
@@ -189,11 +269,189 @@ export function MigrationUploadPage() {
         );
         replaceProgress(uploadedData.progress);
       }
+      if (uploadedData.groupOrder) {
+        localStorage.setItem(
+          "__MW::groupOrder",
+          JSON.stringify({ state: { groupOrder: uploadedData.groupOrder } }),
+        );
+        setGroupOrder(uploadedData.groupOrder);
+      } else {
+        // If no groupOrder in upload, create one from all groups found in bookmarks
+        const allGroups = new Set<string>();
+        if (uploadedData.bookmarks) {
+          Object.values(uploadedData.bookmarks).forEach((bookmark: any) => {
+            if (Array.isArray(bookmark.group)) {
+              bookmark.group.forEach((group: string) => allGroups.add(group));
+            }
+          });
+        }
+        const groupOrderArray = Array.from(allGroups);
+        if (groupOrderArray.length > 0) {
+          localStorage.setItem(
+            "__MW::groupOrder",
+            JSON.stringify({ state: { groupOrder: groupOrderArray } }),
+          );
+          setGroupOrder(groupOrderArray);
+        }
+      }
+      if (uploadedData.settings) {
+        // Apply subtitle settings
+        if (uploadedData.settings.defaultSubtitleLanguage) {
+          subtitleStore.setLanguage(
+            uploadedData.settings.defaultSubtitleLanguage,
+          );
+        }
+        if (uploadedData.settings.febboxKey !== undefined) {
+          preferencesStore.setFebboxKey(uploadedData.settings.febboxKey);
+        }
+        if (uploadedData.settings.debridToken !== undefined) {
+          preferencesStore.setdebridToken(uploadedData.settings.debridToken);
+        }
+        if (uploadedData.settings.debridService !== undefined) {
+          preferencesStore.setdebridService(
+            uploadedData.settings.debridService,
+          );
+        }
+        if (uploadedData.settings.enableThumbnails !== undefined) {
+          preferencesStore.setEnableThumbnails(
+            uploadedData.settings.enableThumbnails,
+          );
+        }
+        if (uploadedData.settings.enableAutoplay !== undefined) {
+          preferencesStore.setEnableAutoplay(
+            uploadedData.settings.enableAutoplay,
+          );
+        }
+        if (uploadedData.settings.enableSkipCredits !== undefined) {
+          preferencesStore.setEnableSkipCredits(
+            uploadedData.settings.enableSkipCredits,
+          );
+        }
+        if (uploadedData.settings.enableDiscover !== undefined) {
+          preferencesStore.setEnableDiscover(
+            uploadedData.settings.enableDiscover,
+          );
+        }
+        if (uploadedData.settings.enableFeatured !== undefined) {
+          preferencesStore.setEnableFeatured(
+            uploadedData.settings.enableFeatured,
+          );
+        }
+        if (uploadedData.settings.enableDetailsModal !== undefined) {
+          preferencesStore.setEnableDetailsModal(
+            uploadedData.settings.enableDetailsModal,
+          );
+        }
+        if (uploadedData.settings.enableImageLogos !== undefined) {
+          preferencesStore.setEnableImageLogos(
+            uploadedData.settings.enableImageLogos,
+          );
+        }
+        if (uploadedData.settings.enableCarouselView !== undefined) {
+          preferencesStore.setEnableCarouselView(
+            uploadedData.settings.enableCarouselView,
+          );
+        }
+        if (uploadedData.settings.forceCompactEpisodeView !== undefined) {
+          preferencesStore.setForceCompactEpisodeView(
+            uploadedData.settings.forceCompactEpisodeView,
+          );
+        }
+        if (uploadedData.settings.sourceOrder !== undefined) {
+          preferencesStore.setSourceOrder(uploadedData.settings.sourceOrder);
+        }
+        if (uploadedData.settings.enableSourceOrder !== undefined) {
+          preferencesStore.setEnableSourceOrder(
+            uploadedData.settings.enableSourceOrder,
+          );
+        }
+        if (uploadedData.settings.lastSuccessfulSource !== undefined) {
+          preferencesStore.setLastSuccessfulSource(
+            uploadedData.settings.lastSuccessfulSource,
+          );
+        }
+        if (uploadedData.settings.enableLastSuccessfulSource !== undefined) {
+          preferencesStore.setEnableLastSuccessfulSource(
+            uploadedData.settings.enableLastSuccessfulSource,
+          );
+        }
+        if (uploadedData.settings.disabledSources !== undefined) {
+          preferencesStore.setDisabledSources(
+            uploadedData.settings.disabledSources,
+          );
+        }
+        if (uploadedData.settings.embedOrder !== undefined) {
+          preferencesStore.setEmbedOrder(uploadedData.settings.embedOrder);
+        }
+        if (uploadedData.settings.enableEmbedOrder !== undefined) {
+          preferencesStore.setEnableEmbedOrder(
+            uploadedData.settings.enableEmbedOrder,
+          );
+        }
+        if (uploadedData.settings.disabledEmbeds !== undefined) {
+          preferencesStore.setDisabledEmbeds(
+            uploadedData.settings.disabledEmbeds,
+          );
+        }
+        if (uploadedData.settings.proxyTmdb !== undefined) {
+          preferencesStore.setProxyTmdb(uploadedData.settings.proxyTmdb);
+        }
+        if (uploadedData.settings.enableLowPerformanceMode !== undefined) {
+          preferencesStore.setEnableLowPerformanceMode(
+            uploadedData.settings.enableLowPerformanceMode,
+          );
+        }
+        if (uploadedData.settings.enableNativeSubtitles !== undefined) {
+          preferencesStore.setEnableNativeSubtitles(
+            uploadedData.settings.enableNativeSubtitles,
+          );
+        }
+        if (uploadedData.settings.enableHoldToBoost !== undefined) {
+          preferencesStore.setEnableHoldToBoost(
+            uploadedData.settings.enableHoldToBoost,
+          );
+        }
+        if (uploadedData.settings.homeSectionOrder !== undefined) {
+          preferencesStore.setHomeSectionOrder(
+            uploadedData.settings.homeSectionOrder,
+          );
+        }
+        if (uploadedData.settings.manualSourceSelection !== undefined) {
+          preferencesStore.setManualSourceSelection(
+            uploadedData.settings.manualSourceSelection,
+          );
+        }
+        if (uploadedData.settings.enableDoubleClickToSeek !== undefined) {
+          preferencesStore.setEnableDoubleClickToSeek(
+            uploadedData.settings.enableDoubleClickToSeek,
+          );
+        }
+      }
+
+      // Apply theme
+      if (uploadedData.theme !== undefined) {
+        setTheme(uploadedData.theme);
+      }
+
+      // Apply language
+      if (uploadedData.language) {
+        setLanguage(uploadedData.language);
+      }
+
       setStatus("success");
     } catch (e) {
       setStatus("error");
     }
-  }, [uploadedData, replaceBookmarks, replaceProgress]);
+  }, [
+    uploadedData,
+    replaceBookmarks,
+    replaceProgress,
+    setGroupOrder,
+    preferencesStore,
+    subtitleStore,
+    setTheme,
+    setLanguage,
+  ]);
 
   return (
     <MinimalPageLayout>
@@ -207,6 +465,34 @@ export function MigrationUploadPage() {
           <Paragraph className="text-lg max-w-md mb-6">
             {t("migration.upload.description")}
           </Paragraph>
+
+          <SettingsCard className="mb-6">
+            <div className="space-y-4">
+              <h3 className="font-bold text-white text-lg">
+                {t("migration.preview.uploadDescription")}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="flex flex-col items-center text-center p-4 bg-background rounded-lg">
+                  <Icon icon={Icons.CLOCK} className="text-2xl mb-2" />
+                  <span className="font-medium">
+                    {t("migration.preview.items.progress")}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center text-center p-4 bg-background rounded-lg">
+                  <Icon icon={Icons.BOOKMARK} className="text-2xl mb-2" />
+                  <span className="font-medium">
+                    {t("migration.preview.items.bookmarks")}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center text-center p-4 bg-background rounded-lg">
+                  <Icon icon={Icons.SETTINGS} className="text-2xl mb-2" />
+                  <span className="font-medium">
+                    {t("migration.preview.items.settings")}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </SettingsCard>
 
           <SettingsCard>
             <div className="flex py-6 flex-col space-y-4 items-center justify-center">
@@ -270,35 +556,35 @@ export function MigrationUploadPage() {
           {uploadedData && (
             <SettingsCard className="mt-6">
               <Heading2 className="!my-0 !text-type-secondary">
-                {t("migration.upload.dataPreview")}
+                {t("migration.upload.previewTitle")}
               </Heading2>
               <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Icon icon={Icons.BOOKMARK} className="text-xl" />
+                    <Icon icon={Icons.CLOCK} className="text-xl" />
                     <span className="font-medium">
-                      {t("migration.upload.items.bookmarks")}
+                      {t("migration.preview.items.progress")}
                     </span>
                   </div>
                   <div className="text-xl font-bold mt-2">
-                    {uploadedData.bookmarks
-                      ? Object.keys(uploadedData.bookmarks).length
+                    {uploadedData.progress
+                      ? Object.keys(uploadedData.progress).length
                       : 0}
                   </div>
                 </div>
 
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Icon icon={Icons.CLOCK} className="text-xl" />
+                    <Icon icon={Icons.BOOKMARK} className="text-xl" />
                     <span className="font-medium">
-                      {t("migration.upload.items.progress")}
+                      {t("migration.preview.items.bookmarks")}
                     </span>
                   </div>
                   <div className="text-xl font-bold mt-2">
-                    {uploadedData.progress
-                      ? Object.keys(uploadedData.progress).length
+                    {uploadedData.bookmarks
+                      ? Object.keys(uploadedData.bookmarks).length
                       : 0}
                   </div>
                 </div>
