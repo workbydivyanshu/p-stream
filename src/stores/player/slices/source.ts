@@ -150,6 +150,17 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.status = playerStatus.PLAYING;
       s.sourceId = id;
     });
+
+    // Remove XPrime ad script if not playing XPrime content
+    if (id !== "xprimetv") {
+      const script = document.querySelector(
+        'script[data-cfasync="false"][src*="jg.prisagedibbuk.com"]',
+      );
+      if (script) {
+        console.log("removing XPrime ad script due to source change");
+        script.remove();
+      }
+    }
   },
   setEmbedId(id) {
     set((s) => {

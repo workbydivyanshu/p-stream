@@ -10,6 +10,7 @@ import { FlagIcon } from "@/components/FlagIcon";
 import { Dropdown } from "@/components/form/Dropdown";
 import { SortableListWithToggles } from "@/components/form/SortableListWithToggles";
 import { Heading1 } from "@/components/utils/Text";
+import { conf } from "@/setup/config";
 import { appLanguageOptions } from "@/setup/i18n";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getLocaleInfo, sortLangCodes } from "@/utils/language";
@@ -39,6 +40,8 @@ export function PreferencesPart(props: {
   setManualSourceSelection: (v: boolean) => void;
   enableDoubleClickToSeek: boolean;
   setEnableDoubleClickToSeek: (v: boolean) => void;
+  disableXPrimeAds: boolean;
+  setDisableXPrimeAds: (v: boolean) => void;
 }) {
   const { t } = useTranslation();
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
@@ -184,6 +187,7 @@ export function PreferencesPart(props: {
                 </div>
               )}
           </div>
+
           {/* Low Performance Mode */}
           <div>
             <p className="text-white font-bold mb-3">
@@ -244,6 +248,29 @@ export function PreferencesPart(props: {
               </p>
             </div>
           </div>
+
+          {/* Disable XPrime Ads */}
+          {conf().XPRIME_ADS && (
+            <div>
+              <p className="text-white font-bold mb-3">
+                {t("settings.preferences.disableXPrimeAds")}
+              </p>
+              <p className="max-w-[25rem] font-medium">
+                {t("settings.preferences.disableXPrimeAdsDescription")}
+              </p>
+              <div
+                onClick={() =>
+                  props.setDisableXPrimeAds(!props.disableXPrimeAds)
+                }
+                className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
+              >
+                <Toggle enabled={props.disableXPrimeAds} />
+                <p className="flex-1 text-white font-bold">
+                  {t("settings.preferences.disableXPrimeAdsLabel")}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Column */}

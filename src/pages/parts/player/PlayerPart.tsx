@@ -5,6 +5,7 @@ import { Player } from "@/components/player";
 import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
 import { UnreleasedEpisodeOverlay } from "@/components/player/atoms/UnreleasedEpisodeOverlay";
 import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
+import { XPrimeAdOverlay } from "@/components/player/atoms/XPrimeAdOverlay";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -227,6 +228,7 @@ export function PlayerPart(props: PlayerPartProps) {
       <Player.SubtitleDelayPopout />
       <Player.SpeedChangedPopout />
       <UnreleasedEpisodeOverlay />
+      <XPrimeAdOverlay />
 
       <Player.NextEpisodeButton
         controlsShowing={showTargets}

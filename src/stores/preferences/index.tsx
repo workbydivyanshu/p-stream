@@ -30,6 +30,7 @@ export interface PreferencesStore {
   homeSectionOrder: string[];
   manualSourceSelection: boolean;
   enableDoubleClickToSeek: boolean;
+  disableXPrimeAds: boolean;
 
   setEnableThumbnails(v: boolean): void;
   setEnableAutoplay(v: boolean): void;
@@ -58,6 +59,7 @@ export interface PreferencesStore {
   setHomeSectionOrder(v: string[]): void;
   setManualSourceSelection(v: boolean): void;
   setEnableDoubleClickToSeek(v: boolean): void;
+  setDisableXPrimeAds(v: boolean): void;
 }
 
 export const usePreferencesStore = create(
@@ -90,6 +92,7 @@ export const usePreferencesStore = create(
       homeSectionOrder: ["watching", "bookmarks"],
       manualSourceSelection: false,
       enableDoubleClickToSeek: false,
+      disableXPrimeAds: false,
       setEnableThumbnails(v) {
         set((s) => {
           s.enableThumbnails = v;
@@ -228,6 +231,11 @@ export const usePreferencesStore = create(
       setEnableDoubleClickToSeek(v) {
         set((s) => {
           s.enableDoubleClickToSeek = v;
+        });
+      },
+      setDisableXPrimeAds(v) {
+        set((s) => {
+          s.disableXPrimeAds = v;
         });
       },
     })),
