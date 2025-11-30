@@ -35,7 +35,6 @@ export interface SettingsInput {
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
-  disableXPrimeAds?: boolean;
 }
 
 export interface SettingsResponse {
@@ -70,7 +69,6 @@ export interface SettingsResponse {
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
-  disableXPrimeAds?: boolean;
 }
 
 export function updateSettings(

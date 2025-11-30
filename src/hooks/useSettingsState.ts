@@ -79,7 +79,6 @@ export function useSettingsState(
   homeSectionOrder: string[],
   manualSourceSelection: boolean,
   enableDoubleClickToSeek: boolean,
-  disableXPrimeAds: boolean,
 ) {
   const [proxyUrlsState, setProxyUrls, resetProxyUrls, proxyUrlsChanged] =
     useDerived(proxyUrls);
@@ -263,12 +262,6 @@ export function useSettingsState(
     resetEnableDoubleClickToSeek,
     enableDoubleClickToSeekChanged,
   ] = useDerived(enableDoubleClickToSeek);
-  const [
-    disableXPrimeAdsState,
-    setDisableXPrimeAdsState,
-    resetDisableXPrimeAds,
-    disableXPrimeAdsChanged,
-  ] = useDerived(disableXPrimeAds);
 
   function reset() {
     resetTheme();
@@ -306,7 +299,6 @@ export function useSettingsState(
     resetHomeSectionOrder();
     resetManualSourceSelection();
     resetEnableDoubleClickToSeek();
-    resetDisableXPrimeAds();
   }
 
   const changed =
@@ -344,8 +336,7 @@ export function useSettingsState(
     enableHoldToBoostChanged ||
     homeSectionOrderChanged ||
     manualSourceSelectionChanged ||
-    enableDoubleClickToSeekChanged ||
-    disableXPrimeAdsChanged;
+    enableDoubleClickToSeekChanged;
 
   return {
     reset,
@@ -524,11 +515,6 @@ export function useSettingsState(
       state: enableDoubleClickToSeekState,
       set: setEnableDoubleClickToSeekState,
       changed: enableDoubleClickToSeekChanged,
-    },
-    disableXPrimeAds: {
-      state: disableXPrimeAdsState,
-      set: setDisableXPrimeAdsState,
-      changed: disableXPrimeAdsChanged,
     },
   };
 }

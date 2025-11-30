@@ -33,7 +33,6 @@ interface Config {
   BANNER_MESSAGE: string;
   BANNER_ID: string;
   USE_TRAKT: boolean;
-  XPRIME_ADS: boolean;
 }
 
 export interface RuntimeConfig {
@@ -63,7 +62,6 @@ export interface RuntimeConfig {
   BANNER_MESSAGE: string | null;
   BANNER_ID: string | null;
   USE_TRAKT: boolean;
-  XPRIME_ADS: boolean;
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -96,7 +94,6 @@ const env: Record<keyof Config, undefined | string> = {
   BANNER_MESSAGE: import.meta.env.VITE_BANNER_MESSAGE,
   BANNER_ID: import.meta.env.VITE_BANNER_ID,
   USE_TRAKT: import.meta.env.VITE_USE_TRAKT,
-  XPRIME_ADS: import.meta.env.VITE_XPRIME_ADS,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -172,6 +169,5 @@ export function conf(): RuntimeConfig {
     BANNER_MESSAGE: getKey("BANNER_MESSAGE"),
     BANNER_ID: getKey("BANNER_ID"),
     USE_TRAKT: getKey("USE_TRAKT", "false") === "true",
-    XPRIME_ADS: getKey("XPRIME_ADS", "false") === "true",
   };
 }

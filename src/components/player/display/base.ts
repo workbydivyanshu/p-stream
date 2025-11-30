@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import fscreen from "fscreen";
 import Hls, { Level } from "hls.js";
 
@@ -19,13 +18,11 @@ import {
   isUrlAlreadyProxied,
 } from "@/components/player/utils/proxy";
 import { useLanguageStore } from "@/stores/language";
-import { usePlayerStore } from "@/stores/player/store";
 import {
   LoadableSource,
   SourceQuality,
   getPreferredQuality,
 } from "@/stores/player/utils/qualities";
-import { usePreferencesStore } from "@/stores/preferences";
 import { processCdnLink } from "@/utils/cdn";
 import {
   canChangeVolume,
@@ -105,44 +102,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     string,
     (value: void | PromiseLike<void>) => void
   >();
-
-  function removeXPrimeAd() {
-    const script = document.querySelector(
-      'script[data-cfasync="false"][src*="jg.prisagedibbuk.com"]',
-    );
-    if (script) {
-      console.log("removing XPrime ad script");
-      script.remove();
-    }
-  }
-
-  function injectXPrimeAd(sourceId?: string | null) {
-    const currentSourceId = sourceId ?? usePlayerStore.getState().sourceId;
-    console.log("currentSourceId", currentSourceId);
-    const disableXPrimeAds = usePreferencesStore.getState().disableXPrimeAds;
-
-    // Remove script if not playing XPrime content
-    if (currentSourceId !== "xprimetv") {
-      removeXPrimeAd();
-      return;
-    }
-
-    // Inject script if playing XPrime content and ads are enabled
-    if (
-      !disableXPrimeAds &&
-      !document.querySelector(
-        'script[data-cfasync="false"][src*="jg.prisagedibbuk.com"]',
-      )
-    ) {
-      console.log("injecting XPrime ad");
-      const script = document.createElement("script");
-      script.setAttribute("data-cfasync", "false");
-      script.async = true;
-      script.type = "text/javascript";
-      script.src = "//jg.prisagedibbuk.com/r47OViiCQMeGnyQ/131974";
-      document.head.appendChild(script);
-    }
-  }
 
   function reportLevels() {
     if (!hls) return;
@@ -395,7 +354,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     videoElement.addEventListener("play", () => {
       emit("play", undefined);
       emit("loading", false);
-      injectXPrimeAd();
     });
     videoElement.addEventListener("error", () => {
       const err = videoElement?.error ?? null;
@@ -589,8 +547,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         "leavepictureinpicture",
         pictureInPictureChange,
       );
-      // Clean up XPrime ad script when destroying the display
-      removeXPrimeAd();
     },
     load(ops) {
       if (!ops.source) unloadSource();
@@ -602,10 +558,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       // Set autoplay flag if starting from beginning (indicates autoplay transition)
       shouldAutoplayAfterLoad = ops.startAt === 0;
       setSource();
-      // Inject ads after source change if conditions are met
-      if (ops.source) {
-        injectXPrimeAd();
-      }
     },
     changeQuality(newAutomaticQuality, newPreferredQuality) {
       if (source?.type !== "hls") return;
