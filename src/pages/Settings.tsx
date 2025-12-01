@@ -486,6 +486,13 @@ export function SettingsPage() {
     (s) => s.setEnableDoubleClickToSeek,
   );
 
+  const enableAutoResumeOnPlaybackError = usePreferencesStore(
+    (s) => s.enableAutoResumeOnPlaybackError,
+  );
+  const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
+    (s) => s.setEnableAutoResumeOnPlaybackError,
+  );
+
   const account = useAuthStore((s) => s.account);
   const updateProfile = useAuthStore((s) => s.setAccountProfile);
   const updateDeviceName = useAuthStore((s) => s.updateDeviceName);
@@ -557,6 +564,7 @@ export function SettingsPage() {
     homeSectionOrder,
     manualSourceSelection,
     enableDoubleClickToSeek,
+    enableAutoResumeOnPlaybackError,
   );
 
   const availableSources = useMemo(() => {
@@ -622,7 +630,8 @@ export function SettingsPage() {
         state.enableHoldToBoost.changed ||
         state.homeSectionOrder.changed ||
         state.manualSourceSelection.changed ||
-        state.enableDoubleClickToSeek
+        state.enableDoubleClickToSeek.changed ||
+        state.enableAutoResumeOnPlaybackError
       ) {
         await updateSettings(backendUrl, account, {
           applicationLanguage: state.appLanguage.state,
@@ -651,6 +660,8 @@ export function SettingsPage() {
           homeSectionOrder: state.homeSectionOrder.state,
           manualSourceSelection: state.manualSourceSelection.state,
           enableDoubleClickToSeek: state.enableDoubleClickToSeek.state,
+          enableAutoResumeOnPlaybackError:
+            state.enableAutoResumeOnPlaybackError.state,
         });
       }
       if (state.deviceName.changed) {
@@ -705,6 +716,9 @@ export function SettingsPage() {
     setHomeSectionOrder(state.homeSectionOrder.state);
     setManualSourceSelection(state.manualSourceSelection.state);
     setEnableDoubleClickToSeek(state.enableDoubleClickToSeek.state);
+    setEnableAutoResumeOnPlaybackError(
+      state.enableAutoResumeOnPlaybackError.state,
+    );
 
     if (state.profile.state) {
       updateProfile(state.profile.state);
@@ -757,6 +771,7 @@ export function SettingsPage() {
     setHomeSectionOrder,
     setManualSourceSelection,
     setEnableDoubleClickToSeek,
+    setEnableAutoResumeOnPlaybackError,
   ]);
   return (
     <SubPageLayout>
@@ -838,6 +853,12 @@ export function SettingsPage() {
               setManualSourceSelection={state.manualSourceSelection.set}
               enableDoubleClickToSeek={state.enableDoubleClickToSeek.state}
               setEnableDoubleClickToSeek={state.enableDoubleClickToSeek.set}
+              enableAutoResumeOnPlaybackError={
+                state.enableAutoResumeOnPlaybackError.state
+              }
+              setEnableAutoResumeOnPlaybackError={
+                state.enableAutoResumeOnPlaybackError.set
+              }
             />
           </div>
         )}

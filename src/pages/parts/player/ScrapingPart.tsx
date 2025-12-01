@@ -31,11 +31,13 @@ export interface ScrapingProps {
     sources: Record<string, ScrapingSegment>,
     sourceOrder: ScrapingItems[],
   ) => void;
+  startFromSourceId?: string;
 }
 
 export function ScrapingPart(props: ScrapingProps) {
   const { report } = useReportProviders();
-  const { startScraping, sourceOrder, sources, currentSource } = useScrape();
+  const { startScraping, resumeScraping, sourceOrder, sources, currentSource } =
+    useScrape();
   const isMounted = useMountedState();
   const { t } = useTranslation();
 
@@ -60,12 +62,17 @@ export function ScrapingPart(props: ScrapingProps) {
     };
   }, [sourceOrder, sources]);
 
-  const started = useRef(false);
+  const started = useRef<string | null>(null);
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
+    // Only start scraping if we haven't started with this startFromSourceId before
+    const currentKey = props.startFromSourceId || "default";
+    if (started.current === currentKey) return;
+    started.current = currentKey;
+
     (async () => {
-      const output = await startScraping(props.media);
+      const output = props.startFromSourceId
+        ? await resumeScraping(props.media, props.startFromSourceId)
+        : await startScraping(props.media);
       if (!isMounted()) return;
       props.onResult?.(
         resultRef.current.sources,
@@ -80,7 +87,7 @@ export function ScrapingPart(props: ScrapingProps) {
       );
       props.onGetStream?.(output);
     })().catch(() => setFailedStartScrape(true));
-  }, [startScraping, props, report, isMounted]);
+  }, [startScraping, resumeScraping, props, report, isMounted]);
 
   let currentProviderIndex = sourceOrder.findIndex(
     (s) => s.id === currentSource || s.children.includes(currentSource ?? ""),

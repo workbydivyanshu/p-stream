@@ -167,27 +167,50 @@ export function useScrape() {
   const disabledEmbeds = usePreferencesStore((s) => s.disabledEmbeds);
 
   const startScraping = useCallback(
-    async (media: ScrapeMedia) => {
-      // Create source order that prioritizes last successful source
-      let filteredSourceOrder = enableSourceOrder
-        ? preferredSourceOrder.filter((id) => !disabledSources.includes(id))
-        : undefined;
+    async (media: ScrapeMedia, startFromSourceId?: string) => {
+      const providerInstance = getProviders();
+      const allSources = providerInstance.listSources();
+
+      // Start with all available sources (filtered by disabled ones)
+      let baseSourceOrder = allSources
+        .filter((source) => !disabledSources.includes(source.id))
+        .map((source) => source.id);
+
+      // Apply custom source ordering if enabled
+      if (enableSourceOrder && preferredSourceOrder.length > 0) {
+        const orderedSources: string[] = [];
+        const remainingSources = [...baseSourceOrder];
+
+        // Add sources in preferred order
+        for (const sourceId of preferredSourceOrder) {
+          const sourceIndex = remainingSources.indexOf(sourceId);
+          if (sourceIndex !== -1) {
+            orderedSources.push(sourceId);
+            remainingSources.splice(sourceIndex, 1);
+          }
+        }
+
+        // Add remaining sources
+        baseSourceOrder = [...orderedSources, ...remainingSources];
+      }
 
       // If we have a last successful source and the feature is enabled, prioritize it
       if (enableLastSuccessfulSource && lastSuccessfulSource) {
-        // Get all available sources (either from custom order or default)
-        const availableSources = filteredSourceOrder || [];
-
-        // If the last successful source is not disabled and exists in available sources,
-        // move it to the front
-        if (
-          !disabledSources.includes(lastSuccessfulSource) &&
-          availableSources.includes(lastSuccessfulSource)
-        ) {
-          filteredSourceOrder = [
+        const lastSourceIndex = baseSourceOrder.indexOf(lastSuccessfulSource);
+        if (lastSourceIndex !== -1) {
+          baseSourceOrder = [
             lastSuccessfulSource,
-            ...availableSources.filter((id) => id !== lastSuccessfulSource),
+            ...baseSourceOrder.filter((id) => id !== lastSuccessfulSource),
           ];
+        }
+      }
+
+      // If starting from a specific source ID, filter the order to start AFTER that source
+      let filteredSourceOrder = baseSourceOrder;
+      if (startFromSourceId) {
+        const startIndex = filteredSourceOrder.indexOf(startFromSourceId);
+        if (startIndex !== -1) {
+          filteredSourceOrder = filteredSourceOrder.slice(startIndex + 1);
         }
       }
 
@@ -223,9 +246,7 @@ export function useScrape() {
       const providers = getProviders();
       const output = await providers.runAll({
         media,
-        // Only pass sourceOrder if enableSourceOrder is true, and filter out disabled sources
         sourceOrder: filteredSourceOrder,
-        // Only pass embedOrder if enableEmbedOrder is true
         embedOrder: filteredEmbedOrder,
         events: {
           init: initEvent,
@@ -256,8 +277,16 @@ export function useScrape() {
     ],
   );
 
+  const resumeScraping = useCallback(
+    async (media: ScrapeMedia, startFromSourceId: string) => {
+      return startScraping(media, startFromSourceId);
+    },
+    [startScraping],
+  );
+
   return {
     startScraping,
+    resumeScraping,
     sourceOrder,
     sources,
     currentSource,

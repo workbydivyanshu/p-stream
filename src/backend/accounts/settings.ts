@@ -35,6 +35,7 @@ export interface SettingsInput {
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
+  enableAutoResumeOnPlaybackError?: boolean;
 }
 
 export interface SettingsResponse {
@@ -69,6 +70,7 @@ export interface SettingsResponse {
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
+  enableAutoResumeOnPlaybackError?: boolean;
 }
 
 export function updateSettings(

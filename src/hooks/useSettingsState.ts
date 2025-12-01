@@ -79,6 +79,7 @@ export function useSettingsState(
   homeSectionOrder: string[],
   manualSourceSelection: boolean,
   enableDoubleClickToSeek: boolean,
+  enableAutoResumeOnPlaybackError: boolean,
 ) {
   const [proxyUrlsState, setProxyUrls, resetProxyUrls, proxyUrlsChanged] =
     useDerived(proxyUrls);
@@ -262,6 +263,12 @@ export function useSettingsState(
     resetEnableDoubleClickToSeek,
     enableDoubleClickToSeekChanged,
   ] = useDerived(enableDoubleClickToSeek);
+  const [
+    enableAutoResumeOnPlaybackErrorState,
+    setEnableAutoResumeOnPlaybackErrorState,
+    resetEnableAutoResumeOnPlaybackError,
+    enableAutoResumeOnPlaybackErrorChanged,
+  ] = useDerived(enableAutoResumeOnPlaybackError);
 
   function reset() {
     resetTheme();
@@ -299,6 +306,7 @@ export function useSettingsState(
     resetHomeSectionOrder();
     resetManualSourceSelection();
     resetEnableDoubleClickToSeek();
+    resetEnableAutoResumeOnPlaybackError();
   }
 
   const changed =
@@ -336,7 +344,8 @@ export function useSettingsState(
     enableHoldToBoostChanged ||
     homeSectionOrderChanged ||
     manualSourceSelectionChanged ||
-    enableDoubleClickToSeekChanged;
+    enableDoubleClickToSeekChanged ||
+    enableAutoResumeOnPlaybackErrorChanged;
 
   return {
     reset,
@@ -515,6 +524,11 @@ export function useSettingsState(
       state: enableDoubleClickToSeekState,
       set: setEnableDoubleClickToSeekState,
       changed: enableDoubleClickToSeekChanged,
+    },
+    enableAutoResumeOnPlaybackError: {
+      state: enableAutoResumeOnPlaybackErrorState,
+      set: setEnableAutoResumeOnPlaybackErrorState,
+      changed: enableAutoResumeOnPlaybackErrorChanged,
     },
   };
 }
