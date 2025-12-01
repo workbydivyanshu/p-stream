@@ -319,6 +319,7 @@ export const getNeverHeardMovies = () => fetchFromTrakt("/never");
 export const getLGBTQContent = () => fetchFromTrakt("/LGBTQ");
 export const getMindfuckMovies = () => fetchFromTrakt("/mindfuck");
 export const getTrueStoryMovies = () => fetchFromTrakt("/truestory");
+export const getChristmasMovies = () => fetchFromTrakt("/christmas");
 export const getHalloweenMovies = () => fetchFromTrakt("/halloween");
 // export const getGreatestTVShows = () => fetchFromTrakt("/greatesttv"); // We only have movies set up. TODO add more tv routes for curated lists so we can have a new page.
 
@@ -326,9 +327,9 @@ export const getHalloweenMovies = () => fetchFromTrakt("/halloween");
 export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
   const listConfigs = [
     {
-      name: "Halloween Movies",
-      slug: "halloween",
-      endpoint: "/halloween",
+      name: "Top Rated Christmas Movies",
+      slug: "christmas",
+      endpoint: "/christmas",
     },
     {
       name: "Letterboxd Top 250 Narrative Feature Films",
@@ -359,6 +360,11 @@ export const getCuratedMovieLists = async (): Promise<CuratedMovieList[]> => {
       name: "Based on a True Story Movies",
       slug: "truestory",
       endpoint: "/truestory",
+    },
+    {
+      name: "Halloween Movies",
+      slug: "halloween",
+      endpoint: "/halloween",
     },
     // {
     //   name: "Rolling Stone's 100 Greatest TV Shows",
