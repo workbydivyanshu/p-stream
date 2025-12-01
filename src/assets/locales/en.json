@@ -1026,7 +1026,9 @@
         "popsicle": "Popsicle",
         "hulk": "Hulk",
         "autumn": "Autumn",
-        "skyrealm": "SkyRealm"
+        "skyrealm": "SkyRealm",
+        "frost": "Frost",
+        "christmas": "Christmas"
       },
       "title": "Appearance",
       "options": {

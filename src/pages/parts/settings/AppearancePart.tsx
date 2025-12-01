@@ -61,6 +61,11 @@ const availableThemes = [
     key: "settings.appearance.themes.autumn",
   },
   {
+    id: "frost",
+    selector: "theme-frost",
+    key: "settings.appearance.themes.frost",
+  },
+  {
     id: "mocha",
     selector: "theme-mocha",
     key: "settings.appearance.themes.mocha",
@@ -114,6 +119,11 @@ const availableThemes = [
     id: "popsicle",
     selector: "theme-popsicle",
     key: "settings.appearance.themes.popsicle",
+  },
+  {
+    id: "christmas",
+    selector: "theme-christmas",
+    key: "settings.appearance.themes.christmas",
   },
   {
     id: "skyRealm",
