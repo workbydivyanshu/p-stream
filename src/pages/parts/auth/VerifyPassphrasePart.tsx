@@ -67,6 +67,7 @@ export function VerifyPassphrase(props: VerifyPassphraseProps) {
     homeSectionOrder: store.homeSectionOrder,
     enableDoubleClickToSeek: store.enableDoubleClickToSeek,
     manualSourceSelection: store.manualSourceSelection,
+    enableAutoResumeOnPlaybackError: store.enableAutoResumeOnPlaybackError,
   }));
 
   const backendUrl = useBackendUrl();

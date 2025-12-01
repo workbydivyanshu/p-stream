@@ -154,6 +154,8 @@ export function useMigration() {
                 : undefined,
             manualSourceSelection: preferences.manualSourceSelection,
             enableDoubleClickToSeek: preferences.enableDoubleClickToSeek,
+            enableAutoResumeOnPlaybackError:
+              preferences.enableAutoResumeOnPlaybackError,
           }),
         );
 

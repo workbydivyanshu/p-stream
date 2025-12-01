@@ -88,6 +88,9 @@ export function useAuthData() {
   const setManualSourceSelection = usePreferencesStore(
     (s) => s.setManualSourceSelection,
   );
+  const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
+    (s) => s.setEnableAutoResumeOnPlaybackError,
+  );
 
   const login = useCallback(
     async (
@@ -266,6 +269,12 @@ export function useAuthData() {
       if (settings.enableDoubleClickToSeek !== undefined) {
         setEnableDoubleClickToSeek(settings.enableDoubleClickToSeek);
       }
+
+      if (settings.enableAutoResumeOnPlaybackError !== undefined) {
+        setEnableAutoResumeOnPlaybackError(
+          settings.enableAutoResumeOnPlaybackError,
+        );
+      }
     },
     [
       replaceBookmarks,
@@ -301,6 +310,7 @@ export function useAuthData() {
       setHomeSectionOrder,
       setManualSourceSelection,
       setEnableDoubleClickToSeek,
+      setEnableAutoResumeOnPlaybackError,
     ],
   );
 
