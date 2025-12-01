@@ -19,7 +19,7 @@ import { useDiscoverStore } from "@/stores/discover";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { MediaItem } from "@/utils/mediaTypes";
 
-import { MediaCarousel } from "./components/MediaCarousel";
+import { LazyMediaCarousel } from "./components/LazyMediaCarousel";
 
 export function DiscoverMore() {
   const [curatedLists, setCuratedLists] = useState<CuratedMovieList[]>([]);
@@ -107,21 +107,23 @@ export function DiscoverMore() {
       <WideContainer ultraWide>
         {/* Latest Movies */}
         <div className="relative">
-          <MediaCarousel
+          <LazyMediaCarousel
             content={{ type: "latest", fallback: "nowPlaying" }}
             isTVShow={false}
             carouselRefs={carouselRefs}
             onShowDetails={handleShowDetails}
+            priority // Load immediately as first carousel
           />
         </div>
 
         {/* Top Rated Movies */}
         <div className="relative">
-          <MediaCarousel
+          <LazyMediaCarousel
             content={{ type: "latest4k", fallback: "topRated" }}
             isTVShow={false}
             carouselRefs={carouselRefs}
             onShowDetails={handleShowDetails}
+            priority // Load immediately as second carousel
           />
         </div>
 
