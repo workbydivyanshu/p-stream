@@ -182,9 +182,10 @@ export function RealPlayerView() {
       let startAt: number | undefined;
       if (startAtParam) startAt = parseTimestamp(startAtParam) ?? undefined;
 
-      // Clear failed sources when we successfully find a working source
+      // Clear failed sources and embeds when we successfully find a working source
       const playerStore = usePlayerStore.getState();
       playerStore.clearFailedSources();
+      playerStore.clearFailedEmbeds();
 
       playMedia(
         convertRunoutputToSource(out),

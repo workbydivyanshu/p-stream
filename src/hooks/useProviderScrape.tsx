@@ -171,7 +171,9 @@ export function useScrape() {
     async (media: ScrapeMedia, startFromSourceId?: string) => {
       const providerInstance = getProviders();
       const allSources = providerInstance.listSources();
-      const failedSources = usePlayerStore.getState().failedSources;
+      const playerState = usePlayerStore.getState();
+      const failedSources = playerState.failedSources;
+      const failedEmbeds = playerState.failedEmbeds;
 
       // Start with all available sources (filtered by disabled and failed ones)
       let baseSourceOrder = allSources
@@ -220,9 +222,15 @@ export function useScrape() {
         }
       }
 
-      // Filter out disabled embeds from the embed order
+      // Collect all failed embed IDs across all sources
+      const allFailedEmbedIds = Object.values(failedEmbeds).flat();
+
+      // Filter out disabled and failed embeds from the embed order
       const filteredEmbedOrder = enableEmbedOrder
-        ? preferredEmbedOrder.filter((id) => !disabledEmbeds.includes(id))
+        ? preferredEmbedOrder.filter(
+            (id) =>
+              !disabledEmbeds.includes(id) && !allFailedEmbedIds.includes(id),
+          )
         : undefined;
 
       const providerApiUrl = getLoadbalancedProviderApiUrl();

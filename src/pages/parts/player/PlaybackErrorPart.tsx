@@ -23,7 +23,10 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
   const { t } = useTranslation();
   const playbackError = usePlayerStore((s) => s.interface.error);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
+  const currentEmbedId = usePlayerStore((s) => s.embedId);
   const addFailedSource = usePlayerStore((s) => s.addFailedSource);
+  const addFailedEmbed = usePlayerStore((s) => s.addFailedEmbed);
+  const failedEmbeds = usePlayerStore((s) => s.failedEmbeds);
   const modal = useModal("error");
   const settingsRouter = useOverlayRouter("settings");
   const hasOpenedSettings = useRef(false);
@@ -35,17 +38,32 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
     (s) => s.enableAutoResumeOnPlaybackError,
   );
 
-  // Mark the failed source and handle UI when a playback error occurs
+  // Mark the failed source/embed and handle UI when a playback error occurs
   useEffect(() => {
     if (playbackError && currentSourceId) {
-      // Only mark source as failed for fatal errors
+      // Only mark source/embed as failed for fatal errors
       const isFatalError =
         playbackError.type === "hls"
           ? (playbackError.hls?.fatal ?? false)
           : playbackError.type === "htmlvideo";
 
       if (isFatalError) {
-        addFailedSource(currentSourceId);
+        // If there's an active embed, disable that embed instead of the source
+        if (currentEmbedId) {
+          addFailedEmbed(currentSourceId, currentEmbedId);
+
+          // Check if all embeds for this source have now failed
+          // If so, disable the entire source
+          const failedEmbedsForSource = failedEmbeds[currentSourceId] || [];
+          // For now, we'll assume if we have 2+ failed embeds for a source, disable it
+          // This is a simple heuristic - we could make it more sophisticated
+          if (failedEmbedsForSource.length >= 2) {
+            addFailedSource(currentSourceId);
+          }
+        } else {
+          // No embed active, disable the source
+          addFailedSource(currentSourceId);
+        }
       }
 
       if (!hasOpenedSettings.current && !enableAutoResumeOnPlaybackError) {
@@ -59,7 +77,10 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
   }, [
     playbackError,
     currentSourceId,
+    currentEmbedId,
+    failedEmbeds,
     addFailedSource,
+    addFailedEmbed,
     settingsRouter,
     setLastSuccessfulSource,
     enableAutoResumeOnPlaybackError,
