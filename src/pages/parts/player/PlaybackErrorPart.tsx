@@ -38,8 +38,15 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
   // Mark the failed source and handle UI when a playback error occurs
   useEffect(() => {
     if (playbackError && currentSourceId) {
-      // Mark this source as failed
-      addFailedSource(currentSourceId);
+      // Only mark source as failed for fatal errors
+      const isFatalError =
+        playbackError.type === "hls"
+          ? (playbackError.hls?.fatal ?? false)
+          : playbackError.type === "htmlvideo";
+
+      if (isFatalError) {
+        addFailedSource(currentSourceId);
+      }
 
       if (!hasOpenedSettings.current && !enableAutoResumeOnPlaybackError) {
         hasOpenedSettings.current = true;
