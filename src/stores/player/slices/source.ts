@@ -154,6 +154,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     set((s) => {
       s.status = playerStatus.PLAYING;
       s.sourceId = id;
+      s.embedId = null;
     });
   },
   setEmbedId(id) {
