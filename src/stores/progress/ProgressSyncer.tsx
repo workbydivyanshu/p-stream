@@ -9,7 +9,7 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { ProgressUpdateItem, useProgressStore } from "@/stores/progress";
 
-const syncIntervalMs = 5 * 1000;
+const syncIntervalMs = 10 * 1000; // 10 second intervals 
 
 async function syncProgress(
   items: ProgressUpdateItem[],
