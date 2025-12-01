@@ -31,7 +31,7 @@ export async function scrapeWyzieCaptions(
 
     const wyzieCaptions: CaptionListItem[] = wyzieSubtitles.map((subtitle) => ({
       id: subtitle.id,
-      language: subtitle.language,
+      language: subtitle.language || "unknown",
       url: subtitle.url,
       type:
         subtitle.format === "srt" || subtitle.format === "vtt"
