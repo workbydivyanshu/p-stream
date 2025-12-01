@@ -89,6 +89,7 @@ export interface SourceSlice {
     asTrack: boolean;
   };
   meta: PlayerMeta | null;
+  failedSources: string[];
   setStatus(status: PlayerStatus): void;
   setSource(
     stream: SourceSliceSource,
@@ -104,6 +105,9 @@ export interface SourceSlice {
   redisplaySource(startAt: number): void;
   setCaptionAsTrack(asTrack: boolean): void;
   addExternalSubtitles(): Promise<void>;
+  addFailedSource(sourceId: string): void;
+  clearFailedSources(): void;
+  reset(): void;
 }
 
 export function metaToScrapeMedia(meta: PlayerMeta): ScrapeMedia {
@@ -141,6 +145,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   currentAudioTrack: null,
   status: playerStatus.IDLE,
   meta: null,
+  failedSources: [],
   caption: {
     selected: null,
     asTrack: false,
@@ -254,6 +259,38 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   setCaptionAsTrack(asTrack: boolean) {
     set((s) => {
       s.caption.asTrack = asTrack;
+    });
+  },
+  addFailedSource(sourceId: string) {
+    set((s) => {
+      if (!s.failedSources.includes(sourceId)) {
+        s.failedSources = [...s.failedSources, sourceId];
+      }
+    });
+  },
+  clearFailedSources() {
+    set((s) => {
+      s.failedSources = [];
+    });
+  },
+  reset() {
+    set((s) => {
+      s.source = null;
+      s.sourceId = null;
+      s.embedId = null;
+      s.qualities = [];
+      s.audioTracks = [];
+      s.captionList = [];
+      s.isLoadingExternalSubtitles = false;
+      s.currentQuality = null;
+      s.currentAudioTrack = null;
+      s.status = playerStatus.IDLE;
+      s.meta = null;
+      s.failedSources = [];
+      s.caption = {
+        selected: null,
+        asTrack: false,
+      };
     });
   },
   async addExternalSubtitles() {

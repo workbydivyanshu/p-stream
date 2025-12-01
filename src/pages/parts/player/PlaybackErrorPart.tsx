@@ -22,6 +22,8 @@ export interface PlaybackErrorPartProps {
 export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
   const { t } = useTranslation();
   const playbackError = usePlayerStore((s) => s.interface.error);
+  const currentSourceId = usePlayerStore((s) => s.sourceId);
+  const addFailedSource = usePlayerStore((s) => s.addFailedSource);
   const modal = useModal("error");
   const settingsRouter = useOverlayRouter("settings");
   const hasOpenedSettings = useRef(false);
@@ -33,21 +35,24 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
     (s) => s.enableAutoResumeOnPlaybackError,
   );
 
-  // Automatically open the settings overlay when a playback error occurs (unless auto-resume is enabled)
+  // Mark the failed source and handle UI when a playback error occurs
   useEffect(() => {
-    if (
-      playbackError &&
-      !hasOpenedSettings.current &&
-      !enableAutoResumeOnPlaybackError
-    ) {
-      hasOpenedSettings.current = true;
-      // Reset the last successful source when a playback error occurs
-      setLastSuccessfulSource(null);
-      settingsRouter.open();
-      settingsRouter.navigate("/source");
+    if (playbackError && currentSourceId) {
+      // Mark this source as failed
+      addFailedSource(currentSourceId);
+
+      if (!hasOpenedSettings.current && !enableAutoResumeOnPlaybackError) {
+        hasOpenedSettings.current = true;
+        // Reset the last successful source when a playback error occurs
+        setLastSuccessfulSource(null);
+        settingsRouter.open();
+        settingsRouter.navigate("/source");
+      }
     }
   }, [
     playbackError,
+    currentSourceId,
+    addFailedSource,
     settingsRouter,
     setLastSuccessfulSource,
     enableAutoResumeOnPlaybackError,

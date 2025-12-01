@@ -10,6 +10,7 @@ import {
 } from "@/backend/helpers/providerApi";
 import { getLoadbalancedProviderApiUrl } from "@/backend/providers/fetchers";
 import { getProviders } from "@/backend/providers/providers";
+import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
 export interface ScrapingItems {
@@ -170,10 +171,15 @@ export function useScrape() {
     async (media: ScrapeMedia, startFromSourceId?: string) => {
       const providerInstance = getProviders();
       const allSources = providerInstance.listSources();
+      const failedSources = usePlayerStore.getState().failedSources;
 
-      // Start with all available sources (filtered by disabled ones)
+      // Start with all available sources (filtered by disabled and failed ones)
       let baseSourceOrder = allSources
-        .filter((source) => !disabledSources.includes(source.id))
+        .filter(
+          (source) =>
+            !disabledSources.includes(source.id) &&
+            !failedSources.includes(source.id),
+        )
         .map((source) => source.id);
 
       // Apply custom source ordering if enabled
