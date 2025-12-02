@@ -97,7 +97,7 @@ export function FancyModal(props: {
             <Flare.Light
               flareSize={300}
               cssColorVar="--colors-mediaCard-hoverAccent"
-              backgroundClass="bg-mediaCard-hoverBackground duration-100"
+              backgroundClass="bg-modal-background duration-100"
               className="rounded-3xl bg-background-main group-hover:opacity-100"
             />
             <Flare.Child className="pointer-events-auto relative mb-2p-[0.4em] transition-transform duration-300">
