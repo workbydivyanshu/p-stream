@@ -9,6 +9,15 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-050</guid>
+      <title>New alerts for source failures!</title>
+      <description>I just added a new alert that pops up if FED API, FED DB, or XPrime sources fail the turnstile check. Previously it would just show the ⚠️ icon and give no explanation why it failed. Now you know why! Simply go back and select that source again or reload the page!
+      </description>
+      <pubDate>Tue, 2 Dec 2025 13:10:00 MST</pubDate>
+      <category>Feature</category>
+    </item>
+
+    <item>
       <guid>notification-049</guid>
       <title>P-Stream v5.3.2 released!</title>
       <description>Many awesome changes and fixes in this release! Some seasonal additions as well! And yes, we skipped a version, it was super small.
