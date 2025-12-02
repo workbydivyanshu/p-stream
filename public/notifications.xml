@@ -9,6 +9,37 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-049</guid>
+      <title>P-Stream v5.3.2 released!</title>
+      <description>Many awesome changes and fixes in this release! Some seasonal additions as well! And yes, we skipped a version, it was super small.
+
+Additions:
+- Added auto-resume on playback error setting. Enabled by default. When enabled, P-Stream will automatically resume playback from the next source if the current source fails.
+- Added new trailers and similar media carousels to the details modal!
+- Added Transcript view for subtitles! View the entire transcript of the current subtitle.
+- Added nickname to user account settings (used in the XP app and for watch parties!)
+- Added Frost and Christmas themes!
+- Added Christmas movies list to all movies lists page!
+- Added a new subtitle source: Granite!
+- Migration features, such as downloading your data, now includes your settings and preferences!
+
+Fixes:
+- Fixed Rotten Tomatoes scores not being displayed correctly!
+- Fixed device name decryption errors causing the settings page to be inaccessible.
+- Fixed More Content pages when our API fails, now shows correct media when trakt fails and also scrolls to the top. Big fix for self hosters.
+- Fixed source selection part not respecting disabled sources.
+- Fixed some stutters when scrolling through the discover page. Again.
+- Fixed captions not working for MP4 sources.
+- Fixed subtitle delay getting reset when double pressing to copy.
+
+Thanks to everyone who has supported P-Stream! We couldnt do it without you!
+      </description>
+      <link>https://pstream.mov/</link>
+      <pubDate>Mon, 01 Dec 2025 19:10:00 MST</pubDate>
+      <category>update</category>
+    </item>
+
+    <item>
       <guid>notification-048</guid>
       <title>P-Stream v5.3.0 released!</title>
       <description>Lots of quality of life improvements and changes and a huge number of bugs fixed!
@@ -49,7 +80,7 @@ P-Stream has partnered with Neon Next Generation Pty Ltd. for this release! They
       </description>
       <link>https://neonnextgeneration.com</link>
       <pubDate>Mon, 10 Nov 2025 13:00:00 MST</pubDate>
-      <category>Feature</category>
+      <category>update</category>
     </item>
 
     <item>
