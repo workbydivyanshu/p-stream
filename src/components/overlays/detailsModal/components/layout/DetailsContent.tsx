@@ -16,6 +16,7 @@ import { scrapeRottenTomatoes } from "@/utils/rottenTomatoesScraper";
 import { DetailsContentProps } from "../../types";
 import { EpisodeCarousel } from "../carousels/EpisodeCarousel";
 import { CastCarousel } from "../carousels/PeopleCarousel";
+import { TrailerCarousel } from "../carousels/TrailerCarousel";
 import { CollectionOverlay } from "../overlays/CollectionOverlay";
 import { TrailerOverlay } from "../overlays/TrailerOverlay";
 import { DetailsBody } from "../sections/DetailsBody";
@@ -365,6 +366,26 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
                 ? TMDBContentTypes.MOVIE
                 : TMDBContentTypes.TV
             }
+          />
+        )}
+
+        {/* Trailer Carousel */}
+        {data.id && (
+          <TrailerCarousel
+            mediaId={data.id.toString()}
+            mediaType={
+              data.type === "movie"
+                ? TMDBContentTypes.MOVIE
+                : TMDBContentTypes.TV
+            }
+            onTrailerClick={(videoKey) => {
+              const trailerUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
+              setShowTrailer(true);
+              setImdbData((prev: any) => ({
+                ...prev,
+                trailer_url: trailerUrl,
+              }));
+            }}
           />
         )}
       </div>

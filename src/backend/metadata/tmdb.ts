@@ -24,6 +24,8 @@ import {
   TMDBSeasonMetaResult,
   TMDBShowData,
   TMDBShowSearchResult,
+  TMDBVideo,
+  TMDBVideosResponse,
 } from "./types/tmdb";
 import { mwFetch } from "../helpers/fetch";
 
@@ -509,6 +511,19 @@ export async function getMediaCredits(
 ): Promise<TMDBCredits> {
   const endpoint = type === TMDBContentTypes.MOVIE ? "movie" : "tv";
   return get<TMDBCredits>(`/${endpoint}/${id}/credits`);
+}
+
+export async function getMediaVideos(
+  id: string,
+  type: TMDBContentTypes,
+): Promise<TMDBVideo[]> {
+  const endpoint = type === TMDBContentTypes.MOVIE ? "movie" : "tv";
+  const data = await get<TMDBVideosResponse>(`/${endpoint}/${id}/videos`);
+  return data.results.filter(
+    (video) =>
+      video.site === "YouTube" &&
+      (video.type === "Trailer" || video.type === "Teaser"),
+  );
 }
 
 export async function getRelatedMedia(
