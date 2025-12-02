@@ -16,6 +16,7 @@ import { scrapeRottenTomatoes } from "@/utils/rottenTomatoesScraper";
 import { DetailsContentProps } from "../../types";
 import { EpisodeCarousel } from "../carousels/EpisodeCarousel";
 import { CastCarousel } from "../carousels/PeopleCarousel";
+import { SimilarMediaCarousel } from "../carousels/SimilarMediaCarousel";
 import { TrailerCarousel } from "../carousels/TrailerCarousel";
 import { CollectionOverlay } from "../overlays/CollectionOverlay";
 import { TrailerOverlay } from "../overlays/TrailerOverlay";
@@ -386,6 +387,18 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
                 trailer_url: trailerUrl,
               }));
             }}
+          />
+        )}
+
+        {/* Similar Media Carousel */}
+        {data.id && (
+          <SimilarMediaCarousel
+            mediaId={data.id.toString()}
+            mediaType={
+              data.type === "movie"
+                ? TMDBContentTypes.MOVIE
+                : TMDBContentTypes.TV
+            }
           />
         )}
       </div>
