@@ -49,10 +49,16 @@ function useIntersectionObserver(options: IntersectionObserverInit = {}) {
 }
 
 // Skeleton Component
-function MediaCardSkeleton() {
+export function MediaCardSkeleton() {
   return (
-    <div className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300">
-      <div className="pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300">
+    <Flare.Base className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300">
+      <Flare.Light
+        flareSize={300}
+        cssColorVar="--colors-mediaCard-hoverAccent"
+        backgroundClass="bg-mediaCard-hoverBackground duration-100"
+        className="rounded-xl bg-background-main group-hover:opacity-100"
+      />
+      <Flare.Child className="pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 opacity-60">
         <div className="animate-pulse">
           {/* Poster skeleton - matches MediaCard poster dimensions exactly */}
           <div className="relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground" />
@@ -71,8 +77,8 @@ function MediaCardSkeleton() {
             <div className="h-3 bg-mediaCard-hoverBackground rounded w-8" />
           </div>
         </div>
-      </div>
-    </div>
+      </Flare.Child>
+    </Flare.Base>
   );
 }
 

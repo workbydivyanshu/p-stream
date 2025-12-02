@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { getMediaPoster, getRelatedMedia } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
-import { MediaCard } from "@/components/media/MediaCard";
+import { MediaCard, MediaCardSkeleton } from "@/components/media/MediaCard";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { CarouselNavButtons } from "@/pages/discover/components/CarouselNavButtons";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
@@ -22,6 +22,7 @@ export function SimilarMediaCarousel({
   const { isMobile } = useIsMobile();
   const { showModal } = useOverlayStack();
   const [similarMedia, setSimilarMedia] = useState<MediaItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     similar: null,
@@ -29,6 +30,7 @@ export function SimilarMediaCarousel({
 
   useEffect(() => {
     const loadSimilarMedia = async () => {
+      setIsLoading(true);
       try {
         const results = await getRelatedMedia(mediaId, mediaType, 12);
         const mediaItems: MediaItem[] = results.map((result) => {
@@ -57,6 +59,8 @@ export function SimilarMediaCarousel({
         setSimilarMedia(mediaItems);
       } catch (err) {
         console.error("Failed to load similar media:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -76,7 +80,7 @@ export function SimilarMediaCarousel({
     });
   };
 
-  if (similarMedia.length === 0) return null;
+  if (!isLoading && similarMedia.length === 0) return null;
 
   return (
     <div className="space-y-4 pt-8">
@@ -96,19 +100,31 @@ export function SimilarMediaCarousel({
         >
           <div className="md:w-12" />
 
-          {similarMedia.map((media) => (
-            <div
-              key={media.id}
-              className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
-              style={{ scrollSnapAlign: "start" }}
-            >
-              <MediaCard
-                media={media}
-                linkable
-                onShowDetails={handleShowDetails}
-              />
-            </div>
-          ))}
+          {isLoading
+            ? // Show skeleton cards while loading
+              Array.from({ length: 12 }, (_, i) => (
+                <div
+                  key={`skeleton-${i}`}
+                  className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                  style={{ scrollSnapAlign: "start" }}
+                >
+                  <MediaCardSkeleton />
+                </div>
+              ))
+            : // Show actual media cards when loaded
+              similarMedia.map((media) => (
+                <div
+                  key={media.id}
+                  className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                  style={{ scrollSnapAlign: "start" }}
+                >
+                  <MediaCard
+                    media={media}
+                    linkable
+                    onShowDetails={handleShowDetails}
+                  />
+                </div>
+              ))}
 
           <div className="md:w-12" />
         </div>
