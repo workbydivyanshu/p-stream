@@ -391,6 +391,7 @@ export interface TMDBVideo {
   type: string;
   official: boolean;
   published_at: string;
+  thumbnail?: string;
 }
 
 export interface TMDBVideosResponse {

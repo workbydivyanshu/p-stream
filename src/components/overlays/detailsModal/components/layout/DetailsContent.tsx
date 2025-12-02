@@ -268,7 +268,6 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         <DetailsBody
           data={data}
           onPlayClick={handlePlayClick}
-          onTrailerClick={() => setShowTrailer(true)}
           onShareClick={handleShareClick}
           showProgress={showProgress}
           voteAverage={data.voteAverage}
@@ -379,8 +378,16 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
                 ? TMDBContentTypes.MOVIE
                 : TMDBContentTypes.TV
             }
-            onTrailerClick={(videoKey) => {
-              const trailerUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
+            imdbData={imdbData}
+            onTrailerClick={(videoKey, isImdbTrailer) => {
+              let trailerUrl: string;
+              if (isImdbTrailer) {
+                // IMDb trailer is already a full URL
+                trailerUrl = videoKey;
+              } else {
+                // TMDB trailer needs to be converted to YouTube embed URL
+                trailerUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
+              }
               setShowTrailer(true);
               setImdbData((prev: any) => ({
                 ...prev,

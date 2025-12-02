@@ -55,6 +55,7 @@ interface IMDbMetadata {
   plot?: string;
   poster_url?: string;
   trailer_url?: string;
+  trailer_thumbnail?: string;
   url?: string;
   genre?: string[];
   cast?: string[];
@@ -251,9 +252,9 @@ export async function scrapeIMDb(
     metadata.imdb_rating = aboveTheFold.ratingsSummary?.aggregateRating || null;
     metadata.votes = aboveTheFold.ratingsSummary?.voteCount || null;
     metadata.poster_url = aboveTheFold.primaryImage?.url || "";
-    metadata.trailer_url =
-      aboveTheFold.primaryVideos?.edges?.[0]?.node?.playbackURLs?.[0]?.url ||
-      "";
+    const trailerNode = aboveTheFold.primaryVideos?.edges?.[0]?.node;
+    metadata.trailer_url = trailerNode?.playbackURLs?.[0]?.url || "";
+    metadata.trailer_thumbnail = trailerNode?.thumbnail?.url || "";
 
     // Extract arrays
     metadata.genre = aboveTheFold.genres?.genres?.map((g: any) => g.text) || [];

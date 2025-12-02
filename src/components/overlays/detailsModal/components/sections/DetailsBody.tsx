@@ -16,7 +16,6 @@ import { DetailsBodyProps } from "../../types";
 export function DetailsBody({
   data,
   onPlayClick,
-  onTrailerClick,
   onShareClick,
   showProgress,
   voteAverage,
@@ -232,19 +231,6 @@ export function DetailsBody({
             </span>
           </Button>
           <div className="flex items-center gap-1 flex-shrink-0">
-            {imdbData?.trailer_url && (
-              <button
-                type="button"
-                onClick={onTrailerClick}
-                className="p-2 opacity-75 transition-opacity duration-300 hover:scale-110 hover:cursor-pointer hover:opacity-95"
-                title={t("details.trailer")}
-              >
-                <IconPatch
-                  icon={Icons.FILM}
-                  className="transition-transform duration-300 hover:scale-110 hover:cursor-pointer"
-                />
-              </button>
-            )}
             <MediaBookmarkButton
               media={{
                 id: data.id?.toString() || "",
