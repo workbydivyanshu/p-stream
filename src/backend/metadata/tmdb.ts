@@ -526,6 +526,10 @@ export async function getMediaVideos(
   );
 }
 
+/**
+ * Fetches recommended media from TMDB recommendations endpoint.
+ * Returns media that users commonly watch together based on ratings and popularity.
+ */
 export async function getRelatedMedia(
   id: string,
   type: TMDBContentTypes,
@@ -534,7 +538,7 @@ export async function getRelatedMedia(
   const endpoint = type === TMDBContentTypes.MOVIE ? "movie" : "tv";
   const data = await get<{
     results: TMDBMovieSearchResult[] | TMDBShowSearchResult[];
-  }>(`/${endpoint}/${id}/similar`);
+  }>(`/${endpoint}/${id}/recommendations`);
 
   return data.results.slice(0, limit);
 }
