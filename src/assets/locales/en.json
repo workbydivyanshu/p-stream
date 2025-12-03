@@ -852,6 +852,7 @@
       "title": "Failed to play video!"
     },
     "scraping": {
+      "skip": "Skip source",
       "items": {
         "failure": "Error occurred",
         "notFound": "Doesn't have the video (╥﹏╥)",
