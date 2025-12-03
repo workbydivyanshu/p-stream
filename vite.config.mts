@@ -26,6 +26,16 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_URL || "/",
     assetsInclude: ['**/*.wasm'],
+    server: {
+      fs: {
+        allow: [
+          // Default: allow serving files from project root
+          path.resolve(__dirname),
+          // Allow serving from the linked providers directory
+          path.resolve(__dirname, '../providers/@p-stream/providers'),
+        ],
+      },
+    },
     plugins: [
       million.vite({ auto: true, mute: true }),
       handlebars({
