@@ -13,7 +13,7 @@
       <title>New alerts for source failures!</title>
       <description>I just added a new alert that pops up if FED API, FED DB, or XPrime sources fail the turnstile check. Previously it would just show the ⚠️ icon and give no explanation why it failed. Now you know why! Simply go back and select that source again or reload the page!
       </description>
-      <pubDate>Tue, 2 Dec 2025 13:10:00 MST</pubDate>
+      <pubDate>Tue, 2 Dec 2025 13:11:00 MST</pubDate>
       <category>Feature</category>
     </item>
 
