@@ -1,6 +1,7 @@
 import {
   Fetcher,
   makeSimpleProxyFetcher,
+  makeStandardFetcher,
   setM3U8ProxyUrl,
 } from "@p-stream/providers";
 
@@ -82,8 +83,19 @@ export function setupM3U8Proxy() {
 
 export function makeLoadBalancedSimpleProxyFetcher() {
   const fetcher: Fetcher = async (a, b) => {
+    const proxyUrl = getLoadbalancedProxyUrl();
+
+    // If no proxy URL is available, fall back to direct fetch
+    if (!proxyUrl) {
+      console.warn(
+        "[makeLoadBalancedSimpleProxyFetcher] No proxy URL available, using direct fetch",
+      );
+      const directFetcher = makeStandardFetcher(fetchButWithApiTokens);
+      return directFetcher(a, b);
+    }
+
     const currentFetcher = makeSimpleProxyFetcher(
-      getLoadbalancedProxyUrl(),
+      proxyUrl,
       fetchButWithApiTokens,
     );
     return currentFetcher(a, b);

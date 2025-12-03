@@ -9,7 +9,13 @@ import {
 import { Transition } from "@/components/utils/Transition";
 
 export interface ScrapeItemProps {
-  status: "failure" | "pending" | "notfound" | "success" | "waiting";
+  status:
+    | "failure"
+    | "pending"
+    | "notfound"
+    | "success"
+    | "waiting"
+    | "skipped";
   name: string;
   id?: string;
   percentage?: number;
@@ -24,6 +30,7 @@ const statusTextMap: Partial<Record<ScrapeCardProps["status"], string>> = {
   notfound: "player.scraping.items.notFound",
   failure: "player.scraping.items.failure",
   pending: "player.scraping.items.pending",
+  skipped: "player.scraping.items.notFound",
 };
 
 const statusMap: Record<ScrapeCardProps["status"], StatusCircleProps["type"]> =
@@ -33,6 +40,7 @@ const statusMap: Record<ScrapeCardProps["status"], StatusCircleProps["type"]> =
     pending: "loading",
     success: "success",
     waiting: "waiting",
+    skipped: "noresult",
   };
 
 export function ScrapeItem(props: ScrapeItemProps) {
