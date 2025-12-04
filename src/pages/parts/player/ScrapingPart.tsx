@@ -26,28 +26,18 @@ import { WarningPart } from "../util/WarningPart";
 
 export interface ScrapingProps {
   media: ScrapeMedia;
-  onGetStream?: (
-    stream: AsyncReturnType<ProviderControls["runAll"]>,
-    sources: Record<string, ScrapingSegment>,
-  ) => void;
+  onGetStream?: (stream: AsyncReturnType<ProviderControls["runAll"]>) => void;
   onResult?: (
     sources: Record<string, ScrapingSegment>,
     sourceOrder: ScrapingItems[],
   ) => void;
   startFromSourceId?: string;
-  onSkipSourceReady?: (skipFn: () => void) => void;
 }
 
 export function ScrapingPart(props: ScrapingProps) {
   const { report } = useReportProviders();
-  const {
-    startScraping,
-    resumeScraping,
-    sourceOrder,
-    sources,
-    currentSource,
-    skipCurrentSource,
-  } = useScrape();
+  const { startScraping, resumeScraping, sourceOrder, sources, currentSource } =
+    useScrape();
   const isMounted = useMountedState();
   const { t } = useTranslation();
 
@@ -73,44 +63,30 @@ export function ScrapingPart(props: ScrapingProps) {
   }, [sourceOrder, sources]);
 
   const started = useRef<string | null>(null);
-
-  // Pass skip function to parent
-  useEffect(() => {
-    props.onSkipSourceReady?.(skipCurrentSource);
-  }, [skipCurrentSource, props]);
-
   useEffect(() => {
     // Only start scraping if we haven't started with this startFromSourceId before
     const currentKey = props.startFromSourceId || "default";
-    if (started.current === currentKey) {
-      return;
-    }
+    if (started.current === currentKey) return;
     started.current = currentKey;
 
     (async () => {
-      try {
-        const output = props.startFromSourceId
-          ? await resumeScraping(props.media, props.startFromSourceId)
-          : await startScraping(props.media);
-        if (!isMounted()) {
-          return;
-        }
-        props.onResult?.(
-          resultRef.current.sources,
+      const output = props.startFromSourceId
+        ? await resumeScraping(props.media, props.startFromSourceId)
+        : await startScraping(props.media);
+      if (!isMounted()) return;
+      props.onResult?.(
+        resultRef.current.sources,
+        resultRef.current.sourceOrder,
+      );
+      report(
+        scrapePartsToProviderMetric(
+          props.media,
           resultRef.current.sourceOrder,
-        );
-        report(
-          scrapePartsToProviderMetric(
-            props.media,
-            resultRef.current.sourceOrder,
-            resultRef.current.sources,
-          ),
-        );
-        props.onGetStream?.(output, resultRef.current.sources);
-      } catch (error) {
-        setFailedStartScrape(true);
-      }
-    })();
+          resultRef.current.sources,
+        ),
+      );
+      props.onGetStream?.(output);
+    })().catch(() => setFailedStartScrape(true));
   }, [startScraping, resumeScraping, props, report, isMounted]);
 
   let currentProviderIndex = sourceOrder.findIndex(
@@ -186,9 +162,7 @@ export function ScrapingPart(props: ScrapingProps) {
   );
 }
 
-export function ScrapingPartInterruptButton(props: {
-  skipCurrentSource?: () => void;
-}) {
+export function ScrapingPartInterruptButton() {
   const { t } = useTranslation();
 
   return (
@@ -209,16 +183,6 @@ export function ScrapingPartInterruptButton(props: {
       >
         {t("notFound.reloadButton")}
       </Button>
-      {props.skipCurrentSource && (
-        <Button
-          onClick={props.skipCurrentSource}
-          theme="purple"
-          padding="md:px-17 p-3"
-          className="mt-6"
-        >
-          {t("player.scraping.skip")}
-        </Button>
-      )}
     </div>
   );
 }

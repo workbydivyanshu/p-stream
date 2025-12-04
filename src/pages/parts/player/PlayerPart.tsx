@@ -20,7 +20,6 @@ export interface PlayerPartProps {
   backUrl: string;
   onLoad?: () => void;
   onMetaChange?: (meta: PlayerMeta) => void;
-  skipSourceFn?: (() => void) | null;
 }
 
 export function PlayerPart(props: PlayerPartProps) {
@@ -140,15 +139,11 @@ export function PlayerPart(props: PlayerPartProps) {
         </div>
       </Player.TopControls>
 
-      <Player.BottomControls
-        show={showTargets || status === playerStatus.SCRAPING}
-      >
+      <Player.BottomControls show={showTargets}>
         {status !== playerStatus.PLAYING && !manualSourceSelection && <Tips />}
         <div className="flex items-center justify-center space-x-3 h-full">
           {status === playerStatus.SCRAPING ? (
-            <ScrapingPartInterruptButton
-              skipCurrentSource={props.skipSourceFn || undefined}
-            />
+            <ScrapingPartInterruptButton />
           ) : null}
           {status === playerStatus.PLAYING ? (
             <>

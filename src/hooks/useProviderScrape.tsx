@@ -22,13 +22,7 @@ export interface ScrapingSegment {
   name: string;
   id: string;
   embedId?: string;
-  status:
-    | "failure"
-    | "pending"
-    | "notfound"
-    | "success"
-    | "waiting"
-    | "skipped";
+  status: "failure" | "pending" | "notfound" | "success" | "waiting";
   reason?: string;
   error?: any;
   percentage: number;
@@ -42,7 +36,6 @@ function useBaseScrape() {
   const [sources, setSources] = useState<Record<string, ScrapingSegment>>({});
   const [sourceOrder, setSourceOrder] = useState<ScrapingItems[]>([]);
   const [currentSource, setCurrentSource] = useState<string>();
-  const abortControllerRef = useRef<AbortController | null>(null);
   const lastId = useRef<string | null>(null);
 
   const initEvent = useCallback((evt: ScraperEvent<"init">) => {
@@ -71,16 +64,12 @@ function useBaseScrape() {
     const lastIdTmp = lastId.current;
     setSources((s) => {
       if (s[id]) s[id].status = "pending";
-      // Only mark as success if it's pending - don't overwrite skipped status
-      if (lastIdTmp && s[lastIdTmp] && s[lastIdTmp].status === "pending") {
+      if (lastIdTmp && s[lastIdTmp] && s[lastIdTmp].status === "pending")
         s[lastIdTmp].status = "success";
-      }
       return { ...s };
     });
     setCurrentSource(id);
     lastId.current = id;
-    // Create new AbortController for this source
-    abortControllerRef.current = new AbortController();
   }, []);
 
   const updateEvent = useCallback((evt: ScraperEvent<"update">) => {
@@ -139,35 +128,6 @@ function useBaseScrape() {
     return output;
   }, []);
 
-  const skipCurrentSource = useCallback(() => {
-    if (currentSource) {
-      // Get the parent source ID (remove embed suffix like "-0", "-1", etc.)
-      const parentSourceId = currentSource.split("-")[0];
-
-      // Abort the current operation FIRST - abort all pending requests immediately
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-
-      // Mark the parent source and all its embeds as skipped AFTER aborting
-      // This ensures the abort happens immediately and can interrupt ongoing operations
-      setSources((s) => {
-        Object.keys(s).forEach((key) => {
-          // Check if this is the parent source or one of its embeds
-          if (key === parentSourceId || key.startsWith(`${parentSourceId}-`)) {
-            if (s[key]) {
-              // Mark as skipped regardless of current status (even if it succeeded)
-              s[key].status = "skipped";
-              s[key].reason = "Skipped by user";
-              s[key].percentage = 100;
-            }
-          }
-        });
-        return { ...s };
-      });
-    }
-  }, [currentSource]);
-
   return {
     initEvent,
     startEvent,
@@ -178,8 +138,6 @@ function useBaseScrape() {
     sources,
     sourceOrder,
     currentSource,
-    skipCurrentSource,
-    abortControllerRef,
   };
 }
 
@@ -194,8 +152,6 @@ export function useScrape() {
     getResult,
     startEvent,
     startScrape,
-    skipCurrentSource,
-    abortControllerRef,
   } = useBaseScrape();
 
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
@@ -215,7 +171,6 @@ export function useScrape() {
     async (media: ScrapeMedia, startFromSourceId?: string) => {
       const providerInstance = getProviders();
       const allSources = providerInstance.listSources();
-
       const playerState = usePlayerStore.getState();
       const failedSources = playerState.failedSources;
       const failedEmbeds = playerState.failedEmbeds;
@@ -279,7 +234,6 @@ export function useScrape() {
         : undefined;
 
       const providerApiUrl = getLoadbalancedProviderApiUrl();
-
       if (providerApiUrl && !isExtensionActiveCached()) {
         startScrape();
         const baseUrlMaker = makeProviderUrl(providerApiUrl);
@@ -304,25 +258,10 @@ export function useScrape() {
 
       startScrape();
       const providers = getProviders();
-
-      // Create initial abort controller if it doesn't exist
-      if (!abortControllerRef.current) {
-        abortControllerRef.current = new AbortController();
-      }
-
-      // Create a wrapper that always gets the current abort controller
-      const getCurrentAbortController = () => abortControllerRef.current;
-
       const output = await providers.runAll({
         media,
         sourceOrder: filteredSourceOrder,
         embedOrder: filteredEmbedOrder,
-        abortController: {
-          get signal() {
-            const controller = getCurrentAbortController();
-            return controller ? controller.signal : undefined;
-          },
-        } as AbortController,
         events: {
           init: initEvent,
           start: startEvent,
@@ -349,7 +288,6 @@ export function useScrape() {
       preferredEmbedOrder,
       enableEmbedOrder,
       disabledEmbeds,
-      abortControllerRef,
     ],
   );
 
@@ -366,7 +304,6 @@ export function useScrape() {
     sourceOrder,
     sources,
     currentSource,
-    skipCurrentSource,
   };
 }
 

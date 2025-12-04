@@ -38,7 +38,6 @@ export function RealPlayerView() {
     episode?: string;
     season?: string;
   }>();
-  const [skipSourceFn, setSkipSourceFn] = useState<(() => void) | null>(null);
   const [errorData, setErrorData] = useState<{
     sources: Record<string, ScrapingSegment>;
     sourceOrder: ScrapingItems[];
@@ -205,11 +204,7 @@ export function RealPlayerView() {
   );
 
   return (
-    <PlayerPart
-      backUrl={backUrl}
-      onMetaChange={metaChange}
-      skipSourceFn={skipSourceFn}
-    >
+    <PlayerPart backUrl={backUrl} onMetaChange={metaChange}>
       {status === playerStatus.IDLE ? (
         <MetaPart onGetMeta={handleMetaReceived} />
       ) : null}
@@ -228,7 +223,6 @@ export function RealPlayerView() {
             key={`scraping-${resumeFromSourceId || "default"}`}
             media={scrapeMedia}
             startFromSourceId={resumeFromSourceId || undefined}
-            onSkipSourceReady={(fn) => setSkipSourceFn(() => fn)}
             onResult={(sources, sourceOrder) => {
               setErrorData({
                 sourceOrder,
@@ -238,29 +232,7 @@ export function RealPlayerView() {
               // Clear resume state after scraping
               setResumeFromSourceId(null);
             }}
-            onGetStream={(out, sources) => {
-              // Check if the source was skipped by user
-              if (out) {
-                const outSourceId = out.sourceId;
-                const parentSourceId = outSourceId.split("-")[0];
-
-                // Check both the parent and the specific embed
-                const parentData = sources[parentSourceId];
-                const embedData = sources[outSourceId];
-
-                // If the source or embed was skipped by user, don't play it
-                // Just ignore the result and let scraping continue to next source
-                if (
-                  parentData?.status === "skipped" ||
-                  embedData?.status === "skipped" ||
-                  parentData?.reason === "Skipped by user" ||
-                  embedData?.reason === "Skipped by user"
-                ) {
-                  return;
-                }
-              }
-              playAfterScrape(out);
-            }}
+            onGetStream={playAfterScrape}
           />
         )
       ) : null}
