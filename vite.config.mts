@@ -25,17 +25,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
     base: env.VITE_BASE_URL || "/",
-    assetsInclude: ['**/*.wasm'],
-    server: {
-      fs: {
-        allow: [
-          // Default: allow serving files from project root
-          path.resolve(__dirname),
-          // Allow serving from the linked providers directory
-          path.resolve(__dirname, '../providers/@p-stream/providers'),
-        ],
-      },
-    },
     plugins: [
       million.vite({ auto: true, mute: true }),
       handlebars({
@@ -134,14 +123,6 @@ export default defineConfig(({ mode }) => {
 
     build: {
       sourcemap: mode !== "production",
-      assetsInlineLimit: (filePath: string) => {
-        // Never inline WASM files
-        if (filePath.endsWith('.wasm')) {
-          return false;
-        }
-        // Use default 4KB limit for other assets
-        return undefined;
-      },
       rollupOptions: {
         output: {
           manualChunks(id: string) {
