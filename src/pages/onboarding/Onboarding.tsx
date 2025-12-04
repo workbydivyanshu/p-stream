@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -179,7 +180,9 @@ export function OnboardingPage() {
         <div className="hidden md:flex w-full flex-col md:flex-row gap-3 pb-6">
           <Card
             onClick={() => navigate("/onboarding/extension")}
-            className="md:w-1/3"
+            className={classNames(
+              conf().HIDE_PROXY_ONBOARDING ? "md:w-1/2" : "md:w-1/3",
+            )}
           >
             <CardContent
               colorClass="!text-onboarding-best"
@@ -192,26 +195,30 @@ export function OnboardingPage() {
               </Link>
             </CardContent>
           </Card>
-          <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
-            <VerticalLine className="items-end" />
-            <span className="text-xs uppercase font-bold">
-              {t("onboarding.start.options.or")}
-            </span>
-            <VerticalLine />
-          </div>
-          <Card
-            onClick={() => navigate("/onboarding/proxy")}
-            className="md:w-1/3"
-          >
-            <CardContent
-              colorClass="!text-onboarding-good"
-              title={t("onboarding.start.options.proxy.title")}
-              subtitle={t("onboarding.start.options.proxy.quality")}
-              description={t("onboarding.start.options.proxy.description")}
-            >
-              <Link>{t("onboarding.start.options.proxy.action")}</Link>
-            </CardContent>
-          </Card>
+          {conf().HIDE_PROXY_ONBOARDING ? null : (
+            <>
+              <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
+                <VerticalLine className="items-end" />
+                <span className="text-xs uppercase font-bold">
+                  {t("onboarding.start.options.or")}
+                </span>
+                <VerticalLine />
+              </div>
+              <Card
+                onClick={() => navigate("/onboarding/proxy")}
+                className="md:w-1/3"
+              >
+                <CardContent
+                  colorClass="!text-onboarding-good"
+                  title={t("onboarding.start.options.proxy.title")}
+                  subtitle={t("onboarding.start.options.proxy.quality")}
+                  description={t("onboarding.start.options.proxy.description")}
+                >
+                  <Link>{t("onboarding.start.options.proxy.action")}</Link>
+                </CardContent>
+              </Card>
+            </>
+          )}
           {noProxies ? null : (
             <>
               <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
@@ -227,7 +234,9 @@ export function OnboardingPage() {
                     ? () => completeAndRedirect() // Skip modal on Safari
                     : skipModal.show // Show modal on other browsers
                 }
-                className="md:w-1/3"
+                className={classNames(
+                  conf().HIDE_PROXY_ONBOARDING ? "md:w-1/2" : "md:w-1/3",
+                )}
               >
                 <CardContent
                   colorClass="!text-onboarding-bad"
@@ -255,17 +264,19 @@ export function OnboardingPage() {
               description={t("onboarding.start.options.extension.description")}
             />
           </Card>
-          <Card
-            onClick={() => navigate("/onboarding/proxy")}
-            className="md:w-1/3"
-          >
-            <MiniCardContent
-              colorClass="!text-onboarding-good"
-              title={t("onboarding.start.options.proxy.title")}
-              subtitle={t("onboarding.start.options.proxy.quality")}
-              description={t("onboarding.start.options.proxy.description")}
-            />
-          </Card>
+          {conf().HIDE_PROXY_ONBOARDING ? null : (
+            <Card
+              onClick={() => navigate("/onboarding/proxy")}
+              className="md:w-1/3"
+            >
+              <MiniCardContent
+                colorClass="!text-onboarding-good"
+                title={t("onboarding.start.options.proxy.title")}
+                subtitle={t("onboarding.start.options.proxy.quality")}
+                description={t("onboarding.start.options.proxy.description")}
+              />
+            </Card>
+          )}
           {noProxies ? null : (
             <Card
               onClick={
@@ -285,6 +296,11 @@ export function OnboardingPage() {
           )}
         </div>
 
+        {(conf().ALLOW_FEBBOX_KEY || conf().ALLOW_DEBRID_KEY) === true && (
+          <Heading3 className="text-white font-bold mb-3 mt-6">
+            {t("onboarding.start.options.addons.title")}
+          </Heading3>
+        )}
         <div className="mt-6">
           <FebboxSetup
             febboxKey={usePreferencesStore((s) => s.febboxKey)}

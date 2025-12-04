@@ -610,7 +610,7 @@
           "defaultDescription": "Uses P-Stream's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
           "fedapi": {
             "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API and CIA API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
+            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
           },
           "outro": "If you have more questions on how this works, feel free to ask on the <0>P-Stream Discord</0> server!"
         },
@@ -647,6 +647,9 @@
           "description": "Setup a free proxy in just 5 minutes! Improves loading reliability!",
           "quality": "Good quality",
           "title": "Custom proxy"
+        },
+        "addons": {
+          "title": "Additional sources:"
         }
       },
       "title": "Let's get you setup with P-Stream 🥳"
@@ -1248,7 +1251,7 @@
   "fedapi": {
     "onboarding": {
       "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API and CIA API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
+      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
     },
     "setup": {
       "title": "To get your UI token:",
