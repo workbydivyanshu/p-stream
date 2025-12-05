@@ -91,9 +91,9 @@ export function WatchingCarousel({
       <SectionHeading
         title={t("home.continueWatching.sectionTitle")}
         icon={Icons.CLOCK}
-        className="ml-2 md:ml-8 mt-2 -mb-5"
+        className="ml-4 md:ml-12 mt-2 -mb-5 md:pl-[48px]"
       >
-        <div className="mr-6">
+        <div className="mr-4 md:mr-[48px]">
           <EditButton
             editing={editing}
             onEdit={setEditing}

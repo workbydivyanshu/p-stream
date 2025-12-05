@@ -299,9 +299,9 @@ export function BookmarksCarousel({
                     <UserIcon icon={icon} className="w-full h-full" />
                   </span>
                 }
-                className="ml-4 md:ml-12 mt-2 -mb-5"
+                className="ml-4 md:ml-12 mt-2 -mb-5 md:pl-[48px]"
               >
-                <div className="mr-4 md:mr-8 flex items-center gap-2">
+                <div className="mr-4 md:mr-[48px] flex items-center gap-2">
                   {editing && section.group && (
                     <EditButtonWithText
                       editing={editing}
