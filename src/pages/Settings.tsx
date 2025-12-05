@@ -22,7 +22,7 @@ import { Heading1 } from "@/components/utils/Text";
 import { Transition } from "@/components/utils/Transition";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useIsIOS, useIsMobile, useIsPWA } from "@/hooks/useIsMobile";
 import { useSettingsState } from "@/hooks/useSettingsState";
 import { AccountActionsPart } from "@/pages/parts/settings/AccountActionsPart";
 import { AccountEditPart } from "@/pages/parts/settings/AccountEditPart";
@@ -60,11 +60,17 @@ function SettingsLayout(props: {
   const searchRef = useRef<HTMLInputElement>(null);
   const bannerSize = useBannerSize();
 
+  const isPWA = useIsPWA();
+  const isIOS = useIsIOS();
+  const isIOSPWA = isIOS && isPWA;
+
   // Navbar height is 80px (h-20)
   const navbarHeight = 80;
   // On desktop: inline with navbar (same top position + 14px adjustment)
   // On mobile: below navbar (navbar height + banner)
-  const topOffset = isMobile ? navbarHeight + bannerSize : bannerSize + 14;
+  const topOffset = isMobile
+    ? navbarHeight + bannerSize + (isIOSPWA ? 34 : 0)
+    : bannerSize + 14;
 
   return (
     <WideContainer ultraWide classNames="overflow-visible">

@@ -6,7 +6,7 @@ import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
 import { useSlashFocus } from "@/components/player/hooks/useSlashFocus";
 import { HeroTitle } from "@/components/text/HeroTitle";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useIsIOS, useIsMobile, useIsPWA } from "@/hooks/useIsMobile";
 import { useIsTV } from "@/hooks/useIsTv";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
@@ -55,11 +55,17 @@ export function HeroPart({
     [setIsSticky],
   );
 
+  const isPWA = useIsPWA();
+  const isIOS = useIsIOS();
+  const isIOSPWA = isIOS && isPWA;
+
   // Navbar height is 80px (h-20)
   const navbarHeight = 80;
-  // On desktop: inline with navbar (same top position)
+  // On desktop: inline with navbar (same top position + 14px adjustment)
   // On mobile: below navbar (navbar height + banner)
-  const topOffset = isMobile ? navbarHeight + bannerSize : bannerSize + 14;
+  const topOffset = isMobile
+    ? navbarHeight + bannerSize + (isIOSPWA ? 34 : 0)
+    : bannerSize + 14;
 
   const time = getTimeOfDay(new Date());
   const title = randomT(`home.titles.${time}`);
