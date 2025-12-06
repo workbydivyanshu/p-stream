@@ -9,6 +9,23 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-051</guid>
+      <title>Xprime has been disabled. More info below!</title>
+      <description>Yes this is unfortunate, Xprime has been disabled due to funding issues on their end. 
+
+Xprime asked if we could introduce ads to P-Stream, and after some consideration and ad testing last week, the P-Stream team and I have decided not to add ads to P-Stream. Ads are not only unattractive, but unsafe and against the team's morals. 
+
+movie-web (what P-Stream was forked from) was created to be easily self-hostable and ad free. And though the media landscape has changed (cors on streams and our scrapers getting blocked) we've still take this into consideration. I still believe P-Stream is better without ads, and our single banner ad reflects this; its unobtrusive and safe. 
+
+Xprime may come back in the future, but we're already working on a new source that should be just as good or better. Plus we will continue to support FED API and all the extension sources that make P-Stream (and self hosted sites) amazing. 
+
+Thanks to everyone who has supported and we'll be working hard to bring you new great things!
+      </description>
+      <pubDate>Sat, 06 Dec 2025 16:00:00 MST</pubDate>
+      <category>announcement</category>
+    </item>
+
+    <item>
       <guid>notification-050</guid>
       <title>New alerts for source failures!</title>
       <description>I just added a new alert that pops up if FED API, FED DB, or XPrime sources fail the turnstile check. Previously it would just show the ⚠️ icon and give no explanation why it failed. Now you know why! Simply go back and select that source again or reload the page!
