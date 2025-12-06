@@ -43,7 +43,7 @@ export async function scrapeWyzieCaptions(
       display: subtitle.display,
       media: subtitle.media,
       isHearingImpaired: subtitle.isHearingImpaired,
-      source: `wyzie ${subtitle.source.toString() === "opensubtitles" ? "opensubs" : subtitle.source}`,
+      source: `wyzie ${subtitle.source?.toString() === "opensubtitles" ? "opensubs" : subtitle.source}`,
       encoding: subtitle.encoding,
     }));
 
