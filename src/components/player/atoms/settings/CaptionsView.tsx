@@ -2,7 +2,6 @@ import classNames from "classnames";
 import Fuse from "fuse.js";
 import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAsyncFn } from "react-use";
 import { convert } from "subsrt-ts";
 
 import { subtitleTypeList } from "@/backend/helpers/subs";
@@ -17,6 +16,7 @@ import {
   parseSubtitles,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { useLanguageStore } from "@/stores/language";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -297,31 +297,33 @@ export function PasteCaptionOption(props: { selected?: boolean }) {
   );
 }
 
+export interface CaptionsViewProps {
+  id: string;
+  backLink?: boolean;
+  onChooseLanguage?: (language: string) => void;
+}
+
 export function CaptionsView({
   id,
   backLink,
-}: {
-  id: string;
-  backLink?: true;
-}) {
+  onChooseLanguage,
+}: CaptionsViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
-  const { disable, selectCaptionById } = useCaptions();
+  const { disable } = useCaptions();
   const [dragging, setDragging] = useState(false);
   const setCaption = usePlayerStore((s) => s.setCaption);
-  const [currentlyDownloading, setCurrentlyDownloading] = useState<
-    string | null
-  >(null);
   const videoTime = usePlayerStore((s) => s.progress.time);
   const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
-  const language = usePlayerStore((s) => s.caption.selected?.language);
+  const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
   const isLoadingExternalSubtitles = usePlayerStore(
     (s) => s.isLoadingExternalSubtitles,
   );
   const delay = useSubtitleStore((s) => s.delay);
+  const appLanguage = useLanguageStore((s) => s.language);
 
   // Get combined caption list
   const captions = useMemo(
@@ -340,28 +342,56 @@ export function CaptionsView({
     [captions],
   );
 
-  // Filter lists based on search query
-  const sourceList = useSubtitleList(sourceCaptions, "");
-  const externalList = useSubtitleList(externalCaptions, "");
+  // Group captions by language
+  const groupedCaptions = useMemo(() => {
+    const allCaptions = [...sourceCaptions, ...externalCaptions];
+    const groups: Record<string, typeof allCaptions> = {};
+
+    allCaptions.forEach((caption) => {
+      const lang = caption.language;
+      if (!groups[lang]) {
+        groups[lang] = [];
+      }
+      groups[lang].push(caption);
+    });
+
+    // Sort languages
+    const sortedGroups: Array<{
+      language: string;
+      captions: typeof allCaptions;
+      languageName: string;
+    }> = [];
+    Object.entries(groups).forEach(([lang, captionsForLang]) => {
+      const languageName =
+        getPrettyLanguageNameFromLocale(lang) ||
+        t("player.menus.subtitles.unknownLanguage");
+      sortedGroups.push({
+        language: lang,
+        captions: captionsForLang,
+        languageName,
+      });
+    });
+
+    // Sort with app language first, then alphabetically
+    return sortedGroups.sort((a, b) => {
+      // App language always comes first
+      if (a.language === appLanguage) return -1;
+      if (b.language === appLanguage) return 1;
+
+      // Then sort alphabetically
+      return a.languageName.localeCompare(b.languageName);
+    });
+  }, [sourceCaptions, externalCaptions, t, appLanguage]);
 
   // Get current subtitle text preview
   const currentSubtitleText = useMemo(() => {
     if (!srtData || !selectedCaptionId) return null;
-    const parsedCaptions = parseSubtitles(srtData, language);
+    const parsedCaptions = parseSubtitles(srtData, selectedLanguage);
     const visibleCaption = parsedCaptions.find(({ start, end }) =>
       captionIsVisible(start, end, delay, videoTime),
     );
     return visibleCaption?.content;
-  }, [srtData, language, delay, videoTime, selectedCaptionId]);
-
-  // Download handler
-  const [downloadReq, startDownload] = useAsyncFn(
-    async (captionId: string) => {
-      setCurrentlyDownloading(captionId);
-      return selectCaptionById(captionId);
-    },
-    [selectCaptionById, setCurrentlyDownloading],
-  );
+  }, [srtData, selectedLanguage, delay, videoTime, selectedCaptionId]);
 
   function onDrop(event: DragEvent<HTMLDivElement>) {
     const files = event.dataTransfer.files;
@@ -388,59 +418,6 @@ export function CaptionsView({
 
     reader.readAsText(firstFile);
   }
-
-  // Render subtitle option
-  const renderSubtitleOption = (
-    v: CaptionListItem & { languageName: string },
-  ) => {
-    const handleDoubleClick = async () => {
-      const copyData = {
-        id: v.id,
-        url: v.url,
-        language: v.language,
-        type: v.type,
-        hasCorsRestrictions: v.needsProxy,
-        opensubtitles: v.opensubtitles,
-        display: v.display,
-        media: v.media,
-        isHearingImpaired: v.isHearingImpaired,
-        source: v.source,
-        encoding: v.encoding,
-        delay,
-      };
-
-      try {
-        await navigator.clipboard.writeText(JSON.stringify(copyData));
-        // Could add a toast notification here if needed
-      } catch (err) {
-        console.error("Failed to copy subtitle data:", err);
-      }
-    };
-
-    return (
-      <CaptionOption
-        key={v.id}
-        countryCode={v.language}
-        selected={v.id === selectedCaptionId}
-        loading={v.id === currentlyDownloading && downloadReq.loading}
-        error={
-          v.id === currentlyDownloading && downloadReq.error
-            ? downloadReq.error.toString()
-            : undefined
-        }
-        onClick={() => startDownload(v.id)}
-        onDoubleClick={handleDoubleClick}
-        flag
-        subtitleUrl={v.url}
-        subtitleType={v.type}
-        subtitleSource={v.source}
-        subtitleEncoding={v.encoding}
-        isHearingImpaired={v.isHearingImpaired}
-      >
-        {v.languageName}
-      </CaptionOption>
-    );
-  };
 
   return (
     <>
@@ -570,36 +547,30 @@ export function CaptionsView({
             </div>
           )}
 
-          {/* Source Subtitles Section */}
-          {sourceCaptions.length > 0 && (
-            <>
-              <div className="text-sm font-semibold text-video-context-type-secondary pt-2 mb-2">
-                {t("player.menus.subtitles.SourceChoice")}
-              </div>
-              {sourceList.length > 0 ? (
-                sourceList.map(renderSubtitleOption)
-              ) : (
-                <div className="text-center text-video-context-type-secondary py-2">
-                  {t("player.menus.subtitles.notFound")}
-                </div>
-              )}
-            </>
-          )}
-
-          {/* External Subtitles Section */}
-          {externalCaptions.length > 0 && (
-            <>
-              <div className="text-sm font-semibold text-video-context-type-secondary pt-2 mb-2">
-                {t("player.menus.subtitles.OpenSubtitlesChoice")}
-              </div>
-              {externalList.length > 0 ? (
-                externalList.map(renderSubtitleOption)
-              ) : (
-                <div className="text-center text-video-context-type-secondary py-2">
-                  {t("player.menus.subtitles.notFound")}
-                </div>
-              )}
-            </>
+          {/* Language selection */}
+          {groupedCaptions.length > 0 ? (
+            groupedCaptions.map(
+              ({ language, languageName, captions: captionsForLang }) => (
+                <Menu.ChevronLink
+                  key={language}
+                  selected={selectedLanguage === language}
+                  rightText={captionsForLang.length.toString()}
+                  onClick={() => {
+                    onChooseLanguage?.(language);
+                    router.navigate("/captions/languages");
+                  }}
+                >
+                  <span className="flex items-center">
+                    <FlagIcon langCode={language} />
+                    <span className="ml-3">{languageName}</span>
+                  </span>
+                </Menu.ChevronLink>
+              ),
+            )
+          ) : (
+            <div className="text-center text-video-context-type-secondary py-2">
+              {t("player.menus.subtitles.notFound")}
+            </div>
           )}
 
           {/* Loading indicator for external subtitles while source exists */}

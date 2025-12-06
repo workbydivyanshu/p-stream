@@ -18,6 +18,7 @@ import { AudioView } from "./settings/AudioView";
 import { CaptionSettingsView } from "./settings/CaptionSettingsView";
 import { CaptionsView } from "./settings/CaptionsView";
 import { DownloadRoutes } from "./settings/Downloads";
+import { LanguageSubtitlesView } from "./settings/LanguageSubtitlesView";
 import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
 import { SettingsMenu } from "./settings/SettingsMenu";
@@ -26,15 +27,18 @@ import { WatchPartyView } from "./settings/WatchPartyView";
 
 function SettingsOverlay({ id }: { id: string }) {
   const [chosenSourceId, setChosenSourceId] = useState<string | null>(null);
+  const [chosenLanguage, setChosenLanguage] = useState<string | null>(null);
   const router = useOverlayRouter(id);
 
-  // reset source id when going to home or closing overlay
+  // reset source id and language when going to home or closing overlay
   useEffect(() => {
     if (!router.isRouterActive) {
       setChosenSourceId(null);
+      setChosenLanguage(null);
     }
     if (router.route === "/") {
       setChosenSourceId(null);
+      setChosenLanguage(null);
     }
   }, [router.isRouterActive, router.route]);
 
@@ -56,13 +60,17 @@ function SettingsOverlay({ id }: { id: string }) {
         </OverlayPage>
         <OverlayPage id={id} path="/captions" width={343} height={452}>
           <Menu.CardWithScrollable>
-            <CaptionsView id={id} backLink />
+            <CaptionsView
+              id={id}
+              backLink
+              onChooseLanguage={setChosenLanguage}
+            />
           </Menu.CardWithScrollable>
         </OverlayPage>
         {/* This is used by the captions shortcut in bottomControls of player */}
         <OverlayPage id={id} path="/captionsOverlay" width={343} height={452}>
           <Menu.CardWithScrollable>
-            <CaptionsView id={id} />
+            <CaptionsView id={id} onChooseLanguage={setChosenLanguage} />
           </Menu.CardWithScrollable>
         </OverlayPage>
         <OverlayPage id={id} path="/captions/settings" width={343} height={452}>
@@ -104,6 +112,18 @@ function SettingsOverlay({ id }: { id: string }) {
         >
           <Menu.CardWithScrollable>
             <TranscriptView id={id} />
+          </Menu.CardWithScrollable>
+        </OverlayPage>
+        <OverlayPage
+          id={id}
+          path="/captions/languages"
+          width={343}
+          height={452}
+        >
+          <Menu.CardWithScrollable>
+            {chosenLanguage && (
+              <LanguageSubtitlesView id={id} language={chosenLanguage} />
+            )}
           </Menu.CardWithScrollable>
         </OverlayPage>
         <DownloadRoutes id={id} />
