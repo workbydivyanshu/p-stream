@@ -11,7 +11,6 @@ import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
-import { Input } from "@/components/player/internals/ContextMenu/Input";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import {
   captionIsVisible,
@@ -311,7 +310,6 @@ export function CaptionsView({
   const { disable, selectCaptionById } = useCaptions();
   const [dragging, setDragging] = useState(false);
   const setCaption = usePlayerStore((s) => s.setCaption);
-  const [searchQuery, setSearchQuery] = useState("");
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
     string | null
   >(null);
@@ -343,8 +341,8 @@ export function CaptionsView({
   );
 
   // Filter lists based on search query
-  const sourceList = useSubtitleList(sourceCaptions, searchQuery);
-  const externalList = useSubtitleList(externalCaptions, searchQuery);
+  const sourceList = useSubtitleList(sourceCaptions, "");
+  const externalList = useSubtitleList(externalCaptions, "");
 
   // Get current subtitle text preview
   const currentSubtitleText = useMemo(() => {
@@ -551,11 +549,6 @@ export function CaptionsView({
           )}
 
           <div className="h-1" />
-
-          {/* Search input */}
-          {(sourceCaptions.length || externalCaptions.length) > 0 && (
-            <Input value={searchQuery} onInput={setSearchQuery} />
-          )}
 
           {/* No subtitles available message */}
           {!isLoadingExternalSubtitles &&
