@@ -124,6 +124,7 @@ export function useEmbedScraping(
     run,
     loading: request.loading,
     errored: !!request.error,
+    notFound: request.error instanceof NotFoundError,
   };
 }
 

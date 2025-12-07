@@ -169,23 +169,26 @@ export function SelectableLink(props: {
   disabled?: boolean;
   error?: ReactNode;
   box?: boolean;
+  rightSide?: ReactNode;
 }) {
-  let rightContent;
-  if (props.selected) {
-    rightContent = (
-      <Icon
-        icon={Icons.CIRCLE_CHECK}
-        className="text-xl text-video-context-type-accent"
-      />
-    );
+  let rightContent = props.rightSide; // Use custom rightSide if provided
+  if (!rightContent) {
+    if (props.selected) {
+      rightContent = (
+        <Icon
+          icon={Icons.CIRCLE_CHECK}
+          className="text-xl text-video-context-type-accent"
+        />
+      );
+    }
+    if (props.error)
+      rightContent = (
+        <span className="flex items-center text-video-context-error">
+          <Icon className="ml-2" icon={Icons.WARNING} />
+        </span>
+      );
+    if (props.loading) rightContent = <Spinner className="text-lg" />; // should override selected and error
   }
-  if (props.error)
-    rightContent = (
-      <span className="flex items-center text-video-context-error">
-        <Icon className="ml-2" icon={Icons.WARNING} />
-      </span>
-    );
-  if (props.loading) rightContent = <Spinner className="text-lg" />; // should override selected and error
 
   return (
     <Link

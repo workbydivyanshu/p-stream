@@ -39,19 +39,33 @@ export function EmbedOption(props: {
     return sourceMeta?.name ?? unknownEmbedName;
   }, [props.embedId, unknownEmbedName]);
 
-  const { run, errored, loading } = useEmbedScraping(
+  const { run, errored, loading, notFound } = useEmbedScraping(
     props.routerId,
     props.sourceId,
     props.url,
     props.embedId,
   );
 
+  let rightSide;
+  if (loading) {
+    rightSide = undefined; // Let SelectableLink handle loading
+  } else if (notFound) {
+    rightSide = (
+      <div className="flex items-center text-video-scraping-noresult">
+        <div className="w-4 h-4 rounded-full border-2 border-current bg-current flex items-center justify-center">
+          <div className="w-2 h-0.5 bg-background-main rounded-full" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <SelectableLink
       loading={loading}
-      error={errored}
+      error={errored && !notFound}
       onClick={run}
       selected={props.embedId === currentEmbedId}
+      rightSide={rightSide}
     >
       <span className="flex flex-col">
         <span>{embedName}</span>
