@@ -91,9 +91,9 @@ export function WatchingCarousel({
       <SectionHeading
         title={t("home.continueWatching.sectionTitle")}
         icon={Icons.CLOCK}
-        className="ml-4 md:ml-12 mt-2 -mb-5 md:pl-[48px]"
+        className="ml-4 lg:ml-12 mt-2 -mb-5 lg:pl-[48px]"
       >
-        <div className="mr-4 md:mr-[48px]">
+        <div className="mr-4 lg:mr-[88px]">
           <EditButton
             editing={editing}
             onEdit={setEditing}
@@ -110,7 +110,7 @@ export function WatchingCarousel({
           }}
           onWheel={handleWheel}
         >
-          <div className="md:w-12" />
+          <div className="lg:w-12" />
 
           {items.length > 0
             ? items.map((media) => (
@@ -136,7 +136,7 @@ export function WatchingCarousel({
                 />
               ))}
 
-          <div className="md:w-12" />
+          <div className="lg:w-12" />
         </div>
 
         {!isMobile && (

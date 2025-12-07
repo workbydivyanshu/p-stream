@@ -299,9 +299,9 @@ export function BookmarksCarousel({
                     <UserIcon icon={icon} className="w-full h-full" />
                   </span>
                 }
-                className="ml-4 md:ml-12 mt-2 -mb-5 md:pl-[48px]"
+                className="ml-4 lg:ml-12 mt-2 -mb-5 lg:pl-[48px]"
               >
-                <div className="mr-4 md:mr-[48px] flex items-center gap-2">
+                <div className="mr-4 lg:mr-[88px] flex items-center gap-2">
                   {editing && section.group && (
                     <EditButtonWithText
                       editing={editing}
@@ -329,7 +329,7 @@ export function BookmarksCarousel({
                   }}
                   onWheel={handleWheel}
                 >
-                  <div className="md:w-12" />
+                  <div className="lg:w-12" />
 
                   {section.items
                     .slice(0, MAX_ITEMS_PER_SECTION)
@@ -357,7 +357,7 @@ export function BookmarksCarousel({
                     <MoreBookmarksCard />
                   )}
 
-                  <div className="md:w-12" />
+                  <div className="lg:w-12" />
                 </div>
 
                 {!isMobile && (
@@ -377,7 +377,7 @@ export function BookmarksCarousel({
               icon={Icons.BOOKMARK}
               className="ml-4 md:ml-12 mt-2 -mb-5"
             >
-              <div className="mr-4 md:mr-8 flex items-center gap-2">
+              <div className="mr-4 lg:mr-[88px] flex items-center gap-2">
                 <EditButton
                   editing={editing}
                   onEdit={setEditing}
@@ -394,7 +394,7 @@ export function BookmarksCarousel({
                 }}
                 onWheel={handleWheel}
               >
-                <div className="md:w-12" />
+                <div className="lg:w-12" />
 
                 {section.items.length > 0
                   ? section.items
@@ -428,7 +428,7 @@ export function BookmarksCarousel({
                   <MoreBookmarksCard />
                 )}
 
-                <div className="md:w-12" />
+                <div className="lg:w-12" />
               </div>
 
               {!isMobile && (
