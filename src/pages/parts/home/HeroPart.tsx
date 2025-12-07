@@ -94,6 +94,7 @@ export function HeroPart({
               paddingTop: `${topOffset}px`,
             }}
             onFixedToggle={stickStateChanged}
+            scrollElement="window"
           >
             <SearchBarInput
               ref={inputRef}

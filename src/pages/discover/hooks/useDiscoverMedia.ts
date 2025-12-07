@@ -184,6 +184,11 @@ export function useDiscoverMedia({
         // Race between the Trakt request and timeout
         const response = await Promise.race([traktFunction(), timeoutPromise]);
 
+        // Check if response is null
+        if (!response) {
+          throw new Error("Trakt API returned null response");
+        }
+
         // Paginate the results
         const pageSize = isCarouselView ? 20 : 100; // Limit to 20 items for carousels, get more for detailed views
         const { tmdb_ids: tmdbIds, hasMore: hasMoreResults } = paginateResults(
@@ -317,6 +322,15 @@ export function useDiscoverMedia({
   }, [mediaType, formattedLanguage, isCarouselView]);
 
   const fetchMedia = useCallback(async () => {
+    // Skip fetching recommendations if no ID is provided
+    if (contentType === "recommendations" && !id) {
+      setIsLoading(false);
+      setMedia([]);
+      setHasMore(false);
+      setSectionTitle("");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 

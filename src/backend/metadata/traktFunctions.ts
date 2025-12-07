@@ -7,15 +7,26 @@ export function paginateResults(
   pageSize: number = 20,
   contentType: "movie" | "tv" | "both" = "both",
 ): PaginatedTraktResponse {
+  if (!results) {
+    return {
+      tmdb_ids: [],
+      hasMore: false,
+      totalCount: 0,
+    };
+  }
+
   let tmdbIds: number[];
 
   if (contentType === "movie") {
-    tmdbIds = results.movie_tmdb_ids;
+    tmdbIds = results.movie_tmdb_ids || [];
   } else if (contentType === "tv") {
-    tmdbIds = results.tv_tmdb_ids;
+    tmdbIds = results.tv_tmdb_ids || [];
   } else {
     // For 'both', combine movies and TV shows
-    tmdbIds = [...results.movie_tmdb_ids, ...results.tv_tmdb_ids];
+    tmdbIds = [
+      ...(results.movie_tmdb_ids || []),
+      ...(results.tv_tmdb_ids || []),
+    ];
   }
 
   const startIndex = (page - 1) * pageSize;
