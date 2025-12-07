@@ -44,7 +44,7 @@ importers:
         version: 1.8.0
       '@p-stream/providers':
         specifier: github:p-stream/providers#production
-        version: https://codeload.github.com/p-stream/providers/tar.gz/976825357fe2540d9ba84ddb93e91b5473d6a32b
+        version: https://codeload.github.com/p-stream/providers/tar.gz/562ee54e1c119c0027b52ab75ebf9c0c302a4170
       '@plasmohq/messaging':
         specifier: ^0.6.2
         version: 0.6.2(react@18.3.1)
@@ -1207,8 +1207,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/976825357fe2540d9ba84ddb93e91b5473d6a32b':
-    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/976825357fe2540d9ba84ddb93e91b5473d6a32b}
+  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/562ee54e1c119c0027b52ab75ebf9c0c302a4170':
+    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/562ee54e1c119c0027b52ab75ebf9c0c302a4170}
     version: 3.2.0
 
   '@pkgjs/parseargs@0.11.0':
@@ -5523,7 +5523,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/976825357fe2540d9ba84ddb93e91b5473d6a32b':
+  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/562ee54e1c119c0027b52ab75ebf9c0c302a4170':
     dependencies:
       abort-controller: 3.0.0
       cheerio: 1.0.0-rc.12
