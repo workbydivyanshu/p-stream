@@ -229,7 +229,8 @@ export function useScrape() {
       const filteredEmbedOrder = enableEmbedOrder
         ? (preferredEmbedOrder || []).filter(
             (id) =>
-              !(disabledEmbeds || []).includes(id) && !allFailedEmbedIds.includes(id),
+              !(disabledEmbeds || []).includes(id) &&
+              !allFailedEmbedIds.includes(id),
           )
         : undefined;
 
