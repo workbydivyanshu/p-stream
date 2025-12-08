@@ -576,7 +576,7 @@ export function SettingsPage() {
   const availableSources = useMemo(() => {
     const sources = getAllProviders().listSources();
     const sourceIDs = sources.map((s) => s.id);
-    const stateSources = state.sourceOrder.state;
+    const stateSources = state.sourceOrder.state || [];
 
     // Filter out sources that are not in `stateSources` and are in `sources`
     const updatedSources = stateSources.filter((ss) => sourceIDs.includes(ss));

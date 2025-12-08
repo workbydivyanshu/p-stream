@@ -179,13 +179,13 @@ export function useScrape() {
       let baseSourceOrder = allSources
         .filter(
           (source) =>
-            !disabledSources.includes(source.id) &&
+            !(disabledSources || []).includes(source.id) &&
             !failedSources.includes(source.id),
         )
         .map((source) => source.id);
 
       // Apply custom source ordering if enabled
-      if (enableSourceOrder && preferredSourceOrder.length > 0) {
+      if (enableSourceOrder && (preferredSourceOrder || []).length > 0) {
         const orderedSources: string[] = [];
         const remainingSources = [...baseSourceOrder];
 
@@ -227,9 +227,9 @@ export function useScrape() {
 
       // Filter out disabled and failed embeds from the embed order
       const filteredEmbedOrder = enableEmbedOrder
-        ? preferredEmbedOrder.filter(
+        ? (preferredEmbedOrder || []).filter(
             (id) =>
-              !disabledEmbeds.includes(id) && !allFailedEmbedIds.includes(id),
+              !(disabledEmbeds || []).includes(id) && !allFailedEmbedIds.includes(id),
           )
         : undefined;
 
