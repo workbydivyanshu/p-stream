@@ -392,6 +392,18 @@
           "It's the Great Pumpkin, Charlie Brown!"
         ]
       }
+    },
+    "support": {
+      "title": "P-Stream needs your help!",
+      "description": "P-Stream is run at a loss, and we need help to keep it ad free! If you enjoy using P-Stream, please consider donating to help us cover our costs.",
+      "moreInfo": "More info",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using P-Stream, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "discord": "Discord",
+      "thankYou": "Thank you for your support!",
+      "donate": "Donate",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "complete": "complete"
     }
   },
   "media": {

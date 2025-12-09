@@ -25,6 +25,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 
 import { Button } from "./About";
 import { AdsPart } from "./parts/home/AdsPart";
+import { SupportBar } from "./parts/home/SupportBar";
 
 function useSearch(search: string) {
   const [searching, setSearching] = useState<boolean>(false);
@@ -170,6 +171,8 @@ export function HomePage() {
             showTitle
           />
         )}
+
+        {conf().SHOW_SUPPORT_BAR ? <SupportBar /> : null}
 
         {conf().SHOW_AD ? <AdsPart /> : null}
       </div>
