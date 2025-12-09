@@ -73,20 +73,20 @@ export function SupportBar() {
             />
           </button>
           <div
-            className={`overflow-hidden transition-all duration-300 ${
+            className={`transition-all duration-300 ${
               isDescriptionDismissed
                 ? "max-h-0 opacity-0 pb-0"
-                : "max-h-32 opacity-100 pb-4"
+                : "max-h-36 opacity-100 pb-0"
             }`}
           >
             <Heading3 className="transition-opacity duration-300">
               {t("home.support.title")}
             </Heading3>
-            <p className="text-type-secondary max-w-md transition-opacity duration-300">
+            <p className="text-type-secondary max-w-md pb-4 transition-opacity duration-300">
               {t("home.support.description")}
             </p>
           </div>
-          <div className="flex flex-grow items-center text-sm text-type-dimmed w-full max-w-md py-4">
+          <div className="flex flex-grow items-center text-sm text-type-dimmed w-full max-w-md pb-4">
             <span className="text-left">
               {t("home.support.label", {
                 current: current.toLocaleString(),
