@@ -9,6 +9,20 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-052</guid>
+      <title>Thanks to everyone who has supported!</title>
+      <description>We've reached our goal of $300! Thanks to everyone who has supported and we'll be working hard to bring you new great things!
+
+We're working on fixing those source issues and hope to have everything back up and running soon!
+
+I'll be reaching out to everyone who has donated to get custom email addresses for the @pstream.mov domain! You can still donate at the link below!
+      </description>
+      <link>https://rentry.co/nnqtas3e</link>
+      <pubDate>Tue, 09 Dec 2025 17:30:00 MST</pubDate>
+      <category>announcement</category>
+    </item>
+
+    <item>
       <guid>notification-051</guid>
       <title>Xprime has been disabled. More info below!</title>
       <description>Yes this is unfortunate, Xprime has been disabled due to funding issues on their end. 
