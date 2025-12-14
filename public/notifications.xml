@@ -9,6 +9,29 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-053</guid>
+      <title>New Userscript alternative to the extension!</title>
+      <description>If you prefer to use a userscript instead of the extension, you now have the option! 
+      
+It should work almost exactly the same as the extension, but without the need to install an extension. Unfortunatly, our Firefox extension store page keeps getting taken down, so this is the alternative until we can get it back up or if you install the .xpi manually.
+
+Some things to note:
+
+- The extension is still the most reliable method!
+- This does not currently work in Safari or Orion due to Webkit’s limitations with webRequest APIs. :(
+
+Thanks to Duplicake for the incredible help building this!
+
+Use the link below to install the userscript into Violentmonkey or Tampermonkey!
+
+P.S. We're still working on getting some new sources online, so expect more updates soon!
+      </description>
+      <link>https://raw.githubusercontent.com/p-stream/Userscript/main/p-stream.user.js</link>
+      <pubDate>Sun, 14 Dec 2025 15:00:00 MST</pubDate>
+      <category>feature</category>
+    </item>
+
+    <item>
       <guid>notification-052</guid>
       <title>Thanks to everyone who has supported!</title>
       <description>We've reached our goal of $300! Thanks to everyone who has supported and we'll be working hard to bring you new great things!

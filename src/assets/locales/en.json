@@ -579,6 +579,8 @@
       "extensionHelp": "If you've installed the extension but it's not detected, <bold>open the extension through your browsers extension menu</bold> and follow the steps on screen.",
       "linkChrome": "Install Chrome extension",
       "linkFirefox": "Install Firefox extension",
+      "linkUserscript": "Alternative Userscript",
+      "userscriptNote": "(The extension is more reliable than the userscript!)",
       "notDetecting": "Installed on Chrome, but the site isn't detecting it? Try reloading the page!",
       "notDetectingAction": "Reload page",
       "status": {
