@@ -41,7 +41,10 @@ import { RegisterPage } from "@/pages/Register";
 import { SupportPage } from "@/pages/Support";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
-import { useClearModalsOnNavigation } from "@/stores/interface/overlayStack";
+import {
+  useClearMediaFailuresOnNavigation,
+  useClearModalsOnNavigation,
+} from "@/stores/interface/overlayStack";
 import { LanguageProvider } from "@/stores/language";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
@@ -107,6 +110,7 @@ function App() {
   useOnlineListener();
   useGlobalKeyboardEvents();
   useClearModalsOnNavigation();
+  useClearMediaFailuresOnNavigation();
   const maintenance = false; // Shows maintance page
   const [showDowntime, setShowDowntime] = useState(maintenance);
 

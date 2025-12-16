@@ -4,6 +4,7 @@ import { immer } from "zustand/middleware/immer";
 import { createCastingSlice } from "@/stores/player/slices/casting";
 import { createDisplaySlice } from "@/stores/player/slices/display";
 import { createInterfaceSlice } from "@/stores/player/slices/interface";
+import { createMediaFailuresSlice } from "@/stores/player/slices/mediaFailures";
 import { createPlayingSlice } from "@/stores/player/slices/playing";
 import { createProgressSlice } from "@/stores/player/slices/progress";
 import { createSourceSlice } from "@/stores/player/slices/source";
@@ -19,5 +20,6 @@ export const usePlayerStore = create(
     ...createDisplaySlice(...a),
     ...createCastingSlice(...a),
     ...createThumbnailSlice(...a),
+    ...createMediaFailuresSlice(...a),
   })),
 );

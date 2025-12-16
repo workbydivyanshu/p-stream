@@ -175,12 +175,28 @@ export function useScrape() {
       const failedSources = playerState.failedSources;
       const failedEmbeds = playerState.failedEmbeds;
 
+      // Get media-specific failures
+      const mediaFailureKey = {
+        type: media.type,
+        tmdbId: media.tmdbId,
+        ...(media.type === "show" && media.episode && media.season
+          ? {
+              seasonNumber: media.season.number,
+              episodeNumber: media.episode.number,
+            }
+          : {}),
+      };
+      const mediaFailures = playerState.getMediaFailures(mediaFailureKey);
+      const mediaFailedSources = mediaFailures.failedSources;
+      const mediaFailedEmbeds = mediaFailures.failedEmbeds;
+
       // Start with all available sources (filtered by disabled and failed ones)
       let baseSourceOrder = allSources
         .filter(
           (source) =>
             !(disabledSources || []).includes(source.id) &&
-            !failedSources.includes(source.id),
+            !failedSources.includes(source.id) &&
+            !mediaFailedSources.includes(source.id),
         )
         .map((source) => source.id);
 
@@ -222,15 +238,17 @@ export function useScrape() {
         }
       }
 
-      // Collect all failed embed IDs across all sources
+      // Collect all failed embed IDs across all sources (both global and media-specific)
       const allFailedEmbedIds = Object.values(failedEmbeds).flat();
+      const allMediaFailedEmbedIds = Object.values(mediaFailedEmbeds).flat();
 
       // Filter out disabled and failed embeds from the embed order
       const filteredEmbedOrder = enableEmbedOrder
         ? (preferredEmbedOrder || []).filter(
             (id) =>
               !(disabledEmbeds || []).includes(id) &&
-              !allFailedEmbedIds.includes(id),
+              !allFailedEmbedIds.includes(id) &&
+              !allMediaFailedEmbedIds.includes(id),
           )
         : undefined;
 
