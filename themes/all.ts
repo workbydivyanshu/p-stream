@@ -17,7 +17,7 @@ import wolverine from "./list/wolverine";
 import popsicle from "./list/popsicle";
 import hulk from "./list/hulk";
 import autumn from "./list/autumn";
-import skyRealm from "./list/skyrealm";
+import cobalt from "./list/cobalt";
 import frost from "./list/frost";
 import christmas from "./list/christmas";
 
@@ -43,5 +43,5 @@ export const allThemes = [
   wolverine,
   popsicle,
   christmas,
-  skyRealm,
+  cobalt,
 ];

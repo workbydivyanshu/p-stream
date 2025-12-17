@@ -96,6 +96,11 @@ const availableThemes = [
     key: "settings.appearance.themes.spark",
   },
   {
+    id: "cobalt",
+    selector: "theme-cobalt",
+    key: "settings.appearance.themes.cobalt",
+  },
+  {
     id: "grape",
     selector: "theme-grape",
     key: "settings.appearance.themes.grape",
@@ -124,11 +129,6 @@ const availableThemes = [
     id: "christmas",
     selector: "theme-christmas",
     key: "settings.appearance.themes.christmas",
-  },
-  {
-    id: "skyRealm",
-    selector: "theme-skyrealm",
-    key: "settings.appearance.themes.skyrealm",
   },
 ];
 
