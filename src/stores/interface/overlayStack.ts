@@ -3,8 +3,6 @@ import { useLocation } from "react-router-dom";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { usePlayerStore } from "@/stores/player/store";
-
 type OverlayType = "volume" | "subtitle" | "speed" | null;
 
 interface ModalData {
@@ -76,16 +74,4 @@ export function useClearModalsOnNavigation() {
   useEffect(() => {
     clearAllModals();
   }, [location.pathname, clearAllModals]);
-}
-
-// Hook to clear media failures on navigation
-export function useClearMediaFailuresOnNavigation() {
-  const location = useLocation();
-  const clearAllMediaFailures = usePlayerStore(
-    (state) => state.clearAllMediaFailures,
-  );
-
-  useEffect(() => {
-    clearAllMediaFailures();
-  }, [location.pathname, clearAllMediaFailures]);
 }

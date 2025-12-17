@@ -24,10 +24,9 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
   const playbackError = usePlayerStore((s) => s.interface.error);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const currentEmbedId = usePlayerStore((s) => s.embedId);
-  const meta = usePlayerStore((s) => s.meta);
-  const addMediaFailedSource = usePlayerStore((s) => s.addMediaFailedSource);
-  const addMediaFailedEmbed = usePlayerStore((s) => s.addMediaFailedEmbed);
-  const getMediaFailures = usePlayerStore((s) => s.getMediaFailures);
+  const addFailedSource = usePlayerStore((s) => s.addFailedSource);
+  const addFailedEmbed = usePlayerStore((s) => s.addFailedEmbed);
+  const failedEmbeds = usePlayerStore((s) => s.failedEmbeds);
   const modal = useModal("error");
   const settingsRouter = useOverlayRouter("settings");
   const hasOpenedSettings = useRef(false);
@@ -41,7 +40,7 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
 
   // Mark the failed source/embed and handle UI when a playback error occurs
   useEffect(() => {
-    if (playbackError && currentSourceId && meta) {
+    if (playbackError && currentSourceId) {
       // Only mark source/embed as failed for fatal errors
       const isFatalError =
         playbackError.type === "hls"
@@ -49,37 +48,21 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
           : playbackError.type === "htmlvideo";
 
       if (isFatalError) {
-        // Create media failure key
-        const mediaFailureKey = {
-          type: meta.type,
-          tmdbId: meta.tmdbId,
-          ...(meta.type === "show" && meta.episode && meta.season
-            ? {
-                seasonNumber: meta.season.number,
-                episodeNumber: meta.episode.number,
-              }
-            : {}),
-        };
-
-        // Get current media failures
-        const mediaFailures = getMediaFailures(mediaFailureKey);
-
         // If there's an active embed, disable that embed instead of the source
         if (currentEmbedId) {
-          addMediaFailedEmbed(mediaFailureKey, currentSourceId, currentEmbedId);
+          addFailedEmbed(currentSourceId, currentEmbedId);
 
           // Check if all embeds for this source have now failed
           // If so, disable the entire source
-          const failedEmbedsForSource =
-            mediaFailures.failedEmbeds[currentSourceId] || [];
+          const failedEmbedsForSource = failedEmbeds[currentSourceId] || [];
           // For now, we'll assume if we have 2+ failed embeds for a source, disable it
           // This is a simple heuristic - we could make it more sophisticated
           if (failedEmbedsForSource.length >= 2) {
-            addMediaFailedSource(mediaFailureKey, currentSourceId);
+            addFailedSource(currentSourceId);
           }
         } else {
           // No embed active, disable the source
-          addMediaFailedSource(mediaFailureKey, currentSourceId);
+          addFailedSource(currentSourceId);
         }
       }
 
@@ -95,10 +78,9 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
     playbackError,
     currentSourceId,
     currentEmbedId,
-    meta,
-    getMediaFailures,
-    addMediaFailedSource,
-    addMediaFailedEmbed,
+    failedEmbeds,
+    addFailedSource,
+    addFailedEmbed,
     settingsRouter,
     setLastSuccessfulSource,
     enableAutoResumeOnPlaybackError,
