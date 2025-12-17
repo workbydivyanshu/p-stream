@@ -31,6 +31,8 @@ import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { needsOnboarding } from "@/utils/onboarding";
 import { parseTimestamp } from "@/utils/timestamp";
 
+import { BlurEllipsis } from "./layouts/SubPageLayout";
+
 export function RealPlayerView() {
   const navigate = useNavigate();
   const params = useParams<{
@@ -205,6 +207,7 @@ export function RealPlayerView() {
 
   return (
     <PlayerPart backUrl={backUrl} onMetaChange={metaChange}>
+      {status !== playerStatus.PLAYING ? <BlurEllipsis /> : null}
       {status === playerStatus.IDLE ? (
         <MetaPart onGetMeta={handleMetaReceived} />
       ) : null}
