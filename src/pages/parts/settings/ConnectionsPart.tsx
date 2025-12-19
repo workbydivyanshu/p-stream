@@ -24,6 +24,7 @@ import { Heading1, Heading2, Paragraph } from "@/components/utils/Text";
 import {
   SetupPart,
   Status,
+  fetchFebboxQuota,
   testFebboxKey,
   testTorboxToken,
   testdebridToken,
@@ -237,9 +238,10 @@ function BackendEdit({ backendUrl, setBackendUrl }: BackendEditProps) {
 async function getFebboxKeyStatus(febboxKey: string | null) {
   if (febboxKey) {
     const status: Status = await testFebboxKey(febboxKey);
-    return status;
+    const quota = await fetchFebboxQuota(febboxKey);
+    return { status, quota };
   }
-  return "unset";
+  return { status: "unset" as Status, quota: null };
 }
 
 interface FebboxSetupProps extends FebboxKeyProps {
@@ -282,6 +284,7 @@ export function FebboxSetup({
   }, [user.account, febboxKey, preferences.febboxKey, setFebboxKey, mode]);
 
   const [status, setStatus] = useState<Status>("unset");
+  const [quota, setQuota] = useState<any>(null);
   const statusMap: Record<Status, StatusCircleProps["type"]> = {
     error: "error",
     success: "success",
@@ -293,7 +296,8 @@ export function FebboxSetup({
   useEffect(() => {
     const checkTokenStatus = async () => {
       const result = await getFebboxKeyStatus(febboxKey);
-      setStatus(result);
+      setStatus(result.status);
+      setQuota(result.quota);
     };
     checkTokenStatus();
   }, [febboxKey]);
@@ -395,9 +399,6 @@ export function FebboxSetup({
                   <br />
                   <Trans i18nKey="fedapi.setup.step.5" />
                 </p>
-                <p className="text-type-danger mt-2">
-                  <Trans i18nKey="fedapi.setup.step.warning" />
-                </p>
               </div>
 
               <Divider marginClass="my-6 px-8 box-content -mx-8" />
@@ -438,6 +439,26 @@ export function FebboxSetup({
                   {t("fedapi.status.invalid_token")}
                 </p>
               )}
+              {status === "success" &&
+                quota &&
+                (() => {
+                  if (!quota?.data?.flow) return null;
+                  const {
+                    traffic_usage: used,
+                    traffic_limit: limit,
+                    reset_at: reset,
+                  } = quota.data.flow;
+                  return (
+                    <>
+                      <p className="text-sm text-green-500 mt-2">
+                        {t("fedapi.setup.traffic", { used, limit, reset })}
+                      </p>
+                      <p className="max-w-[30rem] text-xs opacity-70 mt-2">
+                        {t("fedapi.setup.trafficExplanation")}
+                      </p>
+                    </>
+                  );
+                })()}
             </>
           ) : null}
         </SettingsCard>

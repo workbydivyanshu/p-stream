@@ -1276,8 +1276,7 @@
         "2": "2. Open DevTools or inspect the page",
         "3": "3. Go to Application tab → Cookies",
         "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!",
-        "warning": "(Do not share this token!)"
+        "5": "5. Close the tab, but do NOT logout!"
       },
       "tokenLabel": "Token",
       "tokenExample": {
@@ -1286,7 +1285,9 @@
         "description": "This is what a Febbox UI token looks like:",
         "warning": "Don't try to use, it's fake.",
         "close": "Got it"
-      }
+      },
+      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
+      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream."
     },
     "status": {
       "success": "success",
