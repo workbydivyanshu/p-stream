@@ -9,6 +9,7 @@ import { Paragraph } from "@/components/text/Paragraph";
 import { Title } from "@/components/text/Title";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { ErrorContainer, ErrorLayout } from "@/pages/layouts/ErrorLayout";
+import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -24,9 +25,10 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
   const playbackError = usePlayerStore((s) => s.interface.error);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const currentEmbedId = usePlayerStore((s) => s.embedId);
+  const meta = usePlayerStore((s) => s.meta);
+  const failedEmbedsPerMedia = usePlayerStore((s) => s.failedEmbedsPerMedia);
   const addFailedSource = usePlayerStore((s) => s.addFailedSource);
   const addFailedEmbed = usePlayerStore((s) => s.addFailedEmbed);
-  const failedEmbeds = usePlayerStore((s) => s.failedEmbeds);
   const modal = useModal("error");
   const settingsRouter = useOverlayRouter("settings");
   const hasOpenedSettings = useRef(false);
@@ -54,6 +56,11 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
 
           // Check if all embeds for this source have now failed
           // If so, disable the entire source
+          const mediaKey = getMediaKey(meta);
+          const failedEmbeds =
+            mediaKey && failedEmbedsPerMedia[mediaKey]
+              ? failedEmbedsPerMedia[mediaKey]
+              : {};
           const failedEmbedsForSource = failedEmbeds[currentSourceId] || [];
           // For now, we'll assume if we have 2+ failed embeds for a source, disable it
           // This is a simple heuristic - we could make it more sophisticated
@@ -78,7 +85,8 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
     playbackError,
     currentSourceId,
     currentEmbedId,
-    failedEmbeds,
+    meta,
+    failedEmbedsPerMedia,
     addFailedSource,
     addFailedEmbed,
     settingsRouter,

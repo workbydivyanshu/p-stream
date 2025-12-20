@@ -10,6 +10,7 @@ import {
 } from "@/backend/helpers/providerApi";
 import { getLoadbalancedProviderApiUrl } from "@/backend/providers/fetchers";
 import { getProviders } from "@/backend/providers/providers";
+import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -172,8 +173,26 @@ export function useScrape() {
       const providerInstance = getProviders();
       const allSources = providerInstance.listSources();
       const playerState = usePlayerStore.getState();
-      const failedSources = playerState.failedSources;
-      const failedEmbeds = playerState.failedEmbeds;
+
+      // Get media-specific failed sources/embeds
+      // Try to get media key from player state first, fallback to deriving from ScrapeMedia
+      let mediaKey = getMediaKey(playerState.meta);
+      if (!mediaKey) {
+        // Derive media key from ScrapeMedia if meta is not set yet
+        if (media.type === "movie") {
+          mediaKey = `movie-${media.tmdbId}`;
+        } else if (media.type === "show" && media.season && media.episode) {
+          mediaKey = `show-${media.tmdbId}-${media.season.tmdbId}-${media.episode.tmdbId}`;
+        } else if (media.type === "show") {
+          mediaKey = `show-${media.tmdbId}`;
+        }
+      }
+      const failedSources = mediaKey
+        ? playerState.failedSourcesPerMedia[mediaKey] || []
+        : [];
+      const failedEmbeds = mediaKey
+        ? playerState.failedEmbedsPerMedia[mediaKey] || {}
+        : {};
 
       // Start with all available sources (filtered by disabled and failed ones)
       let baseSourceOrder = allSources
@@ -222,7 +241,7 @@ export function useScrape() {
         }
       }
 
-      // Collect all failed embed IDs across all sources
+      // Collect all failed embed IDs across all sources for current media
       const allFailedEmbedIds = Object.values(failedEmbeds).flat();
 
       // Filter out disabled and failed embeds from the embed order
