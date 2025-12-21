@@ -269,12 +269,15 @@
         "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
         "barrelRoll": "Do a barrel roll! 🌀",
         "closeOverlay": "Close overlay/modal",
+        "nextEpisode": "Next episode",
+        "previousEpisode": "Previous episode",
         "widescreenMode": "to toggle the widescreen button visibility",
         "copyLinkWithTime": "+ click the title to copy the link with time"
       },
       "conditions": {
         "notInWatchParty": "Not in watch party",
-        "whenPaused": "When paused"
+        "whenPaused": "When paused",
+        "showsOnly": "Shows only"
       }
     }
   },

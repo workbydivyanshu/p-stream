@@ -53,6 +53,16 @@ const getShortcutGroups = (t: (key: string) => string): ShortcutGroup[] => [
         description: t("global.keyboardShortcuts.shortcuts.skipBackward1"),
         condition: t("global.keyboardShortcuts.conditions.whenPaused"),
       },
+      {
+        key: "N",
+        description: t("global.keyboardShortcuts.shortcuts.nextEpisode"),
+        condition: t("global.keyboardShortcuts.conditions.showsOnly"),
+      },
+      {
+        key: "P",
+        description: t("global.keyboardShortcuts.shortcuts.previousEpisode"),
+        condition: t("global.keyboardShortcuts.conditions.showsOnly"),
+      },
     ],
   },
   {

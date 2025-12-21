@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
+import { getMetaFromId } from "@/backend/metadata/getmeta";
+import { MWMediaType } from "@/backend/metadata/types/mw";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
+import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { useVolume } from "@/components/player/hooks/useVolume";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
+import { useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useEmpheralVolumeStore } from "@/stores/volume";
 import { useWatchPartyStore } from "@/stores/watchParty";
@@ -20,6 +24,16 @@ export function KeyboardEvents() {
   const duration = usePlayerStore((s) => s.progress.duration);
   const { setVolume, toggleMute } = useVolume();
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
+  const meta = usePlayerStore((s) => s.meta);
+  const { setDirectMeta } = usePlayerMeta();
+  const setShouldStartFromBeginning = usePlayerStore(
+    (s) => s.setShouldStartFromBeginning,
+  );
+  const updateItem = useProgressStore((s) => s.updateItem);
+  const sourceId = usePlayerStore((s) => s.sourceId);
+  const setLastSuccessfulSource = usePreferencesStore(
+    (s) => s.setLastSuccessfulSource,
+  );
 
   const { toggleLastUsed } = useCaptions();
   const setShowVolume = useEmpheralVolumeStore((s) => s.setShowVolume);
@@ -46,6 +60,202 @@ export function KeyboardEvents() {
   const isSpaceHeldRef = useRef<boolean>(false);
 
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
+
+  // Episode navigation functions
+  const navigateToNextEpisode = useCallback(async () => {
+    if (!meta || meta.type !== "show" || !meta.episode) return;
+
+    // Check if we're at the last episode of the current season
+    const isLastEpisode =
+      meta.episode.number === meta.episodes?.[meta.episodes.length - 1]?.number;
+
+    if (!isLastEpisode) {
+      // Navigate to next episode in current season
+      const nextEp = meta.episodes?.find(
+        (v) => v.number === meta.episode!.number + 1,
+      );
+      if (nextEp) {
+        if (sourceId) {
+          setLastSuccessfulSource(sourceId);
+        }
+        const metaCopy = { ...meta };
+        metaCopy.episode = nextEp;
+        setShouldStartFromBeginning(true);
+        setDirectMeta(metaCopy);
+        const defaultProgress = { duration: 0, watched: 0 };
+        updateItem({
+          meta: metaCopy,
+          progress: defaultProgress,
+        });
+      }
+    } else {
+      // Navigate to first episode of next season
+      if (!meta.tmdbId) return;
+
+      try {
+        const data = await getMetaFromId(MWMediaType.SERIES, meta.tmdbId);
+        if (data?.meta.type !== MWMediaType.SERIES) return;
+
+        const nextSeason = data.meta.seasons?.find(
+          (season) => season.number === (meta.season?.number ?? 0) + 1,
+        );
+
+        if (nextSeason) {
+          const seasonData = await getMetaFromId(
+            MWMediaType.SERIES,
+            meta.tmdbId,
+            nextSeason.id,
+          );
+
+          if (seasonData?.meta.type === MWMediaType.SERIES) {
+            const nextSeasonEpisodes = seasonData.meta.seasonData.episodes
+              .filter((episode) => {
+                // Simple aired check - episodes without air_date are considered aired
+                return (
+                  !episode.air_date || new Date(episode.air_date) <= new Date()
+                );
+              })
+              .map((episode) => ({
+                number: episode.number,
+                title: episode.title,
+                tmdbId: episode.id,
+                air_date: episode.air_date,
+              }));
+
+            if (nextSeasonEpisodes.length > 0) {
+              const nextEp = nextSeasonEpisodes[0];
+
+              if (sourceId) {
+                setLastSuccessfulSource(sourceId);
+              }
+
+              const metaCopy = { ...meta };
+              metaCopy.episode = nextEp;
+              metaCopy.season = {
+                number: nextSeason.number,
+                title: nextSeason.title,
+                tmdbId: nextSeason.id,
+              };
+              metaCopy.episodes = nextSeasonEpisodes;
+              setShouldStartFromBeginning(true);
+              setDirectMeta(metaCopy);
+              const defaultProgress = { duration: 0, watched: 0 };
+              updateItem({
+                meta: metaCopy,
+                progress: defaultProgress,
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load next season:", error);
+      }
+    }
+  }, [
+    meta,
+    setDirectMeta,
+    setShouldStartFromBeginning,
+    updateItem,
+    sourceId,
+    setLastSuccessfulSource,
+  ]);
+
+  const navigateToPreviousEpisode = useCallback(async () => {
+    if (!meta || meta.type !== "show" || !meta.episode) return;
+
+    // Check if we're at the first episode of the current season
+    const isFirstEpisode = meta.episode.number === meta.episodes?.[0]?.number;
+
+    if (!isFirstEpisode) {
+      // Navigate to previous episode in current season
+      const prevEp = meta.episodes?.find(
+        (v) => v.number === meta.episode!.number - 1,
+      );
+      if (prevEp) {
+        if (sourceId) {
+          setLastSuccessfulSource(sourceId);
+        }
+        const metaCopy = { ...meta };
+        metaCopy.episode = prevEp;
+        setShouldStartFromBeginning(true);
+        setDirectMeta(metaCopy);
+        const defaultProgress = { duration: 0, watched: 0 };
+        updateItem({
+          meta: metaCopy,
+          progress: defaultProgress,
+        });
+      }
+    } else {
+      // Navigate to last episode of previous season
+      if (!meta.tmdbId) return;
+
+      try {
+        const data = await getMetaFromId(MWMediaType.SERIES, meta.tmdbId);
+        if (data?.meta.type !== MWMediaType.SERIES) return;
+
+        const prevSeason = data.meta.seasons?.find(
+          (season) => season.number === (meta.season?.number ?? 0) - 1,
+        );
+
+        if (prevSeason) {
+          const seasonData = await getMetaFromId(
+            MWMediaType.SERIES,
+            meta.tmdbId,
+            prevSeason.id,
+          );
+
+          if (seasonData?.meta.type === MWMediaType.SERIES) {
+            const prevSeasonEpisodes = seasonData.meta.seasonData.episodes
+              .filter((episode) => {
+                // Simple aired check - episodes without air_date are considered aired
+                return (
+                  !episode.air_date || new Date(episode.air_date) <= new Date()
+                );
+              })
+              .map((episode) => ({
+                number: episode.number,
+                title: episode.title,
+                tmdbId: episode.id,
+                air_date: episode.air_date,
+              }));
+
+            if (prevSeasonEpisodes.length > 0) {
+              const prevEp = prevSeasonEpisodes[prevSeasonEpisodes.length - 1];
+
+              if (sourceId) {
+                setLastSuccessfulSource(sourceId);
+              }
+
+              const metaCopy = { ...meta };
+              metaCopy.episode = prevEp;
+              metaCopy.season = {
+                number: prevSeason.number,
+                title: prevSeason.title,
+                tmdbId: prevSeason.id,
+              };
+              metaCopy.episodes = prevSeasonEpisodes;
+              setShouldStartFromBeginning(true);
+              setDirectMeta(metaCopy);
+              const defaultProgress = { duration: 0, watched: 0 };
+              updateItem({
+                meta: metaCopy,
+                progress: defaultProgress,
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load previous season:", error);
+      }
+    }
+  }, [
+    meta,
+    setDirectMeta,
+    setShouldStartFromBeginning,
+    updateItem,
+    sourceId,
+    setLastSuccessfulSource,
+  ]);
 
   const dataRef = useRef({
     setShowVolume,
@@ -74,6 +284,8 @@ export function KeyboardEvents() {
     boostTimeoutRef,
     isPendingBoostRef,
     enableHoldToBoost,
+    navigateToNextEpisode,
+    navigateToPreviousEpisode,
   });
 
   useEffect(() => {
@@ -104,6 +316,8 @@ export function KeyboardEvents() {
       boostTimeoutRef,
       isPendingBoostRef,
       enableHoldToBoost,
+      navigateToNextEpisode,
+      navigateToPreviousEpisode,
     };
   }, [
     setShowVolume,
@@ -127,6 +341,8 @@ export function KeyboardEvents() {
     setSpeedBoosted,
     setShowSpeedIndicator,
     enableHoldToBoost,
+    navigateToNextEpisode,
+    navigateToPreviousEpisode,
   ]);
 
   useEffect(() => {
@@ -303,6 +519,10 @@ export function KeyboardEvents() {
         dataRef.current.display?.[action]();
       }
       if (k === "Escape") dataRef.current.router.close();
+
+      // Episode navigation (shows only)
+      if (keyL === "n") dataRef.current.navigateToNextEpisode();
+      if (keyL === "p") dataRef.current.navigateToPreviousEpisode();
 
       // captions
       if (keyL === "c") dataRef.current.toggleLastUsed().catch(() => {}); // ignore errors
