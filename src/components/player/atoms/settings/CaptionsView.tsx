@@ -312,8 +312,19 @@ export function CaptionsView({
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
-  const { disable } = useCaptions();
+  const { disable, selectRandomCaptionFromLastUsedLanguage } = useCaptions();
+  const [isRandomSelecting, setIsRandomSelecting] = useState(false);
   const [dragging, setDragging] = useState(false);
+
+  const handleRandomSelect = async () => {
+    if (isRandomSelecting) return; // Prevent multiple simultaneous calls
+    setIsRandomSelecting(true);
+    try {
+      await selectRandomCaptionFromLastUsedLanguage();
+    } finally {
+      setIsRandomSelecting(false);
+    }
+  };
   const setCaption = usePlayerStore((s) => s.setCaption);
   const videoTime = usePlayerStore((s) => s.progress.time);
   const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
@@ -514,6 +525,22 @@ export function CaptionsView({
             {t("player.menus.subtitles.offChoice")}
           </CaptionOption>
 
+          {/* Enable subtitles option */}
+          <CaptionOption
+            onClick={() => handleRandomSelect()}
+            selected={!!selectedCaptionId}
+            loading={isRandomSelecting}
+          >
+            <div className="flex flex-col">
+              {t("player.menus.subtitles.autoSelectChoice")}
+              {selectedCaptionId && (
+                <span className="text-video-context-type-secondary text-xs">
+                  {t("player.menus.subtitles.autoSelectDifferentChoice")}
+                </span>
+              )}
+            </div>
+          </CaptionOption>
+
           {/* Custom upload option */}
           <CustomCaptionOption />
 
@@ -536,7 +563,7 @@ export function CaptionsView({
           {!isLoadingExternalSubtitles &&
             sourceCaptions.length === 0 &&
             externalCaptions.length === 0 && (
-              <div className="p-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
+              <div className="p-4 pb-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
                 <div className="text-video-context-type-secondary">
                   {t("player.menus.subtitles.empty")}
                 </div>
@@ -553,7 +580,7 @@ export function CaptionsView({
           )}
 
           {/* Language selection */}
-          {groupedCaptions.length > 0 ? (
+          {groupedCaptions.length > 0 &&
             groupedCaptions.map(
               ({ language, languageName, captions: captionsForLang }) => (
                 <Menu.ChevronLink
@@ -575,20 +602,7 @@ export function CaptionsView({
                   </span>
                 </Menu.ChevronLink>
               ),
-            )
-          ) : (
-            <div className="text-center text-video-context-type-secondary py-2">
-              {t("player.menus.subtitles.notFound")}
-            </div>
-          )}
-
-          {/* Loading indicator for external subtitles while source exists */}
-          {isLoadingExternalSubtitles && sourceCaptions.length > 0 && (
-            <div className="text-center text-video-context-type-secondary py-4 mt-2">
-              {t("player.menus.subtitles.loadingExternal") ||
-                "Loading external subtitles..."}
-            </div>
-          )}
+            )}
         </Menu.ScrollToActiveSection>
       </FileDropHandler>
     </>

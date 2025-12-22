@@ -804,6 +804,8 @@
         "previewLabel": "Subtitle preview:",
         "offChoice": "Off",
         "onChoice": "On",
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
         "SourceChoice": "Source Subtitles",
         "OpenSubtitlesChoice": "External Subtitles",
         "loadingExternal": "Loading external subtitles...",
