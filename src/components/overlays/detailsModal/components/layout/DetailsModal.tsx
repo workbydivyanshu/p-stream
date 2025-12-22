@@ -23,7 +23,13 @@ import { DetailsSkeleton } from "./DetailsSkeleton";
 import { OverlayPortal } from "../../../OverlayDisplay";
 import { DetailsModalProps } from "../../types";
 
-export function DetailsModal({ id, data: _data, minimal }: DetailsModalProps) {
+export function DetailsModal({
+  id,
+  data: _data,
+  minimal: _minimal,
+}: DetailsModalProps) {
+  // Player details modal should always be minimal (hide episode carousel and movie watch button)
+  const minimal = _minimal || id === "player-details";
   const { hideModal, isModalVisible, modalStack, getModalData } =
     useOverlayStack();
   const [detailsData, setDetailsData] = useState<any>(null);

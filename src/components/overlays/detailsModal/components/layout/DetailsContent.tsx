@@ -7,7 +7,7 @@ import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
-import { useProgressStore } from "@/stores/progress";
+import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
@@ -38,9 +38,22 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [logoHeight, setLogoHeight] = useState<number>(0);
   const logoRef = useRef<HTMLDivElement>(null);
   const progress = useProgressStore((s) => s.items);
+  const updateItem = useProgressStore((s) => s.updateItem);
   const enableImageLogos = usePreferencesStore(
     (state) => state.enableImageLogos,
   );
+
+  // Check if movie is watched (>90% progress)
+  const isMovieWatched = useMemo(() => {
+    if (data.type !== "movie" || !data.id) return false;
+    const movieProgress = progress[data.id.toString()]?.progress;
+    if (!movieProgress) return false;
+    const percentage = getProgressPercentage(
+      movieProgress.watched,
+      movieProgress.duration,
+    );
+    return percentage > 90;
+  }, [data.type, data.id, progress]);
 
   const showProgress = useMemo(() => {
     if (!data.id) return null;
@@ -189,6 +202,30 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     }
   };
 
+  const toggleMovieWatchStatus = () => {
+    if (data.type !== "movie" || !data.id) return;
+
+    // Get the poster URL from the data
+    const posterUrl = data.posterUrl;
+
+    // Update progress - if watched, set to 0%, otherwise set to 100%
+    updateItem({
+      meta: {
+        tmdbId: data.id.toString(),
+        title: data.title || "",
+        type: "movie",
+        releaseYear: data.releaseDate
+          ? new Date(data.releaseDate).getFullYear()
+          : new Date().getFullYear(),
+        poster: posterUrl,
+      },
+      progress: {
+        watched: isMovieWatched ? 0 : 60, // 60 seconds for "watched"
+        duration: 60,
+      },
+    });
+  };
+
   return (
     <div className="relative h-full flex flex-col">
       {/* Share notification popup */}
@@ -290,20 +327,40 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
 
             {/* Genres */}
             {data.genres && data.genres.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                {data.genres.map((genre, index) => (
-                  <span
-                    key={genre.id}
-                    className="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white/80 transition-all duration-300 hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
-                    style={{
-                      animationDelay: `${((data.genres?.length ?? 0) - 1 - index) * 60}ms`,
-                      transform: "scale(0)",
-                      opacity: 0,
-                    }}
+              <div className="flex justify-between items-center">
+                <div className="flex flex-wrap gap-2 items-center">
+                  {data.genres.map((genre, index) => (
+                    <span
+                      key={genre.id}
+                      className="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white/80 transition-all duration-300 hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
+                      style={{
+                        animationDelay: `${((data.genres?.length ?? 0) - 1 - index) * 60}ms`,
+                        transform: "scale(0)",
+                        opacity: 0,
+                      }}
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
+                </div>
+                {/* Movie Watch Toggle Button - Only show for movies and not in minimal modal */}
+                {data.type === "movie" && !minimal && (
+                  <button
+                    type="button"
+                    onClick={toggleMovieWatchStatus}
+                    className="p-1.5 bg-dropdown-background hover:bg-dropdown-hoverBackground transition-colors rounded-full ml-2"
+                    title={
+                      isMovieWatched
+                        ? t("player.menus.episodes.markAsUnwatched")
+                        : t("player.menus.episodes.markAsWatched")
+                    }
                   >
-                    {genre.name}
-                  </span>
-                ))}
+                    <Icon
+                      icon={isMovieWatched ? Icons.EYE_SLASH : Icons.EYE}
+                      className="h-5 w-5 text-white"
+                    />
+                  </button>
+                )}
               </div>
             )}
 
