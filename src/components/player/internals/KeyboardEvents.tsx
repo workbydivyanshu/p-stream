@@ -521,8 +521,8 @@ export function KeyboardEvents() {
       if (k === "Escape") dataRef.current.router.close();
 
       // Episode navigation (shows only)
-      if (keyL === "n") dataRef.current.navigateToNextEpisode();
-      if (keyL === "p") dataRef.current.navigateToPreviousEpisode();
+      if (keyL === "p") dataRef.current.navigateToNextEpisode();
+      if (keyL === "o") dataRef.current.navigateToPreviousEpisode();
 
       // captions
       if (keyL === "c") dataRef.current.toggleLastUsed().catch(() => {}); // ignore errors

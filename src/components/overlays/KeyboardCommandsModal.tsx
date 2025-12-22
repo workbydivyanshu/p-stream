@@ -54,12 +54,12 @@ const getShortcutGroups = (t: (key: string) => string): ShortcutGroup[] => [
         condition: t("global.keyboardShortcuts.conditions.whenPaused"),
       },
       {
-        key: "N",
+        key: "P",
         description: t("global.keyboardShortcuts.shortcuts.nextEpisode"),
         condition: t("global.keyboardShortcuts.conditions.showsOnly"),
       },
       {
-        key: "P",
+        key: "O",
         description: t("global.keyboardShortcuts.shortcuts.previousEpisode"),
         condition: t("global.keyboardShortcuts.conditions.showsOnly"),
       },
