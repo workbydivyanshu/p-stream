@@ -38,6 +38,7 @@ export async function scrapeOpenSubtitlesCaptions(
       openSubtitlesCaptions.push({
         id: downloadUrl,
         language,
+        display: caption.LanguageName,
         url: downloadUrl,
         type: caption.SubFormat || "srt",
         needsProxy: false,
