@@ -15,11 +15,13 @@ import { CaptionOption } from "./CaptionsView";
 export interface LanguageSubtitlesViewProps {
   id: string;
   language: string;
+  overlayBackLink?: boolean;
 }
 
 export function LanguageSubtitlesView({
   id,
   language,
+  overlayBackLink,
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
@@ -56,16 +58,8 @@ export function LanguageSubtitlesView({
     [selectCaptionById, setCurrentlyDownloading],
   );
 
-  const languageName = useMemo(() => {
-    return (
-      getPrettyLanguageNameFromLocale(language) ||
-      t("player.menus.subtitles.unknownLanguage")
-    );
-  }, [language, t]);
-
-  const renderSubtitleOption = (
-    v: CaptionListItem & { languageName: string },
-  ) => {
+  // Render subtitle option
+  const renderSubtitleOption = (v: CaptionListItem) => {
     const handleDoubleClick = async () => {
       const copyData = {
         id: v.id,
@@ -79,11 +73,12 @@ export function LanguageSubtitlesView({
         isHearingImpaired: v.isHearingImpaired,
         source: v.source,
         encoding: v.encoding,
-        delay: 0, // Will be set from current delay if needed
+        delay: 0,
       };
 
       try {
         await navigator.clipboard.writeText(JSON.stringify(copyData));
+        // Could add a toast notification here if needed
       } catch (err) {
         console.error("Failed to copy subtitle data:", err);
       }
@@ -109,14 +104,22 @@ export function LanguageSubtitlesView({
         subtitleEncoding={v.encoding}
         isHearingImpaired={v.isHearingImpaired}
       >
-        {v.languageName}
+        {v.display || v.id}
       </CaptionOption>
     );
   };
 
+  const languageName =
+    getPrettyLanguageNameFromLocale(language) ||
+    t("player.menus.subtitles.unknownLanguage");
+
   return (
     <>
-      <Menu.BackLink onClick={() => router.navigate("/captions")}>
+      <Menu.BackLink
+        onClick={() =>
+          router.navigate(overlayBackLink ? "/captionsOverlay" : "/captions")
+        }
+      >
         <span className="flex items-center">
           <FlagIcon langCode={language} />
           <span className="ml-3">{languageName}</span>
@@ -124,16 +127,8 @@ export function LanguageSubtitlesView({
       </Menu.BackLink>
 
       <Menu.ScrollToActiveSection className="!pt-1 mt-2 pb-3">
-        {/* Language subtitles */}
         {languageCaptions.length > 0 ? (
-          languageCaptions.map((caption) => (
-            <div key={caption.id}>
-              {renderSubtitleOption({
-                ...caption,
-                languageName,
-              })}
-            </div>
-          ))
+          languageCaptions.map(renderSubtitleOption)
         ) : (
           <div className="text-center text-video-context-type-secondary py-2">
             {t("player.menus.subtitles.notFound")}
@@ -141,7 +136,7 @@ export function LanguageSubtitlesView({
         )}
 
         {/* Loading indicator */}
-        {isLoadingExternalSubtitles && (
+        {isLoadingExternalSubtitles && languageCaptions.length === 0 && (
           <div className="text-center text-video-context-type-secondary py-4 mt-2">
             {t("player.menus.subtitles.loadingExternal") ||
               "Loading external subtitles..."}

@@ -557,7 +557,11 @@ export function CaptionsView({
                   rightText={captionsForLang.length.toString()}
                   onClick={() => {
                     onChooseLanguage?.(language);
-                    router.navigate("/captions/languages");
+                    router.navigate(
+                      backLink
+                        ? "/captions/languages"
+                        : "/captionsOverlay/languagesOverlay",
+                    );
                   }}
                 >
                   <span className="flex items-center">

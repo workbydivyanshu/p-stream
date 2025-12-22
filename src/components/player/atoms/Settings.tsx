@@ -73,6 +73,22 @@ function SettingsOverlay({ id }: { id: string }) {
             <CaptionsView id={id} onChooseLanguage={setChosenLanguage} />
           </Menu.CardWithScrollable>
         </OverlayPage>
+        <OverlayPage
+          id={id}
+          path="/captionsOverlay/languagesOverlay"
+          width={343}
+          height={452}
+        >
+          <Menu.CardWithScrollable>
+            {chosenLanguage && (
+              <LanguageSubtitlesView
+                id={id}
+                language={chosenLanguage}
+                overlayBackLink
+              />
+            )}
+          </Menu.CardWithScrollable>
+        </OverlayPage>
         <OverlayPage id={id} path="/captions/settings" width={343} height={452}>
           <Menu.Card>
             <CaptionSettingsView id={id} />
