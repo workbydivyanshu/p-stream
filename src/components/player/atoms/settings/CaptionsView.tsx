@@ -120,7 +120,15 @@ export function CaptionOption(props: {
               <FlagIcon langCode={props.countryCode} />
             </span>
           ) : null}
-          <span>{props.children}</span>
+          <span
+            className={
+              props.flag || props.subtitleUrl || props.subtitleSource
+                ? "truncate max-w-[100px]"
+                : ""
+            }
+          >
+            {props.children}
+          </span>
           {props.subtitleType && (
             <span className="ml-2 px-2 py-0.5 rounded bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-xs font-semibold">
               {props.subtitleType.toUpperCase()}
