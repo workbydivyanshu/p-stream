@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
 import { FlagIcon } from "@/components/FlagIcon";
+import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -30,7 +31,27 @@ export function LanguageSubtitlesView({
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
     string | null
   >(null);
+  const [scrollTrigger, setScrollTrigger] = useState(0);
   const captionList = usePlayerStore((s) => s.captionList);
+
+  // Trigger scroll when selected caption changes
+  useEffect(() => {
+    if (selectedCaptionId) {
+      setScrollTrigger((prev) => prev + 1);
+    }
+  }, [selectedCaptionId]);
+
+  // Manual scroll function with smooth behavior
+  const scrollToActiveCaption = () => {
+    const active = document.querySelector("[data-active-link]");
+    if (!active) return;
+
+    active.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  };
+
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
   const isLoadingExternalSubtitles = usePlayerStore(
     (s) => s.isLoadingExternalSubtitles,
@@ -57,6 +78,19 @@ export function LanguageSubtitlesView({
     },
     [selectCaptionById, setCurrentlyDownloading],
   );
+
+  // Random subtitle selection
+  const handleRandomSelect = async () => {
+    if (languageCaptions.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * languageCaptions.length);
+    const randomCaption = languageCaptions[randomIndex];
+
+    await startDownload(randomCaption.id);
+
+    // Scroll to the newly selected caption after a brief delay to ensure DOM updates
+    setTimeout(() => scrollToActiveCaption(), 100);
+  };
 
   // Render subtitle option
   const renderSubtitleOption = (v: CaptionListItem) => {
@@ -119,6 +153,18 @@ export function LanguageSubtitlesView({
         onClick={() =>
           router.navigate(overlayBackLink ? "/captionsOverlay" : "/captions")
         }
+        rightSide={
+          languageCaptions.length > 0 && (
+            <button
+              type="button"
+              onClick={handleRandomSelect}
+              className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+              title="Pick random subtitle"
+            >
+              <Icon icon={Icons.REPEAT} className="text-lg" />
+            </button>
+          )
+        }
       >
         <span className="flex items-center">
           <FlagIcon langCode={language} />
@@ -126,7 +172,10 @@ export function LanguageSubtitlesView({
         </span>
       </Menu.BackLink>
 
-      <Menu.ScrollToActiveSection className="!pt-1 mt-2 pb-3">
+      <Menu.ScrollToActiveSection
+        className="!pt-1 mt-2 pb-3"
+        loaded={scrollTrigger > 0}
+      >
         {languageCaptions.length > 0 ? (
           languageCaptions.map(renderSubtitleOption)
         ) : (
