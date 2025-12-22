@@ -544,7 +544,7 @@ export function CaptionsView({
             )}
 
           {/* Loading external subtitles */}
-          {isLoadingExternalSubtitles && externalCaptions.length === 0 && (
+          {isLoadingExternalSubtitles && (
             <div className="p-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
               <div className="text-video-context-type-secondary">
                 {t("player.menus.subtitles.loadingExternal")}
