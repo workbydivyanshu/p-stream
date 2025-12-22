@@ -1,3 +1,4 @@
+import { labelToLanguageCode } from "@p-stream/providers";
 import classNames from "classnames";
 import Fuse from "fuse.js";
 import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
@@ -348,7 +349,11 @@ export function CaptionsView({
     const groups: Record<string, typeof allCaptions> = {};
 
     allCaptions.forEach((caption) => {
-      const lang = caption.language;
+      // Use display name if available, otherwise fall back to language code
+      const lang =
+        labelToLanguageCode(caption.display || "") ||
+        caption.language ||
+        "unknown";
       if (!groups[lang]) {
         groups[lang] = [];
       }
