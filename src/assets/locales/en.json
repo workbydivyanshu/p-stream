@@ -320,10 +320,30 @@
         "titlePlaceholder": "Enter a title for your bookmark",
         "yearLabel": "Year",
         "yearPlaceholder": "Enter a year for your bookmark"
+      },
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
       }
     },
     "continueWatching": {
-      "sectionTitle": "Continue Watching..."
+      "sectionTitle": "Continue Watching...",
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
     },
     "mediaList": {
       "stopEditing": "Stop editing"

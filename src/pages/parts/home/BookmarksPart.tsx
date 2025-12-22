@@ -1,10 +1,12 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Listbox } from "@headlessui/react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { EditButton } from "@/components/buttons/EditButton";
 import { EditButtonWithText } from "@/components/buttons/EditButtonWithText";
-import { Icons } from "@/components/Icon";
+import { Dropdown, OptionItem } from "@/components/form/Dropdown";
+import { Icon, Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
@@ -15,6 +17,7 @@ import { UserIcon, UserIcons } from "@/components/UserIcon";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
 import { useProgressStore } from "@/stores/progress";
+import { SortOption, sortMediaItems } from "@/utils/mediaSorting";
 import { MediaItem } from "@/utils/mediaTypes";
 
 function parseGroupString(group: string): { icon: UserIcons; name: string } {
@@ -52,28 +55,25 @@ export function BookmarksPart({
   const modifyBookmarksByGroup = useBookmarkStore(
     (s) => s.modifyBookmarksByGroup,
   );
+  const [sortBy, setSortBy] = useState<SortOption>(() => {
+    const saved = localStorage.getItem("__MW::bookmarksSort");
+    return (saved as SortOption) || "date";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("__MW::bookmarksSort", sortBy);
+  }, [sortBy]);
 
   const items = useMemo(() => {
-    let output: MediaItem[] = [];
+    const output: MediaItem[] = [];
     Object.entries(bookmarks).forEach((entry) => {
       output.push({
         id: entry[0],
         ...entry[1],
       });
     });
-    output = output.sort((a, b) => {
-      const bookmarkA = bookmarks[a.id];
-      const bookmarkB = bookmarks[b.id];
-      const progressA = progressItems[a.id];
-      const progressB = progressItems[b.id];
-
-      const dateA = Math.max(bookmarkA.updatedAt, progressA?.updatedAt ?? 0);
-      const dateB = Math.max(bookmarkB.updatedAt, progressB?.updatedAt ?? 0);
-
-      return dateB - dateA;
-    });
-    return output;
-  }, [bookmarks, progressItems]);
+    return sortMediaItems(output, sortBy, bookmarks, progressItems);
+  }, [bookmarks, progressItems, sortBy]);
 
   const { groupedItems, regularItems } = useMemo(() => {
     const grouped: Record<string, MediaItem[]> = {};
@@ -93,23 +93,26 @@ export function BookmarksPart({
       }
     });
 
-    // Sort items within each group by date
+    // Sort items within each group
     Object.keys(grouped).forEach((group) => {
-      grouped[group].sort((a, b) => {
-        const bookmarkA = bookmarks[a.id];
-        const bookmarkB = bookmarks[b.id];
-        const progressA = progressItems[a.id];
-        const progressB = progressItems[b.id];
-
-        const dateA = Math.max(bookmarkA.updatedAt, progressA?.updatedAt ?? 0);
-        const dateB = Math.max(bookmarkB.updatedAt, progressB?.updatedAt ?? 0);
-
-        return dateB - dateA;
-      });
+      grouped[group] = sortMediaItems(
+        grouped[group],
+        sortBy,
+        bookmarks,
+        progressItems,
+      );
     });
 
-    return { groupedItems: grouped, regularItems: regular };
-  }, [items, bookmarks, progressItems]);
+    // Sort regular items
+    const sortedRegular = sortMediaItems(
+      regular,
+      sortBy,
+      bookmarks,
+      progressItems,
+    );
+
+    return { groupedItems: grouped, regularItems: sortedRegular };
+  }, [items, bookmarks, progressItems, sortBy]);
 
   const sortedSections = useMemo(() => {
     const sections: Array<{
@@ -199,6 +202,17 @@ export function BookmarksPart({
     setEditingGroupName(null);
   };
 
+  const sortOptions: OptionItem[] = [
+    { id: "date", name: t("home.bookmarks.sorting.options.date") },
+    { id: "title-asc", name: t("home.bookmarks.sorting.options.titleAsc") },
+    { id: "title-desc", name: t("home.bookmarks.sorting.options.titleDesc") },
+    { id: "year-asc", name: t("home.bookmarks.sorting.options.yearAsc") },
+    { id: "year-desc", name: t("home.bookmarks.sorting.options.yearDesc") },
+  ];
+
+  const selectedSortOption =
+    sortOptions.find((opt) => opt.id === sortBy) || sortOptions[0];
+
   if (items.length === 0) return null;
 
   return (
@@ -236,6 +250,65 @@ export function BookmarksPart({
                   />
                 </div>
               </SectionHeading>
+              {editing && (
+                <div className="mb-6 -mt-4">
+                  <Dropdown
+                    selectedItem={selectedSortOption}
+                    setSelectedItem={(item) => {
+                      const newSort = item.id as SortOption;
+                      setSortBy(newSort);
+                      localStorage.setItem("__MW::bookmarksSort", newSort);
+                    }}
+                    options={sortOptions}
+                    customButton={
+                      <button
+                        type="button"
+                        className="px-2 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                      >
+                        <span>{selectedSortOption.name}</span>
+                        <Icon
+                          icon={Icons.UP_DOWN_ARROW}
+                          className="text-xs text-dropdown-secondary"
+                        />
+                      </button>
+                    }
+                    side="left"
+                    customMenu={
+                      <Listbox.Options static className="py-1">
+                        {sortOptions.map((opt) => (
+                          <Listbox.Option
+                            className={({ active }) =>
+                              `cursor-pointer min-w-60 flex gap-4 items-center relative select-none py-2 px-4 mx-1 rounded-lg ${
+                                active
+                                  ? "bg-background-secondaryHover text-type-link"
+                                  : "text-type-secondary"
+                              }`
+                            }
+                            key={opt.id}
+                            value={opt}
+                          >
+                            {({ selected }) => (
+                              <>
+                                <span
+                                  className={`block ${selected ? "font-medium" : "font-normal"}`}
+                                >
+                                  {opt.name}
+                                </span>
+                                {selected && (
+                                  <Icon
+                                    icon={Icons.CHECKMARK}
+                                    className="text-xs text-type-link"
+                                  />
+                                )}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    }
+                  />
+                </div>
+              )}
               <MediaGrid>
                 {section.items.map((v) => (
                   <div
@@ -273,6 +346,61 @@ export function BookmarksPart({
                 />
               </div>
             </SectionHeading>
+            {editing && (
+              <div className="mb-6 -mt-4">
+                <Dropdown
+                  selectedItem={selectedSortOption}
+                  setSelectedItem={(item) => setSortBy(item.id as SortOption)}
+                  options={sortOptions}
+                  customButton={
+                    <button
+                      type="button"
+                      className="px-2 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                    >
+                      <span>{selectedSortOption.name}</span>
+                      <Icon
+                        icon={Icons.UP_DOWN_ARROW}
+                        className="text-xs text-dropdown-secondary"
+                      />
+                    </button>
+                  }
+                  side="left"
+                  customMenu={
+                    <Listbox.Options static className="py-1">
+                      {sortOptions.map((opt) => (
+                        <Listbox.Option
+                          className={({ active }) =>
+                            `cursor-pointer min-w-60 flex gap-4 items-center relative select-none py-2 px-4 mx-1 rounded-lg ${
+                              active
+                                ? "bg-background-secondaryHover text-type-link"
+                                : "text-type-secondary"
+                            }`
+                          }
+                          key={opt.id}
+                          value={opt}
+                        >
+                          {({ selected }) => (
+                            <>
+                              <span
+                                className={`block ${selected ? "font-medium" : "font-normal"}`}
+                              >
+                                {opt.name}
+                              </span>
+                              {selected && (
+                                <Icon
+                                  icon={Icons.CHECKMARK}
+                                  className="text-xs text-type-link"
+                                />
+                              )}
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  }
+                />
+              </div>
+            )}
             <MediaGrid ref={gridRef}>
               {section.items.map((v) => (
                 <div
