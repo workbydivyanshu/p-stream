@@ -138,13 +138,27 @@ export function Link(props: {
 
 export function ChevronLink(props: {
   rightText?: string;
+  selected?: boolean;
   onClick?: () => void;
   children?: ReactNode;
   active?: boolean;
   box?: boolean;
   disabled?: boolean;
 }) {
-  const rightContent = <Chevron>{props.rightText}</Chevron>;
+  const rightContent = (
+    <span className="text-white flex items-center font-medium">
+      {props.selected ? (
+        <Icon
+          icon={Icons.CIRCLE_CHECK}
+          className="text-xl text-video-context-type-accent"
+        />
+      ) : (
+        props.rightText
+      )}
+      <Icon className="text-xl ml-1 -mr-1.5" icon={Icons.CHEVRON_RIGHT} />
+    </span>
+  );
+
   return (
     <Link
       onClick={props.onClick}
