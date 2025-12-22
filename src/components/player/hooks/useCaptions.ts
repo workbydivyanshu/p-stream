@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import subsrt from "subsrt-ts";
 
 import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
@@ -175,6 +175,30 @@ export function useCaptions() {
     // Select the random caption
     await selectCaptionById(randomCaption.id);
   }, [lastSelectedLanguage, captions, selectedCaption, selectCaptionById]);
+
+  // Validate selected caption when caption list changes
+  useEffect(() => {
+    if (!selectedCaption) return;
+
+    const isSelectedCaptionStillAvailable = captions.some(
+      (caption) => caption.id === selectedCaption.id,
+    );
+
+    if (!isSelectedCaptionStillAvailable) {
+      // Try to find a caption with the same language
+      const sameLanguageCaption = captions.find(
+        (caption) => caption.language === selectedCaption.language,
+      );
+
+      if (sameLanguageCaption) {
+        // Automatically select the first caption with the same language
+        selectCaptionById(sameLanguageCaption.id);
+      } else {
+        // No caption with the same language found, clear the selection
+        setCaption(null);
+      }
+    }
+  }, [captions, selectedCaption, setCaption, selectCaptionById]);
 
   return {
     selectLanguage,
