@@ -148,6 +148,34 @@ export function useCaptions() {
     if (enabled) await selectLastUsedLanguage();
   }, [selectLastUsedLanguage, enabled]);
 
+  const selectRandomCaptionFromLastUsedLanguage = useCallback(async () => {
+    const language = lastSelectedLanguage ?? "en";
+
+    // Filter captions by language
+    const languageCaptions = captions.filter(
+      (caption) => caption.language === language,
+    );
+
+    // If no captions exist for that language, return early
+    if (languageCaptions.length === 0) return;
+
+    // Filter out the currently selected caption if possible
+    const availableCaptions = languageCaptions.filter(
+      (caption) => caption.id !== selectedCaption?.id,
+    );
+
+    // If we filtered out all captions (only one caption available), use all captions
+    const captionsToChooseFrom =
+      availableCaptions.length > 0 ? availableCaptions : languageCaptions;
+
+    // Pick a random caption
+    const randomIndex = Math.floor(Math.random() * captionsToChooseFrom.length);
+    const randomCaption = captionsToChooseFrom[randomIndex];
+
+    // Select the random caption
+    await selectCaptionById(randomCaption.id);
+  }, [lastSelectedLanguage, captions, selectedCaption, selectCaptionById]);
+
   return {
     selectLanguage,
     disable,
@@ -155,5 +183,6 @@ export function useCaptions() {
     toggleLastUsed,
     selectLastUsedLanguageIfEnabled,
     selectCaptionById,
+    selectRandomCaptionFromLastUsedLanguage,
   };
 }

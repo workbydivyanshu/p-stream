@@ -109,6 +109,10 @@ const getShortcutGroups = (t: (key: string) => string): ShortcutGroup[] => [
         description: t("global.keyboardShortcuts.shortcuts.toggleCaptions"),
       },
       {
+        key: "Shift+C",
+        description: t("global.keyboardShortcuts.shortcuts.randomCaption"),
+      },
+      {
         key: "[",
         description: t(
           "global.keyboardShortcuts.shortcuts.syncSubtitlesEarlier",

@@ -265,6 +265,7 @@
         "changeSpeed": "Increase/decrease playback speed",
         "toggleFullscreen": "Toggle fullscreen",
         "toggleCaptions": "Toggle captions",
+        "randomCaption": "Select random caption from last used language",
         "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
         "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
         "barrelRoll": "Do a barrel roll! 🌀",

@@ -35,7 +35,8 @@ export function KeyboardEvents() {
     (s) => s.setLastSuccessfulSource,
   );
 
-  const { toggleLastUsed } = useCaptions();
+  const { toggleLastUsed, selectRandomCaptionFromLastUsedLanguage } =
+    useCaptions();
   const setShowVolume = useEmpheralVolumeStore((s) => s.setShowVolume);
   const setDelay = useSubtitleStore((s) => s.setDelay);
   const delay = useSubtitleStore((s) => s.delay);
@@ -263,6 +264,7 @@ export function KeyboardEvents() {
     toggleMute,
     setIsRolling,
     toggleLastUsed,
+    selectRandomCaptionFromLastUsedLanguage,
     display,
     mediaPlaying,
     mediaProgress,
@@ -295,6 +297,7 @@ export function KeyboardEvents() {
       toggleMute,
       setIsRolling,
       toggleLastUsed,
+      selectRandomCaptionFromLastUsedLanguage,
       display,
       mediaPlaying,
       mediaProgress,
@@ -325,6 +328,7 @@ export function KeyboardEvents() {
     toggleMute,
     setIsRolling,
     toggleLastUsed,
+    selectRandomCaptionFromLastUsedLanguage,
     display,
     mediaPlaying,
     mediaProgress,
@@ -525,7 +529,14 @@ export function KeyboardEvents() {
       if (keyL === "o") dataRef.current.navigateToPreviousEpisode();
 
       // captions
-      if (keyL === "c") dataRef.current.toggleLastUsed().catch(() => {}); // ignore errors
+      if (keyL === "c" && !evt.shiftKey)
+        dataRef.current.toggleLastUsed().catch(() => {}); // ignore errors
+      // Random caption selection (Shift+C)
+      if (k === "C" && evt.shiftKey) {
+        dataRef.current
+          .selectRandomCaptionFromLastUsedLanguage()
+          .catch(() => {}); // ignore errors
+      }
 
       // Do a barrell roll!
       if (keyL === "r") {
