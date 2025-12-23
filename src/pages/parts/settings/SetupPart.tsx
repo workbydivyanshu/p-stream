@@ -134,9 +134,9 @@ export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
         continue;
       }
 
-      const isVIPLink = Object.values(data.streams).some((link: any) => {
-        if (typeof link === "string") {
-          return link.toLowerCase().includes("vip");
+      const isVIPLink = Object.values(data.streams).some((stream: any) => {
+        if (typeof stream === "object" && stream.download) {
+          return stream.download.includes("/vip/");
         }
         return false;
       });
