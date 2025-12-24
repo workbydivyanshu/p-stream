@@ -72,6 +72,7 @@ export function useSettingsState(
   enableSkipCredits: boolean,
   enableImageLogos: boolean,
   enableCarouselView: boolean,
+  enableMinimalCards: boolean,
   forceCompactEpisodeView: boolean,
   enableLowPerformanceMode: boolean,
   enableNativeSubtitles: boolean,
@@ -222,6 +223,12 @@ export function useSettingsState(
     enableCarouselViewChanged,
   ] = useDerived(enableCarouselView);
   const [
+    enableMinimalCardsState,
+    setEnableMinimalCardsState,
+    resetEnableMinimalCards,
+    enableMinimalCardsChanged,
+  ] = useDerived(enableMinimalCards);
+  const [
     forceCompactEpisodeViewState,
     setForceCompactEpisodeViewState,
     resetForceCompactEpisodeView,
@@ -299,6 +306,7 @@ export function useSettingsState(
     resetDisabledEmbeds();
     resetProxyTmdb();
     resetEnableCarouselView();
+    resetEnableMinimalCards();
     resetForceCompactEpisodeView();
     resetEnableLowPerformanceMode();
     resetEnableNativeSubtitles();
@@ -338,6 +346,7 @@ export function useSettingsState(
     disabledEmbedsChanged ||
     proxyTmdbChanged ||
     enableCarouselViewChanged ||
+    enableMinimalCardsChanged ||
     forceCompactEpisodeViewChanged ||
     enableLowPerformanceModeChanged ||
     enableNativeSubtitlesChanged ||
@@ -489,6 +498,11 @@ export function useSettingsState(
       state: enableCarouselViewState,
       set: setEnableCarouselViewState,
       changed: enableCarouselViewChanged,
+    },
+    enableMinimalCards: {
+      state: enableMinimalCardsState,
+      set: setEnableMinimalCardsState,
+      changed: enableMinimalCardsChanged,
     },
     forceCompactEpisodeView: {
       state: forceCompactEpisodeViewState,

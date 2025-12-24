@@ -16,6 +16,7 @@ export interface PreferencesStore {
   enableDetailsModal: boolean;
   enableImageLogos: boolean;
   enableCarouselView: boolean;
+  enableMinimalCards: boolean;
   forceCompactEpisodeView: boolean;
   sourceOrder: string[];
   enableSourceOrder: boolean;
@@ -46,6 +47,7 @@ export interface PreferencesStore {
   setEnableDetailsModal(v: boolean): void;
   setEnableImageLogos(v: boolean): void;
   setEnableCarouselView(v: boolean): void;
+  setEnableMinimalCards(v: boolean): void;
   setForceCompactEpisodeView(v: boolean): void;
   setSourceOrder(v: string[]): void;
   setEnableSourceOrder(v: boolean): void;
@@ -80,6 +82,7 @@ export const usePreferencesStore = create(
       enableDetailsModal: false,
       enableImageLogos: true,
       enableCarouselView: false,
+      enableMinimalCards: false,
       forceCompactEpisodeView: false,
       sourceOrder: [],
       enableSourceOrder: false,
@@ -139,6 +142,11 @@ export const usePreferencesStore = create(
       setEnableCarouselView(v) {
         set((s) => {
           s.enableCarouselView = v;
+        });
+      },
+      setEnableMinimalCards(v) {
+        set((s) => {
+          s.enableMinimalCards = v;
         });
       },
       setForceCompactEpisodeView(v) {

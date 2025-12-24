@@ -448,6 +448,11 @@ export function SettingsPage() {
     (s) => s.setEnableCarouselView,
   );
 
+  const enableMinimalCards = usePreferencesStore((s) => s.enableMinimalCards);
+  const setEnableMinimalCards = usePreferencesStore(
+    (s) => s.setEnableMinimalCards,
+  );
+
   const forceCompactEpisodeView = usePreferencesStore(
     (s) => s.forceCompactEpisodeView,
   );
@@ -563,6 +568,7 @@ export function SettingsPage() {
     enableSkipCredits,
     enableImageLogos,
     enableCarouselView,
+    enableMinimalCards,
     forceCompactEpisodeView,
     enableLowPerformanceMode,
     enableNativeSubtitles,
@@ -631,6 +637,7 @@ export function SettingsPage() {
         state.disabledSources.changed ||
         state.proxyTmdb.changed ||
         state.enableCarouselView.changed ||
+        state.enableMinimalCards.changed ||
         state.forceCompactEpisodeView.changed ||
         state.enableLowPerformanceMode.changed ||
         state.enableHoldToBoost.changed ||
@@ -660,6 +667,7 @@ export function SettingsPage() {
           disabledSources: state.disabledSources.state,
           proxyTmdb: state.proxyTmdb.state,
           enableCarouselView: state.enableCarouselView.state,
+          enableMinimalCards: state.enableMinimalCards.state,
           forceCompactEpisodeView: state.forceCompactEpisodeView.state,
           enableLowPerformanceMode: state.enableLowPerformanceMode.state,
           enableHoldToBoost: state.enableHoldToBoost.state,
@@ -716,6 +724,7 @@ export function SettingsPage() {
     setdebridService(state.debridService.state);
     setProxyTmdb(state.proxyTmdb.state);
     setEnableCarouselView(state.enableCarouselView.state);
+    setEnableMinimalCards(state.enableMinimalCards.state);
     setForceCompactEpisodeView(state.forceCompactEpisodeView.state);
     setEnableLowPerformanceMode(state.enableLowPerformanceMode.state);
     setEnableHoldToBoost(state.enableHoldToBoost.state);
@@ -771,6 +780,7 @@ export function SettingsPage() {
     setBackendUrl,
     setProxyTmdb,
     setEnableCarouselView,
+    setEnableMinimalCards,
     setForceCompactEpisodeView,
     setEnableLowPerformanceMode,
     setEnableHoldToBoost,
@@ -886,6 +896,8 @@ export function SettingsPage() {
               setEnableImageLogos={state.enableImageLogos.set}
               enableCarouselView={state.enableCarouselView.state}
               setEnableCarouselView={state.enableCarouselView.set}
+              enableMinimalCards={state.enableMinimalCards.state}
+              setEnableMinimalCards={state.enableMinimalCards.set}
               forceCompactEpisodeView={state.forceCompactEpisodeView.state}
               setForceCompactEpisodeView={state.forceCompactEpisodeView.set}
               homeSectionOrder={state.homeSectionOrder.state}

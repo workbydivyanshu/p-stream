@@ -136,6 +136,7 @@ function MediaCardContent({
   const dotListContent = [t(`media.types.${media.type}`)];
 
   const [searchQuery] = useSearchQuery();
+  const enableMinimalCards = usePreferencesStore((s) => s.enableMinimalCards);
 
   // Simple intersection observer for lazy loading images
   const { targetRef, isIntersecting } = useIntersectionObserver({
@@ -185,10 +186,11 @@ function MediaCardContent({
         >
           <div
             className={classNames(
-              "relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
+              "relative pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
               {
                 "group-hover:rounded-lg": canLink,
               },
+              enableMinimalCards ? "" : "mb-4",
             )}
             style={{
               backgroundImage: isIntersecting
@@ -272,48 +274,52 @@ function MediaCardContent({
             </div>
           </div>
 
-          <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-            <span>{media.title}</span>
-          </h1>
-          <div className="media-info-container justify-content-center flex flex-wrap">
-            <DotList className="text-xs" content={dotListContent} />
-          </div>
+          {!enableMinimalCards && (
+            <>
+              <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
+                <span>{media.title}</span>
+              </h1>
+              <div className="media-info-container justify-content-center flex flex-wrap">
+                <DotList className="text-xs" content={dotListContent} />
+              </div>
 
-          {!closable && (
-            <div className="absolute bottom-0 translate-y-1 right-1">
-              <button
-                className="media-more-button p-2"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onShowDetails?.(media);
-                }}
-              >
-                <Icon
-                  className="text-xs font-semibold text-type-secondary"
-                  icon={Icons.ELLIPSIS}
-                />
-              </button>
-            </div>
-          )}
-          {editable && closable && (
-            <div className="absolute bottom-0 translate-y-1 right-1">
-              <button
-                className="media-more-button p-2"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onEdit?.();
-                }}
-              >
-                <Icon
-                  className="text-xs font-semibold text-type-secondary"
-                  icon={Icons.EDIT}
-                />
-              </button>
-            </div>
+              {!closable && (
+                <div className="absolute bottom-0 translate-y-1 right-1">
+                  <button
+                    className="media-more-button p-2"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onShowDetails?.(media);
+                    }}
+                  >
+                    <Icon
+                      className="text-xs font-semibold text-type-secondary"
+                      icon={Icons.ELLIPSIS}
+                    />
+                  </button>
+                </div>
+              )}
+              {editable && closable && (
+                <div className="absolute bottom-0 translate-y-1 right-1">
+                  <button
+                    className="media-more-button p-2"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onEdit?.();
+                    }}
+                  >
+                    <Icon
+                      className="text-xs font-semibold text-type-secondary"
+                      icon={Icons.EDIT}
+                    />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </Flare.Child>
       </Flare.Base>

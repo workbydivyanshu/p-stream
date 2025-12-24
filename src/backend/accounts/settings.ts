@@ -20,6 +20,7 @@ export interface SettingsInput {
   enableDetailsModal?: boolean;
   enableImageLogos?: boolean;
   enableCarouselView?: boolean;
+  enableMinimalCards?: boolean;
   forceCompactEpisodeView?: boolean;
   sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;
@@ -56,6 +57,7 @@ export interface SettingsResponse {
   enableDetailsModal?: boolean;
   enableImageLogos?: boolean;
   enableCarouselView?: boolean;
+  enableMinimalCards?: boolean;
   forceCompactEpisodeView?: boolean;
   sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;

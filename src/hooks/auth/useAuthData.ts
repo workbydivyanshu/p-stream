@@ -94,6 +94,9 @@ export function useAuthData() {
   const setKeyboardShortcuts = usePreferencesStore(
     (s) => s.setKeyboardShortcuts,
   );
+  const setEnableMinimalCards = usePreferencesStore(
+    (s) => s.setEnableMinimalCards,
+  );
 
   const login = useCallback(
     async (
@@ -282,6 +285,10 @@ export function useAuthData() {
       if (settings.keyboardShortcuts !== undefined) {
         setKeyboardShortcuts(settings.keyboardShortcuts);
       }
+
+      if (settings.enableMinimalCards !== undefined) {
+        setEnableMinimalCards(settings.enableMinimalCards);
+      }
     },
     [
       replaceBookmarks,
@@ -319,6 +326,7 @@ export function useAuthData() {
       setEnableDoubleClickToSeek,
       setEnableAutoResumeOnPlaybackError,
       setKeyboardShortcuts,
+      setEnableMinimalCards,
     ],
   );
 
