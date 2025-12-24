@@ -1,13 +1,23 @@
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { Modal, ModalCard } from "@/components/overlays/Modal";
 import { Heading2 } from "@/components/utils/Text";
+import { usePreferencesStore } from "@/stores/preferences";
+import {
+  DEFAULT_KEYBOARD_SHORTCUTS,
+  KeyboardShortcutConfig,
+  ShortcutId,
+  getKeyDisplayName,
+  getModifierSymbol,
+} from "@/utils/keyboardShortcuts";
 
 interface KeyboardShortcut {
   key: string;
   description: string;
   condition?: string;
+  config?: KeyboardShortcutConfig;
 }
 
 interface ShortcutGroup {
@@ -15,145 +25,188 @@ interface ShortcutGroup {
   shortcuts: KeyboardShortcut[];
 }
 
-const getShortcutGroups = (t: (key: string) => string): ShortcutGroup[] => [
-  {
-    title: t("global.keyboardShortcuts.groups.videoPlayback"),
-    shortcuts: [
-      {
-        key: "Space",
-        description: t("global.keyboardShortcuts.shortcuts.playPause"),
-      },
-      {
-        key: "K",
-        description: t("global.keyboardShortcuts.shortcuts.playPauseAlt"),
-      },
-      {
-        key: "→",
-        description: t("global.keyboardShortcuts.shortcuts.skipForward5"),
-      },
-      {
-        key: "←",
-        description: t("global.keyboardShortcuts.shortcuts.skipBackward5"),
-      },
-      {
-        key: "J",
-        description: t("global.keyboardShortcuts.shortcuts.skipBackward10"),
-      },
-      {
-        key: "L",
-        description: t("global.keyboardShortcuts.shortcuts.skipForward10"),
-      },
-      {
-        key: ".",
-        description: t("global.keyboardShortcuts.shortcuts.skipForward1"),
-        condition: t("global.keyboardShortcuts.conditions.whenPaused"),
-      },
-      {
-        key: ",",
-        description: t("global.keyboardShortcuts.shortcuts.skipBackward1"),
-        condition: t("global.keyboardShortcuts.conditions.whenPaused"),
-      },
-      {
-        key: "P",
-        description: t("global.keyboardShortcuts.shortcuts.nextEpisode"),
-        condition: t("global.keyboardShortcuts.conditions.showsOnly"),
-      },
-      {
-        key: "O",
-        description: t("global.keyboardShortcuts.shortcuts.previousEpisode"),
-        condition: t("global.keyboardShortcuts.conditions.showsOnly"),
-      },
-    ],
-  },
-  {
-    title: t("global.keyboardShortcuts.groups.jumpToPosition"),
-    shortcuts: [
-      {
-        key: "0",
-        description: t("global.keyboardShortcuts.shortcuts.jumpTo0"),
-      },
-      {
-        key: "9",
-        description: t("global.keyboardShortcuts.shortcuts.jumpTo9"),
-      },
-    ],
-  },
-  {
-    title: t("global.keyboardShortcuts.groups.audioVideo"),
-    shortcuts: [
-      {
-        key: "↑",
-        description: t("global.keyboardShortcuts.shortcuts.increaseVolume"),
-      },
-      {
-        key: "↓",
-        description: t("global.keyboardShortcuts.shortcuts.decreaseVolume"),
-      },
-      { key: "M", description: t("global.keyboardShortcuts.shortcuts.mute") },
-      {
-        key: ">/",
-        description: t("global.keyboardShortcuts.shortcuts.changeSpeed"),
-        condition: t("global.keyboardShortcuts.conditions.notInWatchParty"),
-      },
-      {
-        key: "F",
-        description: t("global.keyboardShortcuts.shortcuts.toggleFullscreen"),
-      },
-    ],
-  },
-  {
-    title: t("global.keyboardShortcuts.groups.subtitlesAccessibility"),
-    shortcuts: [
-      {
-        key: "C",
-        description: t("global.keyboardShortcuts.shortcuts.toggleCaptions"),
-      },
-      {
-        key: "Shift+C",
-        description: t("global.keyboardShortcuts.shortcuts.randomCaption"),
-      },
-      {
-        key: "[",
-        description: t(
-          "global.keyboardShortcuts.shortcuts.syncSubtitlesEarlier",
-        ),
-      },
-      {
-        key: "]",
-        description: t("global.keyboardShortcuts.shortcuts.syncSubtitlesLater"),
-      },
-    ],
-  },
-  {
-    title: t("global.keyboardShortcuts.groups.interface"),
-    shortcuts: [
-      {
-        key: "R",
-        description: t("global.keyboardShortcuts.shortcuts.barrelRoll"),
-      },
-      {
-        key: "Escape",
-        description: t("global.keyboardShortcuts.shortcuts.closeOverlay"),
-      },
-      {
-        key: "Shift",
-        description: t("global.keyboardShortcuts.shortcuts.copyLinkWithTime"),
-      },
-      {
-        key: "Shift",
-        description: t("global.keyboardShortcuts.shortcuts.widescreenMode"),
-      },
-    ],
-  },
-];
+function KeyBadge({
+  config,
+  children,
+}: {
+  config?: KeyboardShortcutConfig;
+  children: ReactNode;
+}) {
+  const modifier = config?.modifier;
 
-function KeyBadge({ children }: { children: ReactNode }) {
   return (
-    <kbd className="inline-flex items-center justify-center min-w-[2rem] h-8 px-2 text-sm font-mono bg-gray-800 text-gray-200 rounded border border-gray-600 shadow-sm">
+    <kbd className="relative inline-flex items-center justify-center min-w-[2rem] h-8 px-2 text-sm font-mono bg-gray-800 text-gray-200 rounded border border-gray-600 shadow-sm">
       {children}
+      {modifier && (
+        <span className="absolute -top-1 -right-1 text-xs bg-blue-600 text-white rounded-full w-4 h-4 flex items-center justify-center">
+          {getModifierSymbol(modifier)}
+        </span>
+      )}
     </kbd>
   );
 }
+
+const getShortcutGroups = (
+  t: (key: string) => string,
+  shortcuts: Record<string, KeyboardShortcutConfig>,
+): ShortcutGroup[] => {
+  // Merge user shortcuts with defaults (user shortcuts take precedence)
+  const mergedShortcuts = {
+    ...DEFAULT_KEYBOARD_SHORTCUTS,
+    ...shortcuts,
+  };
+
+  const getDisplayKey = (shortcutId: ShortcutId): string => {
+    const config = mergedShortcuts[shortcutId];
+    if (!config?.key) return "";
+    return getKeyDisplayName(config.key);
+  };
+
+  const getConfig = (
+    shortcutId: ShortcutId,
+  ): KeyboardShortcutConfig | undefined => {
+    return mergedShortcuts[shortcutId];
+  };
+
+  return [
+    {
+      title: t("global.keyboardShortcuts.groups.videoPlayback"),
+      shortcuts: [
+        {
+          key: "Space",
+          description: t("global.keyboardShortcuts.shortcuts.playPause"),
+        },
+        {
+          key: "K",
+          description: t("global.keyboardShortcuts.shortcuts.playPauseAlt"),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SKIP_FORWARD_5) || "→",
+          description: t("global.keyboardShortcuts.shortcuts.skipForward5"),
+          config: getConfig(ShortcutId.SKIP_FORWARD_5),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SKIP_BACKWARD_5) || "←",
+          description: t("global.keyboardShortcuts.shortcuts.skipBackward5"),
+          config: getConfig(ShortcutId.SKIP_BACKWARD_5),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SKIP_BACKWARD_10) || "J",
+          description: t("global.keyboardShortcuts.shortcuts.skipBackward10"),
+          config: getConfig(ShortcutId.SKIP_BACKWARD_10),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SKIP_FORWARD_10) || "L",
+          description: t("global.keyboardShortcuts.shortcuts.skipForward10"),
+          config: getConfig(ShortcutId.SKIP_FORWARD_10),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SKIP_FORWARD_1) || ".",
+          description: t("global.keyboardShortcuts.shortcuts.skipForward1"),
+          config: getConfig(ShortcutId.SKIP_FORWARD_1),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SKIP_BACKWARD_1) || ",",
+          description: t("global.keyboardShortcuts.shortcuts.skipBackward1"),
+          config: getConfig(ShortcutId.SKIP_BACKWARD_1),
+        },
+        {
+          key: getDisplayKey(ShortcutId.NEXT_EPISODE) || "P",
+          description: t("global.keyboardShortcuts.shortcuts.nextEpisode"),
+          condition: t("global.keyboardShortcuts.conditions.showsOnly"),
+          config: getConfig(ShortcutId.NEXT_EPISODE),
+        },
+        {
+          key: getDisplayKey(ShortcutId.PREVIOUS_EPISODE) || "O",
+          description: t("global.keyboardShortcuts.shortcuts.previousEpisode"),
+          condition: t("global.keyboardShortcuts.conditions.showsOnly"),
+          config: getConfig(ShortcutId.PREVIOUS_EPISODE),
+        },
+      ],
+    },
+    {
+      title: t("global.keyboardShortcuts.groups.jumpToPosition"),
+      shortcuts: [
+        {
+          key: getDisplayKey(ShortcutId.JUMP_TO_0) || "0",
+          description: t("global.keyboardShortcuts.shortcuts.jumpTo0"),
+          config: getConfig(ShortcutId.JUMP_TO_0),
+        },
+        {
+          key: getDisplayKey(ShortcutId.JUMP_TO_9) || "9",
+          description: t("global.keyboardShortcuts.shortcuts.jumpTo9"),
+          config: getConfig(ShortcutId.JUMP_TO_9),
+        },
+      ],
+    },
+    {
+      title: t("global.keyboardShortcuts.groups.audioVideo"),
+      shortcuts: [
+        {
+          key: "↑",
+          description: t("global.keyboardShortcuts.shortcuts.increaseVolume"),
+        },
+        {
+          key: "↓",
+          description: t("global.keyboardShortcuts.shortcuts.decreaseVolume"),
+        },
+        {
+          key: getDisplayKey(ShortcutId.MUTE) || "M",
+          description: t("global.keyboardShortcuts.shortcuts.mute"),
+          config: getConfig(ShortcutId.MUTE),
+        },
+        {
+          key: getDisplayKey(ShortcutId.TOGGLE_FULLSCREEN) || "F",
+          description: t("global.keyboardShortcuts.shortcuts.toggleFullscreen"),
+          config: getConfig(ShortcutId.TOGGLE_FULLSCREEN),
+        },
+      ],
+    },
+    {
+      title: t("global.keyboardShortcuts.groups.subtitlesAccessibility"),
+      shortcuts: [
+        {
+          key: getDisplayKey(ShortcutId.TOGGLE_CAPTIONS) || "C",
+          description: t("global.keyboardShortcuts.shortcuts.toggleCaptions"),
+          config: getConfig(ShortcutId.TOGGLE_CAPTIONS),
+        },
+        {
+          key: getDisplayKey(ShortcutId.RANDOM_CAPTION) || "Shift+C",
+          description: t("global.keyboardShortcuts.shortcuts.randomCaption"),
+          config: getConfig(ShortcutId.RANDOM_CAPTION),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SYNC_SUBTITLES_EARLIER) || "[",
+          description: t(
+            "global.keyboardShortcuts.shortcuts.syncSubtitlesEarlier",
+          ),
+          config: getConfig(ShortcutId.SYNC_SUBTITLES_EARLIER),
+        },
+        {
+          key: getDisplayKey(ShortcutId.SYNC_SUBTITLES_LATER) || "]",
+          description: t(
+            "global.keyboardShortcuts.shortcuts.syncSubtitlesLater",
+          ),
+          config: getConfig(ShortcutId.SYNC_SUBTITLES_LATER),
+        },
+      ],
+    },
+    {
+      title: t("global.keyboardShortcuts.groups.interface"),
+      shortcuts: [
+        {
+          key: getDisplayKey(ShortcutId.BARREL_ROLL) || "R",
+          description: t("global.keyboardShortcuts.shortcuts.barrelRoll"),
+          config: getConfig(ShortcutId.BARREL_ROLL),
+        },
+        {
+          key: "Escape",
+          description: t("global.keyboardShortcuts.shortcuts.closeOverlay"),
+        },
+      ],
+    },
+  ];
+};
 
 interface KeyboardCommandsModalProps {
   id: string;
@@ -161,7 +214,9 @@ interface KeyboardCommandsModalProps {
 
 export function KeyboardCommandsModal({ id }: KeyboardCommandsModalProps) {
   const { t } = useTranslation();
-  const shortcutGroups = getShortcutGroups(t);
+  const navigate = useNavigate();
+  const keyboardShortcuts = usePreferencesStore((s) => s.keyboardShortcuts);
+  const shortcutGroups = getShortcutGroups(t, keyboardShortcuts);
 
   return (
     <Modal id={id}>
@@ -178,11 +233,22 @@ export function KeyboardCommandsModal({ id }: KeyboardCommandsModalProps) {
                 return (
                   <>
                     {before}
-                    <KeyBadge>`</KeyBadge>
+                    <KeyBadge config={undefined}>`</KeyBadge>
                     {after}
                   </>
                 );
               })()}
+            </p>
+            <p className="text-type-secondary text-sm mt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  navigate("/settings?category=settings-preferences");
+                }}
+                className="text-type-link hover:text-type-linkHover"
+              >
+                {t("global.keyboardShortcuts.editInSettings")}
+              </button>
             </p>
           </div>
 
@@ -193,24 +259,28 @@ export function KeyboardCommandsModal({ id }: KeyboardCommandsModalProps) {
                   {group.title}
                 </h3>
                 <div className="space-y-2">
-                  {group.shortcuts.map((shortcut) => (
-                    <div
-                      key={shortcut.key}
-                      className="flex items-center justify-between py-1"
-                    >
-                      <div className="flex items-center gap-3">
-                        <KeyBadge>{shortcut.key}</KeyBadge>
-                        <span className="text-type-secondary">
-                          {shortcut.description}
-                        </span>
+                  {group.shortcuts
+                    .filter((shortcut) => shortcut.key) // Only show shortcuts that have a key configured
+                    .map((shortcut) => (
+                      <div
+                        key={shortcut.key}
+                        className="flex items-center justify-between py-1"
+                      >
+                        <div className="flex items-center gap-3">
+                          <KeyBadge config={shortcut.config}>
+                            {shortcut.key}
+                          </KeyBadge>
+                          <span className="text-type-secondary">
+                            {shortcut.description}
+                          </span>
+                        </div>
+                        {shortcut.condition && (
+                          <span className="text-xs text-gray-400 italic">
+                            {shortcut.condition}
+                          </span>
+                        )}
                       </div>
-                      {shortcut.condition && (
-                        <span className="text-xs text-gray-400 italic">
-                          {shortcut.condition}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             ))}

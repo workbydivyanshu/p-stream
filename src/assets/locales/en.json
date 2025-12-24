@@ -255,8 +255,8 @@
         "skipBackward5": "Skip backward 5 seconds",
         "skipBackward10": "Skip backward 10 seconds",
         "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second (when paused)",
-        "skipBackward1": "Skip backward 1 second (when paused)",
+        "skipForward1": "Skip forward 1 second",
+        "skipBackward1": "Skip backward 1 second",
         "jumpTo0": "Jump to 0% (beginning)",
         "jumpTo9": "Jump to 90%",
         "increaseVolume": "Increase volume",
@@ -277,9 +277,20 @@
       },
       "conditions": {
         "notInWatchParty": "Not in watch party",
-        "whenPaused": "When paused",
         "showsOnly": "Shows only"
-      }
+      },
+      "editInSettings": "Edit keyboard commands from settings",
+      "clickToEdit": "Click on a key badge to edit it",
+      "conflict": "conflict",
+      "conflicts": "conflicts",
+      "detected": "detected",
+      "resetAllToDefault": "Reset All to Default",
+      "pressKey": "Press a key...",
+      "none": "None",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "resetToDefault": "Reset to default"
     }
   },
   "home": {
@@ -1175,6 +1186,9 @@
       "doubleClickToSeek": "Double tap to seek",
       "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
       "doubleClickToSeekLabel": "Enable double tap to seek",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
       "sourceOrder": "Reordering sources",
       "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
       "sourceOrderEnableLabel": "Custom source order",

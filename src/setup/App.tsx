@@ -12,6 +12,7 @@ import {
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
 import { DetailsModal } from "@/components/overlays/detailsModal";
+import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
@@ -127,6 +128,7 @@ function App() {
       <LanguageProvider />
       <NotificationModal id="notifications" />
       <KeyboardCommandsModal id="keyboard-commands" />
+      <KeyboardCommandsEditModal id="keyboard-commands-edit" />
       <SupportInfoModal id="support-info" />
       <DetailsModal id="details" />
       <DetailsModal id="discover-details" />

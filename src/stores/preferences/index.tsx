@@ -2,6 +2,11 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import {
+  DEFAULT_KEYBOARD_SHORTCUTS,
+  KeyboardShortcuts,
+} from "@/utils/keyboardShortcuts";
+
 export interface PreferencesStore {
   enableThumbnails: boolean;
   enableAutoplay: boolean;
@@ -31,6 +36,7 @@ export interface PreferencesStore {
   manualSourceSelection: boolean;
   enableDoubleClickToSeek: boolean;
   enableAutoResumeOnPlaybackError: boolean;
+  keyboardShortcuts: KeyboardShortcuts;
 
   setEnableThumbnails(v: boolean): void;
   setEnableAutoplay(v: boolean): void;
@@ -60,6 +66,7 @@ export interface PreferencesStore {
   setManualSourceSelection(v: boolean): void;
   setEnableDoubleClickToSeek(v: boolean): void;
   setEnableAutoResumeOnPlaybackError(v: boolean): void;
+  setKeyboardShortcuts(v: KeyboardShortcuts): void;
 }
 
 export const usePreferencesStore = create(
@@ -93,6 +100,7 @@ export const usePreferencesStore = create(
       manualSourceSelection: false,
       enableDoubleClickToSeek: false,
       enableAutoResumeOnPlaybackError: true,
+      keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
       setEnableThumbnails(v) {
         set((s) => {
           s.enableThumbnails = v;
@@ -236,6 +244,11 @@ export const usePreferencesStore = create(
       setEnableAutoResumeOnPlaybackError(v) {
         set((s) => {
           s.enableAutoResumeOnPlaybackError = v;
+        });
+      },
+      setKeyboardShortcuts(v) {
+        set((s) => {
+          s.keyboardShortcuts = v;
         });
       },
     })),

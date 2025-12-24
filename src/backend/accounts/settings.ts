@@ -2,6 +2,7 @@ import { ofetch } from "ofetch";
 
 import { getAuthHeaders } from "@/backend/accounts/auth";
 import { AccountWithToken } from "@/stores/auth";
+import { KeyboardShortcuts } from "@/utils/keyboardShortcuts";
 
 export interface SettingsInput {
   applicationLanguage?: string;
@@ -36,6 +37,7 @@ export interface SettingsInput {
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
   enableAutoResumeOnPlaybackError?: boolean;
+  keyboardShortcuts?: KeyboardShortcuts;
 }
 
 export interface SettingsResponse {
@@ -71,6 +73,7 @@ export interface SettingsResponse {
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
   enableAutoResumeOnPlaybackError?: boolean;
+  keyboardShortcuts?: KeyboardShortcuts;
 }
 
 export function updateSettings(

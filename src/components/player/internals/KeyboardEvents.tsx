@@ -13,6 +13,11 @@ import { useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useEmpheralVolumeStore } from "@/stores/volume";
 import { useWatchPartyStore } from "@/stores/watchParty";
+import {
+  LOCKED_SHORTCUTS,
+  ShortcutId,
+  matchesShortcut,
+} from "@/utils/keyboardShortcuts";
 
 export function KeyboardEvents() {
   const router = useOverlayRouter("");
@@ -44,6 +49,7 @@ export function KeyboardEvents() {
     (s) => s.setShowDelayIndicator,
   );
   const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
+  const keyboardShortcuts = usePreferencesStore((s) => s.keyboardShortcuts);
 
   const [isRolling, setIsRolling] = useState(false);
   const volumeDebounce = useRef<ReturnType<typeof setTimeout> | undefined>();
@@ -288,6 +294,7 @@ export function KeyboardEvents() {
     enableHoldToBoost,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
+    keyboardShortcuts,
   });
 
   useEffect(() => {
@@ -321,6 +328,7 @@ export function KeyboardEvents() {
       enableHoldToBoost,
       navigateToNextEpisode,
       navigateToPreviousEpisode,
+      keyboardShortcuts,
     };
   }, [
     setShowVolume,
@@ -347,6 +355,7 @@ export function KeyboardEvents() {
     enableHoldToBoost,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
+    keyboardShortcuts,
   ]);
 
   useEffect(() => {
@@ -357,7 +366,7 @@ export function KeyboardEvents() {
       const k = evt.key;
       const keyL = evt.key.toLowerCase();
 
-      // Volume
+      // Volume (locked shortcuts - ArrowUp/ArrowDown always work)
       if (["ArrowUp", "ArrowDown", "m", "M"].includes(k)) {
         dataRef.current.setShowVolume(true);
         dataRef.current.setCurrentOverlay("volume");
@@ -368,17 +377,22 @@ export function KeyboardEvents() {
           dataRef.current.setCurrentOverlay(null);
         }, 3e3);
       }
-      if (k === "ArrowUp")
+      if (k === LOCKED_SHORTCUTS.ARROW_UP)
         dataRef.current.setVolume(
           (dataRef.current.mediaPlaying?.volume || 0) + 0.15,
         );
-      if (k === "ArrowDown")
+      if (k === LOCKED_SHORTCUTS.ARROW_DOWN)
         dataRef.current.setVolume(
           (dataRef.current.mediaPlaying?.volume || 0) - 0.15,
         );
-      if (keyL === "m") dataRef.current.toggleMute();
+      // Mute - check customizable shortcut
+      if (
+        matchesShortcut(evt, dataRef.current.keyboardShortcuts[ShortcutId.MUTE])
+      ) {
+        dataRef.current.toggleMute();
+      }
 
-      // Video playback speed - disabled in watch party
+      // Video playback speed - disabled in watch party (hardcoded, not customizable)
       if ((k === ">" || k === "<") && !dataRef.current.isInWatchParty) {
         const options = [0.25, 0.5, 1, 1.5, 2];
         let idx = options.indexOf(dataRef.current.mediaPlaying?.playbackRate);
@@ -389,8 +403,9 @@ export function KeyboardEvents() {
       }
 
       // Handle spacebar press for play/pause and hold for 2x speed - disabled in watch party or when hold to boost is disabled
+      // Space is locked, always check it
       if (
-        k === " " &&
+        k === LOCKED_SHORTCUTS.PLAY_PAUSE_SPACE &&
         !dataRef.current.isInWatchParty &&
         dataRef.current.enableHoldToBoost
       ) {
@@ -455,8 +470,9 @@ export function KeyboardEvents() {
       }
 
       // Handle spacebar press for simple play/pause when hold to boost is disabled or in watch party mode
+      // Space is locked, always check it
       if (
-        k === " " &&
+        k === LOCKED_SHORTCUTS.PLAY_PAUSE_SPACE &&
         (!dataRef.current.enableHoldToBoost || dataRef.current.isInWatchParty)
       ) {
         // Skip if it's a repeated event
@@ -480,38 +496,130 @@ export function KeyboardEvents() {
         dataRef.current.display?.[action]();
       }
 
-      // Video progress
-      if (k === "ArrowRight")
-        dataRef.current.display?.setTime(dataRef.current.time + 5);
-      if (k === "ArrowLeft")
-        dataRef.current.display?.setTime(dataRef.current.time - 5);
-      if (keyL === "j")
-        dataRef.current.display?.setTime(dataRef.current.time - 10);
-      if (keyL === "l")
-        dataRef.current.display?.setTime(dataRef.current.time + 10);
-      if (k === "." && dataRef.current.mediaPlaying?.isPaused)
-        dataRef.current.display?.setTime(dataRef.current.time + 1);
-      if (k === "," && dataRef.current.mediaPlaying?.isPaused)
-        dataRef.current.display?.setTime(dataRef.current.time - 1);
+      // Video progress - handle skip shortcuts
+      // Skip repeated key events to prevent multiple skips
+      if (evt.repeat) return;
 
-      // Skip to percentage with number keys (0-9)
+      // Arrow keys are locked (always 5 seconds) - handle first and return
+      if (k === LOCKED_SHORTCUTS.ARROW_RIGHT) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time + 5);
+        return;
+      }
+      if (k === LOCKED_SHORTCUTS.ARROW_LEFT) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time - 5);
+        return;
+      }
+
+      // Skip forward/backward 5 seconds - customizable (skip if set to arrow keys)
+      const skipForward5 =
+        dataRef.current.keyboardShortcuts[ShortcutId.SKIP_FORWARD_5];
+      if (
+        skipForward5?.key &&
+        skipForward5.key !== LOCKED_SHORTCUTS.ARROW_RIGHT &&
+        matchesShortcut(evt, skipForward5)
+      ) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time + 5);
+        return;
+      }
+      const skipBackward5 =
+        dataRef.current.keyboardShortcuts[ShortcutId.SKIP_BACKWARD_5];
+      if (
+        skipBackward5?.key &&
+        skipBackward5.key !== LOCKED_SHORTCUTS.ARROW_LEFT &&
+        matchesShortcut(evt, skipBackward5)
+      ) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time - 5);
+        return;
+      }
+
+      // Skip forward/backward 10 seconds - customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SKIP_FORWARD_10],
+        )
+      ) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time + 10);
+        return;
+      }
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SKIP_BACKWARD_10],
+        )
+      ) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time - 10);
+        return;
+      }
+
+      // Skip forward/backward 1 second - customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SKIP_FORWARD_1],
+        )
+      ) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time + 1);
+        return;
+      }
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SKIP_BACKWARD_1],
+        )
+      ) {
+        evt.preventDefault();
+        dataRef.current.display?.setTime(dataRef.current.time - 1);
+        return;
+      }
+
+      // Skip to percentage with number keys (0-9) - locked, always use number keys
+      // Number keys are reserved for progress skipping, so handle them before customizable shortcuts
       if (
         /^[0-9]$/.test(k) &&
         dataRef.current.duration > 0 &&
         !evt.ctrlKey &&
-        !evt.metaKey
+        !evt.metaKey &&
+        !evt.shiftKey &&
+        !evt.altKey
       ) {
-        const percentage = parseInt(k, 10) * 10; // 0 = 0%, 1 = 10%, 2 = 20%, ..., 9 = 90%
-        const targetTime = (dataRef.current.duration * percentage) / 100;
-        dataRef.current.display?.setTime(targetTime);
+        evt.preventDefault();
+        if (k === "0") {
+          dataRef.current.display?.setTime(0);
+        } else if (k === "9") {
+          const targetTime = (dataRef.current.duration * 90) / 100;
+          dataRef.current.display?.setTime(targetTime);
+        } else {
+          // 1-8 for 10%-80%
+          const percentage = parseInt(k, 10) * 10;
+          const targetTime = (dataRef.current.duration * percentage) / 100;
+          dataRef.current.display?.setTime(targetTime);
+        }
+        return;
       }
 
-      // Utils
-      if (keyL === "f") dataRef.current.display?.toggleFullscreen();
+      // Utils - Fullscreen is customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.TOGGLE_FULLSCREEN],
+        )
+      ) {
+        dataRef.current.display?.toggleFullscreen();
+      }
 
-      // Remove duplicate spacebar handler that was conflicting
-      // with our improved implementation
-      if (keyL === "k" && !dataRef.current.isSpaceHeldRef.current) {
+      // K key for play/pause - locked shortcut
+      if (
+        keyL === LOCKED_SHORTCUTS.PLAY_PAUSE_K.toLowerCase() &&
+        !dataRef.current.isSpaceHeldRef.current
+      ) {
         if (
           evt.target &&
           (evt.target as HTMLInputElement).nodeName === "BUTTON"
@@ -522,24 +630,55 @@ export function KeyboardEvents() {
         const action = dataRef.current.mediaPlaying.isPaused ? "play" : "pause";
         dataRef.current.display?.[action]();
       }
-      if (k === "Escape") dataRef.current.router.close();
+      // Escape is locked
+      if (k === LOCKED_SHORTCUTS.ESCAPE) dataRef.current.router.close();
 
-      // Episode navigation (shows only)
-      if (keyL === "p") dataRef.current.navigateToNextEpisode();
-      if (keyL === "o") dataRef.current.navigateToPreviousEpisode();
+      // Episode navigation (shows only) - customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.NEXT_EPISODE],
+        )
+      ) {
+        dataRef.current.navigateToNextEpisode();
+      }
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.PREVIOUS_EPISODE],
+        )
+      ) {
+        dataRef.current.navigateToPreviousEpisode();
+      }
 
-      // captions
-      if (keyL === "c" && !evt.shiftKey)
+      // Captions - customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.TOGGLE_CAPTIONS],
+        )
+      ) {
         dataRef.current.toggleLastUsed().catch(() => {}); // ignore errors
-      // Random caption selection (Shift+C)
-      if (k === "C" && evt.shiftKey) {
+      }
+      // Random caption selection - customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.RANDOM_CAPTION],
+        )
+      ) {
         dataRef.current
           .selectRandomCaptionFromLastUsedLanguage()
           .catch(() => {}); // ignore errors
       }
 
-      // Do a barrell roll!
-      if (keyL === "r") {
+      // Barrel roll - customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.BARREL_ROLL],
+        )
+      ) {
         if (dataRef.current.isRolling || evt.ctrlKey || evt.metaKey) return;
 
         dataRef.current.setIsRolling(true);
@@ -553,10 +692,30 @@ export function KeyboardEvents() {
         }, 1e3);
       }
 
-      // Subtitle sync
-      if (k === "[" || k === "]") {
-        const change = k === "[" ? -0.5 : 0.5;
-        dataRef.current.setDelay(dataRef.current.delay + change);
+      // Subtitle sync - customizable
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_EARLIER],
+        )
+      ) {
+        dataRef.current.setDelay(dataRef.current.delay - 0.5);
+        dataRef.current.setShowDelayIndicator(true);
+        dataRef.current.setCurrentOverlay("subtitle");
+
+        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
+        subtitleDebounce.current = setTimeout(() => {
+          dataRef.current.setShowDelayIndicator(false);
+          dataRef.current.setCurrentOverlay(null);
+        }, 3000);
+      }
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_LATER],
+        )
+      ) {
+        dataRef.current.setDelay(dataRef.current.delay + 0.5);
         dataRef.current.setShowDelayIndicator(true);
         dataRef.current.setCurrentOverlay("subtitle");
 

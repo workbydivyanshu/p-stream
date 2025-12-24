@@ -11,6 +11,7 @@ import { Dropdown } from "@/components/form/Dropdown";
 import { SortableListWithToggles } from "@/components/form/SortableListWithToggles";
 import { Heading1 } from "@/components/utils/Text";
 import { appLanguageOptions } from "@/setup/i18n";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getLocaleInfo, sortLangCodes } from "@/utils/language";
 
@@ -43,6 +44,7 @@ export function PreferencesPart(props: {
   setEnableAutoResumeOnPlaybackError: (v: boolean) => void;
 }) {
   const { t } = useTranslation();
+  const { showModal } = useOverlayStack();
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
 
   const allowAutoplay = isAutoplayAllowed();
@@ -246,6 +248,22 @@ export function PreferencesPart(props: {
               </p>
             </div>
           </div>
+
+          {/* Keyboard Shortcuts Preference */}
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.preferences.keyboardShortcuts")}
+            </p>
+            <p className="max-w-[25rem] font-medium">
+              {t("settings.preferences.keyboardShortcutsDescription")}
+            </p>
+          </div>
+          <Button
+            theme="secondary"
+            onClick={() => showModal("keyboard-commands-edit")}
+          >
+            {t("settings.preferences.keyboardShortcutsLabel")}
+          </Button>
         </div>
 
         {/* Column */}

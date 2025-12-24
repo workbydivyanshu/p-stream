@@ -91,6 +91,9 @@ export function useAuthData() {
   const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
     (s) => s.setEnableAutoResumeOnPlaybackError,
   );
+  const setKeyboardShortcuts = usePreferencesStore(
+    (s) => s.setKeyboardShortcuts,
+  );
 
   const login = useCallback(
     async (
@@ -275,6 +278,10 @@ export function useAuthData() {
           settings.enableAutoResumeOnPlaybackError,
         );
       }
+
+      if (settings.keyboardShortcuts !== undefined) {
+        setKeyboardShortcuts(settings.keyboardShortcuts);
+      }
     },
     [
       replaceBookmarks,
@@ -311,6 +318,7 @@ export function useAuthData() {
       setManualSourceSelection,
       setEnableDoubleClickToSeek,
       setEnableAutoResumeOnPlaybackError,
+      setKeyboardShortcuts,
     ],
   );
 
