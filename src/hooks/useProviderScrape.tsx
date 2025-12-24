@@ -163,10 +163,8 @@ export function useScrape() {
   const enableLastSuccessfulSource = usePreferencesStore(
     (s) => s.enableLastSuccessfulSource,
   );
-  const disabledSources = usePreferencesStore((s) => s.disabledSources);
   const preferredEmbedOrder = usePreferencesStore((s) => s.embedOrder);
   const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
-  const disabledEmbeds = usePreferencesStore((s) => s.disabledEmbeds);
 
   const startScraping = useCallback(
     async (media: ScrapeMedia, startFromSourceId?: string) => {
@@ -194,13 +192,9 @@ export function useScrape() {
         ? playerState.failedEmbedsPerMedia[mediaKey] || {}
         : {};
 
-      // Start with all available sources (filtered by disabled and failed ones)
+      // Start with all available sources (filtered by failed ones only)
       let baseSourceOrder = allSources
-        .filter(
-          (source) =>
-            !(disabledSources || []).includes(source.id) &&
-            !failedSources.includes(source.id),
-        )
+        .filter((source) => !failedSources.includes(source.id))
         .map((source) => source.id);
 
       // Apply custom source ordering if enabled
@@ -244,12 +238,10 @@ export function useScrape() {
       // Collect all failed embed IDs across all sources for current media
       const allFailedEmbedIds = Object.values(failedEmbeds).flat();
 
-      // Filter out disabled and failed embeds from the embed order
+      // Filter out failed embeds from the embed order
       const filteredEmbedOrder = enableEmbedOrder
         ? (preferredEmbedOrder || []).filter(
-            (id) =>
-              !(disabledEmbeds || []).includes(id) &&
-              !allFailedEmbedIds.includes(id),
+            (id) => !allFailedEmbedIds.includes(id),
           )
         : undefined;
 
@@ -304,10 +296,8 @@ export function useScrape() {
       enableSourceOrder,
       lastSuccessfulSource,
       enableLastSuccessfulSource,
-      disabledSources,
       preferredEmbedOrder,
       enableEmbedOrder,
-      disabledEmbeds,
     ],
   );
 

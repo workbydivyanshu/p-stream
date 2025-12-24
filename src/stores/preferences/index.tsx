@@ -22,10 +22,8 @@ export interface PreferencesStore {
   enableSourceOrder: boolean;
   lastSuccessfulSource: string | null;
   enableLastSuccessfulSource: boolean;
-  disabledSources: string[];
   embedOrder: string[];
   enableEmbedOrder: boolean;
-  disabledEmbeds: string[];
   proxyTmdb: boolean;
   febboxKey: string | null;
   debridToken: string | null;
@@ -53,10 +51,8 @@ export interface PreferencesStore {
   setEnableSourceOrder(v: boolean): void;
   setLastSuccessfulSource(v: string | null): void;
   setEnableLastSuccessfulSource(v: boolean): void;
-  setDisabledSources(v: string[]): void;
   setEmbedOrder(v: string[]): void;
   setEnableEmbedOrder(v: boolean): void;
-  setDisabledEmbeds(v: string[]): void;
   setProxyTmdb(v: boolean): void;
   setFebboxKey(v: string | null): void;
   setdebridToken(v: string | null): void;
@@ -88,10 +84,8 @@ export const usePreferencesStore = create(
       enableSourceOrder: false,
       lastSuccessfulSource: null,
       enableLastSuccessfulSource: false,
-      disabledSources: [],
       embedOrder: [],
       enableEmbedOrder: false,
-      disabledEmbeds: [],
       proxyTmdb: false,
       febboxKey: null,
       debridToken: null,
@@ -174,11 +168,6 @@ export const usePreferencesStore = create(
           s.enableLastSuccessfulSource = v;
         });
       },
-      setDisabledSources(v) {
-        set((s) => {
-          s.disabledSources = v;
-        });
-      },
       setEmbedOrder(v) {
         set((s) => {
           s.embedOrder = v;
@@ -187,11 +176,6 @@ export const usePreferencesStore = create(
       setEnableEmbedOrder(v) {
         set((s) => {
           s.enableEmbedOrder = v;
-        });
-      },
-      setDisabledEmbeds(v) {
-        set((s) => {
-          s.disabledEmbeds = v;
         });
       },
       setProxyTmdb(v) {

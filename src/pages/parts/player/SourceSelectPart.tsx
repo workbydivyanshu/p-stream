@@ -153,15 +153,13 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
   const enableLastSuccessfulSource = usePreferencesStore(
     (s) => s.enableLastSuccessfulSource,
   );
-  const disabledSources = usePreferencesStore((s) => s.disabledSources);
 
   const sources = useMemo(() => {
     const metaType = props.media.type;
     if (!metaType) return [];
     const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
-      .filter((v) => v.mediaTypes?.includes(metaType))
-      .filter((v) => !(disabledSources || []).includes(v.id));
+      .filter((v) => v.mediaTypes?.includes(metaType));
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
       // Even without custom source order, prioritize last successful source if enabled
@@ -209,7 +207,6 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
     props.media.type,
     preferredSourceOrder,
     enableSourceOrder,
-    disabledSources,
     lastSuccessfulSource,
     enableLastSuccessfulSource,
   ]);

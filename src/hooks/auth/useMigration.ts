@@ -131,19 +131,11 @@ export function useMigration() {
             enableSourceOrder: preferences.enableSourceOrder,
             lastSuccessfulSource: preferences.lastSuccessfulSource,
             enableLastSuccessfulSource: preferences.enableLastSuccessfulSource,
-            disabledSources:
-              preferences.disabledSources.length > 0
-                ? preferences.disabledSources
-                : undefined,
             embedOrder:
               preferences.embedOrder.length > 0
                 ? preferences.embedOrder
                 : undefined,
             enableEmbedOrder: preferences.enableEmbedOrder,
-            disabledEmbeds:
-              preferences.disabledEmbeds.length > 0
-                ? preferences.disabledEmbeds
-                : undefined,
             proxyTmdb: preferences.proxyTmdb,
             enableLowPerformanceMode: preferences.enableLowPerformanceMode,
             enableNativeSubtitles: preferences.enableNativeSubtitles,

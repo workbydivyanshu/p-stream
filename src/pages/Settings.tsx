@@ -413,9 +413,6 @@ export function SettingsPage() {
     (s) => s.setEnableLastSuccessfulSource,
   );
 
-  const disabledSources = usePreferencesStore((s) => s.disabledSources);
-  const setDisabledSources = usePreferencesStore((s) => s.setDisabledSources);
-
   // These are commented because the EmbedOrderPart is on the admin page and not on the settings page.
   const embedOrder = usePreferencesStore((s) => s.embedOrder);
   // const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
@@ -423,7 +420,6 @@ export function SettingsPage() {
   const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
   // const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
 
-  const disabledEmbeds = usePreferencesStore((s) => s.disabledEmbeds);
   // const setDisabledEmbeds = usePreferencesStore((s) => s.setDisabledEmbeds);
 
   const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
@@ -560,10 +556,8 @@ export function SettingsPage() {
     enableSourceOrder,
     lastSuccessfulSource,
     enableLastSuccessfulSource,
-    disabledSources,
     embedOrder,
     enableEmbedOrder,
-    disabledEmbeds,
     proxyTmdb,
     enableSkipCredits,
     enableImageLogos,
@@ -634,7 +628,6 @@ export function SettingsPage() {
         state.enableSourceOrder.changed ||
         state.lastSuccessfulSource.changed ||
         state.enableLastSuccessfulSource.changed ||
-        state.disabledSources.changed ||
         state.proxyTmdb.changed ||
         state.enableCarouselView.changed ||
         state.enableMinimalCards.changed ||
@@ -664,7 +657,6 @@ export function SettingsPage() {
           enableSourceOrder: state.enableSourceOrder.state,
           lastSuccessfulSource: state.lastSuccessfulSource.state,
           enableLastSuccessfulSource: state.enableLastSuccessfulSource.state,
-          disabledSources: state.disabledSources.state,
           proxyTmdb: state.proxyTmdb.state,
           enableCarouselView: state.enableCarouselView.state,
           enableMinimalCards: state.enableMinimalCards.state,
@@ -713,7 +705,6 @@ export function SettingsPage() {
     setEnableSourceOrder(state.enableSourceOrder.state);
     setLastSuccessfulSource(state.lastSuccessfulSource.state);
     setEnableLastSuccessfulSource(state.enableLastSuccessfulSource.state);
-    setDisabledSources(state.disabledSources.state);
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
@@ -768,7 +759,6 @@ export function SettingsPage() {
     setEnableSourceOrder,
     setLastSuccessfulSource,
     setEnableLastSuccessfulSource,
-    setDisabledSources,
     setAppLanguage,
     setTheme,
     setSubStyling,
@@ -859,8 +849,6 @@ export function SettingsPage() {
               setEnableLastSuccessfulSource={
                 state.enableLastSuccessfulSource.set
               }
-              disabledSources={state.disabledSources.state}
-              setDisabledSources={state.disabledSources.set}
               enableLowPerformanceMode={state.enableLowPerformanceMode.state}
               setEnableLowPerformanceMode={state.enableLowPerformanceMode.set}
               enableHoldToBoost={state.enableHoldToBoost.state}

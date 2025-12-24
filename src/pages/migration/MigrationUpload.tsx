@@ -375,22 +375,12 @@ export function MigrationUploadPage() {
             uploadedData.settings.enableLastSuccessfulSource,
           );
         }
-        if (uploadedData.settings.disabledSources !== undefined) {
-          preferencesStore.setDisabledSources(
-            uploadedData.settings.disabledSources,
-          );
-        }
         if (uploadedData.settings.embedOrder !== undefined) {
           preferencesStore.setEmbedOrder(uploadedData.settings.embedOrder);
         }
         if (uploadedData.settings.enableEmbedOrder !== undefined) {
           preferencesStore.setEnableEmbedOrder(
             uploadedData.settings.enableEmbedOrder,
-          );
-        }
-        if (uploadedData.settings.disabledEmbeds !== undefined) {
-          preferencesStore.setDisabledEmbeds(
-            uploadedData.settings.disabledEmbeds,
           );
         }
         if (uploadedData.settings.proxyTmdb !== undefined) {

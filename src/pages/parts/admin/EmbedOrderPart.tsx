@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getAllProviders, getProviders } from "@/backend/providers/providers";
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
-import { SortableListWithToggles } from "@/components/form/SortableListWithToggles";
+import { SortableList } from "@/components/form/SortableList";
 import { Heading2 } from "@/components/utils/Text";
 
 interface EmbedOrderPartProps {
@@ -13,8 +13,6 @@ interface EmbedOrderPartProps {
   setEmbedOrder: (order: string[]) => void;
   enableEmbedOrder: boolean;
   setEnableEmbedOrder: (enabled: boolean) => void;
-  disabledEmbeds: string[];
-  setDisabledEmbeds: (disabled: string[]) => void;
 }
 
 export function EmbedOrderPart({
@@ -22,8 +20,6 @@ export function EmbedOrderPart({
   setEmbedOrder,
   enableEmbedOrder,
   setEnableEmbedOrder,
-  disabledEmbeds,
-  setDisabledEmbeds,
 }: EmbedOrderPartProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -39,7 +35,6 @@ export function EmbedOrderPart({
         id: e.id,
         name: e.name || e.id,
         disabled: !currentDeviceEmbeds.find((embed) => embed.id === e.id),
-        enabled: !disabledEmbeds.includes(e.id),
       }));
     }
 
@@ -48,16 +43,8 @@ export function EmbedOrderPart({
       id,
       name: allEmbeds.find((e) => e.id === id)?.name || id,
       disabled: !currentDeviceEmbeds.find((e) => e.id === id),
-      enabled: !disabledEmbeds.includes(id),
     }));
-  }, [embedOrder, allEmbeds, disabledEmbeds]);
-
-  const handleEmbedToggle = (embedId: string) => {
-    const newDisabledEmbeds = disabledEmbeds.includes(embedId)
-      ? disabledEmbeds.filter((id) => id !== embedId)
-      : [...disabledEmbeds, embedId];
-    setDisabledEmbeds(newDisabledEmbeds);
-  };
+  }, [embedOrder, allEmbeds]);
 
   return (
     <div className="space-y-6">
@@ -91,10 +78,9 @@ export function EmbedOrderPart({
 
         {enableEmbedOrder && (
           <div className="w-full flex flex-col gap-4">
-            <SortableListWithToggles
+            <SortableList
               items={embedItems}
               setItems={(items) => setEmbedOrder(items.map((item) => item.id))}
-              onToggle={handleEmbedToggle}
             />
             <Button
               className="max-w-[25rem]"

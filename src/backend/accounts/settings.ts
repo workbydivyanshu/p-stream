@@ -26,10 +26,8 @@ export interface SettingsInput {
   enableSourceOrder?: boolean;
   lastSuccessfulSource?: string | null;
   enableLastSuccessfulSource?: boolean;
-  disabledSources?: string[] | null;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
-  disabledEmbeds?: string[] | null;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;
@@ -63,10 +61,8 @@ export interface SettingsResponse {
   enableSourceOrder?: boolean;
   lastSuccessfulSource?: string | null;
   enableLastSuccessfulSource?: boolean;
-  disabledSources?: string[] | null;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
-  disabledEmbeds?: string[] | null;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
   enableNativeSubtitles?: boolean;
