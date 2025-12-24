@@ -20,7 +20,7 @@ Additions:
 - Added a new Auto Select caption button to automatically choose and enable a caption!
 - Added a new setting to customize the keyboard shortcuts!
 - Added a new Minimal Cards setting to hide the bottom text on all media cards
-- Improved visual feedback when a is not found 
+- Improved visual feedback when a video is not found 
 - Reworked the extensions onboarding page to reference the new userscript alternative
 - Added a new button to mark a movie as watched from the details modal
 - Added new Cobalt theme
