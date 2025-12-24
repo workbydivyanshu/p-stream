@@ -128,7 +128,7 @@
     },
     "q25": {
       "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources. For FED API, only Safari supports audio switching in MP4 files.",
+      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
       "section": "language"
     },
     "q26": {
