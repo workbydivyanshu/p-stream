@@ -372,18 +372,46 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     videoElement.addEventListener("playing", () => emit("play", undefined));
     videoElement.addEventListener("pause", () => emit("pause", undefined));
     videoElement.addEventListener("canplay", () => {
-      emit("loading", false);
+      // Check if video has enough buffered data to play smoothly (at least 5 seconds ahead)
+      const hasEnoughBuffer = (() => {
+        if (!videoElement) return false;
+        const currentTime = videoElement.currentTime ?? 0;
+        const buffered = videoElement.buffered;
+        if (buffered.length === 0) return false;
+
+        // Find the buffered range that contains current time
+        for (let i = 0; i < buffered.length; i += 1) {
+          if (
+            currentTime >= buffered.start(i) &&
+            currentTime <= buffered.end(i)
+          ) {
+            const bufferedAhead = buffered.end(i) - currentTime;
+            return bufferedAhead >= 5; // At least 5 seconds buffered ahead
+          }
+        }
+        return false;
+      })();
+
+      // Only set loading to false if we have enough buffer or if we're not at the start
+      if (hasEnoughBuffer || (videoElement?.currentTime ?? 0) > 0) {
+        emit("loading", false);
+      }
+
       // Attempt autoplay if this was an autoplay transition (startAt = 0)
       if (shouldAutoplayAfterLoad && startAt === 0 && videoElement) {
         shouldAutoplayAfterLoad = false; // Reset the flag
         // Try to play - this will work on most platforms, but iOS may block it
         const playPromise = videoElement.play();
         if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Play was blocked (likely iOS), emit that we're not playing
-            // The AutoPlayStart component will show a play button
-            emit("pause", undefined);
-          });
+          playPromise
+            .then(() => {
+              // Autoplay succeeded
+            })
+            .catch((_error) => {
+              // Play was blocked (likely iOS), emit that we're not playing
+              // The AutoPlayStart component will show a play button
+              emit("pause", undefined);
+            });
         }
       }
     });
@@ -428,11 +456,38 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       }
     });
     videoElement.addEventListener("progress", () => {
-      if (videoElement)
-        emit(
-          "buffered",
-          handleBuffered(videoElement.currentTime, videoElement.buffered),
+      if (videoElement) {
+        const bufferedTime = handleBuffered(
+          videoElement.currentTime,
+          videoElement.buffered,
         );
+        emit("buffered", bufferedTime);
+
+        // Check if we now have enough buffer to stop loading
+        const hasEnoughBuffer = (() => {
+          const buffered = videoElement.buffered;
+          if (buffered.length === 0) return false;
+
+          const currentTime = videoElement.currentTime ?? 0;
+          // Find the buffered range that contains current time
+          for (let i = 0; i < buffered.length; i += 1) {
+            if (
+              currentTime >= buffered.start(i) &&
+              currentTime <= buffered.end(i)
+            ) {
+              const bufferedAhead = buffered.end(i) - currentTime;
+              return bufferedAhead >= 5; // At least 5 seconds buffered ahead
+            }
+          }
+          return false;
+        })();
+
+        // If we're still loading but now have enough buffer, stop loading
+        // This handles cases where canplay fired with insufficient buffer
+        if (hasEnoughBuffer && videoElement.readyState >= 3) {
+          emit("loading", false);
+        }
+      }
     });
     videoElement.addEventListener("webkitendfullscreen", () => {
       isFullscreen = false;
