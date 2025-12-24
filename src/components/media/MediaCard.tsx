@@ -50,6 +50,8 @@ function useIntersectionObserver(options: IntersectionObserverInit = {}) {
 
 // Skeleton Component
 export function MediaCardSkeleton() {
+  const enableMinimalCards = usePreferencesStore((s) => s.enableMinimalCards);
+
   return (
     <Flare.Base className="group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300">
       <Flare.Light
@@ -61,21 +63,30 @@ export function MediaCardSkeleton() {
       <Flare.Child className="pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 opacity-60">
         <div className="animate-pulse">
           {/* Poster skeleton - matches MediaCard poster dimensions exactly */}
-          <div className="relative mb-4 pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground" />
+          <div
+            className={classNames(
+              "relative pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground",
+              enableMinimalCards ? "" : "mb-4",
+            )}
+          />
 
-          {/* Title skeleton - matches MediaCard title dimensions */}
-          <div className="mb-1">
-            <div className="h-4 bg-mediaCard-hoverBackground rounded w-full mb-1" />
-            <div className="h-4 bg-mediaCard-hoverBackground rounded w-3/4 mb-1" />
-            <div className="h-4 bg-mediaCard-hoverBackground rounded w-1/2" />
-          </div>
+          {!enableMinimalCards && (
+            <>
+              {/* Title skeleton - matches MediaCard title dimensions */}
+              <div className="mb-1">
+                <div className="h-4 bg-mediaCard-hoverBackground rounded w-full mb-1" />
+                <div className="h-4 bg-mediaCard-hoverBackground rounded w-3/4 mb-1" />
+                <div className="h-4 bg-mediaCard-hoverBackground rounded w-1/2" />
+              </div>
 
-          {/* Dot list skeleton - matches MediaCard dot list */}
-          <div className="flex items-center gap-1">
-            <div className="h-3 bg-mediaCard-hoverBackground rounded w-12" />
-            <div className="h-1 w-1 bg-mediaCard-hoverBackground rounded-full" />
-            <div className="h-3 bg-mediaCard-hoverBackground rounded w-8" />
-          </div>
+              {/* Dot list skeleton - matches MediaCard dot list */}
+              <div className="flex items-center gap-1">
+                <div className="h-3 bg-mediaCard-hoverBackground rounded w-12" />
+                <div className="h-1 w-1 bg-mediaCard-hoverBackground rounded-full" />
+                <div className="h-3 bg-mediaCard-hoverBackground rounded w-8" />
+              </div>
+            </>
+          )}
         </div>
       </Flare.Child>
     </Flare.Base>
