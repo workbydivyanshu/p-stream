@@ -123,7 +123,7 @@
     },
     "q24": {
       "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Set a custom DNS like 1.1.1.1 or NextDNS. You can also change your region in the admin panel.",
+      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
       "section": "connections"
     },
     "q25": {
