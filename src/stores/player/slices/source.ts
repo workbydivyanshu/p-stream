@@ -253,12 +253,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   },
   redisplaySource(startAt: number) {
     const store = get();
-    const quality = store.currentQuality;
     if (!store.source) return;
     const qualityPreferences = useQualityStore.getState();
     const loadableStream = selectQuality(store.source, {
       automaticQuality: qualityPreferences.quality.automaticQuality,
-      lastChosenQuality: quality,
+      lastChosenQuality: qualityPreferences.quality.lastChosenQuality,
     });
     set((s) => {
       s.interface.error = undefined;

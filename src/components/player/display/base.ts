@@ -169,8 +169,12 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       hls.currentLevel = -1;
       hls.loadLevel = -1;
     }
-    const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
-    emit("changedquality", quality);
+    // Only emit quality when we have a valid level index (>= 0)
+    // When automaticQuality is true, currentLevel is -1, so we wait for LEVEL_SWITCHED event
+    if (hls.currentLevel >= 0) {
+      const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
+      emit("changedquality", quality);
+    }
   }
 
   function setupSource(vid: HTMLVideoElement, src: LoadableSource) {
@@ -189,6 +193,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           autoStartLoad: true,
           maxBufferLength: 120, // 120 seconds
           maxMaxBufferLength: 240,
+          abrEwmaDefaultEstimate: 5 * 1000 * 1000, // 5 Mbps default bandwidth estimate for better ABR decisions
           fragLoadPolicy: {
             default: {
               maxLoadTimeMs: 30 * 1000, // allow it load extra long, fragments are slow if requested for the first time on an origin
