@@ -8,6 +8,40 @@
     <lastBuildDate>Mon, 29 Sep 2025 18:00:00 MST</lastBuildDate>
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
+        <item>
+      <guid>notification-054</guid>
+      <title>P-Stream v5.3.3 released!</title>
+      <description>Merry Christmas everyone! 🎄
+
+I hope everyone has a great holiday season this year, and thank you to everyone who has supported P-Stream! I'm very happy to have this community and give you all free movies and tv. This is a pretty big update thats been in the works, but I wanted to get it out before Christmas! Hopefully, we'll have another smaller update before the end of the year!
+
+Additions:
+- Revamped the captions menu to sort by language
+- Added a new Auto Select caption button to automatically choose and enable a caption!
+- Added a new setting to customize the keyboard shortcuts!
+- Added a new Minimal Cards setting to hide the bottom text on all media cards
+- Improved visual feedback when a is not found 
+- Reworked the extensions onboarding page to reference the new userscript alternative
+- Added a new button to mark a movie as watched from the details modal
+- Added new Cobalt theme
+- Added new Febbox usage indicator under the token input
+- Added a new dropdown to change the sorting of your bookmarks or watching section (A-Z, Z-A, release date, etc)!
+
+Fixes:
+- Improved caption selection logic to be more consistent
+- Improved auto quality selection logic to be more consistent
+- Improved buffering logic to load the video quicker and be more stable
+- Fixed "Similar" section showing the wrong content
+- Fixed carousel title padding and alignment
+- Fixed search bar placement within the PWA on iOS
+- Fixed many other small bugs and issues!
+
+Enjoy and have a lovely holiday!
+    </description>
+      <pubDate>Wed, 24 Dec 2025 11:10:00 MST</pubDate>
+      <category>update</category>
+    </item>
+
     <item>
       <guid>notification-053</guid>
       <title>New Userscript alternative to the extension!</title>
