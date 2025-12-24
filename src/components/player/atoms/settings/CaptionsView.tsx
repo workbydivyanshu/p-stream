@@ -533,21 +533,23 @@ export function CaptionsView({
             {t("player.menus.subtitles.offChoice")}
           </CaptionOption>
 
-          {/* Enable subtitles option */}
-          <CaptionOption
-            onClick={() => handleRandomSelect()}
-            selected={!!selectedCaptionId}
-            loading={isRandomSelecting}
-          >
-            <div className="flex flex-col">
-              {t("player.menus.subtitles.autoSelectChoice")}
-              {selectedCaptionId && (
-                <span className="text-video-context-type-secondary text-xs">
-                  {t("player.menus.subtitles.autoSelectDifferentChoice")}
-                </span>
-              )}
-            </div>
-          </CaptionOption>
+          {/* Automatically select subtitles option */}
+          {captions.length > 0 && (
+            <CaptionOption
+              onClick={() => handleRandomSelect()}
+              selected={!!selectedCaptionId}
+              loading={isRandomSelecting}
+            >
+              <div className="flex flex-col">
+                {t("player.menus.subtitles.autoSelectChoice")}
+                {selectedCaptionId && (
+                  <span className="text-video-context-type-secondary text-xs">
+                    {t("player.menus.subtitles.autoSelectDifferentChoice")}
+                  </span>
+                )}
+              </div>
+            </CaptionOption>
+          )}
 
           {/* Custom upload option */}
           <CustomCaptionOption />
