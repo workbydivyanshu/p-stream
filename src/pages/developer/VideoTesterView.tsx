@@ -6,6 +6,7 @@ import { Toggle } from "@/components/buttons/Toggle";
 import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { usePlayer } from "@/components/player/hooks/usePlayer";
+import { convertProviderCaption } from "@/components/player/utils/captions";
 import { Title } from "@/components/text/Title";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { TextInputControl } from "@/components/text-inputs/TextInputControl";
@@ -140,6 +141,101 @@ export default function VideoTesterView() {
     [playMedia, setMeta, headersEnabled, headers, extensionState],
   );
 
+  const startFromCli = useCallback(async () => {
+    try {
+      const clipboardText = await navigator.clipboard.readText();
+
+      // Parse JavaScript object notation by evaluating it safely
+      let cliData;
+      try {
+        // Try to parse as JSON first (in case it's already valid JSON)
+        cliData = JSON.parse(clipboardText);
+      } catch {
+        // If JSON parsing fails, try to evaluate as JavaScript object
+        try {
+          // Use Function constructor to safely evaluate the JavaScript object
+          // eslint-disable-next-line no-new-func
+          cliData = new Function(`return (${clipboardText})`)();
+        } catch {
+          throw new Error(
+            "Invalid JavaScript object format. Please ensure the CLI output is properly formatted.",
+          );
+        }
+      }
+
+      if (
+        !cliData.stream ||
+        !Array.isArray(cliData.stream) ||
+        cliData.stream.length === 0
+      ) {
+        throw new Error("Invalid CLI output: no stream data found");
+      }
+
+      const streamData = cliData.stream[0]; // Take the first stream
+
+      let source: SourceSliceSource;
+      if (streamData.type === "hls") {
+        source = {
+          type: "hls",
+          url: streamData.playlist,
+          ...(streamData.headers && { headers: streamData.headers }),
+        };
+      } else if (streamData.type === "file") {
+        // Handle file type streams
+        const qualities = streamData.qualities || {};
+        const qualityKeys = Object.keys(qualities);
+        if (qualityKeys.length === 0) {
+          throw new Error("Invalid file stream: no qualities found");
+        }
+        source = {
+          type: "file",
+          qualities,
+          ...(streamData.headers && { headers: streamData.headers }),
+        };
+      } else {
+        throw new Error(`Unsupported stream type: ${streamData.type}`);
+      }
+
+      // Convert captions
+      const captions = streamData.captions
+        ? convertProviderCaption(streamData.captions)
+        : [];
+
+      // Prepare stream headers if extension is active and headers are present
+      if (
+        extensionState === "success" &&
+        streamData.headers &&
+        Object.keys(streamData.headers).length > 0
+      ) {
+        try {
+          await prepareStream(streamData);
+        } catch (error) {
+          console.warn("Failed to prepare stream headers:", error);
+        }
+      }
+
+      setMeta(testMeta);
+      playMedia(source, captions, streamData.id);
+    } catch (error) {
+      console.error("Failed to parse CLI data:", error);
+
+      let errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+
+      // Check for common JSON/JavaScript formatting issues
+      if (
+        errorMessage.includes("Expected property name") ||
+        errorMessage.includes("Unexpected token")
+      ) {
+        errorMessage +=
+          "\n\nThe CLI output should be in JavaScript object format. Make sure you're copying the complete output from your CLI tool.";
+      }
+
+      // eslint-disable-next-line no-alert
+      alert(`Failed to parse CLI data: ${errorMessage}`);
+    }
+  }, [playMedia, setMeta, extensionState]);
+
   return (
     <PlayerPart backUrl="/dev">
       {status === playerStatus.IDLE ? (
@@ -172,7 +268,7 @@ export default function VideoTesterView() {
                   <div className="flex-1 mb-4">
                     <div className="flex justify-between items-center gap-4">
                       <div className="my-3">
-                        <p className="text-white font-bold">Headers (Beta)</p>
+                        <p className="text-white font-bold">Headers</p>
                       </div>
                       <div>
                         <Toggle
@@ -228,11 +324,16 @@ export default function VideoTesterView() {
                   </div>
                 )}
 
-                <Button
-                  onClick={() => start(inputSource, selected as StreamType)}
-                >
-                  Start stream
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => start(inputSource, selected as StreamType)}
+                  >
+                    Start stream
+                  </Button>
+                  <Button onClick={startFromCli} className="col-span-2">
+                    Paste from CLI
+                  </Button>
+                </div>
               </div>
               <div className="flex-1">
                 <Title>Preset tests</Title>
