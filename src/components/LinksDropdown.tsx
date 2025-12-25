@@ -2,8 +2,10 @@ import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useAsync } from "react-use";
 
 import { base64ToBuffer, decryptData } from "@/backend/accounts/crypto";
+import { getBackendMeta } from "@/backend/accounts/meta";
 import { getRoomStatuses } from "@/backend/player/status";
 import { UserAvatar } from "@/components/Avatar";
 import { Icon, Icons } from "@/components/Icon";
@@ -213,6 +215,17 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
     [seed],
   );
   const { logout } = useAuth();
+  const backendUrl = useBackendUrl();
+
+  // Check backend compatibility for watch party
+  const backendMeta = useAsync(async () => {
+    if (!backendUrl) return;
+    return getBackendMeta(backendUrl);
+  }, [backendUrl]);
+
+  const backendSupportsWatchParty = backendMeta?.value?.version
+    ? backendMeta.value.version >= "2.0.1"
+    : false;
 
   useEffect(() => {
     function onWindowClick(evt: MouseEvent) {
@@ -291,7 +304,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               {t("navigation.menu.discover")}
             </DropdownLink>
           )}
-          <WatchPartyInputLink />
+          {backendSupportsWatchParty && <WatchPartyInputLink />}
           {deviceName ? (
             <DropdownLink
               className="!text-type-danger opacity-75 hover:opacity-100"
