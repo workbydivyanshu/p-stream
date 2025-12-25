@@ -9,6 +9,7 @@ import { subtitleTypeList } from "@/backend/helpers/subs";
 import { FileDropHandler } from "@/components/DropFile";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
+import { Spinner } from "@/components/layout/Spinner";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
@@ -26,7 +27,8 @@ import {
   sortLangCodes,
 } from "@/utils/language";
 
-export function CaptionOption(props: {
+/* eslint-disable react/no-unused-prop-types */
+export interface CaptionOptionProps {
   countryCode?: string;
   children: React.ReactNode;
   selected?: boolean;
@@ -41,7 +43,62 @@ export function CaptionOption(props: {
   subtitleEncoding?: string;
   isHearingImpaired?: boolean;
   onDoubleClick?: () => void;
-}) {
+  onTranslate?: () => void;
+}
+/* eslint-enable react/no-unused-prop-types */
+
+function CaptionOptionRightSide(props: CaptionOptionProps) {
+  if (props.loading) {
+    // should override selected and error and not show translate button
+    return <Spinner className="text-lg" />;
+  }
+
+  function translateBtn(margin: boolean) {
+    return (
+      props.countryCode && (
+        <span
+          className={classNames(
+            "text-buttons-secondaryText px-2 py-1 rounded bg-opacity-0",
+            "transition duration-300 ease-in-out",
+            "hover:bg-opacity-100 hover:bg-buttons-primaryHover",
+            "hover:text-buttons-primaryText",
+            {
+              "mr-3": margin,
+            },
+          )}
+          onClick={(e) => {
+            e.stopPropagation();
+            props.onTranslate?.();
+          }}
+        >
+          <Icon icon={Icons.TRANSLATE} className="text-lg" />
+        </span>
+      )
+    );
+  }
+
+  if (props.selected || props.error) {
+    return (
+      <div className="flex items-center">
+        {translateBtn(true)}
+        {props.error ? (
+          <span className="text-video-context-error">
+            <Icon className="ml-2" icon={Icons.WARNING} />
+          </span>
+        ) : (
+          <Icon
+            icon={Icons.CIRCLE_CHECK}
+            className="text-xl text-video-context-type-accent"
+          />
+        )}
+      </div>
+    );
+  }
+
+  return translateBtn(false);
+}
+
+export function CaptionOption(props: CaptionOptionProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { t } = useTranslation();
@@ -110,6 +167,7 @@ export function CaptionOption(props: {
         error={props.error}
         onClick={props.onClick}
         onDoubleClick={props.onDoubleClick}
+        rightSide={<CaptionOptionRightSide {...props} />}
       >
         <span
           data-active-link={props.selected ? true : undefined}

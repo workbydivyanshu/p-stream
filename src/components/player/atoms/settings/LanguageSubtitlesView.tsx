@@ -17,12 +17,14 @@ export interface LanguageSubtitlesViewProps {
   id: string;
   language: string;
   overlayBackLink?: boolean;
+  onTranslateSubtitle?: (caption: CaptionListItem) => void;
 }
 
 export function LanguageSubtitlesView({
   id,
   language,
   overlayBackLink,
+  onTranslateSubtitle,
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
@@ -130,6 +132,14 @@ export function LanguageSubtitlesView({
             : undefined
         }
         onClick={() => startDownload(v.id)}
+        onTranslate={() => {
+          onTranslateSubtitle?.(v);
+          router.navigate(
+            overlayBackLink
+              ? "/captions/translateSubtitle"
+              : "/captionsOverlay/translateSubtitleOverlay",
+          );
+        }}
         onDoubleClick={handleDoubleClick}
         flag
         subtitleUrl={v.url}

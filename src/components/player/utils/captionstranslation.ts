@@ -176,7 +176,7 @@ async function decompressStr(byteArray: ArrayBuffer): Promise<string> {
   const writer = cs.writable.getWriter();
   writer.write(byteArray);
   writer.close();
-  return new Response(cs.readable).arrayBuffer().then(function (arrayBuffer) {
+  return new Response(cs.readable).arrayBuffer().then((arrayBuffer) => {
     return new TextDecoder().decode(arrayBuffer);
   });
 }
