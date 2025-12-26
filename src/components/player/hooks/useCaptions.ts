@@ -180,6 +180,13 @@ export function useCaptions() {
   useEffect(() => {
     if (!selectedCaption) return;
 
+    // Skip validation for custom/pasted captions that aren't in the caption list
+    const isCustomCaption =
+      selectedCaption.id === "custom-caption" ||
+      selectedCaption.id === "pasted-caption";
+
+    if (isCustomCaption) return;
+
     const isSelectedCaptionStillAvailable = captions.some(
       (caption) => caption.id === selectedCaption.id,
     );
