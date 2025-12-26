@@ -63,7 +63,7 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
           className={classNames(
             "text-buttons-secondaryText px-2 py-1 rounded bg-opacity-0",
             {
-              "mr-3": margin,
+              "mr-1": margin,
               "bg-opacity-100 bg-buttons-purpleHover": props.isTranslatedTarget,
             },
             "transition duration-300 ease-in-out",
