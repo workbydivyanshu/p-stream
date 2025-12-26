@@ -419,6 +419,7 @@ export function CaptionsView({
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
+  const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const { disable, selectRandomCaptionFromLastUsedLanguage } = useCaptions();
   const [isRandomSelecting, setIsRandomSelecting] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -707,7 +708,11 @@ export function CaptionsView({
               ({ language, languageName, captions: captionsForLang }) => (
                 <Menu.ChevronLink
                   key={language}
-                  selected={selectedLanguage === language}
+                  selected={
+                    (!currentTranslateTask && selectedLanguage === language) ||
+                    (!!currentTranslateTask &&
+                      currentTranslateTask.targetCaption.language === language)
+                  }
                   rightText={captionsForLang.length.toString()}
                   onClick={() => {
                     onChooseLanguage?.(language);

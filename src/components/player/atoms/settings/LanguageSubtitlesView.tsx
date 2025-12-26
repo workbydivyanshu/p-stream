@@ -29,6 +29,7 @@ export function LanguageSubtitlesView({
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
+  const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const { selectCaptionById } = useCaptions();
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
     string | null
@@ -124,7 +125,10 @@ export function LanguageSubtitlesView({
       <CaptionOption
         key={v.id}
         countryCode={v.language}
-        selected={v.id === selectedCaptionId}
+        selected={
+          v.id === selectedCaptionId ||
+          v.id === currentTranslateTask?.targetCaption?.id
+        }
         loading={v.id === currentlyDownloading && downloadReq.loading}
         error={
           v.id === currentlyDownloading && downloadReq.error

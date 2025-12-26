@@ -9,6 +9,7 @@ import { usePlayerStore } from "@/stores/player/store";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import { CaptionOption } from "./CaptionsView";
+import { useCaptions } from "../../hooks/useCaptions";
 
 // https://developers.google.com/workspace/admin/directory/v1/languages
 const availableLanguages: string[] = [
@@ -83,7 +84,7 @@ export function TranslateSubtitleView({
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
-  const setCaption = usePlayerStore((s) => s.setCaption);
+  const { setDirectCaption } = useCaptions();
   const translateTask = usePlayerStore((s) => s.caption.translateTask);
   const translateCaption = usePlayerStore((s) => s.translateCaption);
   const clearTranslateTask = usePlayerStore((s) => s.clearTranslateTask);
@@ -93,10 +94,16 @@ export function TranslateSubtitleView({
       return;
     }
     if (translateTask.done) {
-      console.log(translateTask.translatedCaption);
-      // setCaption(translateTask.translatedCaption!);
+      const tCaption = translateTask.translatedCaption!;
+      setDirectCaption(tCaption, {
+        id: tCaption.id,
+        language: tCaption.language,
+        needsProxy: false,
+        url: "",
+        source: "translation",
+      });
     }
-  }, [translateTask, setCaption]);
+  }, [translateTask, setDirectCaption]);
 
   function renderTargetLang(langCode: string) {
     const friendlyName = getPrettyLanguageNameFromLocale(langCode);
@@ -115,22 +122,28 @@ export function TranslateSubtitleView({
         }
         loading={
           !!translateTask &&
+          translateTask.targetCaption.id === caption.id &&
           !translateTask.done &&
           !translateTask.error &&
           translateTask.targetLanguage === langCode
         }
         error={
           !!translateTask &&
+          translateTask.targetCaption.id === caption.id &&
           translateTask.error &&
           translateTask.targetLanguage === langCode
         }
         selected={
           !!translateTask &&
+          translateTask.targetCaption.id === caption.id &&
           translateTask.done &&
           translateTask.targetLanguage === langCode
         }
         onClick={() =>
-          !translateTask || translateTask.done || translateTask.error
+          !translateTask ||
+          translateTask.targetCaption.id !== caption.id ||
+          translateTask.done ||
+          translateTask.error
             ? onClick()
             : undefined
         }
