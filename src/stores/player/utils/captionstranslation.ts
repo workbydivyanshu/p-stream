@@ -76,11 +76,11 @@ async function translateCaption(
   for (let i = 0; i < RETRY_COUNT; i += 1) {
     try {
       text = await translateText(
-        caption.text.replace("\n", "<br>"),
+        caption.text.replaceAll("\n", "<br>"),
         targetLang,
       );
       if (text) {
-        text = text.replace("<br>", "\n");
+        text = text.replaceAll("<br>", "\n");
         break;
       }
     } catch (error) {
@@ -108,18 +108,18 @@ async function translateCaptions(
 
     const successCount = results.filter((v) => v).length;
     const failedCount = results.length - successCount;
-    const successPercentange = (successCount / results.length) * 100;
-    const failedPercentange = (failedCount / results.length) * 100;
+    const successPercentage = (successCount / results.length) * 100;
+    const failedPercentage = (failedCount / results.length) * 100;
     // console.log(
     //   "Done translating captions",
     //   results.length,
     //   successCount,
     //   failedCount,
-    //   successPercentange,
-    //   failedPercentange,
+    //   successPercentage,
+    //   failedPercentage,
     // );
 
-    if (failedPercentange > successPercentange) {
+    if (failedPercentage > successPercentage) {
       throw new Error("Success percentage is not acceptable");
     }
   } catch (error) {
