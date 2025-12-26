@@ -236,7 +236,7 @@ export default function VideoTesterView() {
     }
   }, [playMedia, setMeta, extensionState]);
 
-  // player meta and streams cary over, so reset on mount
+  // player meta and streams carry over, so reset on mount
   useEffect(() => {
     if (status !== playerStatus.IDLE) {
       reset();
