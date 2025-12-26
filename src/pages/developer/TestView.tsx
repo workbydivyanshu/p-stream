@@ -25,13 +25,22 @@ const subtitlesTestSource: SourceSliceSource = {
 
 const subtitlesTestSubs: CaptionListItem[] = [
   {
-    id: "English",
+    id: "http://localhost:8000/subs/en.srt",
+    display: "English",
     language: "en",
     url: "http://localhost:8000/subs/en.srt",
     needsProxy: false,
   },
   {
-    id: "Romanian",
+    id: "http://localhost:8000/subs/en-small.srt",
+    display: "English (small)",
+    language: "en",
+    url: "http://localhost:8000/subs/en-small.srt",
+    needsProxy: false,
+  },
+  {
+    id: "http://localhost:8000/subs/ro.srt",
+    display: "Romanian",
     language: "ro",
     url: "http://localhost:8000/subs/ro.srt",
     needsProxy: false,

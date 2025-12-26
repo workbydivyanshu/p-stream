@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { ScrapeMedia } from "@p-stream/providers";
 
+import { downloadCaption } from "@/backend/helpers/subs";
 import { MakeSlice } from "@/stores/player/slices/types";
 import {
   SourceQuality,
@@ -9,6 +10,8 @@ import {
 } from "@/stores/player/utils/qualities";
 import { useQualityStore } from "@/stores/quality";
 import { ValuesOf } from "@/utils/typeguard";
+
+import { translateSubtitle } from "../utils/captionstranslation";
 
 export const playerStatus = {
   IDLE: "idle",
@@ -73,6 +76,16 @@ export interface AudioTrack {
   language: string;
 }
 
+export interface TranslateTask {
+  targetCaption: CaptionListItem;
+  fetchedTargetCaption?: Caption;
+  targetLanguage: string;
+  translatedCaption?: Caption;
+  done: boolean;
+  error: boolean;
+  cancel: () => void;
+}
+
 export interface SourceSlice {
   status: PlayerStatus;
   source: SourceSliceSource | null;
@@ -87,6 +100,7 @@ export interface SourceSlice {
   caption: {
     selected: Caption | null;
     asTrack: boolean;
+    translateTask: TranslateTask | null;
   };
   meta: PlayerMeta | null;
   failedSourcesPerMedia: Record<string, string[]>; // mediaKey -> array of failed sourceIds
@@ -106,6 +120,11 @@ export interface SourceSlice {
   redisplaySource(startAt: number): void;
   setCaptionAsTrack(asTrack: boolean): void;
   addExternalSubtitles(): Promise<void>;
+  translateCaption(
+    targetCaption: CaptionListItem,
+    targetLanguage: string,
+  ): Promise<void>;
+  clearTranslateTask(): void;
   addFailedSource(sourceId: string): void;
   addFailedEmbed(sourceId: string, embedId: string): void;
   clearFailedSources(mediaKey?: string): void;
@@ -174,6 +193,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   caption: {
     selected: null,
     asTrack: false,
+    translateTask: null,
   },
   setSourceId(id) {
     set((s) => {
@@ -374,9 +394,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.meta = null;
       s.failedSourcesPerMedia = {};
       s.failedEmbedsPerMedia = {};
+      this.clearTranslateTask();
       s.caption = {
         selected: null,
         asTrack: false,
+        translateTask: null,
       };
     });
   },
@@ -411,6 +433,104 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       set((s) => {
         s.isLoadingExternalSubtitles = false;
       });
+    }
+  },
+
+  clearTranslateTask() {
+    set((s) => {
+      console.log("Clearing translate task");
+      if (s.caption.translateTask) {
+        console.log("Cancelling ongoing translate task");
+        s.caption.translateTask.cancel();
+      }
+      s.caption.translateTask = null;
+    });
+  },
+
+  async translateCaption(
+    targetCaption: CaptionListItem,
+    targetLanguage: string,
+  ) {
+    let store = get();
+
+    if (store.caption.translateTask) {
+      console.warn("A translation task is already in progress");
+      return;
+    }
+
+    let cancelled = false;
+
+    set((s) => {
+      s.caption.translateTask = {
+        targetCaption,
+        targetLanguage,
+        done: false,
+        error: false,
+        cancel() {
+          console.log("Translation task cancelled by user");
+          cancelled = true;
+        },
+      };
+    });
+
+    function handleError(err: any) {
+      console.error("Translation task ran into an error", err);
+      if (cancelled) {
+        return;
+      }
+      set((s) => {
+        if (!s.caption.translateTask) return;
+        s.caption.translateTask.error = true;
+      });
+    }
+
+    try {
+      const srtData = await downloadCaption(targetCaption);
+      if (cancelled) {
+        return;
+      }
+      if (!srtData) {
+        throw new Error("Fetching failed");
+      }
+      set((s) => {
+        if (!s.caption.translateTask) return;
+        s.caption.translateTask.fetchedTargetCaption = {
+          id: targetCaption.id,
+          language: targetCaption.language,
+          srtData,
+        };
+      });
+      store = get();
+    } catch (err) {
+      handleError(err);
+      return;
+    }
+
+    try {
+      const result = await translateSubtitle(
+        targetCaption.id,
+        store.caption.translateTask!.fetchedTargetCaption!.srtData,
+        targetLanguage,
+      );
+      if (cancelled) {
+        return;
+      }
+      if (!result) {
+        throw new Error("Translation failed");
+      }
+      set((s) => {
+        if (!s.caption.translateTask) return;
+        const translatedCaption: Caption = {
+          id: `${targetCaption.id}-translated-${targetLanguage}`,
+          language: targetLanguage,
+          srtData: result,
+        };
+        s.caption.translateTask.done = true;
+        s.caption.translateTask.translatedCaption = translatedCaption;
+        console.log("Caption translation completed", s.caption.translateTask);
+      });
+    } catch (err) {
+      handleError(err);
     }
   },
 });

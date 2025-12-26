@@ -10,14 +10,36 @@ const SUBTITLES_CACHE: Map<string, ArrayBuffer> = new Map<
   ArrayBuffer
 >();
 
-async function translateText(text: string): Promise<string | undefined> {
+async function compressStr(string: string): Promise<ArrayBuffer> {
+  const byteArray = new TextEncoder().encode(string);
+  const cs = new CompressionStream("deflate");
+  const writer = cs.writable.getWriter();
+  writer.write(byteArray);
+  writer.close();
+  return new Response(cs.readable).arrayBuffer();
+}
+
+async function decompressStr(byteArray: ArrayBuffer): Promise<string> {
+  const cs = new DecompressionStream("deflate");
+  const writer = cs.writable.getWriter();
+  writer.write(byteArray);
+  writer.close();
+  return new Response(cs.readable).arrayBuffer().then((arrayBuffer) => {
+    return new TextDecoder().decode(arrayBuffer);
+  });
+}
+
+async function translateText(
+  text: string,
+  targetLang: string,
+): Promise<string | undefined> {
   if (!text) {
     return "";
   }
 
   const response = await (
     await fetch(
-      `${API_URL.replace("TARGET_LANG", "ro")}${encodeURIComponent(text)}`,
+      `${API_URL.replace("{TARGET_LANG}", targetLang)}${encodeURIComponent(text)}`,
       {
         method: "GET",
         headers: {
@@ -36,12 +58,18 @@ async function translateText(text: string): Promise<string | undefined> {
     .join("");
 }
 
-async function translateCaption(caption: ContentCaption): Promise<boolean> {
+async function translateCaption(
+  caption: ContentCaption,
+  targetLang: string,
+): Promise<boolean> {
   (caption as any).oldText = caption.text;
   let text: string | undefined;
   for (let i = 0; i < RETRY_COUNT; i += 1) {
     try {
-      text = await translateText(caption.text.replace("\n", "<br>"));
+      text = await translateText(
+        caption.text.replace("\n", "<br>"),
+        targetLang,
+      );
       if (text) {
         text = text.replace("<br>", "\n");
         break;
@@ -59,11 +87,14 @@ async function translateCaption(caption: ContentCaption): Promise<boolean> {
   return true;
 }
 
-async function translateCaptions(captions: ContentCaption[]): Promise<boolean> {
+async function translateCaptions(
+  captions: ContentCaption[],
+  targetLang: string,
+): Promise<boolean> {
   console.log("[CTR] Translating", captions.length, "captions");
   try {
     const results: boolean[] = await Promise.all(
-      captions.map((c) => translateCaption(c)),
+      captions.map((c) => translateCaption(c, targetLang)),
     );
 
     const successCount = results.filter((v) => v).length;
@@ -106,7 +137,10 @@ function tryUseCached(
   return false;
 }
 
-async function translateSRTData(data: string): Promise<string | undefined> {
+async function translateSRTData(
+  data: string,
+  targetLang: string,
+): Promise<string | undefined> {
   let captions: Caption[];
   try {
     captions = subsrt.parse(data);
@@ -149,7 +183,7 @@ async function translateSRTData(data: string): Promise<string | undefined> {
     }
     i += j;
 
-    if (!(await translateCaptions(batch))) {
+    if (!(await translateCaptions(batch, targetLang))) {
       translatedCaptions = undefined;
       break;
     }
@@ -162,36 +196,22 @@ async function translateSRTData(data: string): Promise<string | undefined> {
     : undefined;
 }
 
-async function compressStr(string: string): Promise<ArrayBuffer> {
-  const byteArray = new TextEncoder().encode(string);
-  const cs = new CompressionStream("deflate");
-  const writer = cs.writable.getWriter();
-  writer.write(byteArray);
-  writer.close();
-  return new Response(cs.readable).arrayBuffer();
-}
-
-async function decompressStr(byteArray: ArrayBuffer): Promise<string> {
-  const cs = new DecompressionStream("deflate");
-  const writer = cs.writable.getWriter();
-  writer.write(byteArray);
-  writer.close();
-  return new Response(cs.readable).arrayBuffer().then((arrayBuffer) => {
-    return new TextDecoder().decode(arrayBuffer);
-  });
-}
-
-export async function translateSubtitles(
+export async function translateSubtitle(
   id: string,
   srtData: string,
+  targetLang: string,
 ): Promise<string | undefined> {
+  id = `${id}_${targetLang}`;
   const cachedData: ArrayBuffer | undefined = SUBTITLES_CACHE.get(id);
   if (cachedData) {
     console.log("[CTR] Using cached translation for", id);
     return decompressStr(cachedData);
   }
   console.log("[CTR] Translating", id);
-  const translatedData: string | undefined = await translateSRTData(srtData);
+  const translatedData: string | undefined = await translateSRTData(
+    srtData,
+    targetLang,
+  );
   if (!translatedData) {
     return undefined;
   }

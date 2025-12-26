@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { FlagIcon } from "@/components/FlagIcon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { CaptionListItem } from "@/stores/player/slices/source";
+import { usePlayerStore } from "@/stores/player/store";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import { CaptionOption } from "./CaptionsView";
@@ -81,12 +83,59 @@ export function TranslateSubtitleView({
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
+  const setCaption = usePlayerStore((s) => s.setCaption);
+  const translateTask = usePlayerStore((s) => s.caption.translateTask);
+  const translateCaption = usePlayerStore((s) => s.translateCaption);
+  const clearTranslateTask = usePlayerStore((s) => s.clearTranslateTask);
+
+  useEffect(() => {
+    if (!translateTask) {
+      return;
+    }
+    if (translateTask.done) {
+      console.log(translateTask.translatedCaption);
+      // setCaption(translateTask.translatedCaption!);
+    }
+  }, [translateTask, setCaption]);
 
   function renderTargetLang(langCode: string) {
     const friendlyName = getPrettyLanguageNameFromLocale(langCode);
 
+    async function onClick() {
+      clearTranslateTask();
+      await translateCaption(caption, langCode);
+    }
+
     return (
-      <CaptionOption countryCode={langCode} flag>
+      <CaptionOption
+        key={langCode}
+        countryCode={langCode}
+        disabled={
+          !!translateTask && !translateTask.done && !translateTask.error
+        }
+        loading={
+          !!translateTask &&
+          !translateTask.done &&
+          !translateTask.error &&
+          translateTask.targetLanguage === langCode
+        }
+        error={
+          !!translateTask &&
+          translateTask.error &&
+          translateTask.targetLanguage === langCode
+        }
+        selected={
+          !!translateTask &&
+          translateTask.done &&
+          translateTask.targetLanguage === langCode
+        }
+        onClick={() =>
+          !translateTask || translateTask.done || translateTask.error
+            ? onClick()
+            : undefined
+        }
+        flag
+      >
         {friendlyName}
       </CaptionOption>
     );

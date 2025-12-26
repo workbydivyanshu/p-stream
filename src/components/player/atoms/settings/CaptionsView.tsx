@@ -32,6 +32,7 @@ export interface CaptionOptionProps {
   countryCode?: string;
   children: React.ReactNode;
   selected?: boolean;
+  disabled?: boolean;
   loading?: boolean;
   onClick?: () => void;
   error?: React.ReactNode;
@@ -83,7 +84,7 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
       <div className="flex items-center">
         {translateBtn(true)}
         {props.error ? (
-          <span className="text-video-context-error">
+          <span className="flex items-center text-video-context-error">
             <Icon className="ml-2" icon={Icons.WARNING} />
           </span>
         ) : (
@@ -166,6 +167,7 @@ export function CaptionOption(props: CaptionOptionProps) {
         selected={props.selected}
         loading={props.loading}
         error={props.error}
+        disabled={props.disabled}
         onClick={props.onClick}
         onDoubleClick={props.onDoubleClick}
         rightSide={<CaptionOptionRightSide {...props} />}
