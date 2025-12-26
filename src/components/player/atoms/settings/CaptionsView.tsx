@@ -203,10 +203,46 @@ export function CustomCaptionOption() {
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
   const fileInput = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleFileSelect = (file: File) => {
+    setError(null);
+    const reader = new FileReader();
+
+    reader.addEventListener("load", (event) => {
+      if (!event.target || typeof event.target.result !== "string") {
+        setError("Failed to read file");
+        return;
+      }
+
+      try {
+        const converted = convert(event.target.result, "srt");
+        setCaption({
+          language: "custom",
+          srtData: converted,
+          id: "custom-caption",
+        });
+        setCustomSubs();
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to convert subtitle file",
+        );
+      }
+    });
+
+    reader.addEventListener("error", () => {
+      setError("Failed to read file");
+    });
+
+    reader.readAsText(file, "utf-8");
+  };
 
   return (
     <CaptionOption
       selected={lang === "custom"}
+      error={error}
       onClick={() => fileInput.current?.click()}
     >
       {t("player.menus.subtitles.customChoice")}
@@ -216,20 +252,22 @@ export function CustomCaptionOption() {
         accept={subtitleTypeList.join(",")}
         type="file"
         onChange={(e) => {
-          if (!e.target.files) return;
-          const reader = new FileReader();
-          reader.addEventListener("load", (event) => {
-            if (!event.target || typeof event.target.result !== "string")
-              return;
-            const converted = convert(event.target.result, "srt");
-            setCaption({
-              language: "custom",
-              srtData: converted,
-              id: "custom-caption",
-            });
-            setCustomSubs();
-          });
-          reader.readAsText(e.target.files[0], "utf-8");
+          const files = e.target.files;
+          if (!files || files.length === 0) return;
+
+          const file = files[0];
+          const fileExtension = `.${file.name.split(".").pop()?.toLowerCase()}`;
+
+          if (!subtitleTypeList.includes(fileExtension)) {
+            setError(
+              `Unsupported file type. Supported: ${subtitleTypeList.join(", ")}`,
+            );
+            e.target.value = ""; // Reset input
+            return;
+          }
+
+          handleFileSelect(file);
+          e.target.value = ""; // Reset input so same file can be selected again
         }}
       />
     </CaptionOption>
@@ -344,6 +382,7 @@ export function CaptionsView({
   );
   const delay = useSubtitleStore((s) => s.delay);
   const appLanguage = useLanguageStore((s) => s.language);
+  const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
 
   // Get combined caption list
   const captions = useMemo(
@@ -418,29 +457,41 @@ export function CaptionsView({
   }, [srtData, selectedLanguage, delay, videoTime, selectedCaptionId]);
 
   function onDrop(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
     const files = event.dataTransfer.files;
     const firstFile = files[0];
     if (!files || !firstFile) return;
 
-    const fileExtension = `.${firstFile.name.split(".").pop()}`;
+    const fileExtension = `.${firstFile.name.split(".").pop()?.toLowerCase()}`;
     if (!fileExtension || !subtitleTypeList.includes(fileExtension)) {
       return;
     }
 
     const reader = new FileReader();
     reader.addEventListener("load", (e) => {
-      if (!e.target || typeof e.target.result !== "string") return;
+      if (!e.target || typeof e.target.result !== "string") {
+        return;
+      }
 
-      const converted = convert(e.target.result, "srt");
+      try {
+        const converted = convert(e.target.result, "srt");
 
-      setCaption({
-        language: "custom",
-        srtData: converted,
-        id: "custom-caption",
-      });
+        setCaption({
+          language: "custom",
+          srtData: converted,
+          id: "custom-caption",
+        });
+        setCustomSubs();
+      } catch (err) {
+        // Silently fail on drop - user can use the upload button for better error feedback
+      }
     });
 
-    reader.readAsText(firstFile);
+    reader.addEventListener("error", () => {
+      // Silently fail on drop - user can use the upload button for better error feedback
+    });
+
+    reader.readAsText(firstFile, "utf-8");
   }
 
   return (
