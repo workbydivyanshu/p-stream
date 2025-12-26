@@ -89,7 +89,7 @@ async function translateCaption(
   }
   if (!text) {
     console.error("Failed to translate caption");
-    caption.text = `(CAPTION COULD NOT BE TRANSLATED)\n${caption.text}}`;
+    caption.text = `(CAPTION COULD NOT BE TRANSLATED)\n${caption.text}`;
     return false;
   }
   caption.text = text.trim();
