@@ -76,11 +76,11 @@ async function translateCaption(
   for (let i = 0; i < RETRY_COUNT; i += 1) {
     try {
       text = await translateText(
-        caption.text.replace("\n", "<br>"),
+        caption.text.replaceAll("\n", "<br>"),
         targetLang,
       );
       if (text) {
-        text = text.replace("<br>", "\n");
+        text = text.replaceAll("<br>", "\n");
         break;
       }
     } catch (error) {
