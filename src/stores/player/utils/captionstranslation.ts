@@ -108,18 +108,18 @@ async function translateCaptions(
 
     const successCount = results.filter((v) => v).length;
     const failedCount = results.length - successCount;
-    const successPercentange = (successCount / results.length) * 100;
-    const failedPercentange = (failedCount / results.length) * 100;
+    const successPercentage = (successCount / results.length) * 100;
+    const failedPercentage = (failedCount / results.length) * 100;
     // console.log(
     //   "Done translating captions",
     //   results.length,
     //   successCount,
     //   failedCount,
-    //   successPercentange,
-    //   failedPercentange,
+    //   successPercentage,
+    //   failedPercentage,
     // );
 
-    if (failedPercentange > successPercentange) {
+    if (failedPercentage > successPercentage) {
       throw new Error("Success percentage is not acceptable");
     }
   } catch (error) {
