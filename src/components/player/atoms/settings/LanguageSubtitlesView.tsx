@@ -127,14 +127,21 @@ export function LanguageSubtitlesView({
         countryCode={v.language}
         selected={
           v.id === selectedCaptionId ||
-          v.id === currentTranslateTask?.targetCaption?.id
+          (!!currentTranslateTask &&
+            !currentTranslateTask.error &&
+            v.id === currentTranslateTask.targetCaption.id)
         }
-        disabled={!!currentTranslateTask && !currentTranslateTask.done}
+        disabled={
+          !!currentTranslateTask &&
+          !currentTranslateTask.done &&
+          !currentTranslateTask.error
+        }
         loading={
           (v.id === currentlyDownloading && downloadReq.loading) ||
           (!!currentTranslateTask &&
             v.id === currentTranslateTask.targetCaption.id &&
-            !currentTranslateTask.done)
+            !currentTranslateTask.done &&
+            !currentTranslateTask.error)
         }
         error={
           v.id === currentlyDownloading && downloadReq.error
@@ -142,7 +149,9 @@ export function LanguageSubtitlesView({
             : undefined
         }
         onClick={() =>
-          (!currentTranslateTask || currentTranslateTask.done) &&
+          (!currentTranslateTask ||
+            currentTranslateTask.done ||
+            currentTranslateTask.error) &&
           startDownload(v.id)
         }
         onTranslate={() => {
@@ -153,7 +162,11 @@ export function LanguageSubtitlesView({
               : "/captionsOverlay/translateSubtitleOverlay",
           );
         }}
-        isTranslatedTarget={v.id === currentTranslateTask?.targetCaption?.id}
+        isTranslatedTarget={
+          !!currentTranslateTask &&
+          !currentTranslateTask.error &&
+          v.id === currentTranslateTask.targetCaption.id
+        }
         onDoubleClick={handleDoubleClick}
         flag
         translatable

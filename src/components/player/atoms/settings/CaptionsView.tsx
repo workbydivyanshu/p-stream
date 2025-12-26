@@ -713,6 +713,7 @@ export function CaptionsView({
                   selected={
                     (!currentTranslateTask && selectedLanguage === language) ||
                     (!!currentTranslateTask &&
+                      !currentTranslateTask.error &&
                       currentTranslateTask.targetCaption.language === language)
                   }
                   rightText={captionsForLang.length.toString()}

@@ -238,6 +238,14 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   setCaption(caption) {
     const store = get();
     store.display?.setCaption(caption);
+    if (
+      !caption ||
+      (store.caption.translateTask &&
+        store.caption.translateTask.targetCaption.id !== caption?.id &&
+        store.caption.translateTask.translatedCaption?.id !== caption?.id)
+    ) {
+      store.clearTranslateTask();
+    }
     set((s) => {
       s.caption.selected = caption;
     });

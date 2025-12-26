@@ -19,7 +19,6 @@ export function useCaptions() {
     (s) => s.resetSubtitleSpecificSettings,
   );
   const setCaption = usePlayerStore((s) => s.setCaption);
-  const clearTranslateTask = usePlayerStore((s) => s.clearTranslateTask);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const lastSelectedLanguage = useSubtitleStore((s) => s.lastSelectedLanguage);
   const setIsOpenSubtitles = useSubtitleStore((s) => s.setIsOpenSubtitles);
@@ -119,16 +118,9 @@ export function useCaptions() {
         captionToSet.srtData = srtData;
       }
 
-      clearTranslateTask();
       setDirectCaption(captionToSet, caption);
     },
-    [
-      captions,
-      getSubtitleTracks,
-      setSubtitlePreference,
-      setDirectCaption,
-      clearTranslateTask,
-    ],
+    [captions, getSubtitleTracks, setSubtitlePreference, setDirectCaption],
   );
 
   const selectLanguage = useCallback(
@@ -141,11 +133,10 @@ export function useCaptions() {
   );
 
   const disable = useCallback(async () => {
-    clearTranslateTask();
     setIsOpenSubtitles(false);
     setCaption(null);
     setLanguage(null);
-  }, [setCaption, setLanguage, setIsOpenSubtitles, clearTranslateTask]);
+  }, [setCaption, setLanguage, setIsOpenSubtitles]);
 
   const selectLastUsedLanguage = useCallback(async () => {
     const language = lastSelectedLanguage ?? "en";
@@ -226,7 +217,6 @@ export function useCaptions() {
         selectCaptionById(sameLanguageCaption.id);
       } else {
         // No caption with the same language found, clear the selection
-        clearTranslateTask();
         setCaption(null);
       }
     }
@@ -235,7 +225,6 @@ export function useCaptions() {
     selectedCaption,
     setCaption,
     selectCaptionById,
-    clearTranslateTask,
     currentTranslateTask,
   ]);
 

@@ -84,7 +84,7 @@ export function TranslateSubtitleView({
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
-  const { setDirectCaption } = useCaptions();
+  const { setDirectCaption, disable: disableCaptions } = useCaptions();
   const translateTask = usePlayerStore((s) => s.caption.translateTask);
   const translateCaption = usePlayerStore((s) => s.translateCaption);
   const clearTranslateTask = usePlayerStore((s) => s.clearTranslateTask);
@@ -109,6 +109,7 @@ export function TranslateSubtitleView({
 
     async function onClick() {
       clearTranslateTask();
+      disableCaptions();
       await translateCaption(caption, langCode);
     }
 
