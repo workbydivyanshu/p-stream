@@ -80,7 +80,7 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captionsOverlay/languagesOverlay"
-          width={343}
+          width={443}
           height={452}
         >
           <Menu.CardWithScrollable>
@@ -154,7 +154,7 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captions/languages"
-          width={343}
+          width={443}
           height={452}
         >
           <Menu.CardWithScrollable>
