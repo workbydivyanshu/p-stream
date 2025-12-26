@@ -158,8 +158,8 @@ export function LanguageSubtitlesView({
           onTranslateSubtitle?.(v);
           router.navigate(
             overlayBackLink
-              ? "/captions/translateSubtitle"
-              : "/captionsOverlay/translateSubtitleOverlay",
+              ? "/captionsOverlay/translateSubtitleOverlay"
+              : "/captions/translateSubtitle",
           );
         }}
         isTranslatedTarget={

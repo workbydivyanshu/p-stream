@@ -473,7 +473,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         done: false,
         error: false,
         cancel() {
-          if (!this.done || !this.error) {
+          if (!this.done && !this.error) {
             console.log("Translation task was cancelled");
           }
           cancelled = true;
