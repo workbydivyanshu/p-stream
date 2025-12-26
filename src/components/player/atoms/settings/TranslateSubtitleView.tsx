@@ -97,10 +97,9 @@ export function TranslateSubtitleView({
       const tCaption = translateTask.translatedCaption!;
       setDirectCaption(tCaption, {
         id: tCaption.id,
+        url: "",
         language: tCaption.language,
         needsProxy: false,
-        url: "",
-        source: "translation",
       });
     }
   }, [translateTask, setDirectCaption]);
@@ -140,10 +139,7 @@ export function TranslateSubtitleView({
           translateTask.targetLanguage === langCode
         }
         onClick={() =>
-          !translateTask ||
-          translateTask.targetCaption.id !== caption.id ||
-          translateTask.done ||
-          translateTask.error
+          !translateTask || translateTask.done || translateTask.error
             ? onClick()
             : undefined
         }
@@ -180,7 +176,14 @@ export function TranslateSubtitleView({
       </Menu.BackLink>
 
       <div className="!pt-1 mt-2 pb-3">
-        {availableLanguages.map(renderTargetLang)}
+        {availableLanguages
+          .filter(
+            (lang) =>
+              lang !== caption.language &&
+              !lang.includes(caption.language) &&
+              !caption.language.includes(lang),
+          )
+          .map(renderTargetLang)}
       </div>
     </>
   );

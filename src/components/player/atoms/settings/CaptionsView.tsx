@@ -38,6 +38,7 @@ export interface CaptionOptionProps {
   error?: React.ReactNode;
   flag?: boolean;
   translatable?: boolean;
+  isTranslatedTarget?: boolean;
   subtitleUrl?: string;
   subtitleType?: string;
   // subtitle details from wyzie
@@ -61,12 +62,13 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
         <span
           className={classNames(
             "text-buttons-secondaryText px-2 py-1 rounded bg-opacity-0",
+            {
+              "mr-3": margin,
+              "bg-opacity-100 bg-buttons-purpleHover": props.isTranslatedTarget,
+            },
             "transition duration-300 ease-in-out",
             "hover:bg-opacity-100 hover:bg-buttons-primaryHover",
             "hover:text-buttons-primaryText",
-            {
-              "mr-3": margin,
-            },
           )}
           onClick={(e) => {
             e.stopPropagation();

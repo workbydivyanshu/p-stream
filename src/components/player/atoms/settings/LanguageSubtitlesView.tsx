@@ -129,13 +129,22 @@ export function LanguageSubtitlesView({
           v.id === selectedCaptionId ||
           v.id === currentTranslateTask?.targetCaption?.id
         }
-        loading={v.id === currentlyDownloading && downloadReq.loading}
+        disabled={!!currentTranslateTask && !currentTranslateTask.done}
+        loading={
+          (v.id === currentlyDownloading && downloadReq.loading) ||
+          (!!currentTranslateTask &&
+            v.id === currentTranslateTask.targetCaption.id &&
+            !currentTranslateTask.done)
+        }
         error={
           v.id === currentlyDownloading && downloadReq.error
             ? downloadReq.error.toString()
             : undefined
         }
-        onClick={() => startDownload(v.id)}
+        onClick={() =>
+          (!currentTranslateTask || currentTranslateTask.done) &&
+          startDownload(v.id)
+        }
         onTranslate={() => {
           onTranslateSubtitle?.(v);
           router.navigate(
@@ -144,6 +153,7 @@ export function LanguageSubtitlesView({
               : "/captionsOverlay/translateSubtitleOverlay",
           );
         }}
+        isTranslatedTarget={v.id === currentTranslateTask?.targetCaption?.id}
         onDoubleClick={handleDoubleClick}
         flag
         translatable
