@@ -837,7 +837,10 @@
         "useNativeSubtitles": "Native video subtitles",
         "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
         "delayLate": "Heard audio",
-        "delayEarly": "Saw caption"
+        "delayEarly": "Saw caption",
+        "translate": {
+          "title": "Translate from {{language}}"
+        }
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",

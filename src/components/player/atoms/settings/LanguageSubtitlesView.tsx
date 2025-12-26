@@ -142,6 +142,7 @@ export function LanguageSubtitlesView({
         }}
         onDoubleClick={handleDoubleClick}
         flag
+        translatable
         subtitleUrl={v.url}
         subtitleType={v.type}
         subtitleSource={v.source}

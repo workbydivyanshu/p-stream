@@ -36,6 +36,7 @@ export interface CaptionOptionProps {
   onClick?: () => void;
   error?: React.ReactNode;
   flag?: boolean;
+  translatable?: boolean;
   subtitleUrl?: string;
   subtitleType?: string;
   // subtitle details from wyzie
@@ -55,7 +56,7 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
 
   function translateBtn(margin: boolean) {
     return (
-      props.countryCode && (
+      props.translatable && (
         <span
           className={classNames(
             "text-buttons-secondaryText px-2 py-1 rounded bg-opacity-0",
