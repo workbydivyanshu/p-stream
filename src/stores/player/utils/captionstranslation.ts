@@ -2,7 +2,7 @@ import subsrt from "subsrt-ts";
 import { Caption, ContentCaption } from "subsrt-ts/dist/types/handler";
 
 const API_URL =
-  "https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&oe=UTF-8&sl=auto&tl={TARGET_LANG}&q=";
+  "https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&oe=UTF-8&sl=auto";
 const RETRY_COUNT = 3;
 const FETCH_RATE = 100;
 const SUBTITLES_CACHE: Map<string, ArrayBuffer> = new Map<
@@ -29,6 +29,18 @@ async function decompressStr(byteArray: ArrayBuffer): Promise<string> {
   });
 }
 
+function tryUseCachedCaption(
+  caption: ContentCaption,
+  cache: Map<string, string>,
+): boolean {
+  const text: string | undefined = cache.get(caption.text);
+  if (text) {
+    caption.text = text;
+    return true;
+  }
+  return false;
+}
+
 async function translateText(
   text: string,
   targetLang: string,
@@ -38,15 +50,12 @@ async function translateText(
   }
 
   const response = await (
-    await fetch(
-      `${API_URL.replace("{TARGET_LANG}", targetLang)}${encodeURIComponent(text)}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
+    await fetch(`${API_URL}&tl=${targetLang}&q=${encodeURIComponent(text)}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
       },
-    )
+    })
   ).json();
 
   if (!response) {
@@ -75,11 +84,11 @@ async function translateCaption(
         break;
       }
     } catch (error) {
-      console.warn("[CTR] Re-trying caption translation", caption, error);
+      console.warn("Re-trying caption translation", caption, error);
     }
   }
   if (!text) {
-    console.error("[CTR] Failed to translate caption");
+    console.error("Failed to translate caption");
     caption.text = `(CAPTION COULD NOT BE TRANSLATED)\n${caption.text}}`;
     return false;
   }
@@ -91,7 +100,7 @@ async function translateCaptions(
   captions: ContentCaption[],
   targetLang: string,
 ): Promise<boolean> {
-  console.log("[CTR] Translating", captions.length, "captions");
+  // console.log("Translating", captions.length, "captions");
   try {
     const results: boolean[] = await Promise.all(
       captions.map((c) => translateCaption(c, targetLang)),
@@ -101,40 +110,23 @@ async function translateCaptions(
     const failedCount = results.length - successCount;
     const successPercentange = (successCount / results.length) * 100;
     const failedPercentange = (failedCount / results.length) * 100;
-    console.log(
-      "[CTR] Done translating captions",
-      results.length,
-      successCount,
-      failedCount,
-      successPercentange,
-      failedPercentange,
-    );
+    // console.log(
+    //   "Done translating captions",
+    //   results.length,
+    //   successCount,
+    //   failedCount,
+    //   successPercentange,
+    //   failedPercentange,
+    // );
 
     if (failedPercentange > successPercentange) {
       throw new Error("Success percentage is not acceptable");
     }
   } catch (error) {
-    console.error(
-      "[CTR] Could not translate",
-      captions.length,
-      "captions",
-      error,
-    );
+    console.error("Could not translate", captions.length, "captions", error);
     return false;
   }
   return true;
-}
-
-function tryUseCached(
-  caption: ContentCaption,
-  cache: Map<string, string>,
-): boolean {
-  const text: string | undefined = cache.get(caption.text);
-  if (text) {
-    caption.text = text;
-    return true;
-  }
-  return false;
 }
 
 async function translateSRTData(
@@ -145,7 +137,7 @@ async function translateSRTData(
   try {
     captions = subsrt.parse(data);
   } catch (error) {
-    console.error("[CTR] Failed to parse subtitle data", error);
+    console.error("Failed to parse subtitle data", error);
     return undefined;
   }
 
@@ -166,7 +158,7 @@ async function translateSRTData(
   }
 
   for (let i = 0; i < contentCaptions.length; i += 1) {
-    if (tryUseCached(contentCaptions[i], translatedCache)) {
+    if (tryUseCachedCaption(contentCaptions[i], translatedCache)) {
       continue;
     }
     const batch: ContentCaption[] = [contentCaptions[i]];
@@ -176,7 +168,7 @@ async function translateSRTData(
       if (i + j >= contentCaptions.length) {
         break;
       }
-      if (tryUseCached(contentCaptions[i + j], translatedCache)) {
+      if (tryUseCachedCaption(contentCaptions[i + j], translatedCache)) {
         continue;
       }
       batch.push(contentCaptions[i + j]);
@@ -196,18 +188,21 @@ async function translateSRTData(
     : undefined;
 }
 
+// TODO: make this support multiple providers rather than just google translate
 export async function translateSubtitle(
   id: string,
   srtData: string,
   targetLang: string,
 ): Promise<string | undefined> {
-  id = `${id}_${targetLang}`;
-  const cachedData: ArrayBuffer | undefined = SUBTITLES_CACHE.get(id);
+  const cacheID = `${id}_${targetLang}`;
+
+  const cachedData: ArrayBuffer | undefined = SUBTITLES_CACHE.get(cacheID);
   if (cachedData) {
-    console.log("[CTR] Using cached translation for", id);
+    // console.log("Using cached translation for", id, cacheID);
     return decompressStr(cachedData);
   }
-  console.log("[CTR] Translating", id);
+
+  // console.log("Translating", id);
   const translatedData: string | undefined = await translateSRTData(
     srtData,
     targetLang,
@@ -215,7 +210,8 @@ export async function translateSubtitle(
   if (!translatedData) {
     return undefined;
   }
-  console.log("[CTR] Caching translation for", id);
-  SUBTITLES_CACHE.set(id, await compressStr(translatedData));
+
+  // console.log("Caching translation for", id, cacheID);
+  SUBTITLES_CACHE.set(cacheID, await compressStr(translatedData));
   return translatedData;
 }

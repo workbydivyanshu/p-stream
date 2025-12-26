@@ -446,9 +446,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
 
   clearTranslateTask() {
     set((s) => {
-      console.log("Clearing translate task");
       if (s.caption.translateTask) {
-        console.log("Cancelling ongoing translate task");
         s.caption.translateTask.cancel();
       }
       s.caption.translateTask = null;
@@ -475,7 +473,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         done: false,
         error: false,
         cancel() {
-          console.log("Translation task cancelled by user");
+          if (!this.done || !this.error) {
+            console.log("Translation task was cancelled");
+          }
           cancelled = true;
         },
       };
@@ -535,7 +535,6 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         };
         s.caption.translateTask.done = true;
         s.caption.translateTask.translatedCaption = translatedCaption;
-        console.log("Caption translation completed", s.caption.translateTask);
       });
     } catch (err) {
       handleError(err);
