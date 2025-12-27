@@ -18,7 +18,6 @@ interface Config {
   NORMAL_ROUTER: boolean;
   BACKEND_URL: string;
   DISALLOWED_IDS: string;
-  TURNSTILE_KEY: string;
   CDN_REPLACEMENTS: string;
   HAS_ONBOARDING: string;
   ONBOARDING_CHROME_EXTENSION_INSTALL_LINK: string;
@@ -51,7 +50,6 @@ export interface RuntimeConfig {
   M3U8_PROXY_URLS: string[];
   BACKEND_URL: string | null;
   DISALLOWED_IDS: string[];
-  TURNSTILE_KEY: string | null;
   CDN_REPLACEMENTS: Array<string[]>;
   HAS_ONBOARDING: boolean;
   ALLOW_AUTOPLAY: boolean;
@@ -88,7 +86,6 @@ const env: Record<keyof Config, undefined | string> = {
   NORMAL_ROUTER: import.meta.env.VITE_NORMAL_ROUTER,
   BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
   DISALLOWED_IDS: import.meta.env.VITE_DISALLOWED_IDS,
-  TURNSTILE_KEY: import.meta.env.VITE_TURNSTILE_KEY,
   CDN_REPLACEMENTS: import.meta.env.VITE_CDN_REPLACEMENTS,
   HAS_ONBOARDING: import.meta.env.VITE_HAS_ONBOARDING,
   ALLOW_AUTOPLAY: import.meta.env.VITE_ALLOW_AUTOPLAY,
@@ -153,7 +150,6 @@ export function conf(): RuntimeConfig {
     NORMAL_ROUTER: getKey("NORMAL_ROUTER", "false") === "true",
     HAS_ONBOARDING: getKey("HAS_ONBOARDING", "false") === "true",
     ALLOW_AUTOPLAY: getKey("ALLOW_AUTOPLAY", "false") === "true",
-    TURNSTILE_KEY: getKey("TURNSTILE_KEY"),
     DISALLOWED_IDS: getKey("DISALLOWED_IDS", "")
       .split(",")
       .map((v) => v.trim())

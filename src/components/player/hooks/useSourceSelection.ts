@@ -8,14 +8,9 @@ import { useAsyncFn } from "react-use";
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { prepareStream } from "@/backend/extension/streams";
 import {
-  connectServerSideEvents,
-  makeProviderUrl,
-} from "@/backend/helpers/providerApi";
-import {
   scrapeSourceOutputToProviderMetric,
   useReportProviders,
 } from "@/backend/helpers/report";
-import { getLoadbalancedProviderApiUrl } from "@/backend/providers/fetchers";
 import { getProviders } from "@/backend/providers/providers";
 import { convertProviderCaption } from "@/components/player/utils/captions";
 import { convertRunoutputToSource } from "@/components/player/utils/convertRunoutputToSource";
@@ -60,23 +55,13 @@ export function useEmbedScraping(
   );
 
   const [request, run] = useAsyncFn(async () => {
-    const providerApiUrl = getLoadbalancedProviderApiUrl();
     let result: EmbedOutput | undefined;
     if (!meta) return;
     try {
-      if (providerApiUrl && !isExtensionActiveCached()) {
-        const baseUrlMaker = makeProviderUrl(providerApiUrl);
-        const conn = await connectServerSideEvents<EmbedOutput>(
-          baseUrlMaker.scrapeEmbed(embedId, url),
-          ["completed", "noOutput"],
-        );
-        result = await conn.promise();
-      } else {
-        result = await getProviders().runEmbedScraper({
-          id: embedId,
-          url,
-        });
-      }
+      result = await getProviders().runEmbedScraper({
+        id: embedId,
+        url,
+      });
     } catch (err) {
       console.error(`Failed to scrape ${embedId}`, err);
       const notFound = err instanceof NotFoundError;
@@ -148,23 +133,13 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
     if (!sourceId || !meta) return null;
     setEmbedId(null);
     const scrapeMedia = metaToScrapeMedia(meta);
-    const providerApiUrl = getLoadbalancedProviderApiUrl();
 
     let result: SourcererOutput | undefined;
     try {
-      if (providerApiUrl && !isExtensionActiveCached()) {
-        const baseUrlMaker = makeProviderUrl(providerApiUrl);
-        const conn = await connectServerSideEvents<SourcererOutput>(
-          baseUrlMaker.scrapeSource(sourceId, scrapeMedia),
-          ["completed", "noOutput"],
-        );
-        result = await conn.promise();
-      } else {
-        result = await getProviders().runSourceScraper({
-          id: sourceId,
-          media: scrapeMedia,
-        });
-      }
+      result = await getProviders().runSourceScraper({
+        id: sourceId,
+        media: scrapeMedia,
+      });
     } catch (err) {
       console.error(`Failed to scrape ${sourceId}`, err);
       const notFound = err instanceof NotFoundError;
@@ -199,22 +174,10 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       let embedResult: EmbedOutput | undefined;
       if (!meta) return;
       try {
-        if (providerApiUrl && !isExtensionActiveCached()) {
-          const baseUrlMaker = makeProviderUrl(providerApiUrl);
-          const conn = await connectServerSideEvents<EmbedOutput>(
-            baseUrlMaker.scrapeEmbed(
-              result.embeds[0].embedId,
-              result.embeds[0].url,
-            ),
-            ["completed", "noOutput"],
-          );
-          embedResult = await conn.promise();
-        } else {
-          embedResult = await getProviders().runEmbedScraper({
-            id: result.embeds[0].embedId,
-            url: result.embeds[0].url,
-          });
-        }
+        embedResult = await getProviders().runEmbedScraper({
+          id: result.embeds[0].embedId,
+          url: result.embeds[0].url,
+        });
       } catch (err) {
         console.error(`Failed to scrape ${result.embeds[0].embedId}`, err);
         const notFound = err instanceof NotFoundError;
