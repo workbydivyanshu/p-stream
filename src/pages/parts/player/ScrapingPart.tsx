@@ -21,8 +21,8 @@ import {
   useListCenter,
   useScrape,
 } from "@/hooks/useProviderScrape";
-
-import { WarningPart } from "../util/WarningPart";
+import { playerStatus } from "@/stores/player/slices/source";
+import { usePlayerStore } from "@/stores/player/store";
 
 export interface ScrapingProps {
   media: ScrapeMedia;
@@ -40,10 +40,12 @@ export function ScrapingPart(props: ScrapingProps) {
     useScrape();
   const isMounted = useMountedState();
   const { t } = useTranslation();
+  const setStatus = usePlayerStore((s) => s.setStatus);
+  const addFailedSource = usePlayerStore((s) => s.addFailedSource);
+  const sourceId = usePlayerStore((s) => s.sourceId);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
-  const [failedStartScrape, setFailedStartScrape] = useState<boolean>(false);
   const renderedOnce = useListCenter(
     containerRef,
     listRef,
@@ -86,17 +88,42 @@ export function ScrapingPart(props: ScrapingProps) {
         ),
       );
       props.onGetStream?.(output);
-    })().catch(() => setFailedStartScrape(true));
-  }, [startScraping, resumeScraping, props, report, isMounted]);
+    })().catch((error) => {
+      if (!isMounted()) return;
+      // Treat scraping failure as fatal error
+      // Mark current source as failed if we have one
+      if (sourceId) {
+        addFailedSource(sourceId);
+      } else if (currentSource) {
+        addFailedSource(currentSource);
+      }
+      // Set error and status to trigger PlaybackErrorPart
+      usePlayerStore.setState((s) => {
+        s.interface.error = {
+          errorName: "ScrapingError",
+          message: error?.message || "Failed to start scraping",
+          type: "global",
+        };
+        s.status = playerStatus.PLAYBACK_ERROR;
+      });
+    });
+  }, [
+    startScraping,
+    resumeScraping,
+    props,
+    report,
+    isMounted,
+    setStatus,
+    addFailedSource,
+    sourceId,
+    currentSource,
+  ]);
 
   let currentProviderIndex = sourceOrder.findIndex(
     (s) => s.id === currentSource || s.children.includes(currentSource ?? ""),
   );
   if (currentProviderIndex === -1)
     currentProviderIndex = sourceOrder.length - 1;
-
-  if (failedStartScrape)
-    return <WarningPart>{t("player.scraping.items.failure")}</WarningPart>;
 
   return (
     <div
