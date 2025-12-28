@@ -100,8 +100,25 @@ export function BackendSelector({
   showCustom = true,
 }: BackendSelectorProps) {
   const { t } = useTranslation();
-  const [customUrl, setCustomUrl] = useState("");
+  // Helper to strip protocol from URL for display
+  const stripProtocol = (url: string | null): string => {
+    if (!url) return "";
+    return url.replace(/^https?:\/\//, "");
+  };
+
+  // Initialize customUrl from selectedUrl if it's a custom URL (not in availableUrls)
+  const isCustomUrl = selectedUrl && !availableUrls.includes(selectedUrl);
+  const [customUrl, setCustomUrl] = useState(
+    isCustomUrl ? stripProtocol(selectedUrl) : "",
+  );
   const [backendOptions, setBackendOptions] = useState<BackendOption[]>([]);
+
+  // Update customUrl when selectedUrl changes and it's a custom URL
+  useEffect(() => {
+    if (selectedUrl && !availableUrls.includes(selectedUrl)) {
+      setCustomUrl(stripProtocol(selectedUrl));
+    }
+  }, [selectedUrl, availableUrls]);
 
   // Initialize and fetch meta for backend options
   useEffect(() => {
@@ -142,9 +159,7 @@ export function BackendSelector({
   };
 
   const isCustomUrlSelected =
-    customUrl &&
-    selectedUrl === customUrl &&
-    !availableUrls.includes(selectedUrl);
+    selectedUrl !== null && !availableUrls.includes(selectedUrl);
 
   return (
     <div className="space-y-4">

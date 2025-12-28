@@ -38,14 +38,8 @@ function CaptchaProvider(props: {
 export function RegisterPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [step, setStep] = useState(-1);
-  const [mnemonic, setMnemonic] = useState<null | string>(null);
-  const [account, setAccount] = useState<null | AccountProfile>(null);
-  const [siteKey, setSiteKey] = useState<string | null>(null);
-  const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
-    null,
-  );
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
+  const currentBackendUrl = useAuthStore((s) => s.backendUrl);
   const config = conf();
   const availableBackends =
     config.BACKEND_URLS.length > 0
@@ -53,6 +47,14 @@ export function RegisterPage() {
       : config.BACKEND_URL
         ? [config.BACKEND_URL]
         : [];
+
+  const [step, setStep] = useState(-1);
+  const [mnemonic, setMnemonic] = useState<null | string>(null);
+  const [account, setAccount] = useState<null | AccountProfile>(null);
+  const [siteKey, setSiteKey] = useState<string | null>(null);
+  const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
+    currentBackendUrl ?? null,
+  );
 
   const handleBackendSelect = (url: string | null) => {
     setSelectedBackendUrl(url);

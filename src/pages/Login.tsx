@@ -18,10 +18,6 @@ import { useAuthStore } from "@/stores/auth";
 export function LoginPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [showBackendSelection, setShowBackendSelection] = useState(true);
-  const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
-    null,
-  );
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const config = conf();
   const availableBackends =
@@ -36,6 +32,11 @@ export function LoginPage() {
   const defaultBackend =
     currentBackendUrl ??
     (availableBackends.length === 1 ? availableBackends[0] : null);
+
+  const [showBackendSelection, setShowBackendSelection] = useState(true);
+  const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
+    currentBackendUrl ?? null,
+  );
 
   const handleBackendSelect = (url: string | null) => {
     setSelectedBackendUrl(url);
