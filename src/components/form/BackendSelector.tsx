@@ -67,9 +67,15 @@ function BackendOptionItem({
               </span>
             </div>
           ) : option.error ? (
-            <div>
-              <p className="text-white font-medium">{hostname}</p>
-              <p className="text-type-secondary text-sm">{option.url}</p>
+            <div className="flex items-center gap-2">
+              <div className="flex flex-col">
+                <p className="text-white font-medium">{hostname}</p>
+                <p className="text-type-secondary text-sm">{option.url}</p>
+              </div>
+              <Icon icon={Icons.WARNING} className="text-type-danger text-sm" />
+              <span className="text-type-danger text-sm">
+                {t("settings.connections.server.error")}
+              </span>
             </div>
           ) : option.meta ? (
             <div>

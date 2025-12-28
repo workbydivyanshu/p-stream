@@ -1143,7 +1143,8 @@
           "description": "<0>Migrate my data</0> to a new server.",
           "link": "Migrate my data"
         },
-        "documentation": "Backend documentation"
+        "documentation": "Backend documentation",
+        "error": "Error connecting to backend"
       },
       "setup": {
         "doSetup": "Do setup",
