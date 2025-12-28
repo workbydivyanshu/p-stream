@@ -3,12 +3,7 @@ import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { prepareStream } from "@/backend/extension/streams";
-import {
-  connectServerSideEvents,
-  getCachedMetadata,
-  makeProviderUrl,
-} from "@/backend/helpers/providerApi";
-import { getLoadbalancedProviderApiUrl } from "@/backend/providers/fetchers";
+import { getCachedMetadata } from "@/backend/helpers/providerApi";
 import { getProviders } from "@/backend/providers/providers";
 import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -244,29 +239,6 @@ export function useScrape() {
             (id) => !allFailedEmbedIds.includes(id),
           )
         : undefined;
-
-      const providerApiUrl = getLoadbalancedProviderApiUrl();
-      if (providerApiUrl && !isExtensionActiveCached()) {
-        startScrape();
-        const baseUrlMaker = makeProviderUrl(providerApiUrl);
-        const conn = await connectServerSideEvents<RunOutput | "">(
-          baseUrlMaker.scrapeAll(
-            media,
-            filteredSourceOrder,
-            filteredEmbedOrder,
-          ),
-          ["completed", "noOutput"],
-        );
-        conn.on("init", initEvent);
-        conn.on("start", startEvent);
-        conn.on("update", updateEvent);
-        conn.on("discoverEmbeds", discoverEmbedsEvent);
-        const sseOutput = await conn.promise();
-        if (sseOutput && isExtensionActiveCached())
-          await prepareStream(sseOutput.stream);
-
-        return getResult(sseOutput === "" ? null : sseOutput);
-      }
 
       startScrape();
       const providers = getProviders();

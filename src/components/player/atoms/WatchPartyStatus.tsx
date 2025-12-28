@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
+import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useAuthStore } from "@/stores/auth";
 import { getProgressPercentage } from "@/stores/progress";
@@ -15,6 +16,8 @@ export function WatchPartyStatus() {
   const [showNotification, setShowNotification] = useState(false);
   const [lastUserCount, setLastUserCount] = useState(1);
   const account = useAuthStore((s) => s.account);
+  const backendUrl = useBackendUrl();
+  const backendHostname = backendUrl ? new URL(backendUrl).hostname : null;
 
   const {
     roomUsers,
@@ -70,6 +73,11 @@ export function WatchPartyStatus() {
           {roomCode}
         </span>
       </div>
+      {backendHostname && (
+        <div className="w-full text-xs text-type-secondary text-center">
+          {t("watchParty.activeBackend", { backend: backendHostname })}
+        </div>
+      )}
 
       <div className="w-full text-type-secondary flex justify-between items-center space-x-2">
         <div className="cursor-pointer" onClick={handleToggleExpanded}>

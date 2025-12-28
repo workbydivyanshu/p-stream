@@ -102,6 +102,21 @@ export function useAuth() {
     await userDataLogout();
   }, [userDataLogout, backendUrl, currentAccount]);
 
+  const disconnectFromBackend = useCallback(async () => {
+    if (!currentAccount || !backendUrl) return;
+    try {
+      await removeSession(
+        backendUrl,
+        currentAccount.token,
+        currentAccount.sessionId,
+      );
+    } catch {
+      // we dont care about failing to delete session
+    }
+    // Only remove the account, keep all local data
+    useAuthStore.getState().removeAccount();
+  }, [backendUrl, currentAccount]);
+
   const register = useCallback(
     async (registerData: RegistrationData) => {
       if (!backendUrl) return;
@@ -215,6 +230,7 @@ export function useAuth() {
     profile,
     login,
     logout,
+    disconnectFromBackend,
     register,
     restore,
     importData,

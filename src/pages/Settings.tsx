@@ -16,9 +16,10 @@ import { Button } from "@/components/buttons/Button";
 import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
 import { WideContainer } from "@/components/layout/WideContainer";
+import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { UserIcons } from "@/components/UserIcon";
 import { Divider } from "@/components/utils/Divider";
-import { Heading1 } from "@/components/utils/Text";
+import { Heading1, Heading2, Paragraph } from "@/components/utils/Text";
 import { Transition } from "@/components/utils/Transition";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
@@ -168,6 +169,10 @@ export function SettingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const prevCategoryRef = useRef<string | null>(null);
+  const backendChangeModal = useModal("settings-backend-change-confirmation");
+  const [pendingBackendChange, setPendingBackendChange] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -730,25 +735,32 @@ export function SettingsPage() {
       updateProfile(state.profile.state);
     }
 
-    // when backend url gets changed, log the user out first
+    // when backend url gets changed, show confirmation and log the user out (only if logged in)
     if (state.backendUrl.changed) {
-      await logout();
-
       let url = state.backendUrl.state;
       if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
         url = `https://${url}`;
       }
-
+      if (account) {
+        // User is logged in - show confirmation
+        setPendingBackendChange(url);
+        backendChangeModal.show();
+        return;
+      }
+      // User is not logged in - just update without confirmation
       setBackendUrl(url);
     }
   }, [
     account,
     backendUrl,
+    backendChangeModal,
+    setPendingBackendChange,
+    state,
+    setBackendUrl,
     setEnableThumbnails,
     setFebboxKey,
     setdebridToken,
     setdebridService,
-    state,
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableDiscover,
@@ -766,8 +778,6 @@ export function SettingsPage() {
     updateDeviceName,
     updateProfile,
     updateNickname,
-    logout,
-    setBackendUrl,
     setProxyTmdb,
     setEnableCarouselView,
     setEnableMinimalCards,
@@ -948,6 +958,43 @@ export function SettingsPage() {
           </Button>
         </div>
       </Transition>
+      {account && (
+        <Modal id={backendChangeModal.id}>
+          <ModalCard>
+            <Heading2 className="!mt-0 !mb-4">
+              {t("settings.connections.server.changeWarningTitle")}
+            </Heading2>
+            <Paragraph className="!mt-1 !mb-6">
+              {t("settings.connections.server.changeWarning")}
+            </Paragraph>
+            <div className="flex justify-end gap-3">
+              <Button
+                theme="secondary"
+                onClick={() => {
+                  backendChangeModal.hide();
+                  setPendingBackendChange(null);
+                  state.backendUrl.set(backendUrlSetting);
+                }}
+              >
+                {t("actions.cancel")}
+              </Button>
+              <Button
+                theme="purple"
+                onClick={async () => {
+                  backendChangeModal.hide();
+                  if (pendingBackendChange !== null) {
+                    await logout();
+                    setBackendUrl(pendingBackendChange);
+                    setPendingBackendChange(null);
+                  }
+                }}
+              >
+                {t("actions.confirm")}
+              </Button>
+            </div>
+          </ModalCard>
+        </Modal>
+      )}
     </SubPageLayout>
   );
 }

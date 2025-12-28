@@ -180,6 +180,16 @@
         "title": "Account information"
       }
     },
+    "backendSelection": {
+      "title": "Select Account Server",
+      "description": "Choose which backend server to connect to",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "active": "Active",
+      "selecting": "Selecting..."
+    },
     "trust": {
       "failed": {
         "text": "Did you configure it correctly?",
@@ -950,12 +960,6 @@
       "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "turnstile": {
-      "description": "Please prove your humanity by completing the quick challenge, this is to keep P-Stream safe.",
-      "error": "Failed to verify your humanity - stream failed to load. Clear your cache and try again, or switch to a different source (tap the gear).",
-      "title": "Are You a Robot 🤖?",
-      "verifyingHumanity": "Verifying your humanity... (^▽^)👍"
     }
   },
   "support": {
@@ -991,9 +995,14 @@
     "loadingUserError": {
       "logout": "Logout",
       "reset": "Reset custom server",
+      "disconnect": "Disconnect from backend",
       "text": "Failed to load your profile",
       "reload": "Reload",
-      "textWithReset": "Failed to load your profile from your custom server, want to reset back to the default server?"
+      "textWithReset": "Failed to load your profile from your custom server, want to reset back to the default server?",
+      "disconnectTitle": "Disconnect from backend?",
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectConfirm": "Confirm",
+      "disconectCancel": "Cancel"
     },
     "migration": {
       "failed": "Failed to migrate your data. 😿",
@@ -1125,13 +1134,20 @@
     "connections": {
       "server": {
         "description": "If you would like to connect to a custom backend to store your data, enable this and provide the URL. <0>Instructions.</0>",
-        "label": "Custom server",
+        "label": "Backend Server",
         "urlLabel": "Custom server URL",
+        "selectBackend": "Select Backend Server",
+        "currentBackend": "Current Backend",
+        "changeWarning": "Changing backend server will log you out. Continue?",
+        "confirm": "Log out and change server",
+        "cancel": "Cancel",
+        "changeWarningTitle": "Change Backend Server",
         "migration": {
           "description": "<0>Migrate my data</0> to a new server.",
           "link": "Migrate my data"
         },
-        "documentation": "Backend documentation"
+        "documentation": "Backend documentation",
+        "error": "Error connecting to backend"
       },
       "setup": {
         "doSetup": "Do setup",
@@ -1387,6 +1403,8 @@
     "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
     "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
     "validating": "Validating watch party...",
-    "linkCopied": "Copied!"
+    "linkCopied": "Copied!",
+    "backendRequirement": "All users must use the same backend server",
+    "activeBackend": "Active Backend: {{backend}}"
   }
 }

@@ -19,7 +19,6 @@ services:
       #   ONBOARDING_PROXY_INSTALL_LINK: ""
       #   DISALLOWED_IDS: ""
       #   CDN_REPLACEMENTS: ""
-      #   TURNSTILE_KEY: ""
     ports:
       - "80:80"
     restart: unless-stopped
