@@ -9,9 +9,9 @@ import {
   selectQuality,
 } from "@/stores/player/utils/qualities";
 import { useQualityStore } from "@/stores/quality";
+import googletranslate from "@/utils/translation/googletranslate";
+import { translate } from "@/utils/translation/index";
 import { ValuesOf } from "@/utils/typeguard";
-
-import { translateSubtitle } from "../utils/captionstranslation";
 
 export const playerStatus = {
   IDLE: "idle",
@@ -515,10 +515,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     }
 
     try {
-      const result = await translateSubtitle(
-        targetCaption.id,
-        store.caption.translateTask!.fetchedTargetCaption!.srtData,
+      const result = await translate(
+        store.caption.translateTask!.fetchedTargetCaption!,
         targetLanguage,
+        googletranslate,
       );
       if (cancelled) {
         return;
