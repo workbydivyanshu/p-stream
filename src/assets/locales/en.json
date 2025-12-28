@@ -992,9 +992,14 @@
     "loadingUserError": {
       "logout": "Logout",
       "reset": "Reset custom server",
+      "disconnect": "Disconnect from backend",
       "text": "Failed to load your profile",
       "reload": "Reload",
-      "textWithReset": "Failed to load your profile from your custom server, want to reset back to the default server?"
+      "textWithReset": "Failed to load your profile from your custom server, want to reset back to the default server?",
+      "disconnectTitle": "Disconnect from backend?",
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectConfirm": "Confirm",
+      "disconectCancel": "Cancel"
     },
     "migration": {
       "failed": "Failed to migrate your data. 😿",

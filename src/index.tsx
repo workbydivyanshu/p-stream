@@ -4,7 +4,7 @@ import "./stores/__old/imports";
 import "@/setup/ga";
 import "@/assets/css/index.css";
 
-import { StrictMode, Suspense, useCallback } from "react";
+import { StrictMode, Suspense, useCallback, useState } from "react";
 import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
@@ -62,21 +62,32 @@ function ErrorScreen(props: {
   showResetButton?: boolean;
   showLogoutButton?: boolean;
   showReloadButton?: boolean;
+  showDisconnectButton?: boolean;
 }) {
   const { t } = useTranslation();
-  const { logout } = useAuth();
+  const { logout, disconnectFromBackend } = useAuth();
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
+  const [showDisconnectConfirm, setShowDisconnectConfirm] = useState(false);
+
   const resetBackend = useCallback(() => {
     setBackendUrl(null);
     // eslint-disable-next-line no-restricted-globals
     location.reload();
   }, [setBackendUrl]);
+
   const logoutFromBackend = useCallback(() => {
     logout().then(() => {
       // eslint-disable-next-line no-restricted-globals
       location.reload();
     });
   }, [logout]);
+
+  const handleDisconnectConfirm = useCallback(() => {
+    disconnectFromBackend().then(() => {
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
+    });
+  }, [disconnectFromBackend]);
 
   return (
     <LargeTextPart
@@ -99,6 +110,16 @@ function ErrorScreen(props: {
           </Button>
         </div>
       ) : null}
+      {props.showDisconnectButton ? (
+        <div className="mt-6">
+          <Button
+            theme="secondary"
+            onClick={() => setShowDisconnectConfirm(true)}
+          >
+            {t("screens.loadingUserError.disconnect")}
+          </Button>
+        </div>
+      ) : null}
       {props.showReloadButton ? (
         <div className="mt-6">
           <Button theme="secondary" onClick={() => window.location.reload()}>
@@ -106,6 +127,31 @@ function ErrorScreen(props: {
           </Button>
         </div>
       ) : null}
+
+      {/* Disconnect Confirmation Modal */}
+      {showDisconnectConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-modal-background rounded-xl p-8 max-w-md mx-4">
+            <h2 className="text-white text-xl font-semibold mb-4">
+              {t("screens.loadingUserError.disconnectTitle")}
+            </h2>
+            <p className="text-type-secondary mb-6">
+              {t("screens.loadingUserError.disconnectMessage")}
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button
+                theme="secondary"
+                onClick={() => setShowDisconnectConfirm(false)}
+              >
+                {t("screens.loadingUserError.disconectCancel")}
+              </Button>
+              <Button theme="danger" onClick={handleDisconnectConfirm}>
+                {t("screens.loadingUserError.disconnectConfirm")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </LargeTextPart>
   );
 }
@@ -115,6 +161,7 @@ function AuthWrapper() {
   const backendUrl = conf().BACKEND_URL;
   const userBackendUrl = useBackendUrl();
   const { t } = useTranslation();
+  const isLoggedIn = !!useAuthStore((s) => s.account);
 
   const isCustomUrl = backendUrl !== userBackendUrl;
 
@@ -124,6 +171,7 @@ function AuthWrapper() {
       <ErrorScreen
         showResetButton={isCustomUrl}
         showLogoutButton={!isCustomUrl}
+        showDisconnectButton={!isCustomUrl}
         showReloadButton={!isCustomUrl}
       >
         {t(
