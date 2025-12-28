@@ -220,7 +220,17 @@ export function WatchPartyView({ id }: { id: string }) {
                 ) : (
                   <>
                     <div className="flex flex-col gap-2">
-                      <div className="text-center">
+                      <div className="text-center space-y-2">
+                        <div className="text-xs text-type-logo font-semibold flex flex-col gap-1 bg-type-danger/10 px-2 py-1 rounded mb-2">
+                          <span className="text-xs">
+                            {t("watchParty.backendRequirement")}
+                          </span>
+                          <span className="text-xs">
+                            {t("watchParty.activeBackend", {
+                              backend: backendUrl || "Unknown",
+                            })}
+                          </span>
+                        </div>
                         <Trans
                           i18nKey={
                             isHost ? "watchParty.isHost" : "watchParty.isGuest"

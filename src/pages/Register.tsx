@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { MetaResponse } from "@/backend/accounts/meta";
+import { Button } from "@/components/buttons/Button";
+import { BackendSelector } from "@/components/form/BackendSelector";
+import {
+  LargeCard,
+  LargeCardButtons,
+  LargeCardText,
+} from "@/components/layout/LargeCard";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import {
   AccountCreatePart,
@@ -12,6 +20,8 @@ import { PassphraseGeneratePart } from "@/pages/parts/auth/PassphraseGeneratePar
 import { TrustBackendPart } from "@/pages/parts/auth/TrustBackendPart";
 import { VerifyPassphrase } from "@/pages/parts/auth/VerifyPassphrasePart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
+import { conf } from "@/setup/config";
+import { useAuthStore } from "@/stores/auth";
 
 function CaptchaProvider(props: {
   siteKey: string | null;
@@ -27,17 +37,63 @@ function CaptchaProvider(props: {
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
+  const { t } = useTranslation();
+  const [step, setStep] = useState(-1);
   const [mnemonic, setMnemonic] = useState<null | string>(null);
   const [account, setAccount] = useState<null | AccountProfile>(null);
   const [siteKey, setSiteKey] = useState<string | null>(null);
+  const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
+    null,
+  );
+  const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
+  const config = conf();
+  const availableBackends =
+    config.BACKEND_URLS.length > 0
+      ? config.BACKEND_URLS
+      : config.BACKEND_URL
+        ? [config.BACKEND_URL]
+        : [];
+
+  const handleBackendSelect = (url: string | null) => {
+    setSelectedBackendUrl(url);
+    if (url) {
+      setBackendUrl(url);
+    }
+  };
 
   return (
     <CaptchaProvider siteKey={siteKey}>
       <SubPageLayout>
         <PageTitle subpage k="global.pages.register" />
+        {step === -1 ? (
+          <LargeCard>
+            <LargeCardText title={t("auth.backendSelection.title")}>
+              {t("auth.backendSelection.description")}
+            </LargeCardText>
+            <BackendSelector
+              selectedUrl={selectedBackendUrl}
+              onSelect={handleBackendSelect}
+              availableUrls={availableBackends}
+              showCustom
+            />
+            <LargeCardButtons>
+              <Button
+                theme="purple"
+                onClick={() => {
+                  if (selectedBackendUrl) {
+                    setStep(0);
+                  }
+                }}
+                disabled={!selectedBackendUrl}
+              >
+                {t("auth.register.information.next")}
+              </Button>
+            </LargeCardButtons>
+          </LargeCard>
+        ) : null}
         {step === 0 ? (
           <TrustBackendPart
+            backendUrl={selectedBackendUrl}
             onNext={(meta: MetaResponse) => {
               setSiteKey(
                 meta.hasCaptcha && meta.captchaClientKey
