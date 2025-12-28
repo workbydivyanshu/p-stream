@@ -1144,7 +1144,8 @@
           "link": "Migrate my data"
         },
         "documentation": "Backend documentation",
-        "error": "Error connecting to backend"
+        "error": "Error connecting to backend",
+        "notice": "Your account does NOT sync between backends, so remember which one you use!"
       },
       "setup": {
         "doSetup": "Do setup",

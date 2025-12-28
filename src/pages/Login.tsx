@@ -72,6 +72,9 @@ export function LoginPage() {
             showCustom
           />
           <LargeCardButtons>
+            <span className="text-type-danger font-medium text-center">
+              {t("settings.connections.server.notice")}
+            </span>
             <Button
               theme="purple"
               onClick={handleContinue}
