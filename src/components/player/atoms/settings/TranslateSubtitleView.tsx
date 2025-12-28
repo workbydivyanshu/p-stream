@@ -71,7 +71,7 @@ const availableLanguages: string[] = [
   "cy",
 ];
 
-export interface LanguageSubtitlesViewProps {
+export interface TranslateSubtitlesViewProps {
   id: string;
   caption: CaptionListItem;
   overlayBackLink?: boolean;
@@ -81,28 +81,13 @@ export function TranslateSubtitleView({
   id,
   caption,
   overlayBackLink,
-}: LanguageSubtitlesViewProps) {
+}: TranslateSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
-  const { setDirectCaption, disable: disableCaptions } = useCaptions();
+  const { disable: disableCaptions } = useCaptions();
   const translateTask = usePlayerStore((s) => s.caption.translateTask);
   const translateCaption = usePlayerStore((s) => s.translateCaption);
   const clearTranslateTask = usePlayerStore((s) => s.clearTranslateTask);
-
-  useEffect(() => {
-    if (!translateTask) {
-      return;
-    }
-    if (translateTask.done) {
-      const tCaption = translateTask.translatedCaption!;
-      setDirectCaption(tCaption, {
-        id: tCaption.id,
-        url: "",
-        language: tCaption.language,
-        needsProxy: false,
-      });
-    }
-  }, [translateTask, setDirectCaption]);
 
   function renderTargetLang(langCode: string) {
     const friendlyName = getPrettyLanguageNameFromLocale(langCode);
