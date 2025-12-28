@@ -90,7 +90,7 @@ class Translator {
     let attempts = 0;
     const errors: any[] = [];
 
-    while (!result && attempts < 3) {
+    while (!result && attempts < this.serviceCfg.maxRetryCount) {
       try {
         result = await this.service.translate(
           content.text,
