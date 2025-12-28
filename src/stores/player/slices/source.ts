@@ -464,7 +464,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       return;
     }
 
-    let cancelled = false;
+    const abortController = new AbortController();
 
     set((s) => {
       s.caption.translateTask = {
@@ -476,16 +476,16 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           if (!this.done && !this.error) {
             console.log("Translation task was cancelled");
           }
-          cancelled = true;
+          abortController.abort();
         },
       };
     });
 
     function handleError(err: any) {
-      console.error("Translation task ran into an error", err);
-      if (cancelled) {
+      if (abortController.signal.aborted) {
         return;
       }
+      console.error("Translation task ran into an error", err);
       set((s) => {
         if (!s.caption.translateTask) return;
         s.caption.translateTask.error = true;
@@ -494,7 +494,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
 
     try {
       const srtData = await downloadCaption(targetCaption);
-      if (cancelled) {
+      if (abortController.signal.aborted) {
         return;
       }
       if (!srtData) {
@@ -519,8 +519,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         store.caption.translateTask!.fetchedTargetCaption!,
         targetLanguage,
         googletranslate,
+        abortController.signal,
       );
-      if (cancelled) {
+      if (abortController.signal.aborted) {
         return;
       }
       if (!result) {

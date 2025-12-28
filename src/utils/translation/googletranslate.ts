@@ -12,23 +12,30 @@ export default {
 
   getConfig() {
     return {
-      singleBatchSize: 15,
-      multiBatchSize: 80,
+      single: {
+        batchSize: 250,
+        batchDelayMs: 1000,
+      },
+      multi: {
+        batchSize: 80,
+        batchDelayMs: 200,
+      },
       maxRetryCount: 3,
-      batchSleepMs: 200,
     };
   },
 
-  async translate(str, targetLang) {
+  async translate(str, targetLang, abortSignal) {
     if (!str) {
       return "";
     }
+    str = str.replaceAll("\n", "<br />");
 
     const response = await (
       await fetch(
         `${SINGLE_API_URL}&tl=${targetLang}&q=${encodeURIComponent(str)}`,
         {
           method: "GET",
+          signal: abortSignal,
           headers: {
             Accept: "application/json",
           },
@@ -43,17 +50,20 @@ export default {
 
     return (response.sentences as any[])
       .map((s: any) => s.trans as string)
-      .join("");
+      .join("")
+      .replaceAll("<br />", "\n");
   },
 
-  async translateMulti(batch, targetLang) {
+  async translateMulti(batch, targetLang, abortSignal) {
     if (!batch || batch.length === 0) {
       return [];
     }
+    batch = batch.map((s) => s.replaceAll("\n", "<br />"));
 
     const response = await (
       await fetch(BATCH_API_URL, {
         method: "POST",
+        signal: abortSignal,
         headers: {
           "Content-Type": "application/json+protobuf",
           "X-goog-api-key": BATCH_API_KEY,
@@ -67,6 +77,8 @@ export default {
       throw new Error("Invalid response");
     }
 
-    return response[0].map((s: any) => s as string);
+    return response[0].map((s: any) =>
+      (s as string).replaceAll("<br />", "\n"),
+    );
   },
 } satisfies TranslateService;

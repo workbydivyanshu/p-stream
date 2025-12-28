@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import subsrt from "subsrt-ts";
 import { Caption, ContentCaption } from "subsrt-ts/dist/types/handler";
 
@@ -7,16 +8,32 @@ import { compressStr, decompressStr, sleep } from "./utils";
 
 const CAPTIONS_CACHE: Map<string, ArrayBuffer> = new Map<string, ArrayBuffer>();
 
+// single will not be used if multi-line is supported
+export interface TranslateServiceConfig {
+  single: {
+    batchSize: number;
+    batchDelayMs: number;
+  };
+  multi?: {
+    batchSize: number;
+    batchDelayMs: number;
+  };
+  maxRetryCount: number;
+}
+
 export interface TranslateService {
   getName(): string;
-  getConfig(): {
-    singleBatchSize: number;
-    multiBatchSize: number; // -1 = unsupported
-    maxRetryCount: number;
-    batchSleepMs: number;
-  };
-  translate(str: string, targetLang: string): Promise<string>;
-  translateMulti(batch: string[], targetLang: string): Promise<string[]>;
+  getConfig(): TranslateServiceConfig;
+  translate(
+    str: string,
+    targetLang: string,
+    abortSignal?: AbortSignal,
+  ): Promise<string>;
+  translateMulti(
+    batch: string[],
+    targetLang: string,
+    abortSignal?: AbortSignal,
+  ): Promise<string[]>;
 }
 
 class Translator {
@@ -30,10 +47,21 @@ class Translator {
 
   private service: TranslateService;
 
-  constructor(srtData: string, targetLang: string, service: TranslateService) {
+  private serviceCfg: TranslateServiceConfig;
+
+  private abortSignal?: AbortSignal;
+
+  constructor(
+    srtData: string,
+    targetLang: string,
+    service: TranslateService,
+    abortSignal?: AbortSignal,
+  ) {
     this.captions = subsrt.parse(srtData);
     this.targetLang = targetLang;
     this.service = service;
+    this.serviceCfg = service.getConfig();
+    this.abortSignal = abortSignal;
 
     for (const caption of this.captions) {
       if (caption.type !== "caption") {
@@ -64,13 +92,24 @@ class Translator {
 
     while (!result && attempts < 3) {
       try {
-        result = await this.service.translate(content.text, this.targetLang);
+        result = await this.service.translate(
+          content.text,
+          this.targetLang,
+          this.abortSignal,
+        );
       } catch (err) {
+        if (this.abortSignal?.aborted) {
+          break;
+        }
         console.warn("Translation attempt failed");
         errors.push(err);
         await sleep(500);
         attempts += 1;
       }
+    }
+
+    if (this.abortSignal?.aborted) {
+      return false;
     }
 
     if (!result) {
@@ -88,6 +127,7 @@ class Translator {
       const result = await this.service.translateMulti(
         batch.map((content) => content.text),
         this.targetLang,
+        this.abortSignal,
       );
 
       if (result.length !== batch.length) {
@@ -106,6 +146,9 @@ class Translator {
 
       return true;
     } catch (err) {
+      if (this.abortSignal?.aborted) {
+        return false;
+      }
       console.warn("Batch translation failed", err);
       return false;
     }
@@ -113,10 +156,9 @@ class Translator {
 
   takeBatch(): ContentCaption[] {
     const batch: ContentCaption[] = [];
-    const batchSize =
-      this.service.getConfig().multiBatchSize === -1
-        ? this.service.getConfig().singleBatchSize
-        : this.service.getConfig().multiBatchSize;
+    const batchSize = !this.serviceCfg.multi
+      ? this.serviceCfg.single.batchSize
+      : this.serviceCfg.multi!.batchSize;
 
     let count = 0;
     while (count < batchSize && this.contentCaptions.length > 0) {
@@ -132,12 +174,24 @@ class Translator {
   }
 
   async translate(): Promise<string | undefined> {
+    const batchDelay = !this.serviceCfg.multi
+      ? this.serviceCfg.single.batchDelayMs
+      : this.serviceCfg.multi!.batchDelayMs;
+
+    console.info(
+      "Translating captions",
+      this.service.getName(),
+      this.contentCaptions.length,
+      batchDelay,
+    );
+    console.time("translation");
+
     let batch: ContentCaption[] = this.takeBatch();
     while (batch.length > 0) {
       let result: boolean;
-      console.info("Translating captions batch", batch.length, batch);
+      console.info("Translating batch", batch.length, batch);
 
-      if (this.service.getConfig().multiBatchSize === -1) {
+      if (!this.serviceCfg.multi) {
         result = (
           await Promise.all(
             batch.map((content) => this.translateContent(content)),
@@ -147,18 +201,24 @@ class Translator {
         result = await this.translateContentBatch(batch);
       }
 
+      if (this.abortSignal?.aborted) {
+        return undefined;
+      }
+
       if (!result) {
-        console.error(
-          "Failed to translate captions batch",
-          batch.length,
-          batch,
-        );
+        console.error("Failed to translate batch", batch.length, batch);
         return undefined;
       }
 
       batch = this.takeBatch();
-      await sleep(this.service.getConfig().batchSleepMs);
+      await sleep(batchDelay);
     }
+
+    if (this.abortSignal?.aborted) {
+      return undefined;
+    }
+
+    console.timeEnd("translation");
     return subsrt.build(this.captions, { format: "srt" });
   }
 }
@@ -167,6 +227,7 @@ export async function translate(
   caption: PlayerCaption,
   targetLang: string,
   service: TranslateService,
+  abortSignal?: AbortSignal,
 ): Promise<string | undefined> {
   const cacheID = `${caption.id}_${targetLang}`;
 
@@ -175,10 +236,15 @@ export async function translate(
     return decompressStr(cachedData);
   }
 
-  const translator = new Translator(caption.srtData, targetLang, service);
+  const translator = new Translator(
+    caption.srtData,
+    targetLang,
+    service,
+    abortSignal,
+  );
 
   const result = await translator.translate();
-  if (!result) {
+  if (!result || abortSignal?.aborted) {
     return undefined;
   }
 
