@@ -117,8 +117,8 @@ class Translator {
       return false;
     }
 
-    content.text = result;
     this.contentCache.set(content.text, result);
+    content.text = result;
     return true;
   }
 
@@ -140,8 +140,8 @@ class Translator {
       }
 
       for (let i = 0; i < batch.length; i += 1) {
-        batch[i].text = result[i];
         this.contentCache.set(batch[i].text, result[i]);
+        batch[i].text = result[i];
       }
 
       return true;
