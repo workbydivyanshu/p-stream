@@ -161,7 +161,6 @@ function AuthWrapper() {
   const backendUrl = conf().BACKEND_URL;
   const userBackendUrl = useBackendUrl();
   const { t } = useTranslation();
-  const isLoggedIn = !!useAuthStore((s) => s.account);
 
   const isCustomUrl = backendUrl !== userBackendUrl;
 
