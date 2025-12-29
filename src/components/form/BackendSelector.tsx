@@ -80,6 +80,9 @@ function BackendOptionItem({
           ) : option.meta ? (
             <div>
               <p className="text-white font-medium">{option.meta.name}</p>
+              <p className="text-type-secondary text-sm">
+                {option.meta.description}
+              </p>
               <p className="text-type-secondary text-sm">{hostname}</p>
             </div>
           ) : (
