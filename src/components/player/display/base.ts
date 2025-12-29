@@ -308,8 +308,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         });
         hls.on(Hls.Events.LEVEL_SWITCHED, () => {
           if (!hls) return;
-          const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
-          emit("changedquality", quality);
+          if (automaticQuality) {
+            // Only emit quality changes when automatic quality is enabled
+            const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
+            emit("changedquality", quality);
+          } else {
+            // When automatic quality is disabled, re-lock to preferred quality
+            // This prevents HLS.js from switching levels unexpectedly
+            setupQualityForHls();
+          }
         });
         hls.on(Hls.Events.SUBTITLE_TRACK_LOADED, () => {
           for (const [lang, resolve] of languagePromises) {
