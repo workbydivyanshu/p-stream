@@ -50,6 +50,10 @@ export function RegisterPage() {
 
   const [step, setStep] = useState(-1);
   const [mnemonic, setMnemonic] = useState<null | string>(null);
+  const [credentialId, setCredentialId] = useState<null | string>(null);
+  const [authMethod, setAuthMethod] = useState<"mnemonic" | "passkey">(
+    "mnemonic",
+  );
   const [account, setAccount] = useState<null | AccountProfile>(null);
   const [siteKey, setSiteKey] = useState<string | null>(null);
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
@@ -113,6 +117,12 @@ export function RegisterPage() {
           <PassphraseGeneratePart
             onNext={(m) => {
               setMnemonic(m);
+              setAuthMethod("mnemonic");
+              setStep(2);
+            }}
+            onPasskeyNext={(credId) => {
+              setCredentialId(credId);
+              setAuthMethod("passkey");
               setStep(2);
             }}
           />
@@ -129,7 +139,10 @@ export function RegisterPage() {
           <VerifyPassphrase
             hasCaptcha={!!siteKey}
             mnemonic={mnemonic}
+            credentialId={credentialId}
+            authMethod={authMethod}
             userData={account}
+            backendUrl={selectedBackendUrl}
             onNext={() => {
               navigate("/");
             }}
