@@ -116,7 +116,7 @@ export function GroupDropdown({
         </span>
       </button>
       {open && (
-        <div className="absolute min-w-full z-[150] mt-1 end-0 bg-background-main border border-background-secondary rounded-xl shadow-lg py-1 pb-3 text-sm">
+        <div className="absolute min-w-full z-[150] mt-1 end-0 bg-background-main border border-background-secondary rounded-xl shadow-lg py-1 pb-3 text-sm max-h-80 overflow-auto scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary">
           {groups.length === 0 && !showInput && (
             <div className="px-4 py-2 text-type-secondary">
               {t("home.bookmarks.groups.dropdown.empty")}
