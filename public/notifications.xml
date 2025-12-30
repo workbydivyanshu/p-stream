@@ -8,7 +8,22 @@
     <lastBuildDate>Mon, 29 Sep 2025 18:00:00 MST</lastBuildDate>
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
-        <item>
+    <item>
+      <guid>notification-055</guid>
+      <title>Backend issues have been fixed!</title>
+      <description>You are now able to log into your account again! Hopefully less downtime going forward!
+
+We decided to move the backend (previously server.fifthwit.net) to a new server at backend.pstream.mov.
+
+All of your account data has been migrated to the new server, so you can log in with existing passphrase.
+
+We've also introduced some new backend servers, so you can now choose which one you want to use. Sorry for all the downtime!
+      </description>
+      <pubDate>Mon, 29 Dec 2025 13:30:00 MST</pubDate>
+      <category>announcement</category>
+    </item>
+
+    <item>
       <guid>notification-054</guid>
       <title>P-Stream v5.3.3 released!</title>
       <description>Merry Christmas everyone! 🎄

@@ -48,12 +48,23 @@ export function RegisterPage() {
         ? [config.BACKEND_URL]
         : [];
 
-  const [step, setStep] = useState(-1);
+  // If there's only one backend and user hasn't selected a custom one, auto-select it
+  const defaultBackend =
+    currentBackendUrl ??
+    (availableBackends.length === 1 ? availableBackends[0] : null);
+
+  const [step, setStep] = useState(
+    availableBackends.length > 1 || !defaultBackend ? -1 : 0,
+  );
   const [mnemonic, setMnemonic] = useState<null | string>(null);
+  const [credentialId, setCredentialId] = useState<null | string>(null);
+  const [authMethod, setAuthMethod] = useState<"mnemonic" | "passkey">(
+    "mnemonic",
+  );
   const [account, setAccount] = useState<null | AccountProfile>(null);
   const [siteKey, setSiteKey] = useState<string | null>(null);
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
-    currentBackendUrl ?? null,
+    currentBackendUrl ?? defaultBackend ?? null,
   );
 
   const handleBackendSelect = (url: string | null) => {
@@ -67,7 +78,7 @@ export function RegisterPage() {
     <CaptchaProvider siteKey={siteKey}>
       <SubPageLayout>
         <PageTitle subpage k="global.pages.register" />
-        {step === -1 ? (
+        {step === -1 && (availableBackends.length > 1 || !defaultBackend) ? (
           <LargeCard>
             <LargeCardText title={t("auth.backendSelection.title")}>
               {t("auth.backendSelection.description")}
@@ -113,6 +124,12 @@ export function RegisterPage() {
           <PassphraseGeneratePart
             onNext={(m) => {
               setMnemonic(m);
+              setAuthMethod("mnemonic");
+              setStep(2);
+            }}
+            onPasskeyNext={(credId) => {
+              setCredentialId(credId);
+              setAuthMethod("passkey");
               setStep(2);
             }}
           />
@@ -129,7 +146,10 @@ export function RegisterPage() {
           <VerifyPassphrase
             hasCaptcha={!!siteKey}
             mnemonic={mnemonic}
+            credentialId={credentialId}
+            authMethod={authMethod}
             userData={account}
+            backendUrl={selectedBackendUrl}
             onNext={() => {
               navigate("/");
             }}
