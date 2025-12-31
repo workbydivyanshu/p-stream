@@ -40,6 +40,7 @@ export enum ShortcutId {
   RANDOM_CAPTION = "randomCaption",
   SYNC_SUBTITLES_EARLIER = "syncSubtitlesEarlier",
   SYNC_SUBTITLES_LATER = "syncSubtitlesLater",
+  TOGGLE_NATIVE_SUBTITLES = "toggleNativeSubtitles",
 
   // Interface
   BARREL_ROLL = "barrelRoll",
@@ -67,6 +68,7 @@ export const DEFAULT_KEYBOARD_SHORTCUTS: KeyboardShortcuts = {
   [ShortcutId.RANDOM_CAPTION]: { modifier: "Shift", key: "C" },
   [ShortcutId.SYNC_SUBTITLES_EARLIER]: { key: "[" },
   [ShortcutId.SYNC_SUBTITLES_LATER]: { key: "]" },
+  [ShortcutId.TOGGLE_NATIVE_SUBTITLES]: { key: "S" },
   [ShortcutId.BARREL_ROLL]: { key: "R" },
 };
 

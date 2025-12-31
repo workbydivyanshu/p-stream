@@ -189,6 +189,13 @@ const getShortcutGroups = (
           ),
           config: getConfig(ShortcutId.SYNC_SUBTITLES_LATER),
         },
+        {
+          key: getDisplayKey(ShortcutId.TOGGLE_NATIVE_SUBTITLES) || "S",
+          description: t(
+            "global.keyboardShortcuts.shortcuts.toggleNativeSubtitles",
+          ),
+          config: getConfig(ShortcutId.TOGGLE_NATIVE_SUBTITLES),
+        },
       ],
     },
     {
