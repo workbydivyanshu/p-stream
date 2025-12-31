@@ -520,6 +520,21 @@ export function FebboxSetup({
                 })()}
             </>
           ) : null}
+          <div className="flex justify-between items-center gap-4 mt-6">
+            <div className="my-3">
+              <p className="max-w-[32rem] font-medium">
+                {t("fedapi.setup.useMp4")}
+              </p>
+            </div>
+            <div>
+              <Toggle
+                onClick={() =>
+                  preferences.setFebboxUseMp4(!preferences.febboxUseMp4)
+                }
+                enabled={preferences.febboxUseMp4}
+              />
+            </div>
+          </div>
         </SettingsCard>
         <Modal id={exampleModal.id}>
           <ModalCard>
