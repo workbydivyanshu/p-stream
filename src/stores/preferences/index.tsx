@@ -26,6 +26,7 @@ export interface PreferencesStore {
   enableEmbedOrder: boolean;
   proxyTmdb: boolean;
   febboxKey: string | null;
+  febboxUseMp4: boolean;
   debridToken: string | null;
   debridService: string;
   enableLowPerformanceMode: boolean;
@@ -55,6 +56,7 @@ export interface PreferencesStore {
   setEnableEmbedOrder(v: boolean): void;
   setProxyTmdb(v: boolean): void;
   setFebboxKey(v: string | null): void;
+  setFebboxUseMp4(v: boolean): void;
   setdebridToken(v: string | null): void;
   setdebridService(v: string): void;
   setEnableLowPerformanceMode(v: boolean): void;
@@ -88,6 +90,7 @@ export const usePreferencesStore = create(
       enableEmbedOrder: false,
       proxyTmdb: false,
       febboxKey: null,
+      febboxUseMp4: false,
       debridToken: null,
       debridService: "realdebrid",
       enableLowPerformanceMode: false,
@@ -186,6 +189,11 @@ export const usePreferencesStore = create(
       setFebboxKey(v) {
         set((s) => {
           s.febboxKey = v;
+        });
+      },
+      setFebboxUseMp4(v) {
+        set((s) => {
+          s.febboxUseMp4 = v;
         });
       },
       setdebridToken(v) {
