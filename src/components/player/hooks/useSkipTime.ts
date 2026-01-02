@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 // import { proxiedFetch } from "@/backend/helpers/fetch";
+import { proxiedFetch } from "@/backend/helpers/fetch";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -89,7 +90,7 @@ export function useSkipTime() {
       try {
         const apiUrl = `${INTRODB_BASE_URL}?imdb_id=${meta.imdbId}&season=${meta.season?.number}&episode=${meta.episode?.number}`;
 
-        const response = await fetch(apiUrl);
+        const response = await proxiedFetch(apiUrl);
 
         if (!response.ok) {
           throw new Error("IntroDB API request failed");
