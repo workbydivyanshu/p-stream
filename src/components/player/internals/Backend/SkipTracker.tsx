@@ -9,7 +9,7 @@ type SkipEvent = NonNullable<ReturnType<typeof useSkipTracking>["latestSkip"]>;
 /**
  * Component that tracks and reports completed skip sessions to analytics backend.
  * Sessions are detected when users accumulate 20+ seconds of forward movement
- * within a 6-second window and end after 8 seconds of no activity.
+ * within a 6-second window and end after 5 seconds of no activity.
  * Ignores skips that start after 20% of video duration (unlikely to be intro skipping).
  */
 interface PendingSkip {
@@ -77,7 +77,7 @@ export function SkipTracker() {
           // Remove from pending
           return prev.filter((p) => p.skip.timestamp !== skip.timestamp);
         });
-      }, 8000); // 8 second delay
+      }, 5000); // 5 second delay
 
       return {
         skip,
@@ -101,7 +101,7 @@ export function SkipTracker() {
     // eslint-disable-next-line no-console
     console.log(`Skip session completed: ${latestSkip.skipDuration}s total`);
 
-    // Create pending skip with 8-second delay
+    // Create pending skip with 5-second delay
     const pendingSkip = createPendingSkip(latestSkip);
     setPendingSkips((prev) => [...prev, pendingSkip]);
 
