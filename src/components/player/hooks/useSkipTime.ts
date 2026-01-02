@@ -90,13 +90,7 @@ export function useSkipTime() {
       try {
         const apiUrl = `${INTRODB_BASE_URL}?imdb_id=${meta.imdbId}&season=${meta.season?.number}&episode=${meta.episode?.number}`;
 
-        const response = await proxiedFetch(apiUrl);
-
-        if (!response.ok) {
-          throw new Error("IntroDB API request failed");
-        }
-
-        const data = await response.json();
+        const data = await proxiedFetch(apiUrl);
 
         if (data && typeof data.end_ms === "number") {
           // Convert milliseconds to seconds
