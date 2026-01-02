@@ -735,6 +735,10 @@
       "device": "device",
       "enabled": "Casting to device 🎬"
     },
+    "skipIntro": {
+      "feedback": "Was this skip helpful?",
+      "skip": "Skip Intro"
+    },
     "menus": {
       "downloads": {
         "button": "Attempt download",
