@@ -49,7 +49,7 @@ export function SkipIntroButton(props: {
   const status = usePlayerStore((s) => s.status);
   const display = usePlayerStore((s) => s.display);
   const meta = usePlayerStore((s) => s.meta);
-  const { addSkipEvent } = useSkipTracking(30);
+  const { addSkipEvent } = useSkipTracking(20);
   const showingState = shouldShowSkipButton(time, props.skipTime);
   const animation = showingState === "hover" ? "slide-up" : "fade";
   let bottom = "bottom-[calc(6rem+env(safe-area-inset-bottom))]";

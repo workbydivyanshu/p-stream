@@ -38,8 +38,8 @@ function calculateSkipConfidence(
   duration: number,
 ): number {
   // Duration confidence: longer skips are more confident
-  // 30s = 0.5, 60s = 0.75, 90s+ = 0.85
-  const durationConfidence = Math.min(0.85, 0.5 + (skipDuration - 30) * 0.01);
+  // 20s = 0.4, 40s = 0.6, 60s+ = 0.85
+  const durationConfidence = Math.min(0.85, 0.4 + (skipDuration - 20) * 0.01);
 
   // Timing confidence: earlier skips are more confident
   // Start time as percentage of total duration
@@ -52,16 +52,16 @@ function calculateSkipConfidence(
 }
 
 /**
- * Hook that tracks rapid skipping sessions where users accumulate 30+ seconds of forward
+ * Hook that tracks rapid skipping sessions where users accumulate 20+ seconds of forward
  * movement within a 5-second window. Sessions continue until 8 seconds pass without
  * any forward movement, then report the total skip distance. Ignores skips that start
  * after 20% of video duration (unlikely to be intro skipping).
  *
- * @param minSkipThreshold Minimum total forward movement in 5-second window to start session (default: 30)
+ * @param minSkipThreshold Minimum total forward movement in 5-second window to start session (default: 20)
  * @param maxHistory Maximum number of skip events to keep in history (default: 50)
  */
 export function useSkipTracking(
-  minSkipThreshold: number = 30,
+  minSkipThreshold: number = 20,
   maxHistory: number = 50,
 ): SkipTrackingResult {
   const [skipHistory, setSkipHistory] = useState<SkipEvent[]>([]);
@@ -114,12 +114,12 @@ export function useSkipTracking(
 
     const timeDelta = currentTime - previousTimeRef.current;
 
-    // Track forward movements >= 1 second in sliding 5-second window
+    // Track forward movements >= 1 second in sliding 6-second window
     if (timeDelta >= 1) {
-      // Add forward movement to window and remove entries older than 5 seconds
+      // Add forward movement to window and remove entries older than 6 seconds
       skipWindowRef.current.push({ time: now, delta: timeDelta });
       skipWindowRef.current = skipWindowRef.current.filter(
-        (entry) => entry.time > now - 5000,
+        (entry) => entry.time > now - 6000,
       );
 
       // Calculate total forward movement in current window
