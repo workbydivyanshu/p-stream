@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { getMetaFromId } from "@/backend/metadata/getmeta";
 import { MWMediaType } from "@/backend/metadata/types/mw";
@@ -14,6 +14,7 @@ import { useSubtitleStore } from "@/stores/subtitles";
 import { useEmpheralVolumeStore } from "@/stores/volume";
 import { useWatchPartyStore } from "@/stores/watchParty";
 import {
+  DEFAULT_KEYBOARD_SHORTCUTS,
   LOCKED_SHORTCUTS,
   ShortcutId,
   matchesShortcut,
@@ -49,7 +50,23 @@ export function KeyboardEvents() {
     (s) => s.setShowDelayIndicator,
   );
   const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
-  const keyboardShortcuts = usePreferencesStore((s) => s.keyboardShortcuts);
+  const storedKeyboardShortcuts = usePreferencesStore(
+    (s) => s.keyboardShortcuts,
+  );
+  // Merge defaults with stored shortcuts to ensure new shortcuts are available
+  const keyboardShortcuts = useMemo(
+    () => ({
+      ...DEFAULT_KEYBOARD_SHORTCUTS,
+      ...storedKeyboardShortcuts,
+    }),
+    [storedKeyboardShortcuts],
+  );
+  const enableNativeSubtitles = usePreferencesStore(
+    (s) => s.enableNativeSubtitles,
+  );
+  const setEnableNativeSubtitles = usePreferencesStore(
+    (s) => s.setEnableNativeSubtitles,
+  );
 
   const [isRolling, setIsRolling] = useState(false);
   const volumeDebounce = useRef<ReturnType<typeof setTimeout> | undefined>();
@@ -295,6 +312,8 @@ export function KeyboardEvents() {
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
+    enableNativeSubtitles,
+    setEnableNativeSubtitles,
   });
 
   useEffect(() => {
@@ -329,6 +348,8 @@ export function KeyboardEvents() {
       navigateToNextEpisode,
       navigateToPreviousEpisode,
       keyboardShortcuts,
+      enableNativeSubtitles,
+      setEnableNativeSubtitles,
     };
   }, [
     setShowVolume,
@@ -356,6 +377,8 @@ export function KeyboardEvents() {
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
+    enableNativeSubtitles,
+    setEnableNativeSubtitles,
   ]);
 
   useEffect(() => {
@@ -724,6 +747,20 @@ export function KeyboardEvents() {
           dataRef.current.setShowDelayIndicator(false);
           dataRef.current.setCurrentOverlay(null);
         }, 3000);
+      }
+
+      // Toggle native subtitles - customizable
+      const toggleNativeSubtitles =
+        dataRef.current.keyboardShortcuts[ShortcutId.TOGGLE_NATIVE_SUBTITLES];
+      if (
+        toggleNativeSubtitles?.key &&
+        matchesShortcut(evt, toggleNativeSubtitles)
+      ) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        dataRef.current.setEnableNativeSubtitles(
+          !dataRef.current.enableNativeSubtitles,
+        );
       }
     };
 

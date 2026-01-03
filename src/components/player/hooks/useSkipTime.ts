@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 // import { proxiedFetch } from "@/backend/helpers/fetch";
+import { proxiedFetch } from "@/backend/helpers/fetch";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -9,6 +10,7 @@ import { getTurnstileToken } from "@/utils/turnstile";
 // Thanks Nemo for this API
 const FED_SKIPS_BASE_URL = "https://fed-skips.pstream.mov";
 // const VELORA_BASE_URL = "https://veloratv.ru/api/intro-end/confirmed";
+const INTRODB_BASE_URL = "https://api.introdb.app/intro";
 const MAX_RETRIES = 3;
 
 export function useSkipTime() {
@@ -82,19 +84,39 @@ export function useSkipTime() {
       }
     };
 
+    const fetchIntroDBTime = async (): Promise<number | null> => {
+      if (!meta?.imdbId || meta.type === "movie") return null;
+
+      try {
+        const apiUrl = `${INTRODB_BASE_URL}?imdb_id=${meta.imdbId}&season=${meta.season?.number}&episode=${meta.episode?.number}`;
+
+        const data = await proxiedFetch(apiUrl);
+
+        if (data && typeof data.end_ms === "number") {
+          // Convert milliseconds to seconds
+          return Math.floor(data.end_ms / 1000);
+        }
+
+        return null;
+      } catch (error) {
+        console.error("Error fetching IntroDB time:", error);
+        return null;
+      }
+    };
+
     const fetchSkipTime = async (): Promise<void> => {
       // If user has febbox key, prioritize Fed-skips (better quality)
       if (febboxKey) {
         const fedSkipsTime = await fetchFedSkipsTime();
         if (fedSkipsTime !== null) {
           setSkiptime(fedSkipsTime);
-          // return;
+          return;
         }
       }
 
-      // // Fall back to Velora API (available to all users)
-      // const veloraSkipTime = await fetchVeloraSkipTime();
-      // setSkiptime(veloraSkipTime);
+      // Fall back to IntroDB API (available to all users)
+      const introDBTime = await fetchIntroDBTime();
+      setSkiptime(introDBTime);
     };
 
     fetchSkipTime();

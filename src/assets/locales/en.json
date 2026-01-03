@@ -285,6 +285,7 @@
         "randomCaption": "Select random caption from last used language",
         "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
         "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleNativeSubtitles": "Toggle native subtitles",
         "barrelRoll": "Do a barrel roll! 🌀",
         "closeOverlay": "Close overlay/modal",
         "nextEpisode": "Next episode",
@@ -733,6 +734,10 @@
       "to": "Casting to {{device}} 📺",
       "device": "device",
       "enabled": "Casting to device 🎬"
+    },
+    "skipIntro": {
+      "feedback": "Was this skip helpful?",
+      "skip": "Skip Intro"
     },
     "menus": {
       "downloads": {
