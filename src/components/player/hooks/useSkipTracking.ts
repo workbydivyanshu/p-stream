@@ -160,6 +160,16 @@ export function useSkipTracking(
         return;
       }
 
+      // Only report skips where end time is greater than start time
+      if (currentTime <= skipSessionStartRef.current) {
+        // Reset session state without creating event
+        isInSkipSessionRef.current = false;
+        skipSessionStartRef.current = 0;
+        sessionTotalRef.current = 0;
+        skipWindowRef.current = [];
+        return;
+      }
+
       // Create skip event for completed session
       const skipEvent: SkipEvent = {
         startTime: skipSessionStartRef.current,
