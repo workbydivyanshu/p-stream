@@ -313,9 +313,24 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
             const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
             emit("changedquality", quality);
           } else {
-            // When automatic quality is disabled, re-lock to preferred quality
-            // This prevents HLS.js from switching levels unexpectedly
-            setupQualityForHls();
+            // When automatic quality is disabled, check if current level matches preferred quality
+            const currentQuality = hlsLevelToQuality(
+              hls.levels[hls.currentLevel],
+            );
+            const preferredQualityLevel = getPreferredQuality(
+              hlsLevelsToQualities(hls.levels),
+              {
+                lastChosenQuality: preferenceQuality,
+                automaticQuality: false,
+              },
+            );
+            // Only re-lock if the current level doesn't match our preferred quality
+            if (currentQuality !== preferredQualityLevel) {
+              setupQualityForHls();
+            } else {
+              // Emit the quality change since we're now at the correct level
+              emit("changedquality", currentQuality);
+            }
           }
         });
         hls.on(Hls.Events.SUBTITLE_TRACK_LOADED, () => {
