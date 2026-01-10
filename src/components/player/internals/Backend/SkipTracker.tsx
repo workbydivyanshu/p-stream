@@ -82,13 +82,13 @@ export function SkipTracker() {
       return {
         skip,
         originalConfidence: skip.confidence,
-        startTime: progress.time,
+        startTime: skip.startTime,
         endTime: skip.endTime,
         hasBackwardMovement: false,
         timer,
       };
     },
-    [progress.time, sendSkipAnalytics],
+    [sendSkipAnalytics],
   );
 
   useEffect(() => {
