@@ -96,8 +96,8 @@ function SettingsOverlay({ id }: { id: string }) {
         </OverlayPage>
         <OverlayPage
           id={id}
-          path="/captionsOverlay/translateSubtitleOverlay"
-          width={343}
+          path="/captionsOverlay/languagesOverlay/translateSubtitleOverlay"
+          width={443}
           height={452}
         >
           <Menu.CardWithScrollable>
@@ -169,8 +169,8 @@ function SettingsOverlay({ id }: { id: string }) {
         </OverlayPage>
         <OverlayPage
           id={id}
-          path="/captions/translateSubtitle"
-          width={343}
+          path="/captions/languages/translateSubtitleOverlay"
+          width={443}
           height={452}
         >
           <Menu.CardWithScrollable>
