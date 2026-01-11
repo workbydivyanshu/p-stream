@@ -33,11 +33,20 @@ export function InfoButton() {
     return null;
   }
 
+  // Don't render button if meta, tmdbId, or type is missing/invalid
+  if (
+    !meta?.tmdbId ||
+    !meta.type ||
+    (meta.type !== "movie" && meta.type !== "show")
+  ) {
+    return null;
+  }
+
   return (
     <VideoPlayerButton
       icon={Icons.CIRCLE_QUESTION}
       iconSizeClass="text-base"
-      className="p-2 !-mr-2"
+      className="p-2 !-mr-2 relative z-10"
       onClick={handleClick}
     />
   );
