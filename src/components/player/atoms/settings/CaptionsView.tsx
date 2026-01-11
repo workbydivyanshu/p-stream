@@ -9,6 +9,7 @@ import { subtitleTypeList } from "@/backend/helpers/subs";
 import { FileDropHandler } from "@/components/DropFile";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
+import { Spinner } from "@/components/layout/Spinner";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
@@ -26,14 +27,18 @@ import {
   sortLangCodes,
 } from "@/utils/language";
 
-export function CaptionOption(props: {
+/* eslint-disable react/no-unused-prop-types */
+export interface CaptionOptionProps {
   countryCode?: string;
   children: React.ReactNode;
   selected?: boolean;
+  disabled?: boolean;
   loading?: boolean;
   onClick?: () => void;
   error?: React.ReactNode;
   flag?: boolean;
+  translatable?: boolean;
+  isTranslatedTarget?: boolean;
   subtitleUrl?: string;
   subtitleType?: string;
   // subtitle details from wyzie
@@ -41,7 +46,63 @@ export function CaptionOption(props: {
   subtitleEncoding?: string;
   isHearingImpaired?: boolean;
   onDoubleClick?: () => void;
-}) {
+  onTranslate?: () => void;
+}
+/* eslint-enable react/no-unused-prop-types */
+
+function CaptionOptionRightSide(props: CaptionOptionProps) {
+  if (props.loading) {
+    // should override selected and error and not show translate button
+    return <Spinner className="text-lg" />;
+  }
+
+  function translateBtn(margin: boolean) {
+    return (
+      props.translatable && (
+        <span
+          className={classNames(
+            "text-buttons-secondaryText px-2 py-1 rounded bg-opacity-0",
+            {
+              "mr-1": margin,
+              "bg-opacity-100 bg-buttons-purpleHover": props.isTranslatedTarget,
+            },
+            "transition duration-300 ease-in-out",
+            "hover:bg-opacity-100 hover:bg-buttons-primaryHover",
+            "hover:text-buttons-primaryText",
+          )}
+          onClick={(e) => {
+            e.stopPropagation();
+            props.onTranslate?.();
+          }}
+        >
+          <Icon icon={Icons.TRANSLATE} className="text-lg" />
+        </span>
+      )
+    );
+  }
+
+  if (props.selected || props.error) {
+    return (
+      <div className="flex items-center">
+        {translateBtn(true)}
+        {props.error ? (
+          <span className="flex items-center text-video-context-error">
+            <Icon className="ml-2" icon={Icons.WARNING} />
+          </span>
+        ) : (
+          <Icon
+            icon={Icons.CIRCLE_CHECK}
+            className="text-xl text-video-context-type-accent"
+          />
+        )}
+      </div>
+    );
+  }
+
+  return translateBtn(false);
+}
+
+export function CaptionOption(props: CaptionOptionProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { t } = useTranslation();
@@ -108,8 +169,10 @@ export function CaptionOption(props: {
         selected={props.selected}
         loading={props.loading}
         error={props.error}
+        disabled={props.disabled}
         onClick={props.onClick}
         onDoubleClick={props.onDoubleClick}
+        rightSide={<CaptionOptionRightSide {...props} />}
       >
         <span
           data-active-link={props.selected ? true : undefined}
@@ -358,6 +421,7 @@ export function CaptionsView({
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
+  const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const { disable, selectRandomCaptionFromLastUsedLanguage } = useCaptions();
   const [isRandomSelecting, setIsRandomSelecting] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -646,7 +710,12 @@ export function CaptionsView({
               ({ language, languageName, captions: captionsForLang }) => (
                 <Menu.ChevronLink
                   key={language}
-                  selected={selectedLanguage === language}
+                  selected={
+                    (!currentTranslateTask && selectedLanguage === language) ||
+                    (!!currentTranslateTask &&
+                      !currentTranslateTask.error &&
+                      currentTranslateTask.targetCaption.language === language)
+                  }
                   rightText={captionsForLang.length.toString()}
                   onClick={() => {
                     onChooseLanguage?.(language);

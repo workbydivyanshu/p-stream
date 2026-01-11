@@ -17,16 +17,19 @@ export interface LanguageSubtitlesViewProps {
   id: string;
   language: string;
   overlayBackLink?: boolean;
+  onTranslateSubtitle?: (caption: CaptionListItem) => void;
 }
 
 export function LanguageSubtitlesView({
   id,
   language,
   overlayBackLink,
+  onTranslateSubtitle,
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
+  const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const { selectCaptionById } = useCaptions();
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
     string | null
@@ -122,16 +125,51 @@ export function LanguageSubtitlesView({
       <CaptionOption
         key={v.id}
         countryCode={v.language}
-        selected={v.id === selectedCaptionId}
-        loading={v.id === currentlyDownloading && downloadReq.loading}
+        selected={
+          v.id === selectedCaptionId ||
+          (!!currentTranslateTask &&
+            !currentTranslateTask.error &&
+            v.id === currentTranslateTask.targetCaption.id)
+        }
+        disabled={
+          !!currentTranslateTask &&
+          !currentTranslateTask.done &&
+          !currentTranslateTask.error
+        }
+        loading={
+          (v.id === currentlyDownloading && downloadReq.loading) ||
+          (!!currentTranslateTask &&
+            v.id === currentTranslateTask.targetCaption.id &&
+            !currentTranslateTask.done &&
+            !currentTranslateTask.error)
+        }
         error={
           v.id === currentlyDownloading && downloadReq.error
             ? downloadReq.error.toString()
             : undefined
         }
-        onClick={() => startDownload(v.id)}
+        onClick={() =>
+          (!currentTranslateTask ||
+            currentTranslateTask.done ||
+            currentTranslateTask.error) &&
+          startDownload(v.id)
+        }
+        onTranslate={() => {
+          onTranslateSubtitle?.(v);
+          router.navigate(
+            overlayBackLink
+              ? "/captionsOverlay/translateSubtitleOverlay"
+              : "/captions/translateSubtitle",
+          );
+        }}
+        isTranslatedTarget={
+          !!currentTranslateTask &&
+          !currentTranslateTask.error &&
+          v.id === currentTranslateTask.targetCaption.id
+        }
         onDoubleClick={handleDoubleClick}
         flag
+        translatable
         subtitleUrl={v.url}
         subtitleType={v.type}
         subtitleSource={v.source}

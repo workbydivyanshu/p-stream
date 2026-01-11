@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import subsrt from "subsrt-ts";
 
 import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
-import { Caption } from "@/stores/player/slices/source";
+import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -19,6 +19,7 @@ export function useCaptions() {
     (s) => s.resetSubtitleSpecificSettings,
   );
   const setCaption = usePlayerStore((s) => s.setCaption);
+  const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const lastSelectedLanguage = useSubtitleStore((s) => s.lastSelectedLanguage);
   const setIsOpenSubtitles = useSubtitleStore((s) => s.setIsOpenSubtitles);
 
@@ -40,6 +41,38 @@ export function useCaptions() {
     () =>
       captionList.length !== 0 ? captionList : (getHlsCaptionList?.() ?? []),
     [captionList, getHlsCaptionList],
+  );
+
+  const setDirectCaption = useCallback(
+    (caption: Caption, listItem: CaptionListItem) => {
+      setIsOpenSubtitles(!!listItem.opensubtitles);
+      setCaption(caption);
+
+      // Only reset subtitle settings if selecting a different caption
+      if (selectedCaption?.id !== caption.id) {
+        resetSubtitleSpecificSettings();
+      }
+
+      setLanguage(caption.language);
+
+      // Use native tracks for MP4 streams instead of custom rendering
+      if (source?.type === "file" && enableNativeSubtitles) {
+        setCaptionAsTrack(true);
+      } else {
+        // For HLS sources or when native subtitles are disabled, use custom rendering
+        setCaptionAsTrack(false);
+      }
+    },
+    [
+      setIsOpenSubtitles,
+      setLanguage,
+      setCaption,
+      resetSubtitleSpecificSettings,
+      source,
+      setCaptionAsTrack,
+      enableNativeSubtitles,
+      selectedCaption,
+    ],
   );
 
   const selectCaptionById = useCallback(
@@ -85,37 +118,9 @@ export function useCaptions() {
         captionToSet.srtData = srtData;
       }
 
-      setIsOpenSubtitles(!!caption.opensubtitles);
-      setCaption(captionToSet);
-
-      // Only reset subtitle settings if selecting a different caption
-      if (selectedCaption?.id !== caption.id) {
-        resetSubtitleSpecificSettings();
-      }
-
-      setLanguage(caption.language);
-
-      // Use native tracks for MP4 streams instead of custom rendering
-      if (source?.type === "file" && enableNativeSubtitles) {
-        setCaptionAsTrack(true);
-      } else {
-        // For HLS sources or when native subtitles are disabled, use custom rendering
-        setCaptionAsTrack(false);
-      }
+      setDirectCaption(captionToSet, caption);
     },
-    [
-      setIsOpenSubtitles,
-      setLanguage,
-      captions,
-      setCaption,
-      resetSubtitleSpecificSettings,
-      getSubtitleTracks,
-      setSubtitlePreference,
-      source,
-      setCaptionAsTrack,
-      enableNativeSubtitles,
-      selectedCaption,
-    ],
+    [captions, getSubtitleTracks, setSubtitlePreference, setDirectCaption],
   );
 
   const selectLanguage = useCallback(
@@ -188,13 +193,23 @@ export function useCaptions() {
     if (isCustomCaption) return;
 
     const isSelectedCaptionStillAvailable = captions.some(
-      (caption) => caption.id === selectedCaption.id,
+      (caption) =>
+        caption.id ===
+        (currentTranslateTask
+          ? currentTranslateTask.targetCaption
+          : selectedCaption
+        ).id,
     );
 
     if (!isSelectedCaptionStillAvailable) {
       // Try to find a caption with the same language
       const sameLanguageCaption = captions.find(
-        (caption) => caption.language === selectedCaption.language,
+        (caption) =>
+          caption.language ===
+          (currentTranslateTask
+            ? currentTranslateTask.targetCaption
+            : selectedCaption
+          ).language,
       );
 
       if (sameLanguageCaption) {
@@ -205,7 +220,13 @@ export function useCaptions() {
         setCaption(null);
       }
     }
-  }, [captions, selectedCaption, setCaption, selectCaptionById]);
+  }, [
+    captions,
+    selectedCaption,
+    setCaption,
+    selectCaptionById,
+    currentTranslateTask,
+  ]);
 
   return {
     selectLanguage,
@@ -213,6 +234,7 @@ export function useCaptions() {
     selectLastUsedLanguage,
     toggleLastUsed,
     selectLastUsedLanguageIfEnabled,
+    setDirectCaption,
     selectCaptionById,
     selectRandomCaptionFromLastUsedLanguage,
   };

@@ -12,6 +12,7 @@ import {
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 import { AudioView } from "./settings/AudioView";
@@ -23,11 +24,14 @@ import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
 import { SettingsMenu } from "./settings/SettingsMenu";
 import { TranscriptView } from "./settings/TranscriptView";
+import { TranslateSubtitleView } from "./settings/TranslateSubtitleView";
 import { WatchPartyView } from "./settings/WatchPartyView";
 
 function SettingsOverlay({ id }: { id: string }) {
   const [chosenSourceId, setChosenSourceId] = useState<string | null>(null);
   const [chosenLanguage, setChosenLanguage] = useState<string | null>(null);
+  const [captionToTranslate, setCaptionToTranslate] =
+    useState<CaptionListItem | null>(null);
   const router = useOverlayRouter(id);
 
   // reset source id and language when going to home or closing overlay
@@ -76,7 +80,7 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captionsOverlay/languagesOverlay"
-          width={343}
+          width={443}
           height={452}
         >
           <Menu.CardWithScrollable>
@@ -84,6 +88,23 @@ function SettingsOverlay({ id }: { id: string }) {
               <LanguageSubtitlesView
                 id={id}
                 language={chosenLanguage}
+                onTranslateSubtitle={setCaptionToTranslate}
+                overlayBackLink
+              />
+            )}
+          </Menu.CardWithScrollable>
+        </OverlayPage>
+        <OverlayPage
+          id={id}
+          path="/captionsOverlay/translateSubtitleOverlay"
+          width={343}
+          height={452}
+        >
+          <Menu.CardWithScrollable>
+            {captionToTranslate && (
+              <TranslateSubtitleView
+                id={id}
+                caption={captionToTranslate}
                 overlayBackLink
               />
             )}
@@ -133,12 +154,28 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captions/languages"
-          width={343}
+          width={443}
           height={452}
         >
           <Menu.CardWithScrollable>
             {chosenLanguage && (
-              <LanguageSubtitlesView id={id} language={chosenLanguage} />
+              <LanguageSubtitlesView
+                id={id}
+                language={chosenLanguage}
+                onTranslateSubtitle={setCaptionToTranslate}
+              />
+            )}
+          </Menu.CardWithScrollable>
+        </OverlayPage>
+        <OverlayPage
+          id={id}
+          path="/captions/translateSubtitle"
+          width={343}
+          height={452}
+        >
+          <Menu.CardWithScrollable>
+            {captionToTranslate && (
+              <TranslateSubtitleView id={id} caption={captionToTranslate} />
             )}
           </Menu.CardWithScrollable>
         </OverlayPage>

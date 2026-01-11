@@ -36,7 +36,7 @@ const streamTypes: Record<StreamType, string> = {
 };
 
 export default function VideoTesterView() {
-  const { status, playMedia, setMeta } = usePlayer();
+  const { status, playMedia, setMeta, reset } = usePlayer();
   const [selected, setSelected] = useState("mp4");
   const [inputSource, setInputSource] = useState("");
   const [extensionState, setExtensionState] =
@@ -235,6 +235,14 @@ export default function VideoTesterView() {
       alert(`Failed to parse CLI data: ${errorMessage}`);
     }
   }, [playMedia, setMeta, extensionState]);
+
+  // player meta and streams carry over, so reset on mount
+  useEffect(() => {
+    if (status !== playerStatus.IDLE) {
+      reset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <PlayerPart backUrl="/dev">
