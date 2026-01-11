@@ -1,4 +1,5 @@
 import { ReactNode, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
@@ -31,6 +32,8 @@ export function PlayerPart(props: PlayerPartProps) {
   );
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { isHost, enabled } = useWatchPartyStore();
+  const { t } = useTranslation();
+  const meta = usePlayerStore((s) => s.meta);
 
   const inControl = !enabled || isHost;
 
@@ -117,6 +120,15 @@ export function PlayerPart(props: PlayerPartProps) {
             <Player.BackLink url={props.backUrl} />
             <span className="text mx-3 text-type-secondary">/</span>
             <Player.Title />
+
+            {isMobile && meta?.type === "show" && (
+              <span className="text-type-secondary text-sm whitespace-nowrap flex-shrink-0">
+                {t("media.episodeDisplay", {
+                  season: meta?.season?.number,
+                  episode: meta?.episode?.number,
+                })}
+              </span>
+            )}
 
             <Player.InfoButton />
 
