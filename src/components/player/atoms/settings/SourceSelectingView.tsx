@@ -10,6 +10,7 @@ import {
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -156,6 +157,8 @@ export function SourceSelectionView({
   const router = useOverlayRouter(id);
   const metaType = usePlayerStore((s) => s.meta?.type);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
+  const setResumeFromSourceId = usePlayerStore((s) => s.setResumeFromSourceId);
+  const setStatus = usePlayerStore((s) => s.setStatus);
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
   const lastSuccessfulSource = usePreferencesStore(
@@ -163,6 +166,9 @@ export function SourceSelectionView({
   );
   const enableLastSuccessfulSource = usePreferencesStore(
     (s) => s.enableLastSuccessfulSource,
+  );
+  const manualSourceSelection = usePreferencesStore(
+    (s) => s.manualSourceSelection,
   );
 
   const sources = useMemo(() => {
@@ -221,20 +227,32 @@ export function SourceSelectionView({
     enableLastSuccessfulSource,
   ]);
 
+  const handleFindNextSource = () => {
+    if (!currentSourceId) return;
+    // Set the resume source ID in the store
+    setResumeFromSourceId(currentSourceId);
+    // Close the settings overlay
+    router.close();
+    // Set status to SCRAPING to trigger scraping from next source
+    setStatus(playerStatus.SCRAPING);
+  };
+
   return (
     <>
       <Menu.BackLink
         onClick={() => router.navigate("/")}
         rightSide={
-          <button
-            type="button"
-            onClick={() => {
-              window.location.href = "/settings#source-order";
-            }}
-            className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
-          >
-            {t("player.menus.sources.editOrder")}
-          </button>
+          <div className="flex items-center gap-2">
+            {currentSourceId && !manualSourceSelection && (
+              <button
+                type="button"
+                onClick={handleFindNextSource}
+                className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+              >
+                {t("player.menus.sources.findNextSource")}
+              </button>
+            )}
+          </div>
         }
       >
         {t("player.menus.sources.title")}

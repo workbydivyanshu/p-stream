@@ -211,7 +211,12 @@ export function useScrape() {
       }
 
       // If we have a last successful source and the feature is enabled, prioritize it
-      if (enableLastSuccessfulSource && lastSuccessfulSource) {
+      // BUT only if we're not resuming from a specific source (to preserve custom order)
+      if (
+        enableLastSuccessfulSource &&
+        lastSuccessfulSource &&
+        !startFromSourceId
+      ) {
         const lastSourceIndex = baseSourceOrder.indexOf(lastSuccessfulSource);
         if (lastSourceIndex !== -1) {
           baseSourceOrder = [
@@ -222,6 +227,7 @@ export function useScrape() {
       }
 
       // If starting from a specific source ID, filter the order to start AFTER that source
+      // This preserves the custom order while starting from the next source
       let filteredSourceOrder = baseSourceOrder;
       if (startFromSourceId) {
         const startIndex = filteredSourceOrder.indexOf(startFromSourceId);

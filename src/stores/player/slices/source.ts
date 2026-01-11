@@ -105,6 +105,7 @@ export interface SourceSlice {
   meta: PlayerMeta | null;
   failedSourcesPerMedia: Record<string, string[]>; // mediaKey -> array of failed sourceIds
   failedEmbedsPerMedia: Record<string, Record<string, string[]>>; // mediaKey -> sourceId -> array of failed embedIds
+  resumeFromSourceId: string | null;
   setStatus(status: PlayerStatus): void;
   setSource(
     stream: SourceSliceSource,
@@ -129,6 +130,7 @@ export interface SourceSlice {
   addFailedEmbed(sourceId: string, embedId: string): void;
   clearFailedSources(mediaKey?: string): void;
   clearFailedEmbeds(mediaKey?: string): void;
+  setResumeFromSourceId(sourceId: string | null): void;
   reset(): void;
 }
 
@@ -190,6 +192,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   meta: null,
   failedSourcesPerMedia: {},
   failedEmbedsPerMedia: {},
+  resumeFromSourceId: null,
   caption: {
     selected: null,
     asTrack: false,
@@ -387,6 +390,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       }
     });
   },
+  setResumeFromSourceId(sourceId: string | null) {
+    set((s) => {
+      s.resumeFromSourceId = sourceId;
+    });
+  },
   reset() {
     set((s) => {
       s.source = null;
@@ -402,6 +410,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.meta = null;
       s.failedSourcesPerMedia = {};
       s.failedEmbedsPerMedia = {};
+      s.resumeFromSourceId = null;
       this.clearTranslateTask();
       s.caption = {
         selected: null,

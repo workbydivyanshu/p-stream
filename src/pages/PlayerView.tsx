@@ -47,6 +47,10 @@ export function RealPlayerView() {
   const [resumeFromSourceId, setResumeFromSourceId] = useState<string | null>(
     null,
   );
+  const storeResumeFromSourceId = usePlayerStore((s) => s.resumeFromSourceId);
+  const setResumeFromSourceIdInStore = usePlayerStore(
+    (s) => s.setResumeFromSourceId,
+  );
   const [startAtParam] = useQueryParam("t");
   const {
     status,
@@ -76,6 +80,14 @@ export function RealPlayerView() {
       setLastSuccessfulSource(null);
     };
   }, [setLastSuccessfulSource]);
+
+  // Reset resume from source ID when leaving the player
+  useEffect(() => {
+    return () => {
+      setResumeFromSourceId(null);
+      setResumeFromSourceIdInStore(null);
+    };
+  }, [setResumeFromSourceIdInStore]);
 
   const paramsData = JSON.stringify({
     media: params.media,
@@ -169,13 +181,27 @@ export function RealPlayerView() {
     (startFromSourceId: string) => {
       // Set resume source first
       setResumeFromSourceId(startFromSourceId);
+      setResumeFromSourceIdInStore(startFromSourceId);
       // Then change status in next tick to ensure re-render
       setTimeout(() => {
         setStatus(playerStatus.SCRAPING);
       }, 0);
     },
-    [setStatus],
+    [setStatus, setResumeFromSourceIdInStore],
   );
+
+  // Sync store value to local state when it changes (e.g., from settings)
+  // or when status changes to SCRAPING
+  useEffect(() => {
+    if (storeResumeFromSourceId && status === playerStatus.SCRAPING) {
+      if (
+        !resumeFromSourceId ||
+        resumeFromSourceId !== storeResumeFromSourceId
+      ) {
+        setResumeFromSourceId(storeResumeFromSourceId);
+      }
+    }
+  }, [storeResumeFromSourceId, resumeFromSourceId, status]);
 
   const playAfterScrape = useCallback(
     (out: RunOutput | null) => {
@@ -223,9 +249,11 @@ export function RealPlayerView() {
           <SourceSelectPart media={scrapeMedia} />
         ) : (
           <ScrapingPart
-            key={`scraping-${resumeFromSourceId || "default"}`}
+            key={`scraping-${resumeFromSourceId || storeResumeFromSourceId || "default"}`}
             media={scrapeMedia}
-            startFromSourceId={resumeFromSourceId || undefined}
+            startFromSourceId={
+              resumeFromSourceId || storeResumeFromSourceId || undefined
+            }
             onResult={(sources, sourceOrder) => {
               setErrorData({
                 sourceOrder,
@@ -234,6 +262,7 @@ export function RealPlayerView() {
               setScrapeNotFound();
               // Clear resume state after scraping
               setResumeFromSourceId(null);
+              setResumeFromSourceIdInStore(null);
             }}
             onGetStream={playAfterScrape}
           />

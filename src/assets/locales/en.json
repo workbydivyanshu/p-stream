@@ -823,7 +823,7 @@
         },
         "title": "Sources",
         "unknownOption": "Unknown",
-        "editOrder": "Edit order"
+        "findNextSource": "Find next source"
       },
       "subtitles": {
         "customChoice": "Drop or upload file",
