@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // import { proxiedFetch } from "@/backend/helpers/fetch";
-import { proxiedFetch } from "@/backend/helpers/fetch";
+import { mwFetch, proxiedFetch } from "@/backend/helpers/fetch";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -40,7 +40,7 @@ export function useSkipTime() {
           apiUrl += `&season=${meta.season.number}&episode=${meta.episode.number}`;
         }
 
-        const data = await proxiedFetch(apiUrl);
+        const data = await mwFetch(apiUrl);
 
         if (data && typeof data.end_ms === "number") {
           // Convert milliseconds to seconds
