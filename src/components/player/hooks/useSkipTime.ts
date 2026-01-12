@@ -28,10 +28,10 @@ export function useSkipTime() {
 
   useEffect(() => {
     const fetchTheIntroDBTime = async (): Promise<number | null> => {
-      if (!meta?.imdbId) return null;
+      if (!meta?.tmdbId) return null;
 
       try {
-        let apiUrl = `${THE_INTRO_DB_BASE_URL}?imdb_id=${meta.imdbId}`;
+        let apiUrl = `${THE_INTRO_DB_BASE_URL}?tmdb_id=${meta.tmdbId}`;
         if (
           meta.type !== "movie" &&
           meta.season?.number &&
