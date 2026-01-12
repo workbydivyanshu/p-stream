@@ -8,10 +8,18 @@ import { usePreferencesStore } from "@/stores/preferences";
 import { getTurnstileToken } from "@/utils/turnstile";
 
 // Thanks Nemo for this API
+const THE_INTRO_DB_BASE_URL = "https://api.theintrodb.org";
 const FED_SKIPS_BASE_URL = "https://fed-skips.pstream.mov";
 // const VELORA_BASE_URL = "https://veloratv.ru/api/intro-end/confirmed";
 const INTRODB_BASE_URL = "https://api.introdb.app/intro";
 const MAX_RETRIES = 3;
+
+// Track the source of the current skip time (for analytics filtering)
+let currentSkipTimeSource: "fed-skips" | "introdb" | "theintrodb" | null = null;
+
+export function useSkipTimeSource(): typeof currentSkipTimeSource {
+  return currentSkipTimeSource;
+}
 
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
@@ -19,6 +27,33 @@ export function useSkipTime() {
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
 
   useEffect(() => {
+    const fetchTheIntroDBTime = async (): Promise<number | null> => {
+      if (!meta?.imdbId) return null;
+
+      try {
+        let apiUrl = `${THE_INTRO_DB_BASE_URL}?imdb_id=${meta.imdbId}`;
+        if (
+          meta.type !== "movie" &&
+          meta.season?.number &&
+          meta.episode?.number
+        ) {
+          apiUrl += `&season=${meta.season.number}&episode=${meta.episode.number}`;
+        }
+
+        const data = await proxiedFetch(apiUrl);
+
+        if (data && typeof data.end_ms === "number") {
+          // Convert milliseconds to seconds
+          return Math.floor(data.end_ms / 1000);
+        }
+
+        return null;
+      } catch (error) {
+        console.error("Error fetching TIDB time:", error);
+        return null;
+      }
+    };
+
     // const fetchVeloraSkipTime = async (): Promise<number | null> => {
     //   if (!meta?.tmdbId) return null;
 
@@ -105,17 +140,33 @@ export function useSkipTime() {
     };
 
     const fetchSkipTime = async (): Promise<void> => {
+      // Reset source
+      currentSkipTimeSource = null;
+
       // If user has febbox key, prioritize Fed-skips (better quality)
-      if (febboxKey) {
+      // Note: Fed-skips only supports TV shows, not movies
+      if (febboxKey && meta?.type !== "movie") {
         const fedSkipsTime = await fetchFedSkipsTime();
         if (fedSkipsTime !== null) {
+          currentSkipTimeSource = "fed-skips";
           setSkiptime(fedSkipsTime);
           return;
         }
       }
 
-      // Fall back to IntroDB API (available to all users)
+      // Try TheIntroDB API (supports both movies and TV shows)
+      const theIntroDBTime = await fetchTheIntroDBTime();
+      if (theIntroDBTime !== null) {
+        currentSkipTimeSource = "theintrodb";
+        setSkiptime(theIntroDBTime);
+        return;
+      }
+
+      // Fall back to IntroDB API (TV shows only, available to all users)
       const introDBTime = await fetchIntroDBTime();
+      if (introDBTime !== null) {
+        currentSkipTimeSource = "introdb";
+      }
       setSkiptime(introDBTime);
     };
 
