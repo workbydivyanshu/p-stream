@@ -8,7 +8,7 @@ import { usePreferencesStore } from "@/stores/preferences";
 import { getTurnstileToken } from "@/utils/turnstile";
 
 // Thanks Nemo for this API
-const THE_INTRO_DB_BASE_URL = "https://api.theintrodb.org";
+const THE_INTRO_DB_BASE_URL = "https://api.theintrodb.org/v1";
 const FED_SKIPS_BASE_URL = "https://fed-skips.pstream.mov";
 // const VELORA_BASE_URL = "https://veloratv.ru/api/intro-end/confirmed";
 const INTRODB_BASE_URL = "https://api.introdb.app/intro";
@@ -31,7 +31,7 @@ export function useSkipTime() {
       if (!meta?.tmdbId) return null;
 
       try {
-        let apiUrl = `${THE_INTRO_DB_BASE_URL}?tmdb_id=${meta.tmdbId}`;
+        let apiUrl = `${THE_INTRO_DB_BASE_URL}/intro?tmdb_id=${meta.tmdbId}`;
         if (
           meta.type !== "movie" &&
           meta.season?.number &&
@@ -143,7 +143,15 @@ export function useSkipTime() {
       // Reset source
       currentSkipTimeSource = null;
 
-      // If user has febbox key, prioritize Fed-skips (better quality)
+      // Try TheIntroDB API first (supports both movies and TV shows)
+      const theIntroDBTime = await fetchTheIntroDBTime();
+      if (theIntroDBTime !== null) {
+        currentSkipTimeSource = "theintrodb";
+        setSkiptime(theIntroDBTime);
+        return;
+      }
+
+      // Fall back to Fed-skips if TheIntroDB doesn't have anything
       // Note: Fed-skips only supports TV shows, not movies
       if (febboxKey && meta?.type !== "movie") {
         const fedSkipsTime = await fetchFedSkipsTime();
@@ -154,15 +162,7 @@ export function useSkipTime() {
         }
       }
 
-      // Try TheIntroDB API (supports both movies and TV shows)
-      const theIntroDBTime = await fetchTheIntroDBTime();
-      if (theIntroDBTime !== null) {
-        currentSkipTimeSource = "theintrodb";
-        setSkiptime(theIntroDBTime);
-        return;
-      }
-
-      // Fall back to IntroDB API (TV shows only, available to all users)
+      // Last resort: Fall back to IntroDB API (TV shows only, available to all users)
       const introDBTime = await fetchIntroDBTime();
       if (introDBTime !== null) {
         currentSkipTimeSource = "introdb";
