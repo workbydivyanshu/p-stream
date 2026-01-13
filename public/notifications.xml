@@ -9,6 +9,22 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-056</guid>
+      <title>New Skip Intro Time API!</title>
+      <description>Introducting TheIntroDB, a new skip intro time API! TheIntroDB is a free, community-driven platform that provides skip intro times for thousands of movies and TV shows.
+
+TheIntroDB is powered by the community. You can contribute by adding skip intro times for movies and TV shows to the database!
+
+It's now avaliable to P-Stream users and soon to avaliable as a seperate free API! 
+
+Join the waitlist below to get access to the API when it's ready!
+      </description>
+      <link>https://theintrodb.org/waitlist</link>
+      <pubDate>Mon, 12 Jan 2026 17:10:00 MST</pubDate>
+      <category>announcement</category>
+    </item>
+
+    <item>
       <guid>notification-055</guid>
       <title>Backend issues have been fixed!</title>
       <description>You are now able to log into your account again! Hopefully less downtime going forward!
