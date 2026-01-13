@@ -19,7 +19,7 @@ interface PendingSkip {
   startTime: number;
   endTime: number;
   hasBackwardMovement: boolean;
-  skipTimeSource: "fed-skips" | "introdb" | "theintrodb" | null;
+  skipTimeSource: "fed-skips" | "introdb" | "theintrodb" | "quickwatch" | null;
   timer: ReturnType<typeof setTimeout>;
 }
 
@@ -77,7 +77,8 @@ export function SkipTracker() {
           // Only send analytics if skip time came from fed-skips or introdb (not theintrodb)
           if (
             pendingSkip.skipTimeSource === "fed-skips" ||
-            pendingSkip.skipTimeSource === "introdb"
+            pendingSkip.skipTimeSource === "introdb" ||
+            pendingSkip.skipTimeSource === "quickwatch"
           ) {
             // Send analytics
             sendSkipAnalytics(pendingSkip.skip, adjustedConfidence);
@@ -113,7 +114,7 @@ export function SkipTracker() {
 
     // Create pending skip with 5-second delay
     const pendingSkip = createPendingSkip(latestSkip);
-    setPendingSkips((prev) => [...prev, pendingSkip]);
+    setPendingSkips((prev) => [...prev, pendingSkip as PendingSkip]);
 
     lastLoggedSkipRef.current = latestSkip.timestamp;
   }, [latestSkip, meta, createPendingSkip]);

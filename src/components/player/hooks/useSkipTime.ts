@@ -9,13 +9,19 @@ import { getTurnstileToken } from "@/utils/turnstile";
 
 // Thanks Nemo for this API
 const THE_INTRO_DB_BASE_URL = "https://api.theintrodb.org/v1";
+const QUICKWATCH_BASE_URL = "https://skips.quickwatch.co";
 const FED_SKIPS_BASE_URL = "https://fed-skips.pstream.mov";
 // const VELORA_BASE_URL = "https://veloratv.ru/api/intro-end/confirmed";
 const INTRODB_BASE_URL = "https://api.introdb.app/intro";
 const MAX_RETRIES = 3;
 
 // Track the source of the current skip time (for analytics filtering)
-let currentSkipTimeSource: "fed-skips" | "introdb" | "theintrodb" | null = null;
+let currentSkipTimeSource:
+  | "fed-skips"
+  | "introdb"
+  | "theintrodb"
+  | "quickwatch"
+  | null = null;
 
 export function useSkipTimeSource(): typeof currentSkipTimeSource {
   return currentSkipTimeSource;
@@ -74,6 +80,47 @@ export function useSkipTime() {
     //     return null;
     //   }
     // };
+
+    const fetchQuickWatchTime = async (): Promise<number | null> => {
+      if (!meta?.title || meta.type === "movie") return null;
+      if (!meta.season?.number || !meta.episode?.number) return null;
+
+      try {
+        const encodedName = encodeURIComponent(meta.title);
+        const apiUrl = `${QUICKWATCH_BASE_URL}/api/skip-times?name=${encodedName}&season=${meta.season.number}&episode=${meta.episode.number}`;
+
+        const data = await proxiedFetch(apiUrl);
+
+        if (!Array.isArray(data) || data.length === 0) return null;
+
+        // Find the first result with intro or credits data
+        for (const item of data) {
+          if (item.data) {
+            // Check for intro end time
+            if (
+              item.data.intro?.end &&
+              typeof item.data.intro.end === "number"
+            ) {
+              // Convert milliseconds to seconds
+              return Math.floor(item.data.intro.end / 1000);
+            }
+            // Check for credits start time (use as intro end)
+            if (
+              item.data.credits?.start &&
+              typeof item.data.credits.start === "number"
+            ) {
+              // Convert milliseconds to seconds
+              return Math.floor(item.data.credits.start / 1000);
+            }
+          }
+        }
+
+        return null;
+      } catch (error) {
+        console.error("Error fetching QuickWatch time:", error);
+        return null;
+      }
+    };
 
     const fetchFedSkipsTime = async (retries = 0): Promise<number | null> => {
       if (!meta?.imdbId || meta.type === "movie") return null;
@@ -151,7 +198,15 @@ export function useSkipTime() {
         return;
       }
 
-      // Fall back to Fed-skips if TheIntroDB doesn't have anything
+      // Try QuickWatch API (TV shows only)
+      const quickWatchTime = await fetchQuickWatchTime();
+      if (quickWatchTime !== null) {
+        currentSkipTimeSource = "quickwatch";
+        setSkiptime(quickWatchTime);
+        return;
+      }
+
+      // Fall back to Fed-skips if TheIntroDB and QuickWatch don't have anything
       // Note: Fed-skips only supports TV shows, not movies
       if (febboxKey && meta?.type !== "movie") {
         const fedSkipsTime = await fetchFedSkipsTime();
@@ -174,6 +229,7 @@ export function useSkipTime() {
   }, [
     meta?.tmdbId,
     meta?.imdbId,
+    meta?.title,
     meta?.type,
     meta?.season?.number,
     meta?.episode?.number,
