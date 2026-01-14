@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
-import { SkipIntroButton } from "@/components/player/atoms/SkipIntroButton";
+import { SkipSegmentButton } from "@/components/player/atoms/SkipSegmentButton";
 import { UnreleasedEpisodeOverlay } from "@/components/player/atoms/UnreleasedEpisodeOverlay";
 import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
@@ -74,7 +74,7 @@ export function PlayerPart(props: PlayerPartProps) {
     }, 1000);
   };
 
-  const skiptime = useSkipTime();
+  const segments = useSkipTime();
 
   return (
     <Player.Container onLoad={props.onLoad} showingControls={showTargets}>
@@ -246,10 +246,11 @@ export function PlayerPart(props: PlayerPartProps) {
         inControl={inControl}
       />
 
-      <SkipIntroButton
+      <SkipSegmentButton
         controlsShowing={showTargets}
-        skipTime={skiptime}
+        segments={segments}
         inControl={inControl}
+        onChangeMeta={props.onMetaChange}
       />
     </Player.Container>
   );

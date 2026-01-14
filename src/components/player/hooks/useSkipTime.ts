@@ -27,17 +27,25 @@ export function useSkipTimeSource(): typeof currentSkipTimeSource {
   return currentSkipTimeSource;
 }
 
+export interface SegmentData {
+  type: "intro" | "recap" | "credits";
+  start_ms: number | null;
+  end_ms: number | null;
+  confidence: number | null;
+  submission_count: number;
+}
+
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
-  const [skiptime, setSkiptime] = useState<number | null>(null);
+  const [segments, setSegments] = useState<SegmentData[]>([]);
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
 
   useEffect(() => {
-    const fetchTheIntroDBTime = async (): Promise<number | null> => {
-      if (!meta?.tmdbId) return null;
+    const fetchTheIntroDBSegments = async (): Promise<SegmentData[]> => {
+      if (!meta?.tmdbId) return [];
 
       try {
-        let apiUrl = `${THE_INTRO_DB_BASE_URL}/intro?tmdb_id=${meta.tmdbId}`;
+        let apiUrl = `${THE_INTRO_DB_BASE_URL}/media?tmdb_id=${meta.tmdbId}`;
         if (
           meta.type !== "movie" &&
           meta.season?.number &&
@@ -48,15 +56,45 @@ export function useSkipTime() {
 
         const data = await mwFetch(apiUrl);
 
-        if (data && typeof data.end_ms === "number") {
-          // Convert milliseconds to seconds
-          return Math.floor(data.end_ms / 1000);
+        const fetchedSegments: SegmentData[] = [];
+
+        // Add intro segment if it has data
+        if (data?.intro && data.intro.submission_count > 0) {
+          fetchedSegments.push({
+            type: "intro",
+            start_ms: data.intro.start_ms,
+            end_ms: data.intro.end_ms,
+            confidence: data.intro.confidence,
+            submission_count: data.intro.submission_count,
+          });
         }
 
-        return null;
+        // Add recap segment if it has data
+        if (data?.recap && data.recap.submission_count > 0) {
+          fetchedSegments.push({
+            type: "recap",
+            start_ms: data.recap.start_ms,
+            end_ms: data.recap.end_ms,
+            confidence: data.recap.confidence,
+            submission_count: data.recap.submission_count,
+          });
+        }
+
+        // Add credits segment if it has data
+        if (data?.credits && data.credits.submission_count > 0) {
+          fetchedSegments.push({
+            type: "credits",
+            start_ms: data.credits.start_ms,
+            end_ms: data.credits.end_ms,
+            confidence: data.credits.confidence,
+            submission_count: data.credits.submission_count,
+          });
+        }
+
+        return fetchedSegments;
       } catch (error) {
-        console.error("Error fetching TIDB time:", error);
-        return null;
+        console.error("Error fetching TIDB segments:", error);
+        return [];
       }
     };
 
@@ -187,22 +225,31 @@ export function useSkipTime() {
     };
 
     const fetchSkipTime = async (): Promise<void> => {
-      // Reset source
+      // Reset source and segments
       currentSkipTimeSource = null;
+      setSegments([]);
 
-      // Try TheIntroDB API first (supports both movies and TV shows)
-      const theIntroDBTime = await fetchTheIntroDBTime();
-      if (theIntroDBTime !== null) {
+      // Try TheIntroDB API first (supports both movies and TV shows with full segment data)
+      const theIntroDBSegments = await fetchTheIntroDBSegments();
+      if (theIntroDBSegments.length > 0) {
         currentSkipTimeSource = "theintrodb";
-        setSkiptime(theIntroDBTime);
+        setSegments(theIntroDBSegments);
         return;
       }
 
-      // Try QuickWatch API (TV shows only)
+      // Try QuickWatch API (TV shows only) - convert to intro segment
       const quickWatchTime = await fetchQuickWatchTime();
       if (quickWatchTime !== null) {
         currentSkipTimeSource = "quickwatch";
-        setSkiptime(quickWatchTime);
+        setSegments([
+          {
+            type: "intro",
+            start_ms: 0, // Assume starts at beginning
+            end_ms: quickWatchTime * 1000, // Convert seconds to milliseconds
+            confidence: null,
+            submission_count: 1,
+          },
+        ]);
         return;
       }
 
@@ -212,7 +259,15 @@ export function useSkipTime() {
         const fedSkipsTime = await fetchFedSkipsTime();
         if (fedSkipsTime !== null) {
           currentSkipTimeSource = "fed-skips";
-          setSkiptime(fedSkipsTime);
+          setSegments([
+            {
+              type: "intro",
+              start_ms: 0, // Assume starts at beginning
+              end_ms: fedSkipsTime * 1000, // Convert seconds to milliseconds
+              confidence: null,
+              submission_count: 1,
+            },
+          ]);
           return;
         }
       }
@@ -221,8 +276,16 @@ export function useSkipTime() {
       const introDBTime = await fetchIntroDBTime();
       if (introDBTime !== null) {
         currentSkipTimeSource = "introdb";
+        setSegments([
+          {
+            type: "intro",
+            start_ms: 0, // Assume starts at beginning
+            end_ms: introDBTime * 1000, // Convert seconds to milliseconds
+            confidence: null,
+            submission_count: 1,
+          },
+        ]);
       }
-      setSkiptime(introDBTime);
     };
 
     fetchSkipTime();
@@ -236,5 +299,5 @@ export function useSkipTime() {
     febboxKey,
   ]);
 
-  return skiptime;
+  return segments;
 }

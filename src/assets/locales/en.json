@@ -968,6 +968,11 @@
       "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "skipTime": {
+      "intro": "Skip Intro",
+      "recap": "Skip Recap",
+      "credits": "Skip Credits"
     }
   },
   "support": {
