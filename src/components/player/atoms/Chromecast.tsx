@@ -38,6 +38,8 @@ export function Chromecast({ className }: ChromecastProps) {
     const context = castFramework.CastContext.getInstance();
     const updateVisibility = () => {
       const state = context.getCastState();
+      // Hide only if we know for sure there are no devices available
+      // Show the button for other states (NOT_CONNECTED, CONNECTING, CONNECTED)
       setCastHidden(state === castFramework.CastState.NO_DEVICES_AVAILABLE);
     };
 

@@ -784,19 +784,41 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           proxiedUrl = source.url; // Already proxied or no headers needed
         }
       } else if (source?.type === "mp4") {
-        // TODO: Implement MP4 proxy for protected streams
-        const hasHeaders =
-          source.headers && Object.keys(source.headers).length > 0;
-        if (hasHeaders) {
+        const allHeaders = {
+          ...source.preferredHeaders,
+          ...source.headers,
+        };
+        const hasHeaders = Object.keys(allHeaders).length > 0;
+        if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
           // Use MP4 proxy for streams with headers
-          proxiedUrl = createMP4ProxyUrl(source.url, source.headers || {});
+          proxiedUrl = createMP4ProxyUrl(source.url, allHeaders);
         } else {
           proxiedUrl = source.url;
         }
       }
 
+      // Function to restore original URL
+      const restoreOriginalUrl = () => {
+        if (source?.type === "hls") {
+          if (hls && originalUrl) {
+            hls.loadSource(originalUrl);
+          }
+        } else if (originalUrl) {
+          videoPlayer.src = originalUrl;
+        }
+      };
+
+      // Function to check airplay state and restore if needed
+      const checkAirplayState = () => {
+        const isWireless = videoPlayer.webkitCurrentPlaybackTargetIsWireless;
+        if (!isWireless) {
+          // Airplay didn't start or ended, restore original URL
+          restoreOriginalUrl();
+        }
+      };
+
       if (proxiedUrl && proxiedUrl !== originalUrl) {
-        // Temporarily set the proxied URL for Airplay
+        // Set the proxied URL for Airplay
         if (source?.type === "hls") {
           if (hls) {
             hls.loadSource(proxiedUrl);
@@ -809,16 +831,25 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         setTimeout(() => {
           videoPlayer.webkitShowPlaybackTargetPicker();
 
-          // Restore original URL after a short delay
+          // Check airplay state after user interaction
+          // Give user time to select device, then check if airplay started
           setTimeout(() => {
-            if (source?.type === "hls") {
-              if (hls && originalUrl) {
-                hls.loadSource(originalUrl);
-              }
-            } else if (originalUrl) {
-              videoPlayer.src = originalUrl;
+            checkAirplayState();
+          }, 2000);
+
+          // Set up periodic check for airplay state changes
+          const airplayCheckInterval = setInterval(() => {
+            const isWireless =
+              videoPlayer.webkitCurrentPlaybackTargetIsWireless;
+            if (!isWireless) {
+              // Airplay ended, restore original URL
+              restoreOriginalUrl();
+              clearInterval(airplayCheckInterval);
             }
           }, 1000);
+
+          // Clear interval after 5 minutes as safety measure
+          setTimeout(() => clearInterval(airplayCheckInterval), 300000);
         }, 100);
       } else {
         // No proxying needed, just trigger Airplay
