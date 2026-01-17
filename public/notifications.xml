@@ -13,10 +13,10 @@
       <title>P-Stream v5.3.4 released!</title>
       <description>I know it's been a while, but there's finally new features and fixes that many people have been waiting for!
 
-- Added a new Watch History page! Seperate from the currently watching section. Accessable from the dropdown menu.
+- Added a new Watch History page! Separate from the currently watching section. Accessible from the dropdown menu.
 - Added subtitle translation! Thanks to @vlOd2 you can now translate any subtitle to any other language!
 - Added passkey support for new account creation.
-- Added a button to quickly find the next avaliable source!
+- Added a button to quickly find the next available source!
 - Added support for multiple skip segment types including recaps and credits!
 - Added a new total watched percentage and watched count to the details modal!
 - Added support for multiple backend servers.
