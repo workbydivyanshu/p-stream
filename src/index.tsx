@@ -30,6 +30,7 @@ import { changeAppLanguage, useLanguageStore } from "@/stores/language";
 import { ProgressSyncer } from "@/stores/progress/ProgressSyncer";
 import { SettingsSyncer } from "@/stores/subtitles/SettingsSyncer";
 import { ThemeProvider } from "@/stores/theme";
+import { WatchHistorySyncer } from "@/stores/watchHistory/WatchHistorySyncer";
 import { detectRegion, useRegionStore } from "@/utils/detectRegion";
 
 import {
@@ -248,6 +249,7 @@ root.render(
           <ThemeProvider applyGlobal>
             <ProgressSyncer />
             <BookmarkSyncer />
+            <WatchHistorySyncer />
             <GroupSyncer />
             <SettingsSyncer />
             <TheRouter>

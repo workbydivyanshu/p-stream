@@ -378,6 +378,10 @@
     "mediaList": {
       "stopEditing": "Stop editing"
     },
+    "watchHistory": {
+      "sectionTitle": "Watch History",
+      "recentlyWatched": "Recently Watched"
+    },
     "search": {
       "allResults": "That's all we have...",
       "failed": "Failed to find media, try again!",

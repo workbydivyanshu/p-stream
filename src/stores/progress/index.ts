@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
+import { useWatchHistoryStore } from "@/stores/watchHistory";
 import {
   ProgressModificationOptions,
   ProgressModificationResult,
@@ -141,6 +142,12 @@ export const useProgressStore = create(
                 watched: 0,
               };
             item.progress = { ...progress };
+
+            // Update watch history
+            const completed =
+              progress.duration > 0 &&
+              progress.watched / progress.duration > 0.9;
+            useWatchHistoryStore.getState().addItem(meta, progress, completed);
             return;
           }
 
@@ -167,6 +174,11 @@ export const useProgressStore = create(
             };
 
           item.episodes[meta.episode.tmdbId].progress = { ...progress };
+
+          // Update watch history
+          const completed =
+            progress.duration > 0 && progress.watched / progress.duration > 0.9;
+          useWatchHistoryStore.getState().addItem(meta, progress, completed);
         });
       },
       clear() {

@@ -40,6 +40,7 @@ import { OnboardingExtensionPage } from "@/pages/onboarding/OnboardingExtension"
 import { OnboardingProxyPage } from "@/pages/onboarding/OnboardingProxy";
 import { RegisterPage } from "@/pages/Register";
 import { SupportPage } from "@/pages/Support";
+import { WatchHistory } from "@/pages/watchHistory/WatchHistory";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
 import { useClearModalsOnNavigation } from "@/stores/interface/overlayStack";
@@ -201,6 +202,8 @@ function App() {
           <Route path="/discover/all" element={<DiscoverMore />} />
           {/* Bookmarks page */}
           <Route path="/bookmarks" element={<AllBookmarks />} />
+          {/* Watch History page */}
+          <Route path="/watch-history" element={<WatchHistory />} />
           {/* Settings page */}
           <Route
             path="/settings"

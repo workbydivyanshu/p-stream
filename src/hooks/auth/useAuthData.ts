@@ -6,8 +6,10 @@ import {
   BookmarkResponse,
   ProgressResponse,
   UserResponse,
+  WatchHistoryResponse,
   bookmarkResponsesToEntries,
   progressResponsesToEntries,
+  watchHistoryResponsesToEntries,
 } from "@/backend/accounts/user";
 import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
@@ -17,6 +19,7 @@ import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useThemeStore } from "@/stores/theme";
+import { useWatchHistoryStore } from "@/stores/watchHistory";
 
 export function useAuthData() {
   const loggedIn = !!useAuthStore((s) => s.account);
@@ -25,6 +28,7 @@ export function useAuthData() {
   const setProxySet = useAuthStore((s) => s.setProxySet);
   const clearBookmarks = useBookmarkStore((s) => s.clear);
   const clearProgress = useProgressStore((s) => s.clear);
+  const clearWatchHistory = useWatchHistoryStore((s) => s.clear);
   const clearGroupOrder = useGroupOrderStore((s) => s.clear);
   const setTheme = useThemeStore((s) => s.setTheme);
   const setAppLanguage = useLanguageStore((s) => s.setLanguage);
@@ -37,6 +41,7 @@ export function useAuthData() {
 
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceItems = useProgressStore((s) => s.replaceItems);
+  const replaceWatchHistory = useWatchHistoryStore((s) => s.replaceItems);
 
   const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
@@ -122,12 +127,14 @@ export function useAuthData() {
     removeAccount();
     clearBookmarks();
     clearProgress();
+    clearWatchHistory();
     clearGroupOrder();
     setFebboxKey(null);
   }, [
     removeAccount,
     clearBookmarks,
     clearProgress,
+    clearWatchHistory,
     clearGroupOrder,
     setFebboxKey,
   ]);
@@ -138,11 +145,13 @@ export function useAuthData() {
       _session: SessionResponse,
       progress: ProgressResponse[],
       bookmarks: BookmarkResponse[],
+      watchHistory: WatchHistoryResponse[],
       settings: SettingsResponse,
       groupOrder: { groupOrder: string[] },
     ) => {
       replaceBookmarks(bookmarkResponsesToEntries(bookmarks));
       replaceItems(progressResponsesToEntries(progress));
+      replaceWatchHistory(watchHistoryResponsesToEntries(watchHistory));
 
       if (groupOrder?.groupOrder) {
         useGroupOrderStore.getState().setGroupOrder(groupOrder.groupOrder);
@@ -283,6 +292,7 @@ export function useAuthData() {
     [
       replaceBookmarks,
       replaceItems,
+      replaceWatchHistory,
       setAppLanguage,
       importSubtitleLanguage,
       setTheme,

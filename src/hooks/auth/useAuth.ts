@@ -27,6 +27,7 @@ import {
   getBookmarks,
   getProgress,
   getUser,
+  getWatchHistory,
 } from "@/backend/accounts/user";
 import { useAuthData } from "@/hooks/auth/useAuthData";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
@@ -238,12 +239,14 @@ export function useAuth() {
         throw err;
       }
 
-      const [bookmarks, progress, settings, groupOrder] = await Promise.all([
-        getBookmarks(backendUrl, account),
-        getProgress(backendUrl, account),
-        getSettings(backendUrl, account),
-        getGroupOrder(backendUrl, account),
-      ]);
+      const [bookmarks, progress, watchHistory, settings, groupOrder] =
+        await Promise.all([
+          getBookmarks(backendUrl, account),
+          getProgress(backendUrl, account),
+          getWatchHistory(backendUrl, account),
+          getSettings(backendUrl, account),
+          getGroupOrder(backendUrl, account),
+        ]);
 
       // Update account store with fresh user data (including nickname)
       const { setAccount } = useAuthStore.getState();
@@ -260,6 +263,7 @@ export function useAuth() {
         user.session,
         progress,
         bookmarks,
+        watchHistory,
         settings,
         groupOrder,
       );
