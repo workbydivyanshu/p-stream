@@ -489,6 +489,7 @@
     "seasons": "Season/s",
     "season": "Season",
     "episode": "Episode",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
     "airs": "Airs",
     "endsAt": "Ends at {{time}}",
     "trailer": "Trailer",

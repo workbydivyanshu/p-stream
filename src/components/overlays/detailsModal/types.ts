@@ -105,6 +105,7 @@ export interface EpisodeCarouselProps {
   mediaId?: number;
   mediaTitle?: string;
   mediaPosterUrl?: string;
+  totalEpisodes?: number;
 }
 
 export interface DetailsBodyProps {

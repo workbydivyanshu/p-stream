@@ -411,6 +411,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
             mediaId={data.id}
             mediaTitle={data.title}
             mediaPosterUrl={data.posterUrl}
+            totalEpisodes={data.episodes}
           />
         )}
 
