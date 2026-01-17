@@ -97,6 +97,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let lastValidDuration = 0; // Store the last valid duration to prevent reset during source switches
   let lastValidTime = 0; // Store the last valid time to prevent reset during source switches
   let shouldAutoplayAfterLoad = false; // Flag to track if we should autoplay after loading completes
+  let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
 
   const languagePromises = new Map<
     string,
@@ -308,6 +309,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         });
         hls.on(Hls.Events.LEVEL_SWITCHED, () => {
           if (!hls) return;
+
+          // Don't process level switched events during debounced quality changes
+          if (qualityChangeTimeout) return;
+
           if (automaticQuality) {
             // Only emit quality changes when automatic quality is enabled
             const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
@@ -546,6 +551,12 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   }
 
   function unloadSource() {
+    // Clear any pending quality change timeout
+    if (qualityChangeTimeout) {
+      clearTimeout(qualityChangeTimeout);
+      qualityChangeTimeout = null;
+    }
+
     if (videoElement) {
       videoElement.removeAttribute("src");
       videoElement.load();
@@ -563,6 +574,11 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     unloadSource();
     if (videoElement) {
       videoElement = null;
+    }
+    // Clear any remaining timeout
+    if (qualityChangeTimeout) {
+      clearTimeout(qualityChangeTimeout);
+      qualityChangeTimeout = null;
     }
   }
 
@@ -643,9 +659,21 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     },
     changeQuality(newAutomaticQuality, newPreferredQuality) {
       if (source?.type !== "hls") return;
+
+      // Clear any pending quality change to prevent race conditions
+      if (qualityChangeTimeout) {
+        clearTimeout(qualityChangeTimeout);
+        qualityChangeTimeout = null;
+      }
+
       automaticQuality = newAutomaticQuality;
       preferenceQuality = newPreferredQuality;
-      setupQualityForHls();
+
+      // Debounce quality changes to prevent rapid switching issues
+      qualityChangeTimeout = setTimeout(() => {
+        setupQualityForHls();
+        qualityChangeTimeout = null;
+      }, 100); // 100ms debounce delay
     },
 
     processVideoElement(video) {
