@@ -9,6 +9,33 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-057</guid>
+      <title>P-Stream v5.3.4 released!</title>
+      <description>I know it's been a while, but there's finally new features and fixes that many people have been waiting for!
+
+- Added a new Watch History page! Seperate from the currently watching section. Accessable from the dropdown menu.
+- Added subtitle translation! Thanks to @vlOd2 you can now translate any subtitle to any other language!
+- Added passkey support for new account creation.
+- Added a button to quickly find the next avaliable source!
+- Added support for multiple skip segment types including recaps and credits!
+- Added a new total watched percentage and watched count to the details modal!
+- Added support for multiple backend servers.
+- Added more keyboard shortcuts!
+- Fixed uploading and downloading captions on some devices.
+- Fixed auto quality not working.
+- Fixed some Airplay issues
+- Fixed many other bugs and issues!
+
+Thanks to everyone who has supported and we'll be working hard to bring you new great things!
+
+Also, my new project, TheIntroDB, is now available to everyone, please submit intros, recaps, and credits for all your favorite movies and shows! Signup below!
+      </description>
+      <link>https://theintrodb.org</link>
+      <pubDate>Sat, 17 Jan 2026 14:10:00 MST</pubDate>
+      <category>update</category>
+    </item>
+
+    <item>
       <guid>notification-056</guid>
       <title>New Skip Intro Time API!</title>
       <description>Introducing TheIntroDB, a new skip intro time API! TheIntroDB is a free, community-driven platform that provides skip intro times for thousands of movies and TV shows.
