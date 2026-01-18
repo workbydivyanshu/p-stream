@@ -66,18 +66,16 @@ export function WatchHistorySyncer() {
     clearUpdateQueue();
   }, [clearUpdateQueue]);
 
-  // Immediate sync when items are added to queue
+  // Immediate sync when items are added or removed
   useEffect(() => {
-    let lastQueueLength = 0;
+    let syncTimeout: NodeJS.Timeout | null = null;
 
-    const checkAndSync = async () => {
-      const currentQueueLength =
-        useWatchHistoryStore.getState().updateQueue.length;
-      // Only sync immediately if queue grew (items were added)
-      if (currentQueueLength > lastQueueLength && currentQueueLength > 0) {
-        if (!url) return;
-        const state = useWatchHistoryStore.getState();
-        const user = useAuthStore.getState();
+    const syncImmediately = async () => {
+      if (!url) return;
+      const state = useWatchHistoryStore.getState();
+      const user = useAuthStore.getState();
+      // Only sync if there are items in the queue
+      if (state.updateQueue.length > 0) {
         await syncWatchHistory(
           state.updateQueue,
           removeUpdateItem,
@@ -85,7 +83,13 @@ export function WatchHistorySyncer() {
           user.account,
         );
       }
-      lastQueueLength = currentQueueLength;
+    };
+
+    const debouncedSync = () => {
+      if (syncTimeout) {
+        clearTimeout(syncTimeout);
+      }
+      syncTimeout = setTimeout(syncImmediately, 100);
     };
 
     // Override the addItem function to trigger immediate sync
@@ -93,20 +97,26 @@ export function WatchHistorySyncer() {
     useWatchHistoryStore.setState({
       addItem: (...args) => {
         originalAddItem(...args);
-        // Trigger sync after adding item
-        setTimeout(checkAndSync, 100);
+        // Trigger debounced sync after adding item
+        debouncedSync();
       },
     });
 
-    // Also override removeItem
+    // Override removeItem to trigger immediate sync
     const originalRemoveItem = useWatchHistoryStore.getState().removeItem;
     useWatchHistoryStore.setState({
       removeItem: (...args) => {
         originalRemoveItem(...args);
-        // Trigger sync after removing item
-        setTimeout(checkAndSync, 100);
+        // Trigger debounced sync after removing item
+        debouncedSync();
       },
     });
+
+    return () => {
+      if (syncTimeout) {
+        clearTimeout(syncTimeout);
+      }
+    };
   }, [removeUpdateItem, url]);
 
   // Regular interval sync
