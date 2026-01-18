@@ -170,12 +170,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       hls.currentLevel = -1;
       hls.loadLevel = -1;
     }
-    // Only emit quality when we have a valid level index (>= 0)
-    // When automaticQuality is true, currentLevel is -1, so we wait for LEVEL_SWITCHED event
-    if (hls.currentLevel >= 0) {
-      const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
-      emit("changedquality", quality);
-    }
+    // For manual quality selection, wait for LEVEL_SWITCHED to emit quality
+    // to avoid showing intermediate states when HLS switches away from unplayable levels
+    // For automatic quality, currentLevel is -1, so we wait for LEVEL_SWITCHED event
   }
 
   function setupSource(vid: HTMLVideoElement, src: LoadableSource) {
@@ -313,29 +310,16 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           // Don't process level switched events during debounced quality changes
           if (qualityChangeTimeout) return;
 
+          const currentLevel = hls.levels[hls.currentLevel];
+          const currentQuality = hlsLevelToQuality(currentLevel);
+
           if (automaticQuality) {
             // Only emit quality changes when automatic quality is enabled
-            const quality = hlsLevelToQuality(hls.levels[hls.currentLevel]);
-            emit("changedquality", quality);
+            emit("changedquality", currentQuality);
           } else {
-            // When automatic quality is disabled, check if current level matches preferred quality
-            const currentQuality = hlsLevelToQuality(
-              hls.levels[hls.currentLevel],
-            );
-            const preferredQualityLevel = getPreferredQuality(
-              hlsLevelsToQualities(hls.levels),
-              {
-                lastChosenQuality: preferenceQuality,
-                automaticQuality: false,
-              },
-            );
-            // Only re-lock if the current level doesn't match our preferred quality
-            if (currentQuality !== preferredQualityLevel) {
-              setupQualityForHls();
-            } else {
-              // Emit the quality change since we're now at the correct level
-              emit("changedquality", currentQuality);
-            }
+            // For manual quality selection, emit the user's preferred quality
+            // This ensures the UI shows the selected quality, not the actual playing quality
+            emit("changedquality", preferenceQuality);
           }
         });
         hls.on(Hls.Events.SUBTITLE_TRACK_LOADED, () => {
