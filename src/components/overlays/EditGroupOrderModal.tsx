@@ -120,7 +120,7 @@ export function EditGroupOrderModal({
         <Paragraph className="mt-4">
           {t("home.bookmarks.groups.reorder.description")}
         </Paragraph>
-        <div>
+        <div className="max-h-[50vh] overflow-y-auto">
           <SortableList items={sortableItems} setItems={handleItemsChange} />
         </div>
         <div className="flex gap-4 mt-6 justify-end">
