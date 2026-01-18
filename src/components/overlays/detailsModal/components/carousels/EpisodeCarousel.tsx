@@ -179,6 +179,7 @@ export function EpisodeCarousel({
 
         // If watched (>90%), reset to 0%, otherwise set to 100%
         const isWatched = percentage > 90;
+        const shouldMarkWatched = !isWatched;
 
         // Get the poster URL from the mediaPosterUrl prop
         const posterUrl = mediaPosterUrl;
@@ -203,7 +204,7 @@ export function EpisodeCarousel({
             },
           },
           progress: {
-            watched: isWatched ? 0 : 60,
+            watched: shouldMarkWatched ? 60 : 0, // 60 seconds (100%) for watched, 0 for unwatched
             duration: 60,
           },
         });

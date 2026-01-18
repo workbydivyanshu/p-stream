@@ -8,7 +8,9 @@ import {
   importGroupOrder,
   importProgress,
   importSettings,
+  importWatchHistory,
 } from "@/backend/accounts/import";
+import { watchHistoryItemsToInputs } from "@/backend/accounts/watchHistory";
 import { progressMediaItemToInputs } from "@/backend/accounts/progress";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
@@ -28,6 +30,7 @@ import { usePreferencesStore } from "@/stores/preferences";
 import { ProgressMediaItem, useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useThemeStore } from "@/stores/theme";
+import { WatchHistoryItem, useWatchHistoryStore } from "@/stores/watchHistory";
 
 interface UploadedData {
   account?: {
@@ -40,6 +43,7 @@ interface UploadedData {
   };
   bookmarks?: Record<string, BookmarkMediaItem>;
   progress?: Record<string, ProgressMediaItem>;
+  watchHistory?: Record<string, WatchHistoryItem>;
   groupOrder?: string[];
   settings?: any;
   theme?: string | null;
@@ -55,6 +59,7 @@ export function MigrationUploadPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceProgress = useProgressStore((s) => s.replaceItems);
+  const replaceWatchHistory = useWatchHistoryStore((s) => s.replaceItems);
   const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
   const preferencesStore = usePreferencesStore();
   const subtitleStore = useSubtitleStore();
@@ -133,6 +138,37 @@ export function MigrationUploadPage() {
               {} as Record<string, ProgressMediaItem>,
             )
           : undefined,
+
+        watchHistory: parsedData.watchHistory
+          ? Object.entries(parsedData.watchHistory).reduce(
+              (acc, [id, item]: [string, any]) => {
+                // Ensure type is either "show" or "movie"
+                if (
+                  typeof item.type === "string" &&
+                  (item.type === "show" || item.type === "movie")
+                ) {
+                  acc[id] = {
+                    title: item.title || "",
+                    poster: item.poster,
+                    type: item.type as "show" | "movie",
+                    year: typeof item.year === "number" ? item.year : undefined,
+                    progress: item.progress,
+                    watchedAt:
+                      typeof item.watchedAt === "number"
+                        ? item.watchedAt
+                        : Date.now(),
+                    completed: typeof item.completed === "boolean" ? item.completed : false,
+                    episodeId: item.episodeId,
+                    seasonId: item.seasonId,
+                    seasonNumber: item.seasonNumber,
+                    episodeNumber: item.episodeNumber,
+                  };
+                }
+                return acc;
+              },
+              {} as Record<string, WatchHistoryItem>,
+            )
+          : undefined,
       };
 
       setUploadedData(validatedData);
@@ -170,6 +206,17 @@ export function MigrationUploadPage() {
       );
       importPromises.push(
         importProgress(backendUrl, user.account, progressInputs),
+      );
+    }
+
+    // Import watch history
+    if (
+      uploadedData.watchHistory &&
+      Object.keys(uploadedData.watchHistory).length > 0
+    ) {
+      const watchHistoryInputs = watchHistoryItemsToInputs(uploadedData.watchHistory);
+      importPromises.push(
+        importWatchHistory(backendUrl, user.account, watchHistoryInputs),
       );
     }
 
@@ -234,6 +281,10 @@ export function MigrationUploadPage() {
       replaceProgress(uploadedData.progress);
     }
 
+    if (uploadedData.watchHistory) {
+      replaceWatchHistory(uploadedData.watchHistory);
+    }
+
     // Import all data types to backend
     try {
       await handleBackendImport();
@@ -268,6 +319,13 @@ export function MigrationUploadPage() {
           JSON.stringify({ state: { items: uploadedData.progress } }),
         );
         replaceProgress(uploadedData.progress);
+      }
+      if (uploadedData.watchHistory) {
+        localStorage.setItem(
+          "__MW::watchHistory",
+          JSON.stringify({ state: { items: uploadedData.watchHistory } }),
+        );
+        replaceWatchHistory(uploadedData.watchHistory);
       }
       if (uploadedData.groupOrder) {
         localStorage.setItem(
@@ -550,7 +608,7 @@ export function MigrationUploadPage() {
               </Heading2>
               <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2">
                     <Icon icon={Icons.CLOCK} className="text-xl" />
@@ -575,6 +633,20 @@ export function MigrationUploadPage() {
                   <div className="text-xl font-bold mt-2">
                     {uploadedData.bookmarks
                       ? Object.keys(uploadedData.bookmarks).length
+                      : 0}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-background rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Icon icon={Icons.HISTORY} className="text-xl" />
+                    <span className="font-medium">
+                      {t("migration.preview.items.watchHistory")}
+                    </span>
+                  </div>
+                  <div className="text-xl font-bold mt-2">
+                    {uploadedData.watchHistory
+                      ? Object.keys(uploadedData.watchHistory).length
                       : 0}
                   </div>
                 </div>

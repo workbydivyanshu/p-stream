@@ -16,7 +16,9 @@ import {
   importGroupOrder,
   importProgress,
   importSettings,
+  importWatchHistory,
 } from "@/backend/accounts/import";
+import { watchHistoryItemsToInputs } from "@/backend/accounts/watchHistory";
 // import { getLoginChallengeToken, loginAccount } from "@/backend/accounts/login";
 import { progressMediaItemToInputs } from "@/backend/accounts/progress";
 import {
@@ -39,6 +41,7 @@ import { useGroupOrderStore } from "@/stores/groupOrder";
 import { usePreferencesStore } from "@/stores/preferences";
 import { ProgressMediaItem, useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
+import { WatchHistoryItem, useWatchHistoryStore } from "@/stores/watchHistory";
 
 export interface RegistrationData {
   recaptchaToken?: string;
@@ -63,6 +66,7 @@ export interface LoginData {
 export function useMigration() {
   const currentAccount = useAuthStore((s) => s.account);
   const progress = useProgressStore((s) => s.items);
+  const watchHistory = useWatchHistoryStore((s) => s.items);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
   const groupOrder = useGroupOrderStore((s) => s.groupOrder);
   const preferences = usePreferencesStore.getState();
@@ -77,11 +81,13 @@ export function useMigration() {
         backendUrlInner: string,
         account: AccountWithToken,
         progressItems: Record<string, ProgressMediaItem>,
+        watchHistoryItems: Record<string, WatchHistoryItem>,
         bookmarkItems: Record<string, BookmarkMediaItem>,
         groupOrderItems: string[],
       ) => {
         if (
           Object.keys(progressItems).length === 0 &&
+          Object.keys(watchHistoryItems).length === 0 &&
           Object.keys(bookmarkItems).length === 0 &&
           groupOrderItems.length === 0
         ) {
@@ -92,12 +98,15 @@ export function useMigration() {
           ([tmdbId, item]) => progressMediaItemToInputs(tmdbId, item),
         );
 
+        const watchHistoryInputs = watchHistoryItemsToInputs(watchHistoryItems);
+
         const bookmarkInputs = Object.entries(bookmarkItems).map(
           ([tmdbId, item]) => bookmarkMediaToInput(tmdbId, item),
         );
 
         const importPromises = [
           importProgress(backendUrlInner, account, progressInputs),
+          importWatchHistory(backendUrlInner, account, watchHistoryInputs),
           importBookmarks(backendUrlInner, account, bookmarkInputs),
         ];
 
@@ -177,7 +186,7 @@ export function useMigration() {
         bytesToBase64(keys.seed),
       );
 
-      await importData(backendUrl, account, progress, bookmarks, groupOrder);
+      await importData(backendUrl, account, progress, watchHistory, bookmarks, groupOrder);
 
       return account;
     },
@@ -186,6 +195,7 @@ export function useMigration() {
       userDataLogin,
       bookmarks,
       progress,
+      watchHistory,
       groupOrder,
       preferences,
       subtitleLanguage,

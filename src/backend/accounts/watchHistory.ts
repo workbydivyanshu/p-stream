@@ -76,6 +76,14 @@ export function watchHistoryItemToInputs(
   };
 }
 
+export function watchHistoryItemsToInputs(
+  watchHistoryItems: Record<string, WatchHistoryItem>,
+): WatchHistoryInput[] {
+  return Object.entries(watchHistoryItems).map(([id, item]) =>
+    watchHistoryItemToInputs(id, item),
+  );
+}
+
 export async function setWatchHistory(
   url: string,
   account: AccountWithToken,

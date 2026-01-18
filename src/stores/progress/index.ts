@@ -141,13 +141,17 @@ export const useProgressStore = create(
                 duration: 0,
                 watched: 0,
               };
+
+            const wasCompleted = item.progress.duration > 0 && item.progress.watched / item.progress.duration > 0.9;
             item.progress = { ...progress };
 
-            // Update watch history
-            const completed =
+            // Update watch history only if becoming completed
+            const isCompleted =
               progress.duration > 0 &&
               progress.watched / progress.duration > 0.9;
-            useWatchHistoryStore.getState().addItem(meta, progress, completed);
+            if (isCompleted && !wasCompleted) {
+              useWatchHistoryStore.getState().addItem(meta, progress, true);
+            }
             return;
           }
 
@@ -173,12 +177,16 @@ export const useProgressStore = create(
               },
             };
 
-          item.episodes[meta.episode.tmdbId].progress = { ...progress };
+          const episodeItem = item.episodes[meta.episode.tmdbId];
+          const wasCompleted = episodeItem.progress.duration > 0 && episodeItem.progress.watched / episodeItem.progress.duration > 0.9;
+          episodeItem.progress = { ...progress };
 
-          // Update watch history
-          const completed =
+          // Update watch history only if becoming completed
+          const isCompleted =
             progress.duration > 0 && progress.watched / progress.duration > 0.9;
-          useWatchHistoryStore.getState().addItem(meta, progress, completed);
+          if (isCompleted && !wasCompleted) {
+            useWatchHistoryStore.getState().addItem(meta, progress, true);
+          }
         });
       },
       clear() {

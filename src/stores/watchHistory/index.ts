@@ -70,6 +70,16 @@ export const useWatchHistoryStore = create(
       updateQueue: [],
       addItem(meta, progress, completed) {
         set((s) => {
+          const key = meta.episode
+            ? `${meta.tmdbId}-${meta.episode.tmdbId}`
+            : meta.tmdbId;
+
+          // Only add/update if this is a completion or if the item doesn't exist yet
+          const existingItem = s.items[key];
+          const shouldUpdate = !existingItem || (completed && !existingItem.completed);
+
+          if (!shouldUpdate) return;
+
           // add to updateQueue
           updateId += 1;
           s.updateQueue.push({
@@ -90,9 +100,6 @@ export const useWatchHistoryStore = create(
           });
 
           // add to watch history store
-          const key = meta.episode
-            ? `${meta.tmdbId}-${meta.episode.tmdbId}`
-            : meta.tmdbId;
           s.items[key] = {
             type: meta.type,
             title: meta.title,
@@ -110,32 +117,37 @@ export const useWatchHistoryStore = create(
       },
       updateItem(id, progress, completed) {
         set((s) => {
-          if (!s.items[id]) return;
+          const existingItem = s.items[id];
+          if (!existingItem) return;
+
+          // Only update if this is becoming completed and wasn't completed before
+          const shouldUpdate = completed && !existingItem.completed;
+
+          if (!shouldUpdate) return;
 
           // add to updateQueue
           updateId += 1;
-          const item = s.items[id];
           s.updateQueue.push({
-            tmdbId: item.episodeId ? item.seasonId || id.split("-")[0] : id,
-            title: item.title,
-            year: item.year,
-            poster: item.poster,
-            type: item.type,
+            tmdbId: existingItem.episodeId ? existingItem.seasonId || id.split("-")[0] : id,
+            title: existingItem.title,
+            year: existingItem.year,
+            poster: existingItem.poster,
+            type: existingItem.type,
             progress: { ...progress },
             watchedAt: Date.now(),
             completed,
             id: updateId.toString(),
-            episodeId: item.episodeId,
-            seasonId: item.seasonId,
-            seasonNumber: item.seasonNumber,
-            episodeNumber: item.episodeNumber,
+            episodeId: existingItem.episodeId,
+            seasonId: existingItem.seasonId,
+            seasonNumber: existingItem.seasonNumber,
+            episodeNumber: existingItem.episodeNumber,
             action: "update",
           });
 
           // update item
-          item.progress = { ...progress };
-          item.watchedAt = Date.now();
-          item.completed = completed;
+          existingItem.progress = { ...progress };
+          existingItem.watchedAt = Date.now();
+          existingItem.completed = completed;
         });
       },
       removeItem(id) {

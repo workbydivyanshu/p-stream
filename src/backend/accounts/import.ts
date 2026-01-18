@@ -6,6 +6,7 @@ import { AccountWithToken } from "@/stores/auth";
 import { BookmarkInput } from "./bookmarks";
 import { ProgressInput } from "./progress";
 import { SettingsInput } from "./settings";
+import { WatchHistoryInput, watchHistoryItemsToInputs } from "./watchHistory";
 
 export function importProgress(
   url: string,
@@ -41,6 +42,19 @@ export function importGroupOrder(
   return ofetch<void>(`/users/${account.userId}/group-order`, {
     method: "PUT",
     body: groupOrder,
+    baseURL: url,
+    headers: getAuthHeaders(account.token),
+  });
+}
+
+export function importWatchHistory(
+  url: string,
+  account: AccountWithToken,
+  watchHistoryItems: WatchHistoryInput[],
+) {
+  return ofetch<void>(`/users/${account.userId}/watch-history/import`, {
+    method: "PUT",
+    body: watchHistoryItems,
     baseURL: url,
     headers: getAuthHeaders(account.token),
   });

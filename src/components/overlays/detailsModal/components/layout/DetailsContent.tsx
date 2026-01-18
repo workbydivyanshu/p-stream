@@ -208,7 +208,8 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     // Get the poster URL from the data
     const posterUrl = data.posterUrl;
 
-    // Update progress - if watched, set to 0%, otherwise set to 100%
+    // Update progress - if watched, set to 0%, otherwise set to 100% (completed)
+    const shouldMarkWatched = !isMovieWatched;
     updateItem({
       meta: {
         tmdbId: data.id.toString(),
@@ -220,7 +221,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         poster: posterUrl,
       },
       progress: {
-        watched: isMovieWatched ? 0 : 60, // 60 seconds for "watched"
+        watched: shouldMarkWatched ? 60 : 0, // 60 seconds (100%) for watched, 0 for unwatched
         duration: 60,
       },
     });

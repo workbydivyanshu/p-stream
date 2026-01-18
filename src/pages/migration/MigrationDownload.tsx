@@ -16,6 +16,7 @@ import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
 import { useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
+import { useWatchHistoryStore } from "@/stores/watchHistory";
 
 export function MigrationDownloadPage() {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ export function MigrationDownloadPage() {
   const navigate = useNavigate();
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
   const progress = useProgressStore((s) => s.items);
+  const watchHistory = useWatchHistoryStore((s) => s.items);
   const groupOrder = useGroupOrderStore((s) => s.groupOrder);
 
   // Get data from localStorage directly to ensure we have the persisted data
@@ -37,6 +39,7 @@ export function MigrationDownloadPage() {
 
   const persistedBookmarks = getPersistedData("__MW::bookmarks");
   const persistedProgress = getPersistedData("__MW::progress");
+  const persistedWatchHistory = getPersistedData("__MW::watchHistory");
   const persistedGroupOrder = getPersistedData("__MW::groupOrder");
   const persistedPreferences = getPersistedData("__MW::preferences");
   const persistedSubtitles = getPersistedData("__MW::subtitles");
@@ -55,6 +58,7 @@ export function MigrationDownloadPage() {
         },
         bookmarks: persistedBookmarks.bookmarks || bookmarks,
         progress: persistedProgress.items || progress,
+        watchHistory: persistedWatchHistory.items || watchHistory,
         groupOrder: persistedGroupOrder.groupOrder || groupOrder,
         settings: {
           ...persistedPreferences,
@@ -104,13 +108,15 @@ export function MigrationDownloadPage() {
       console.error("Error during data download:", error);
       setStatus("error");
     }
-  }, [
+  },     [
     bookmarks,
     progress,
+    watchHistory,
     user.account,
     groupOrder,
     persistedBookmarks,
     persistedProgress,
+    persistedWatchHistory,
     persistedGroupOrder,
     persistedPreferences,
     persistedSubtitles,
@@ -138,7 +144,7 @@ export function MigrationDownloadPage() {
                 <h3 className="font-bold text-white text-lg">
                   {t("migration.preview.downloadDescription")}
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="p-4 bg-background rounded-lg">
                     <div className="flex items-center gap-2">
                       <Icon icon={Icons.CLOCK} className="text-xl" />
@@ -163,6 +169,18 @@ export function MigrationDownloadPage() {
                         Object.keys(persistedBookmarks.bookmarks || bookmarks)
                           .length
                       }
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-background rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <Icon icon={Icons.HISTORY} className="text-xl" />
+                      <span className="font-medium">
+                        {t("migration.preview.items.watchHistory")}
+                      </span>
+                    </div>
+                    <div className="text-xl font-bold mt-2">
+                      {Object.keys(persistedWatchHistory.items || watchHistory).length}
                     </div>
                   </div>
 
