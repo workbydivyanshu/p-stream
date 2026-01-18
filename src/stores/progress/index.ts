@@ -142,7 +142,9 @@ export const useProgressStore = create(
                 watched: 0,
               };
 
-            const wasCompleted = item.progress.duration > 0 && item.progress.watched / item.progress.duration > 0.9;
+            const wasCompleted =
+              item.progress.duration > 0 &&
+              item.progress.watched / item.progress.duration > 0.9;
             item.progress = { ...progress };
 
             // Update watch history only if becoming completed
@@ -178,7 +180,9 @@ export const useProgressStore = create(
             };
 
           const episodeItem = item.episodes[meta.episode.tmdbId];
-          const wasCompleted = episodeItem.progress.duration > 0 && episodeItem.progress.watched / episodeItem.progress.duration > 0.9;
+          const wasCompleted =
+            episodeItem.progress.duration > 0 &&
+            episodeItem.progress.watched / episodeItem.progress.duration > 0.9;
           episodeItem.progress = { ...progress };
 
           // Update watch history only if becoming completed

@@ -76,7 +76,8 @@ export const useWatchHistoryStore = create(
 
           // Only add/update if this is a completion or if the item doesn't exist yet
           const existingItem = s.items[key];
-          const shouldUpdate = !existingItem || (completed && !existingItem.completed);
+          const shouldUpdate =
+            !existingItem || (completed && !existingItem.completed);
 
           if (!shouldUpdate) return;
 
@@ -128,7 +129,9 @@ export const useWatchHistoryStore = create(
           // add to updateQueue
           updateId += 1;
           s.updateQueue.push({
-            tmdbId: existingItem.episodeId ? existingItem.seasonId || id.split("-")[0] : id,
+            tmdbId: existingItem.episodeId
+              ? existingItem.seasonId || id.split("-")[0]
+              : id,
             title: existingItem.title,
             year: existingItem.year,
             poster: existingItem.poster,

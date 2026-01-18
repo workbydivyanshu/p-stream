@@ -6,7 +6,7 @@ import { AccountWithToken } from "@/stores/auth";
 import { BookmarkInput } from "./bookmarks";
 import { ProgressInput } from "./progress";
 import { SettingsInput } from "./settings";
-import { WatchHistoryInput, watchHistoryItemsToInputs } from "./watchHistory";
+import { WatchHistoryInput } from "./watchHistory";
 
 export function importProgress(
   url: string,

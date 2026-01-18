@@ -18,13 +18,13 @@ import {
   importSettings,
   importWatchHistory,
 } from "@/backend/accounts/import";
-import { watchHistoryItemsToInputs } from "@/backend/accounts/watchHistory";
 // import { getLoginChallengeToken, loginAccount } from "@/backend/accounts/login";
 import { progressMediaItemToInputs } from "@/backend/accounts/progress";
 import {
   getRegisterChallengeToken,
   registerAccount,
 } from "@/backend/accounts/register";
+import { watchHistoryItemsToInputs } from "@/backend/accounts/watchHistory";
 // import { removeSession } from "@/backend/accounts/sessions";
 // import { getSettings } from "@/backend/accounts/settings";
 // import {
@@ -186,7 +186,14 @@ export function useMigration() {
         bytesToBase64(keys.seed),
       );
 
-      await importData(backendUrl, account, progress, watchHistory, bookmarks, groupOrder);
+      await importData(
+        backendUrl,
+        account,
+        progress,
+        watchHistory,
+        bookmarks,
+        groupOrder,
+      );
 
       return account;
     },

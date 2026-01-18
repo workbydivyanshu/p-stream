@@ -10,8 +10,8 @@ import {
   importSettings,
   importWatchHistory,
 } from "@/backend/accounts/import";
-import { watchHistoryItemsToInputs } from "@/backend/accounts/watchHistory";
 import { progressMediaItemToInputs } from "@/backend/accounts/progress";
+import { watchHistoryItemsToInputs } from "@/backend/accounts/watchHistory";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
@@ -157,7 +157,10 @@ export function MigrationUploadPage() {
                       typeof item.watchedAt === "number"
                         ? item.watchedAt
                         : Date.now(),
-                    completed: typeof item.completed === "boolean" ? item.completed : false,
+                    completed:
+                      typeof item.completed === "boolean"
+                        ? item.completed
+                        : false,
                     episodeId: item.episodeId,
                     seasonId: item.seasonId,
                     seasonNumber: item.seasonNumber,
@@ -214,7 +217,9 @@ export function MigrationUploadPage() {
       uploadedData.watchHistory &&
       Object.keys(uploadedData.watchHistory).length > 0
     ) {
-      const watchHistoryInputs = watchHistoryItemsToInputs(uploadedData.watchHistory);
+      const watchHistoryInputs = watchHistoryItemsToInputs(
+        uploadedData.watchHistory,
+      );
       importPromises.push(
         importWatchHistory(backendUrl, user.account, watchHistoryInputs),
       );
@@ -296,6 +301,7 @@ export function MigrationUploadPage() {
   }, [
     replaceBookmarks,
     replaceProgress,
+    replaceWatchHistory,
     uploadedData,
     user.account,
     handleBackendImport,
@@ -494,6 +500,7 @@ export function MigrationUploadPage() {
     uploadedData,
     replaceBookmarks,
     replaceProgress,
+    replaceWatchHistory,
     setGroupOrder,
     preferencesStore,
     subtitleStore,
@@ -639,7 +646,7 @@ export function MigrationUploadPage() {
 
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Icon icon={Icons.HISTORY} className="text-xl" />
+                    <Icon icon={Icons.CLOCK} className="text-xl" />
                     <span className="font-medium">
                       {t("migration.preview.items.watchHistory")}
                     </span>

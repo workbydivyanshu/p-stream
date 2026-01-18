@@ -108,7 +108,7 @@ export function MigrationDownloadPage() {
       console.error("Error during data download:", error);
       setStatus("error");
     }
-  },     [
+  }, [
     bookmarks,
     progress,
     watchHistory,
@@ -174,13 +174,16 @@ export function MigrationDownloadPage() {
 
                   <div className="p-4 bg-background rounded-lg">
                     <div className="flex items-center gap-2">
-                      <Icon icon={Icons.HISTORY} className="text-xl" />
+                      <Icon icon={Icons.CLOCK} className="text-xl" />
                       <span className="font-medium">
                         {t("migration.preview.items.watchHistory")}
                       </span>
                     </div>
                     <div className="text-xl font-bold mt-2">
-                      {Object.keys(persistedWatchHistory.items || watchHistory).length}
+                      {
+                        Object.keys(persistedWatchHistory.items || watchHistory)
+                          .length
+                      }
                     </div>
                   </div>
 
