@@ -29,6 +29,7 @@ export interface PreferencesStore {
   febboxUseMp4: boolean;
   debridToken: string | null;
   debridService: string;
+  tidbKey: string | null;
   enableLowPerformanceMode: boolean;
   enableNativeSubtitles: boolean;
   enableHoldToBoost: boolean;
@@ -59,6 +60,7 @@ export interface PreferencesStore {
   setFebboxUseMp4(v: boolean): void;
   setdebridToken(v: string | null): void;
   setdebridService(v: string): void;
+  setTIDBKey(v: string | null): void;
   setEnableLowPerformanceMode(v: boolean): void;
   setEnableNativeSubtitles(v: boolean): void;
   setEnableHoldToBoost(v: boolean): void;
@@ -93,6 +95,7 @@ export const usePreferencesStore = create(
       febboxUseMp4: false,
       debridToken: null,
       debridService: "realdebrid",
+      tidbKey: null,
       enableLowPerformanceMode: false,
       enableNativeSubtitles: false,
       enableHoldToBoost: true,
@@ -204,6 +207,11 @@ export const usePreferencesStore = create(
       setdebridService(v) {
         set((s) => {
           s.debridService = v;
+        });
+      },
+      setTIDBKey(v) {
+        set((s) => {
+          s.tidbKey = v;
         });
       },
       setEnableLowPerformanceMode(v) {

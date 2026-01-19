@@ -3,7 +3,12 @@ import { useLocation } from "react-router-dom";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-type OverlayType = "volume" | "subtitle" | "speed" | null;
+type OverlayType =
+  | "volume"
+  | "subtitle"
+  | "speed"
+  | "tidb-submission-success"
+  | null;
 
 interface ModalData {
   id: number;

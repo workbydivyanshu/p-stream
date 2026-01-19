@@ -1,13 +1,17 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
 import { SkipSegmentButton } from "@/components/player/atoms/SkipSegmentButton";
+import { ThumbsFeedback } from "@/components/player/atoms/ThumbsFeedback";
 import { UnreleasedEpisodeOverlay } from "@/components/player/atoms/UnreleasedEpisodeOverlay";
 import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
-import { useSkipTime } from "@/components/player/hooks/useSkipTime";
+import {
+  SegmentData,
+  useSkipTime,
+} from "@/components/player/hooks/useSkipTime";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -74,7 +78,24 @@ export function PlayerPart(props: PlayerPartProps) {
     }, 1000);
   };
 
+  // State for thumbs feedback
+  const [thumbsFeedbackData, setThumbsFeedbackData] = useState<{
+    segment: SegmentData;
+    skipTime: number;
+  } | null>(null);
+
   const segments = useSkipTime();
+
+  const handleSkipTriggered = useCallback(
+    (segment: SegmentData, skipTime: number) => {
+      setThumbsFeedbackData({ segment, skipTime });
+    },
+    [],
+  );
+
+  const handleThumbsFeedback = useCallback(() => {
+    setThumbsFeedbackData(null);
+  }, []);
 
   return (
     <Player.Container onLoad={props.onLoad} showingControls={showTargets}>
@@ -238,6 +259,7 @@ export function PlayerPart(props: PlayerPartProps) {
       <Player.VolumeChangedPopout />
       <Player.SubtitleDelayPopout />
       <Player.SpeedChangedPopout />
+      <Player.TIDBSubmissionSuccessPopout />
       <UnreleasedEpisodeOverlay />
 
       <Player.NextEpisodeButton
@@ -251,6 +273,13 @@ export function PlayerPart(props: PlayerPartProps) {
         segments={segments}
         inControl={inControl}
         onChangeMeta={props.onMetaChange}
+        onSkipTriggered={handleSkipTriggered}
+      />
+
+      <ThumbsFeedback
+        controlsShowing={showTargets}
+        feedbackData={thumbsFeedbackData}
+        onAction={handleThumbsFeedback}
       />
     </Player.Container>
   );

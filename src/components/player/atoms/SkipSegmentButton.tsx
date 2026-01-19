@@ -76,6 +76,7 @@ function SkipSegmentButton(props: {
   segments: SegmentData[];
   inControl: boolean;
   onChangeMeta?: (meta: PlayerMeta) => void;
+  onSkipTriggered?: (segment: SegmentData, skipTime: number) => void;
 }) {
   const { t } = useTranslation();
   const time = usePlayerStore((s) => s.progress.time);
@@ -134,10 +135,15 @@ function SkipSegmentButton(props: {
           : undefined,
       });
 
+      // Notify parent that skip was triggered
+      if (props.onSkipTriggered) {
+        props.onSkipTriggered(segment, targetTime);
+      }
+
       // eslint-disable-next-line no-console
       console.log(`Skip ${segment.type} button used: ${skipDuration}s total`);
     },
-    [display, time, _duration, addSkipEvent, meta],
+    [display, time, _duration, addSkipEvent, meta, props],
   );
 
   // Show NextEpisodeButton instead of credits skip button for TV shows when credits end at video end

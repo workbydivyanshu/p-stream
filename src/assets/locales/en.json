@@ -977,7 +977,60 @@
     "skipTime": {
       "intro": "Skip Intro",
       "recap": "Skip Recap",
-      "credits": "Skip Credits"
+      "credits": "Skip Credits",
+      "feedback": {
+        "title": "Was this skip correct?",
+        "modal": {
+          "title": "Submit Timestamps to TheIntroDB",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "segmentType": "Segment Type",
+          "types": {
+            "intro": "Intro",
+            "recap": "Recap",
+            "credits": "Credits"
+          },
+          "startTimeLabel": "Start (s)",
+          "endTimeLabel": "End (s)",
+          "placeholders": {
+            "start": {
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)",
+              "credits": "2:30 or 150 (required)"
+            },
+            "end": {
+              "intro": "3:30 or 210 (required)",
+              "recap": "3:30 or 210 (required)",
+              "credits": "3:30 or 210 (leave empty for end of media)"
+            }
+          },
+          "whenToTitle": "Timestamps guide:",
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "guide": {
+            "startLabel": "Start:",
+            "startDesc": "Required - when credits begin rolling",
+            "endLabel": "End:",
+            "endDesc": "Optional - empty if extends to end",
+            "durationLabel": "Duration:",
+            "durationDesc": "Min 5s if end provided",
+            "excludeLabel": "Exclude:",
+            "excludeDesc": "Post-credits scenes"
+          },
+          "cancel": "Cancel",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "error": {
+            "tidbKey": "TIDB API key is not set",
+            "mediaInfo": "Media information is not available",
+            "endTime": "End time is required",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "segment": "No segment selected"
+          },
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          }
+        }
+      }
     }
   },
   "support": {
@@ -1203,6 +1256,10 @@
           "title": "Proxy TMDB",
           "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
         }
+      },
+      "tidb": {
+        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
+        "tokenLabel": "API Key"
       }
     },
     "preferences": {

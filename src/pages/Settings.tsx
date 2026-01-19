@@ -385,6 +385,9 @@ export function SettingsPage() {
   const debridService = usePreferencesStore((s) => s.debridService);
   const setdebridService = usePreferencesStore((s) => s.setdebridService);
 
+  const tidbKey = usePreferencesStore((s) => s.tidbKey);
+  const setTIDBKey = usePreferencesStore((s) => s.setTIDBKey);
+
   const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
   const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
 
@@ -551,6 +554,7 @@ export function SettingsPage() {
     febboxKey,
     debridToken,
     debridService,
+    tidbKey,
     account ? account.profile : undefined,
     enableThumbnails,
     enableAutoplay,
@@ -718,6 +722,7 @@ export function SettingsPage() {
     setFebboxKey(state.febboxKey.state);
     setdebridToken(state.debridToken.state);
     setdebridService(state.debridService.state);
+    setTIDBKey(state.tidbKey.state);
     setProxyTmdb(state.proxyTmdb.state);
     setEnableCarouselView(state.enableCarouselView.state);
     setEnableMinimalCards(state.enableMinimalCards.state);
@@ -761,6 +766,7 @@ export function SettingsPage() {
     setFebboxKey,
     setdebridToken,
     setdebridService,
+    setTIDBKey,
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableDiscover,
@@ -929,6 +935,8 @@ export function SettingsPage() {
               setdebridToken={state.debridToken.set}
               debridService={state.debridService.state}
               setdebridService={state.debridService.set}
+              tidbKey={state.tidbKey.state}
+              setTIDBKey={state.tidbKey.set}
               proxyTmdb={state.proxyTmdb.state}
               setProxyTmdb={state.proxyTmdb.set}
             />
