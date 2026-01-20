@@ -974,6 +974,11 @@
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     },
+    "segment": {
+      "intro": "Intro",
+      "recap": "Recap",
+      "credits": "Credits"
+    },
     "skipTime": {
       "intro": "Skip Intro",
       "recap": "Skip Recap",

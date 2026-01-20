@@ -13,7 +13,7 @@
       <title>New TheIntroDB Skip Segments feature!</title>
       <description>You can now quickly leave feedback, correct, and submit skip times for movies and TV shows using your TheIntroDB API key right within P-Stream!
 
-If you haven't made an account on TheIntroDB yet, you can do so below! Generate your API key and add it to your P-Stream connectionssettings!
+If you haven't made an account on TheIntroDB yet, you can do so below! Generate your API key and add it to your P-Stream connections settings!
 
 Then, the next time you encounter a skip button, you can leave feedback and correct the skip time if it's incorrect!
 

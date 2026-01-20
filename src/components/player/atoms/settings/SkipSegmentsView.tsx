@@ -25,11 +25,11 @@ export function SkipSegmentsView({ id }: { id: string }) {
   const getSegmentTypeLabel = (type: "intro" | "recap" | "credits") => {
     switch (type) {
       case "intro":
-        return t("player.skipTime.intro");
+        return t("player.segment.intro");
       case "recap":
-        return t("player.skipTime.recap");
+        return t("player.segment.recap");
       case "credits":
-        return t("player.skipTime.credits");
+        return t("player.segment.credits");
       default:
         return type;
     }
