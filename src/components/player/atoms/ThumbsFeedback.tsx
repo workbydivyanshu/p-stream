@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
 import { SegmentData } from "@/components/player/hooks/useSkipTime";
-import { SubmissionForm } from "@/components/player/TIDBSubmissionForm";
+import { TIDBSubmissionForm } from "@/components/player/TIDBSubmissionForm";
 import { Transition } from "@/components/utils/Transition";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
@@ -153,7 +153,7 @@ export function ThumbsFeedback({
       </div>
 
       {showSubmissionModal && feedbackData && (
-        <SubmissionForm
+        <TIDBSubmissionForm
           segment={feedbackData.segment}
           onSuccess={handleSubmissionSuccess}
           onCancel={handleSubmissionCancel}

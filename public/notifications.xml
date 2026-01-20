@@ -9,6 +9,22 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-058</guid>
+      <title>New TheIntroDB Skip Segments feature!</title>
+      <description>You can now quickly leave feedback, correct, and submit skip times for movies and TV shows using your TheIntroDB API key right within P-Stream!
+
+If you haven't made an account on TheIntroDB yet, you can do so below! Generate your API key and add it to your P-Stream connectionssettings!
+
+Then, the next time you encounter a skip button, you can leave feedback and correct the skip time if it's incorrect!
+
+And if an episode does't have a segment yet, you can submit it yourself from the new Skip Segments menu on the player!
+      </description>
+      <link>https://theintrodb.org/sign-up</link>
+      <pubDate>Mon, 19 Jan 2026 17:40:00 MST</pubDate>
+      <category>feature</category>
+    </item>
+
+    <item>
       <guid>notification-057</guid>
       <title>P-Stream v5.3.4 released!</title>
       <description>I know it's been a while, but there's finally new features and fixes that many people have been waiting for!

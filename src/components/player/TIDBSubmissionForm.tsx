@@ -64,17 +64,17 @@ function parseTimeToSeconds(timeStr: string): number | null {
   return parsed;
 }
 
-interface SubmissionFormProps {
+interface TIDBSubmissionFormProps {
   segment: SegmentData;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-export function SubmissionForm({
+export function TIDBSubmissionForm({
   segment,
   onSuccess,
   onCancel,
-}: SubmissionFormProps) {
+}: TIDBSubmissionFormProps) {
   const { t } = useTranslation();
   const meta = usePlayerStore((s) => s.meta);
   const tidbKey = usePreferencesStore((s) => s.tidbKey);
@@ -336,15 +336,20 @@ export function SubmissionForm({
               >
                 {t("player.skipTime.feedback.modal.cancel")}
               </Button>
-              <button
-                type="submit"
+              <Button
+                theme="purple"
                 disabled={isSubmitting}
-                className="bg-buttons-purple hover:bg-buttons-purpleHover disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded font-medium transition-colors pointer-events-auto"
+                loading={isSubmitting}
+                onClick={() => {
+                  // Trigger form submission
+                  const form = document.querySelector("form");
+                  if (form) form.requestSubmit();
+                }}
               >
                 {isSubmitting
                   ? t("player.skipTime.feedback.modal.submitting")
                   : t("player.skipTime.feedback.modal.submit")}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

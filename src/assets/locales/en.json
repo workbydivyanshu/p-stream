@@ -978,6 +978,16 @@
       "intro": "Skip Intro",
       "recap": "Skip Recap",
       "credits": "Skip Credits",
+      "skipSegments": "Skip Segments",
+      "submitSegment": "Submit Segment",
+      "noSegments": "No skip segments available",
+      "startsAt": "Starts at {{time}}",
+      "endsAt": "Ends at {{time}}",
+      "timeUnknown": "Time unknown",
+      "confidence": "confidence",
+      "submissions": "{{count}} submissions",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "endOfVideo": "End",
       "feedback": {
         "title": "Was this skip correct?",
         "modal": {

@@ -23,6 +23,7 @@ import { LanguageSubtitlesView } from "./settings/LanguageSubtitlesView";
 import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
 import { SettingsMenu } from "./settings/SettingsMenu";
+import { SkipSegmentsView } from "./settings/SkipSegmentsView";
 import { TranscriptView } from "./settings/TranscriptView";
 import { TranslateSubtitleView } from "./settings/TranslateSubtitleView";
 import { WatchPartyView } from "./settings/WatchPartyView";
@@ -49,20 +50,20 @@ function SettingsOverlay({ id }: { id: string }) {
   return (
     <Overlay id={id}>
       <OverlayRouter id={id}>
-        <OverlayPage id={id} path="/" width={343} height={452}>
+        <OverlayPage id={id} path="/" width={343} height={496}>
           <SettingsMenu id={id} />
         </OverlayPage>
-        <OverlayPage id={id} path="/quality" width={343} height={452}>
+        <OverlayPage id={id} path="/quality" width={343} height={496}>
           <Menu.Card>
             <QualityView id={id} />
           </Menu.Card>
         </OverlayPage>
-        <OverlayPage id={id} path="/audio" width={343} height={452}>
+        <OverlayPage id={id} path="/audio" width={343} height={496}>
           <Menu.Card>
             <AudioView id={id} />
           </Menu.Card>
         </OverlayPage>
-        <OverlayPage id={id} path="/captions" width={343} height={452}>
+        <OverlayPage id={id} path="/captions" width={343} height={496}>
           <Menu.CardWithScrollable>
             <CaptionsView
               id={id}
@@ -72,7 +73,7 @@ function SettingsOverlay({ id }: { id: string }) {
           </Menu.CardWithScrollable>
         </OverlayPage>
         {/* This is used by the captions shortcut in bottomControls of player */}
-        <OverlayPage id={id} path="/captionsOverlay" width={343} height={452}>
+        <OverlayPage id={id} path="/captionsOverlay" width={343} height={496}>
           <Menu.CardWithScrollable>
             <CaptionsView id={id} onChooseLanguage={setChosenLanguage} />
           </Menu.CardWithScrollable>
@@ -81,7 +82,7 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/captionsOverlay/languagesOverlay"
           width={443}
-          height={452}
+          height={496}
         >
           <Menu.CardWithScrollable>
             {chosenLanguage && (
@@ -98,7 +99,7 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/captionsOverlay/languagesOverlay/translateSubtitleOverlay"
           width={443}
-          height={452}
+          height={496}
         >
           <Menu.CardWithScrollable>
             {captionToTranslate && (
@@ -110,7 +111,7 @@ function SettingsOverlay({ id }: { id: string }) {
             )}
           </Menu.CardWithScrollable>
         </OverlayPage>
-        <OverlayPage id={id} path="/captions/settings" width={343} height={452}>
+        <OverlayPage id={id} path="/captions/settings" width={343} height={496}>
           <Menu.Card>
             <CaptionSettingsView id={id} />
           </Menu.Card>
@@ -120,18 +121,18 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/captions/settingsOverlay"
           width={343}
-          height={452}
+          height={496}
         >
           <Menu.Card>
             <CaptionSettingsView id={id} overlayBackLink />
           </Menu.Card>
         </OverlayPage>
-        <OverlayPage id={id} path="/source" width={343} height={452}>
+        <OverlayPage id={id} path="/source" width={343} height={496}>
           <Menu.CardWithScrollable>
             <SourceSelectionView id={id} onChoose={setChosenSourceId} />
           </Menu.CardWithScrollable>
         </OverlayPage>
-        <OverlayPage id={id} path="/source/embeds" width={343} height={452}>
+        <OverlayPage id={id} path="/source/embeds" width={343} height={496}>
           <Menu.CardWithScrollable>
             <EmbedSelectionView id={id} sourceId={chosenSourceId} />
           </Menu.CardWithScrollable>
@@ -143,9 +144,19 @@ function SettingsOverlay({ id }: { id: string }) {
         </OverlayPage>
         <OverlayPage
           id={id}
+          path="/playback/skip-segments"
+          width={343}
+          height={496}
+        >
+          <Menu.Card>
+            <SkipSegmentsView id={id} />
+          </Menu.Card>
+        </OverlayPage>
+        <OverlayPage
+          id={id}
           path="/captions/transcript"
           width={343}
-          height={452}
+          height={496}
         >
           <Menu.CardWithScrollable>
             <TranscriptView id={id} />
@@ -155,7 +166,7 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/captions/languages"
           width={443}
-          height={452}
+          height={496}
         >
           <Menu.CardWithScrollable>
             {chosenLanguage && (
@@ -171,7 +182,7 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/captions/languages/translateSubtitleOverlay"
           width={443}
-          height={452}
+          height={496}
         >
           <Menu.CardWithScrollable>
             {captionToTranslate && (
@@ -180,7 +191,7 @@ function SettingsOverlay({ id }: { id: string }) {
           </Menu.CardWithScrollable>
         </OverlayPage>
         <DownloadRoutes id={id} />
-        <OverlayPage id={id} path="/watchparty" width={343} height={455}>
+        <OverlayPage id={id} path="/watchparty" width={343} height={496}>
           <Menu.CardWithScrollable>
             <WatchPartyView id={id} />
           </Menu.CardWithScrollable>
