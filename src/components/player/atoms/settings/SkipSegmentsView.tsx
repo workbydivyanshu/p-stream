@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -19,6 +19,18 @@ export function SkipSegmentsView({ id }: { id: string }) {
   const tidbKey = usePreferencesStore((s) => s.tidbKey);
   const { setCurrentOverlay } = useOverlayStack();
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
+
+  // Memoize the segment object to prevent re-renders from clearing form inputs
+  const segmentData = useMemo(
+    () => ({
+      type: "intro" as const,
+      start_ms: null,
+      end_ms: null,
+      confidence: null,
+      submission_count: 0,
+    }),
+    [],
+  );
 
   const handleSeek = (seconds: number) => {
     display?.setTime(seconds);
@@ -108,13 +120,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
 
       {showSubmissionForm && tidbKey && (
         <TIDBSubmissionForm
-          segment={{
-            type: "intro",
-            start_ms: null,
-            end_ms: null,
-            confidence: null,
-            submission_count: 0,
-          }}
+          segment={segmentData}
           onSuccess={() => {
             setShowSubmissionForm(false);
             setCurrentOverlay("tidb-submission-success");
