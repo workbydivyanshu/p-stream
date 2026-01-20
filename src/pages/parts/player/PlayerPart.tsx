@@ -5,7 +5,6 @@ import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
 import { SkipSegmentButton } from "@/components/player/atoms/SkipSegmentButton";
 import { ThumbsFeedback } from "@/components/player/atoms/ThumbsFeedback";
-import { UnreleasedEpisodeOverlay } from "@/components/player/atoms/UnreleasedEpisodeOverlay";
 import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import {
@@ -260,7 +259,7 @@ export function PlayerPart(props: PlayerPartProps) {
       <Player.SubtitleDelayPopout />
       <Player.SpeedChangedPopout />
       <Player.TIDBSubmissionSuccessPopout />
-      <UnreleasedEpisodeOverlay />
+      <Player.UnreleasedEpisodeOverlay />
 
       <Player.NextEpisodeButton
         controlsShowing={showTargets}
