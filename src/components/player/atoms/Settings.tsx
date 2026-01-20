@@ -146,7 +146,7 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/playback/skip-segments"
           width={343}
-          height={496}
+          height={446}
         >
           <Menu.Card>
             <SkipSegmentsView id={id} />

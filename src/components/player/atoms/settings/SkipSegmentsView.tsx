@@ -6,6 +6,7 @@ import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { TIDBSubmissionForm } from "@/components/player/TIDBSubmissionForm";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { formatSeconds } from "@/utils/formatSeconds";
@@ -16,6 +17,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
   const display = usePlayerStore((s) => s.display);
   const segments = useSkipTime();
   const tidbKey = usePreferencesStore((s) => s.tidbKey);
+  const { setCurrentOverlay } = useOverlayStack();
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
 
   const handleSeek = (seconds: number) => {
@@ -115,6 +117,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
           }}
           onSuccess={() => {
             setShowSubmissionForm(false);
+            setCurrentOverlay("tidb-submission-success");
             // Optionally refresh segments here
           }}
           onCancel={() => setShowSubmissionForm(false)}
