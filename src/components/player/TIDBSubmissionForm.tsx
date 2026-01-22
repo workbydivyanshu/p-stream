@@ -188,7 +188,7 @@ export function TIDBSubmissionForm({
 
   return (
     <Modal id={submissionModal.id}>
-      <ModalCard className="!max-w-4xl max-h-[90vh] md:max-h-[80vh] overflow-y-auto px-4">
+      <ModalCard className="!max-w-4xl max-h-[80vh] overflow-y-auto">
         <Heading3 className="!mt-0 !mb-4">
           {t("player.skipTime.feedback.modal.title")}
         </Heading3>
@@ -196,7 +196,7 @@ export function TIDBSubmissionForm({
           {t("player.skipTime.feedback.modal.description")}
         </Paragraph>
 
-        <div className="space-y-4 mt-4 pb-4">
+        <div className="space-y-4 mt-4">
           {/* Section: Segment timestamps */}
           <div>
             <label
@@ -325,7 +325,7 @@ export function TIDBSubmissionForm({
               </div>
             </div>
 
-            <div className="flex gap-2 pt-4 justify-between sticky bottom-0 bg-modal-background -mx-6 -mb-6 px-6 pb-6 mt-6 border-t border-gray-700">
+            <div className="flex gap-2 pt-4 justify-between">
               <Button
                 theme="secondary"
                 onClick={() => {
