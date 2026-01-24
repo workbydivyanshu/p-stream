@@ -62,9 +62,6 @@ function BackendOptionItem({
           {option.loading ? (
             <div className="flex items-center gap-2">
               <Loading />
-              <span className="text-type-secondary text-sm">
-                {t("auth.backendSelection.selecting")}
-              </span>
             </div>
           ) : option.error ? (
             <div className="flex items-center gap-2">
