@@ -140,16 +140,28 @@ export function BackendSelector({
       }));
       setBackendOptions(options);
 
-      const promises = options.map(async (option) => {
+      // Fetch each backend's meta independently and update state as each completes
+      // This prevents one slow/down backend from blocking the others
+      options.forEach(async (option) => {
         try {
           const meta = await getBackendMeta(option.url);
-          return { ...option, meta, loading: false, error: false };
+          setBackendOptions((prev) =>
+            prev.map((opt) =>
+              opt.url === option.url
+                ? { ...opt, meta, loading: false, error: false }
+                : opt,
+            ),
+          );
         } catch {
-          return { ...option, meta: null, loading: false, error: true };
+          setBackendOptions((prev) =>
+            prev.map((opt) =>
+              opt.url === option.url
+                ? { ...opt, meta: null, loading: false, error: true }
+                : opt,
+            ),
+          );
         }
       });
-      const results = await Promise.all(promises);
-      setBackendOptions(results);
     };
 
     if (availableUrls.length > 0) {
