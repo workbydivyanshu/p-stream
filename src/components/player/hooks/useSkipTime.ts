@@ -9,19 +9,12 @@ import { getTurnstileToken } from "@/utils/turnstile";
 
 // Thanks Nemo for this API
 const THE_INTRO_DB_BASE_URL = "https://api.theintrodb.org/v1";
-// const QUICKWATCH_BASE_URL = "https://skips.quickwatch.co";
 const FED_SKIPS_BASE_URL = "https://fed-skips.pstream.mov";
-// const VELORA_BASE_URL = "https://veloratv.ru/api/intro-end/confirmed";
 const INTRODB_BASE_URL = "https://api.introdb.app/intro";
 const MAX_RETRIES = 3;
 
 // Track the source of the current skip time (for analytics filtering)
-let currentSkipTimeSource:
-  | "fed-skips"
-  | "introdb"
-  | "theintrodb"
-  // | "quickwatch"
-  | null = null;
+let currentSkipTimeSource: "fed-skips" | "introdb" | "theintrodb" | null = null;
 
 export function useSkipTimeSource(): typeof currentSkipTimeSource {
   return currentSkipTimeSource;
@@ -41,6 +34,50 @@ export function useSkipTime() {
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
 
   useEffect(() => {
+    // Validate segment data according to rules
+    // eslint-disable-next-line camelcase
+    const validateSegment = (
+      type: "intro" | "recap" | "credits",
+      // eslint-disable-next-line camelcase
+      start_ms: number | null,
+      // eslint-disable-next-line camelcase
+      end_ms: number | null,
+    ): boolean => {
+      // eslint-disable-next-line camelcase
+      const start = start_ms ?? 0;
+      // eslint-disable-next-line camelcase
+      const end = end_ms;
+
+      if (type === "intro") {
+        // Intro: end_ms is required, duration must be 0 or 5-200 seconds
+        if (end === null) return false;
+        const duration = (end - start) / 1000;
+        if (duration === 0) return true; // No intro is valid
+        return duration >= 5 && duration <= 200;
+      }
+
+      if (type === "recap") {
+        // Recap: end_ms is required, duration must be 0 or 5-1200 seconds
+        if (end === null) return false;
+        const duration = (end - start) / 1000;
+        if (duration === 0) return true; // No recap is valid
+        return duration >= 5 && duration <= 1200;
+      }
+
+      if (type === "credits") {
+        // Credits: start_ms is required
+        // If end_ms is provided, duration must be at least 5 seconds
+        // If end_ms is null, credits extend to end of video (valid)
+        // eslint-disable-next-line camelcase
+        if (start_ms === null) return false;
+        if (end === null) return true; // Credits to end of video is valid
+        const duration = (end - start) / 1000;
+        return duration >= 5;
+      }
+
+      return false;
+    };
+
     const fetchTheIntroDBSegments = async (): Promise<SegmentData[]> => {
       if (!meta?.tmdbId) return [];
 
@@ -58,8 +95,12 @@ export function useSkipTime() {
 
         const fetchedSegments: SegmentData[] = [];
 
-        // Add intro segment if it has data
-        if (data?.intro && data.intro.submission_count > 0) {
+        // Add intro segment if it has valid data
+        if (
+          data?.intro &&
+          data.intro.submission_count > 0 &&
+          validateSegment("intro", data.intro.start_ms, data.intro.end_ms)
+        ) {
           fetchedSegments.push({
             type: "intro",
             start_ms: data.intro.start_ms,
@@ -69,8 +110,12 @@ export function useSkipTime() {
           });
         }
 
-        // Add recap segment if it has data
-        if (data?.recap && data.recap.submission_count > 0) {
+        // Add recap segment if it has valid data
+        if (
+          data?.recap &&
+          data.recap.submission_count > 0 &&
+          validateSegment("recap", data.recap.start_ms, data.recap.end_ms)
+        ) {
           fetchedSegments.push({
             type: "recap",
             start_ms: data.recap.start_ms,
@@ -80,8 +125,12 @@ export function useSkipTime() {
           });
         }
 
-        // Add credits segment if it has data
-        if (data?.credits && data.credits.submission_count > 0) {
+        // Add credits segment if it has valid data
+        if (
+          data?.credits &&
+          data.credits.submission_count > 0 &&
+          validateSegment("credits", data.credits.start_ms, data.credits.end_ms)
+        ) {
           fetchedSegments.push({
             type: "credits",
             start_ms: data.credits.start_ms,
@@ -97,68 +146,6 @@ export function useSkipTime() {
         return [];
       }
     };
-
-    // const fetchVeloraSkipTime = async (): Promise<number | null> => {
-    //   if (!meta?.tmdbId) return null;
-
-    //   try {
-    //     let apiUrl = `${VELORA_BASE_URL}?tmdbId=${meta.tmdbId}`;
-    //     if (meta.type !== "movie") {
-    //       apiUrl += `&season=${meta.season?.number}&episode=${meta.episode?.number}`;
-    //     }
-    //     const data = await proxiedFetch(apiUrl);
-
-    //     if (data.introSkippable && typeof data.introEnd === "number") {
-    //       return data.introEnd;
-    //     }
-
-    //     return null;
-    //   } catch (error) {
-    //     console.error("Error fetching velora skip time:", error);
-    //     return null;
-    //   }
-    // };
-
-    // const fetchQuickWatchTime = async (): Promise<number | null> => {
-    //   if (!meta?.title || meta.type === "movie") return null;
-    //   if (!meta.season?.number || !meta.episode?.number) return null;
-
-    //   try {
-    //     const encodedName = encodeURIComponent(meta.title);
-    //     const apiUrl = `${QUICKWATCH_BASE_URL}/api/skip-times?name=${encodedName}&season=${meta.season.number}&episode=${meta.episode.number}`;
-
-    //     const data = await proxiedFetch(apiUrl);
-
-    //     if (!Array.isArray(data) || data.length === 0) return null;
-
-    //     // Find the first result with intro or credits data
-    //     for (const item of data) {
-    //       if (item.data) {
-    //         // Check for intro end time
-    //         if (
-    //           item.data.intro?.end &&
-    //           typeof item.data.intro.end === "number"
-    //         ) {
-    //           // Convert milliseconds to seconds
-    //           return Math.floor(item.data.intro.end / 1000);
-    //         }
-    //         // Check for credits start time (use as intro end)
-    //         if (
-    //           item.data.credits?.start &&
-    //           typeof item.data.credits.start === "number"
-    //         ) {
-    //           // Convert milliseconds to seconds
-    //           return Math.floor(item.data.credits.start / 1000);
-    //         }
-    //       }
-    //     }
-
-    //     return null;
-    //   } catch (error) {
-    //     console.error("Error fetching QuickWatch time:", error);
-    //     return null;
-    //   }
-    // };
 
     const fetchFedSkipsTime = async (retries = 0): Promise<number | null> => {
       if (!meta?.imdbId || meta.type === "movie") return null;
@@ -231,60 +218,65 @@ export function useSkipTime() {
 
       // Try TheIntroDB API first (supports both movies and TV shows with full segment data)
       const theIntroDBSegments = await fetchTheIntroDBSegments();
-      if (theIntroDBSegments.length > 0) {
+      const hasIntroSegment = theIntroDBSegments.some(
+        (s) => s.type === "intro",
+      );
+      const nonIntroSegments = theIntroDBSegments.filter(
+        (s) => s.type !== "intro",
+      );
+
+      // If we have a valid intro from TIDB, use all TIDB segments
+      if (hasIntroSegment) {
         currentSkipTimeSource = "theintrodb";
         setSegments(theIntroDBSegments);
         return;
       }
 
-      // QuickWatch API disabled
-      // const quickWatchTime = await fetchQuickWatchTime();
-      // if (quickWatchTime !== null) {
-      //   currentSkipTimeSource = "quickwatch";
-      //   setSegments([
-      //     {
-      //       type: "intro",
-      //       start_ms: 0, // Assume starts at beginning
-      //       end_ms: quickWatchTime * 1000, // Convert seconds to milliseconds
-      //       confidence: null,
-      //       submission_count: 1,
-      //     },
-      //   ]);
-      //   return;
-      // }
+      // If TIDB doesn't have a valid intro, try fallbacks to get intro data
+      // But keep any valid recap/credits segments from TIDB
+      let fallbackIntroSegment: SegmentData | null = null;
 
-      // Fall back to Fed-skips if TheIntroDB and QuickWatch don't have anything
+      // Fall back to Fed-skips if TheIntroDB doesn't have intro
       // Note: Fed-skips only supports TV shows, not movies
       if (febboxKey && meta?.type !== "movie") {
         const fedSkipsTime = await fetchFedSkipsTime();
         if (fedSkipsTime !== null) {
           currentSkipTimeSource = "fed-skips";
-          setSegments([
-            {
-              type: "intro",
-              start_ms: 0, // Assume starts at beginning
-              end_ms: fedSkipsTime * 1000, // Convert seconds to milliseconds
-              confidence: null,
-              submission_count: 1,
-            },
-          ]);
-          return;
+          fallbackIntroSegment = {
+            type: "intro",
+            start_ms: 0, // Assume starts at beginning
+            end_ms: fedSkipsTime * 1000, // Convert seconds to milliseconds
+            confidence: null,
+            submission_count: 1,
+          };
         }
       }
 
       // Last resort: Fall back to IntroDB API (TV shows only, available to all users)
-      const introDBTime = await fetchIntroDBTime();
-      if (introDBTime !== null) {
-        currentSkipTimeSource = "introdb";
-        setSegments([
-          {
+      if (!fallbackIntroSegment) {
+        const introDBTime = await fetchIntroDBTime();
+        if (introDBTime !== null) {
+          currentSkipTimeSource = "introdb";
+          fallbackIntroSegment = {
             type: "intro",
             start_ms: 0, // Assume starts at beginning
             end_ms: introDBTime * 1000, // Convert seconds to milliseconds
             confidence: null,
             submission_count: 1,
-          },
-        ]);
+          };
+        }
+      }
+
+      // Combine fallback intro with any valid TIDB segments (recap/credits)
+      const finalSegments: SegmentData[] = [];
+      if (fallbackIntroSegment) {
+        finalSegments.push(fallbackIntroSegment);
+      }
+      // Add any valid recap/credits segments from TIDB
+      finalSegments.push(...nonIntroSegments);
+
+      if (finalSegments.length > 0) {
+        setSegments(finalSegments);
       }
     };
 
