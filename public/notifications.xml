@@ -9,6 +9,20 @@
     <atom:link href="https://pstream.mov/notifications.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <guid>notification-059</guid>
+      <title>P-Stream desktop app is now available!</title>
+      <description>The P-Stream desktop app is now available for download! You can now stream movies and TV shows seperatly from your browser!
+
+The app has the extension built in, so all the best sources are already configured and ready to use! You can still set up FED API from the settings page as well!
+
+The app is available for Windows, macOS, and Linux. You can download it from the link below!
+      </description>
+      <link>https://github.com/p-stream/p-stream-desktop/releases</link>
+      <pubDate>Mon, 26 Jan 2026 15:20:00 MST</pubDate>
+      <category>announcement</category>
+    </item>
+
+    <item>
       <guid>notification-058</guid>
       <title>New TheIntroDB Skip Segments feature!</title>
       <description>You can now quickly leave feedback, correct, and submit skip times for movies and TV shows using your TheIntroDB API key right within P-Stream!
