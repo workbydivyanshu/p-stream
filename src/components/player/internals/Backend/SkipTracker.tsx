@@ -19,7 +19,7 @@ interface PendingSkip {
   startTime: number;
   endTime: number;
   hasBackwardMovement: boolean;
-  skipTimeSource: "fed-skips" | "introdb" | "theintrodb" | null;
+  skipTimeSource: "fed-skips" | null;
   timer: ReturnType<typeof setTimeout>;
 }
 
