@@ -74,10 +74,9 @@ export function SkipTracker() {
             ? Math.max(0.1, pendingSkip.originalConfidence * 0.5) // Reduce confidence by half if adjusted
             : pendingSkip.originalConfidence;
 
-          // Only send analytics if skip time came from fed-skips or introdb (not theintrodb)
+          // Only send analytics if skip time came from fed-skips
           if (
-            pendingSkip.skipTimeSource === "fed-skips" ||
-            pendingSkip.skipTimeSource === "introdb"
+            pendingSkip.skipTimeSource === "fed-skips"
           ) {
             // Send analytics
             sendSkipAnalytics(pendingSkip.skip, adjustedConfidence);
