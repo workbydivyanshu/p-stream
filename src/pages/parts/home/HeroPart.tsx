@@ -6,6 +6,7 @@ import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
 import { useSlashFocus } from "@/components/player/hooks/useSlashFocus";
 import { HeroTitle } from "@/components/text/HeroTitle";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useIsIOS, useIsMobile, useIsPWA } from "@/hooks/useIsMobile";
 import { useIsTV } from "@/hooks/useIsTv";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
@@ -46,6 +47,7 @@ export function HeroPart({
   const bannerSize = useBannerSize();
   const { isMobile } = useIsMobile();
   const { isTV } = useIsTV();
+  const isDesktopApp = useIsDesktopApp();
 
   const stickStateChanged = useCallback(
     (isFixed: boolean) => {
@@ -81,7 +83,7 @@ export function HeroPart({
           showTitle ? "mt-44" : "mt-4",
         )}
       >
-        {showTitle && (!isTV || search.length === 0) ? (
+        {showTitle && (!isTV || search.length === 0) && !isDesktopApp ? (
           <div className="relative z-10 mb-16">
             <HeroTitle className="mx-auto max-w-md">{title}</HeroTitle>
           </div>

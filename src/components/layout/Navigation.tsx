@@ -9,6 +9,7 @@ import { LinksDropdown } from "@/components/LinksDropdown";
 import { useNotifications } from "@/components/overlays/notificationsModal";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
 import { conf } from "@/setup/config";
 import { useBannerSize } from "@/stores/banner";
@@ -21,6 +22,7 @@ export interface NavigationProps {
   noLightbar?: boolean;
   doBackground?: boolean;
   clearBackground?: boolean;
+  hideBrandPill?: boolean;
 }
 
 export function Navigation(props: NavigationProps) {
@@ -29,6 +31,11 @@ export function Navigation(props: NavigationProps) {
   const { loggedIn } = useAuth();
   const [scrollPosition, setScrollPosition] = useState(0);
   const { openNotifications, getUnreadCount } = useNotifications();
+  const isDesktopApp = useIsDesktopApp();
+
+  const handleDesktopSettings = () => {
+    window.dispatchEvent(new CustomEvent("pstream-desktop-settings"));
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -136,13 +143,15 @@ export function Navigation(props: NavigationProps) {
         <div className={classNames("fixed left-0 right-0 flex items-center")}>
           <div className="px-7 py-5 relative z-[60] flex flex-1 items-center justify-between">
             <div className="flex items-center space-x-1.5 ssm:space-x-3 pointer-events-auto">
-              <Link
-                className="block tabbable rounded-full text-xs ssm:text-base"
-                to="/"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                <BrandPill clickable header />
-              </Link>
+              {!(props.hideBrandPill && isDesktopApp) && (
+                <Link
+                  className="block tabbable rounded-full text-xs ssm:text-base"
+                  to="/"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
+                  <BrandPill clickable header />
+                </Link>
+              )}
               <a
                 href={conf().DISCORD_LINK}
                 target="_blank"
@@ -202,7 +211,16 @@ export function Navigation(props: NavigationProps) {
                 })()}
               </a>
             </div>
-            <div className="relative pointer-events-auto">
+            <div className="relative pointer-events-auto flex items-center gap-2">
+              {isDesktopApp && (
+                <button
+                  type="button"
+                  onClick={handleDesktopSettings}
+                  className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
+                >
+                  <IconPatch icon={Icons.GEAR} clickable downsized navigation />
+                </button>
+              )}
               <LinksDropdown>
                 {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
               </LinksDropdown>

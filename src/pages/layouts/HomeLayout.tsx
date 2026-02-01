@@ -30,6 +30,7 @@ export function HomeLayout(props: {
         bg={enableFeatured ? true : props.showBg}
         clearBackground={clearBackground}
         noLightbar={enableFeatured}
+        hideBrandPill
       />
       {props.children}
     </FooterView>
