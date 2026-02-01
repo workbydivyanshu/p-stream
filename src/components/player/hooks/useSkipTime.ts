@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // import { proxiedFetch } from "@/backend/helpers/fetch";
 import { mwFetch, proxiedFetch } from "@/backend/helpers/fetch";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
+import { usePlayerStore } from "@/stores/player/store";
+import { getMediaKey } from "@/stores/player/slices/source";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getTurnstileToken } from "@/utils/turnstile";
 
@@ -30,10 +32,16 @@ export interface SegmentData {
 
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
-  const [segments, setSegments] = useState<SegmentData[]>([]);
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
+  const cacheKey = getMediaKey(meta ?? null);
+  const skipSegmentsCacheKey = usePlayerStore((s) => s.skipSegmentsCacheKey);
+  const skipSegments = usePlayerStore((s) => s.skipSegments);
+  const setSkipSegments = usePlayerStore((s) => s.setSkipSegments);
 
   useEffect(() => {
+    if (!cacheKey) return;
+    // Already have segments for this media – don't refetch (e.g. when opening menu)
+    if (cacheKey === skipSegmentsCacheKey) return;
     // Validate segment data according to rules
     // eslint-disable-next-line camelcase
     const validateSegment = (
@@ -212,9 +220,7 @@ export function useSkipTime() {
     };
 
     const fetchSkipTime = async (): Promise<void> => {
-      // Reset source and segments
       currentSkipTimeSource = null;
-      setSegments([]);
 
       // Try TheIntroDB API first (supports both movies and TV shows with full segment data)
       const theIntroDBSegments = await fetchTheIntroDBSegments();
@@ -228,7 +234,7 @@ export function useSkipTime() {
       // If we have a valid intro from TIDB, use all TIDB segments
       if (hasIntroSegment) {
         currentSkipTimeSource = "theintrodb";
-        setSegments(theIntroDBSegments);
+        setSkipSegments(cacheKey, theIntroDBSegments);
         return;
       }
 
@@ -275,13 +281,15 @@ export function useSkipTime() {
       // Add any valid recap/credits segments from TIDB
       finalSegments.push(...nonIntroSegments);
 
-      if (finalSegments.length > 0) {
-        setSegments(finalSegments);
-      }
+      // Always update cache (even when empty) so we don't refetch for this media
+      setSkipSegments(cacheKey, finalSegments);
     };
 
     fetchSkipTime();
   }, [
+    cacheKey,
+    skipSegmentsCacheKey,
+    setSkipSegments,
     meta?.tmdbId,
     meta?.imdbId,
     meta?.title,
@@ -291,5 +299,6 @@ export function useSkipTime() {
     febboxKey,
   ]);
 
-  return segments;
+  // Only return segments when they're for the current media (avoid showing stale data)
+  return cacheKey === skipSegmentsCacheKey ? skipSegments : [];
 }

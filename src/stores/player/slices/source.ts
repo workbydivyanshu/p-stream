@@ -396,6 +396,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     });
   },
   reset() {
+    get().clearSkipSegments?.();
     set((s) => {
       s.source = null;
       s.sourceId = null;
