@@ -96,6 +96,8 @@ export function NextEpisodeButton(props: {
   onChange?: (meta: PlayerMeta) => void;
   inControl: boolean;
   showAsButton?: boolean;
+  /** When true (e.g. in credits-to-end segment), show regardless of time/duration. */
+  forceShow?: boolean;
 }) {
   const { t } = useTranslation();
   const duration = usePlayerStore((s) => s.progress.duration);
@@ -109,7 +111,8 @@ export function NextEpisodeButton(props: {
   const setLastSuccessfulSource = usePreferencesStore(
     (s) => s.setLastSuccessfulSource,
   );
-  const showingState = shouldShowNextEpisodeButton(time, duration);
+  const timeBasedState = shouldShowNextEpisodeButton(time, duration);
+  const showingState = props.forceShow ? "always" : timeBasedState;
   const status = usePlayerStore((s) => s.status);
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,

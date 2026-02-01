@@ -86,24 +86,35 @@ function SkipSegmentButton(props: {
   const meta = usePlayerStore((s) => s.meta);
   const { addSkipEvent } = useSkipTracking(20);
 
-  // Check if we should show NextEpisodeButton instead of credits skip button
+  // Only replace with NextEpisodeButton when credits have no end (end_ms === null) – i.e. credits
+  // run to the end of the video. When end_ms is a number, there may be content after (e.g. post-
+  // credits scene), so we show the normal "Skip credits" button that seeks to end_ms.
   const shouldShowNextEpisodeInsteadOfCredits =
     meta?.type === "show" &&
     props.segments.some((segment) => {
       if (segment.type !== "credits") return false;
-      // Show NextEpisodeButton if credits end at video end (null means end of video)
       return segment.end_ms === null;
     });
 
-  // Find segments that should be shown at the current time
+  // Find segments that should be shown at the current time (intro, recap; credits excluded when we show NextEpisodeButton)
   const activeSegments = props.segments.filter((segment) => {
-    // Skip credits segments if we're showing NextEpisodeButton instead
     if (segment.type === "credits" && shouldShowNextEpisodeInsteadOfCredits) {
       return false;
     }
     const showingState = shouldShowSkipButton(time, segment);
     return showingState !== "none";
   });
+
+  // NextEpisodeButton only for the "credits to end of video" segment (end_ms === null)
+  const creditsSegment = props.segments.find(
+    (s) => s.type === "credits" && s.end_ms === null,
+  );
+  const inCreditsSegment =
+    creditsSegment != null && time * 1000 >= (creditsSegment.start_ms ?? 0);
+  const showNextEpisodeButton =
+    shouldShowNextEpisodeInsteadOfCredits &&
+    props.inControl &&
+    inCreditsSegment;
 
   const handleSkip = useCallback(
     (segment: SegmentData) => {
@@ -146,70 +157,70 @@ function SkipSegmentButton(props: {
     [display, time, _duration, addSkipEvent, meta, props],
   );
 
-  // Show NextEpisodeButton instead of credits skip button for TV shows when credits end at video end
-  if (shouldShowNextEpisodeInsteadOfCredits && props.inControl) {
-    return (
-      <NextEpisodeButton
-        controlsShowing={props.controlsShowing}
-        onChange={props.onChangeMeta}
-        inControl={props.inControl}
-      />
-    );
-  }
-
-  if (!props.inControl || activeSegments.length === 0) return null;
-
-  // If status is not playing, don't show buttons
+  if (!props.inControl) return null;
   if (status !== "playing") return null;
+  if (activeSegments.length === 0 && !showNextEpisodeButton) return null;
 
   return (
-    <div className="absolute right-[calc(3rem+env(safe-area-inset-right))] bottom-0">
-      {activeSegments.map((segment, index) => {
-        const showingState = shouldShowSkipButton(time, segment);
-        const animation = showingState === "hover" ? "slide-up" : "fade";
+    <>
+      <div className="absolute right-[calc(3rem+env(safe-area-inset-right))] bottom-0">
+        {activeSegments.map((segment, index) => {
+          const showingState = shouldShowSkipButton(time, segment);
+          const animation = showingState === "hover" ? "slide-up" : "fade";
 
-        let bottom = "bottom-[calc(6rem+env(safe-area-inset-bottom))]";
-        if (showingState === "always") {
-          bottom = props.controlsShowing
-            ? bottom
-            : "bottom-[calc(3rem+env(safe-area-inset-bottom))]";
-        }
+          let bottom = "bottom-[calc(6rem+env(safe-area-inset-bottom))]";
+          if (showingState === "always") {
+            bottom = props.controlsShowing
+              ? bottom
+              : "bottom-[calc(3rem+env(safe-area-inset-bottom))]";
+          }
 
-        // Offset multiple buttons vertically
-        const verticalOffset = index * 60; // 60px spacing between buttons
-        const adjustedBottom = bottom.replace(
-          /bottom-\[calc\(([^)]+)\)\]/,
-          `bottom-[calc($1 + ${verticalOffset}px)]`,
-        );
+          // Offset multiple buttons vertically
+          const verticalOffset = index * 60; // 60px spacing between buttons
+          const adjustedBottom = bottom.replace(
+            /bottom-\[calc\(([^)]+)\)\]/,
+            `bottom-[calc($1 + ${verticalOffset}px)]`,
+          );
 
-        // Show button whenever we're in a segment (not only on hover after first 10s)
-        const show = showingState === "always" || showingState === "hover";
+          let show = false;
+          if (showingState === "always") show = true;
+          else if (showingState === "hover" && props.controlsShowing)
+            show = true;
 
-        return (
-          <Transition
-            key={segment.type}
-            animation={animation}
-            show={show}
-            className="absolute right-0"
-          >
-            <div
-              className={classNames([
-                "absolute bottom-0 right-0 transition-[bottom] duration-200 flex items-center space-x-3",
-                adjustedBottom,
-              ])}
+          return (
+            <Transition
+              key={segment.type}
+              animation={animation}
+              show={show}
+              className="absolute right-0"
             >
-              <Button
-                onClick={() => handleSkip(segment)}
-                className="bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText flex justify-center items-center"
+              <div
+                className={classNames([
+                  "absolute bottom-0 right-0 transition-[bottom] duration-200 flex items-center space-x-3",
+                  adjustedBottom,
+                ])}
               >
-                <Icon className="text-xl mr-1" icon={Icons.SKIP_EPISODE} />
-                {getSegmentText(segment.type, t)}
-              </Button>
-            </div>
-          </Transition>
-        );
-      })}
-    </div>
+                <Button
+                  onClick={() => handleSkip(segment)}
+                  className="bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText flex justify-center items-center"
+                >
+                  <Icon className="text-xl mr-1" icon={Icons.SKIP_EPISODE} />
+                  {getSegmentText(segment.type, t)}
+                </Button>
+              </div>
+            </Transition>
+          );
+        })}
+      </div>
+      {showNextEpisodeButton && (
+        <NextEpisodeButton
+          controlsShowing={props.controlsShowing}
+          onChange={props.onChangeMeta}
+          inControl={props.inControl}
+          forceShow
+        />
+      )}
+    </>
   );
 }
 
