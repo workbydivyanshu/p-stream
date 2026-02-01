@@ -182,9 +182,8 @@ function SkipSegmentButton(props: {
           `bottom-[calc($1 + ${verticalOffset}px)]`,
         );
 
-        let show = false;
-        if (showingState === "always") show = true;
-        else if (showingState === "hover" && props.controlsShowing) show = true;
+        // Show button whenever we're in a segment (not only on hover after first 10s)
+        const show = showingState === "always" || showingState === "hover";
 
         return (
           <Transition
