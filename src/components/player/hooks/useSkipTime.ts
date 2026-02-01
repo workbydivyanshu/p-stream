@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { mwFetch, proxiedFetch } from "@/backend/helpers/fetch";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { conf } from "@/setup/config";
-import { usePlayerStore } from "@/stores/player/store";
 import { getMediaKey } from "@/stores/player/slices/source";
+import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getTurnstileToken } from "@/utils/turnstile";
 

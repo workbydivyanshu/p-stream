@@ -75,9 +75,7 @@ export function SkipTracker() {
             : pendingSkip.originalConfidence;
 
           // Only send analytics if skip time came from fed-skips
-          if (
-            pendingSkip.skipTimeSource === "fed-skips"
-          ) {
+          if (pendingSkip.skipTimeSource === "fed-skips") {
             // Send analytics
             sendSkipAnalytics(pendingSkip.skip, adjustedConfidence);
           }
