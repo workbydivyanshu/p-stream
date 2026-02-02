@@ -607,7 +607,8 @@
       "settings": "Settings",
       "support": "Support",
       "discover": "Discover",
-      "development": "Development"
+      "development": "Development",
+      "desktop": "App Settings"
     }
   },
   "notFound": {
