@@ -648,7 +648,7 @@ export function MigrationUploadPage() {
                   <div className="flex items-center gap-2">
                     <Icon icon={Icons.CLOCK} className="text-xl" />
                     <span className="font-medium">
-                      {t("migration.preview.items.watchHistory")}
+                      {t("migration.preview.items.progress")}
                     </span>
                   </div>
                   <div className="text-xl font-bold mt-2">
