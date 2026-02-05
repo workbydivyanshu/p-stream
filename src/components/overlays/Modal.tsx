@@ -26,8 +26,13 @@ export function ModalCard(props: {
   className?: ReactNode;
 }) {
   return (
-    <div className={classNames("w-full max-w-[30rem] m-4", props.className)}>
-      <div className="w-full bg-modal-background rounded-xl p-8 pointer-events-auto">
+    <div
+      className={classNames(
+        "w-full max-w-[30rem] m-4 pointer-events-auto",
+        props.className,
+      )}
+    >
+      <div className="w-full bg-modal-background rounded-xl p-8">
         {props.children}
       </div>
     </div>
@@ -50,7 +55,7 @@ export function Modal(props: { id: string; children?: ReactNode }) {
       <Helmet>
         <html data-no-scroll />
       </Helmet>
-      <div className="flex absolute inset-0 items-center justify-center flex-col">
+      <div className="flex absolute inset-0 items-center justify-center flex-col pointer-events-none">
         {props.children}
       </div>
     </OverlayPortal>

@@ -1,4 +1,4 @@
-export type SegmentType = "intro" | "recap" | "credits";
+export type SegmentType = "intro" | "recap" | "credits" | "preview";
 
 export interface SubmissionRequest {
   tmdb_id: number;

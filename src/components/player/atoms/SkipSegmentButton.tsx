@@ -11,7 +11,7 @@ import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 function getSegmentText(
-  type: "intro" | "recap" | "credits",
+  type: "intro" | "recap" | "credits" | "preview",
   t: (key: string) => string,
 ): string {
   switch (type) {
@@ -21,6 +21,8 @@ function getSegmentText(
       return t("player.skipTime.recap");
     case "credits":
       return t("player.skipTime.credits");
+    case "preview":
+      return t("player.skipTime.preview");
     default:
       return t("player.skipTime.intro");
   }

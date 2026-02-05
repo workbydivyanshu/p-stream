@@ -36,7 +36,7 @@ export function useSkipTimeSource(): typeof currentSkipTimeSource {
 }
 
 export interface SegmentData {
-  type: "intro" | "recap" | "credits";
+  type: "intro" | "recap" | "credits" | "preview";
   start_ms: number | null;
   end_ms: number | null;
   confidence: number | null;
@@ -58,49 +58,6 @@ export function useSkipTime() {
     // Another fetch for this key is already in progress (e.g. two components mounted)
     if (fetchingForCacheKey === cacheKey) return;
     fetchingForCacheKey = cacheKey;
-    // Validate segment data according to rules
-    // eslint-disable-next-line camelcase
-    const validateSegment = (
-      type: "intro" | "recap" | "credits",
-      // eslint-disable-next-line camelcase
-      start_ms: number | null,
-      // eslint-disable-next-line camelcase
-      end_ms: number | null,
-    ): boolean => {
-      // eslint-disable-next-line camelcase
-      const start = start_ms ?? 0;
-      // eslint-disable-next-line camelcase
-      const end = end_ms;
-
-      if (type === "intro") {
-        // Intro: end_ms is required, duration must be 0 or 5-200 seconds
-        if (end === null) return false;
-        const duration = (end - start) / 1000;
-        if (duration === 0) return true; // No intro is valid
-        return duration >= 5 && duration <= 200;
-      }
-
-      if (type === "recap") {
-        // Recap: end_ms is required, duration must be 0 or 5-1200 seconds
-        if (end === null) return false;
-        const duration = (end - start) / 1000;
-        if (duration === 0) return true; // No recap is valid
-        return duration >= 5 && duration <= 1200;
-      }
-
-      if (type === "credits") {
-        // Credits: start_ms is required
-        // If end_ms is provided, duration must be at least 5 seconds
-        // If end_ms is null, credits extend to end of video (valid)
-        // eslint-disable-next-line camelcase
-        if (start_ms === null) return false;
-        if (end === null) return true; // Credits to end of video is valid
-        const duration = (end - start) / 1000;
-        return duration >= 5;
-      }
-
-      return false;
-    };
 
     const fetchTheIntroDBSegments = async (): Promise<{
       segments: SegmentData[];
@@ -122,12 +79,8 @@ export function useSkipTime() {
 
         const fetchedSegments: SegmentData[] = [];
 
-        // Add intro segment if it has valid data
-        if (
-          data?.intro &&
-          data.intro.submission_count > 0 &&
-          validateSegment("intro", data.intro.start_ms, data.intro.end_ms)
-        ) {
+        // Add intro segment if it has data
+        if (data?.intro && data.intro.submission_count > 0) {
           fetchedSegments.push({
             type: "intro",
             start_ms: data.intro.start_ms,
@@ -137,12 +90,8 @@ export function useSkipTime() {
           });
         }
 
-        // Add recap segment if it has valid data
-        if (
-          data?.recap &&
-          data.recap.submission_count > 0 &&
-          validateSegment("recap", data.recap.start_ms, data.recap.end_ms)
-        ) {
+        // Add recap segment if it has data
+        if (data?.recap && data.recap.submission_count > 0) {
           fetchedSegments.push({
             type: "recap",
             start_ms: data.recap.start_ms,
@@ -152,18 +101,25 @@ export function useSkipTime() {
           });
         }
 
-        // Add credits segment if it has valid data
-        if (
-          data?.credits &&
-          data.credits.submission_count > 0 &&
-          validateSegment("credits", data.credits.start_ms, data.credits.end_ms)
-        ) {
+        // Add credits segment if it has data
+        if (data?.credits && data.credits.submission_count > 0) {
           fetchedSegments.push({
             type: "credits",
             start_ms: data.credits.start_ms,
             end_ms: data.credits.end_ms,
             confidence: data.credits.confidence,
             submission_count: data.credits.submission_count,
+          });
+        }
+
+        // Add preview segment if it has data
+        if (data?.preview && data.preview.submission_count > 0) {
+          fetchedSegments.push({
+            type: "preview",
+            start_ms: data.preview.start_ms,
+            end_ms: data.preview.end_ms,
+            confidence: data.preview.confidence,
+            submission_count: data.preview.submission_count,
           });
         }
 
@@ -213,7 +169,7 @@ export function useSkipTime() {
 
         const parseSkipTime = (timeStr: string | undefined): number | null => {
           if (!timeStr || typeof timeStr !== "string") return null;
-          const match = timeStr.match(/^(\d+)s$/);
+          const match = timeStr.match(/^($\d+$)s$/);
           if (!match) return null;
           return parseInt(match[1], 10);
         };

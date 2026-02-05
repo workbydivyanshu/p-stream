@@ -1003,7 +1003,8 @@
           "types": {
             "intro": "Intro",
             "recap": "Recap",
-            "credits": "Credits"
+            "credits": "Credits",
+            "preview": "Preview"
           },
           "startTimeLabel": "Start (s)",
           "endTimeLabel": "End (s)",
@@ -1011,12 +1012,14 @@
             "start": {
               "intro": "2:30 or 150 (leave empty for start at beginning)",
               "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)"
+              "credits": "2:30 or 150 (required)",
+              "preview": "2:30 or 150 (required)"
             },
             "end": {
               "intro": "3:30 or 210 (required)",
               "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)"
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "preview": "3:30 or 210 (leave empty for end of media)"
             }
           },
           "whenToTitle": "Timestamps guide:",
@@ -1029,7 +1032,35 @@
             "durationLabel": "Duration:",
             "durationDesc": "Min 5s if end provided",
             "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes"
+            "excludeDesc": "Post-credits scenes",
+            "intro": {
+              "whenToTitle": "Intro timestamps guide:",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
+            },
+            "recap": {
+              "whenToTitle": "Recap timestamps guide:",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
+            },
+            "credits": {
+              "whenToTitle": "Credits timestamps guide:",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
+            },
+            "preview": {
+              "whenToTitle": "Preview timestamps guide:",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
+            }
           },
           "cancel": "Cancel",
           "submit": "Submit",
