@@ -36,7 +36,9 @@ export function SkipSegmentsView({ id }: { id: string }) {
     display?.setTime(seconds);
   };
 
-  const getSegmentTypeLabel = (type: "intro" | "recap" | "credits") => {
+  const getSegmentTypeLabel = (
+    type: "intro" | "recap" | "credits" | "preview",
+  ) => {
     switch (type) {
       case "intro":
         return t("player.segment.intro");
@@ -44,6 +46,8 @@ export function SkipSegmentsView({ id }: { id: string }) {
         return t("player.segment.recap");
       case "credits":
         return t("player.segment.credits");
+      case "preview":
+        return t("player.segment.preview");
       default:
         return type;
     }
