@@ -19,7 +19,7 @@ function parseTimeToSeconds(timeStr: string): number | null {
   if (!timeStr.trim()) return null;
 
   // Check if it's in hh:mm:ss format
-  const hhmmssMatch = timeStr.match(/^($\d{1,2}$):($[0-5]?\d$):($[0-5]?\d$)$/);
+  const hhmmssMatch = timeStr.match(/^(\d{1,2}):(0?[0-5]\d):(0?[0-5]\d)$/);
   if (hhmmssMatch) {
     const hours = parseInt(hhmmssMatch[1], 10);
     const minutes = parseInt(hhmmssMatch[2], 10);
@@ -33,7 +33,7 @@ function parseTimeToSeconds(timeStr: string): number | null {
   }
 
   // Check if it's in mm:ss format
-  const mmssMatch = timeStr.match(/^($\d{1,3}$):($[0-5]?\d$)$/);
+  const mmssMatch = timeStr.match(/^(\d{1,3}):(0?[0-5]\d)$/);
   if (mmssMatch) {
     const minutes = parseInt(mmssMatch[1], 10);
     const seconds = parseInt(mmssMatch[2], 10);
