@@ -670,16 +670,16 @@
     "start": {
       "explainer": "To get the best streams possible, you will need to choose which streaming method you want to use.",
       "moreInfo": {
-        "button": "More info",
+        "button": "Which setup should I choose?",
         "title": "Understanding a setup",
         "explainer": {
           "intro": "P-Stream doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
           "options": "Your Options:",
-          "extension": "1. Extension",
+          "extension": "Extension",
           "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "2. Proxy",
+          "proxy": "Proxy",
           "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "3. Default Setup",
+          "default": "Default Setup",
           "defaultDescription": "Uses P-Stream's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
           "fedapi": {
             "fedapi": "Additional: Febbox token",
@@ -692,7 +692,7 @@
           "subtitle": "Recommended Configurations:",
           "desktop": {
             "title": "Desktop:",
-            "description": "Extension + Febbox token"
+            "description": "Extension (or app) + Febbox token"
           },
           "iOS": {
             "title": "iOS:",
