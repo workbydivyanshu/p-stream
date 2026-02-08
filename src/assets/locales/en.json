@@ -629,6 +629,7 @@
       "cancel": "Cancel",
       "confirm": "Use default setup",
       "description": "The default setup does not have the best streams. You'll be missing out on the best sources!",
+      "tip": "It's recommended to set up the extension and/or FED API!",
       "title": "Are you sure?"
     },
     "extension": {
@@ -712,8 +713,14 @@
         "extension": {
           "action": "Install extension",
           "description": "Install browser extension and gain access to additional sources! Remember to enable it for this site.",
-          "quality": "Best quality + More Sources",
+          "quality": "Best quality + More sources",
           "title": "Browser extension"
+        },
+        "desktopapp": {
+          "action": "Install Desktop app",
+          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
+          "quality": "Best quality + Even more sources",
+          "title": "P-Stream Desktop app"
         },
         "proxy": {
           "action": "Setup proxy",
