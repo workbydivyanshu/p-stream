@@ -38,7 +38,7 @@
     },
     "q6": {
       "title": "Is there a P-Stream app?",
-      "body": "Not yet, but you can install it as a PWA (Progressive Web App). On iOS, use Safari → Share → Add to Home Screen. On Android, use Chrome → 3 dots → Add to Home Screen. An experimental APK is available via our Discord, but it's not recommended.",
+      "body": "Yes! We now have an official desktop app available for download! https://github.com/p-stream/p-stream-desktop/releases",
       "section": "general"
     },
     "q7": {
@@ -108,7 +108,7 @@
     },
     "q21": {
       "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all logged-in devices.",
+      "body": "Yes. Once set up, your token works across all devices!",
       "section": "connections"
     },
     "q22": {
