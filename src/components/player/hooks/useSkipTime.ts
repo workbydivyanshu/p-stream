@@ -50,6 +50,7 @@ export function useSkipTime() {
   const skipSegmentsCacheKey = usePlayerStore((s) => s.skipSegmentsCacheKey);
   const skipSegments = usePlayerStore((s) => s.skipSegments);
   const setSkipSegments = usePlayerStore((s) => s.setSkipSegments);
+  const tidbKey = usePreferencesStore((s) => s.tidbKey);
 
   useEffect(() => {
     if (!cacheKey) return;
@@ -75,7 +76,11 @@ export function useSkipTime() {
           apiUrl += `&season=${meta.season.number}&episode=${meta.episode.number}`;
         }
 
-        const data = await mwFetch(apiUrl);
+        const data = await mwFetch(apiUrl, {
+          headers: {
+            Authorization: tidbKey ? `Bearer ${tidbKey}` : undefined,
+          } as HeadersInit,
+        });
 
         const fetchedSegments: SegmentData[] = [];
 
@@ -287,6 +292,7 @@ export function useSkipTime() {
     meta?.episode?.number,
     febboxKey,
     setSkipSegments,
+    tidbKey,
   ]);
 
   // Only return segments when they're for the current media (avoid showing stale data)
