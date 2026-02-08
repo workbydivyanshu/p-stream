@@ -54,7 +54,7 @@ function MoreCard({ link }: { link: string }) {
             className="rounded-xl bg-background-main group-hover:opacity-100"
           />
           <Flare.Child className="pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300">
-            <div className="relative pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground flex items-center justify-center">
+            <div className="relative pb-[150%] w-full flex items-center justify-center">
               <div className="flex absolute inset-0 flex-col items-center justify-center">
                 <Icon
                   icon={Icons.ARROW_RIGHT}
