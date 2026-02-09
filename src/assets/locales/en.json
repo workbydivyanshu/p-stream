@@ -1424,6 +1424,7 @@
         "moviesOn": "Movies on {{provider}}",
         "tvshowsOn": "Shows on {{provider}}",
         "recommended": "Because You Watched: {{title}}",
+        "forYou": "For You",
         "genreMovies": "{{genre}} Movies",
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",

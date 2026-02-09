@@ -13,6 +13,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 import { DiscoverNavigation } from "./components/DiscoverNavigation";
 import type { FeaturedMedia } from "./components/FeaturedCarousel";
 import { LazyMediaCarousel } from "./components/LazyMediaCarousel";
+import { PersonalRecommendationsCarousel } from "./components/PersonalRecommendationsCarousel";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 
 export function DiscoverContent() {
@@ -48,6 +49,16 @@ export function DiscoverContent() {
   // Render Movies content with lazy loading
   const renderMoviesContent = () => {
     const carousels = [];
+
+    // For You - personal recommendations from watch history, progress, and bookmarks
+    carousels.push(
+      <PersonalRecommendationsCarousel
+        key="movie-for-you"
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />,
+    );
 
     // Movie Recommendations - only show if there are movie progress items
     if (movieProgressItems.length > 0) {
@@ -136,6 +147,16 @@ export function DiscoverContent() {
   // Render TV Shows content with lazy loading
   const renderTVShowsContent = () => {
     const carousels = [];
+
+    // For You - personal recommendations from watch history, progress, and bookmarks
+    carousels.push(
+      <PersonalRecommendationsCarousel
+        key="tv-for-you"
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />,
+    );
 
     // TV Show Recommendations - only show if there are TV show progress items
     if (tvProgressItems.length > 0) {
