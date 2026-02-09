@@ -23,6 +23,7 @@ import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
 import { Heading1, Heading2, Paragraph } from "@/components/utils/Text";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import {
   SetupPart,
   Status,
@@ -780,17 +781,20 @@ export function ConnectionsPart(
     TIDBKeyProps,
 ) {
   const { t } = useTranslation();
+  const isDesktopApp = useIsDesktopApp();
   return (
     <div>
       <Heading1 border>{t("settings.connections.title")}</Heading1>
       <div className="space-y-6">
-        <SetupPart /> {/* I was wondering what happened to this badddev >:( */}
-        <ProxyEdit
-          proxyUrls={props.proxyUrls}
-          setProxyUrls={props.setProxyUrls}
-          proxyTmdb={props.proxyTmdb}
-          setProxyTmdb={props.setProxyTmdb}
-        />
+        <SetupPart />
+        {!isDesktopApp && (
+          <ProxyEdit
+            proxyUrls={props.proxyUrls}
+            setProxyUrls={props.setProxyUrls}
+            proxyTmdb={props.proxyTmdb}
+            setProxyTmdb={props.setProxyTmdb}
+          />
+        )}
         <BackendEdit
           backendUrl={props.backendUrl}
           setBackendUrl={props.setBackendUrl}

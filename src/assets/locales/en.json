@@ -1285,7 +1285,8 @@
         "items": {
           "default": "Default setup",
           "extension": "Extension",
-          "proxy": "Custom proxy"
+          "proxy": "Custom proxy",
+          "desktopapp": "Native app"
         },
         "redoSetup": "Redo setup",
         "successStatus": {

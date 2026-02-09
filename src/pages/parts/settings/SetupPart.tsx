@@ -17,6 +17,7 @@ import {
   StatusCircleProps,
 } from "@/components/player/internals/StatusCircle";
 import { Heading3 } from "@/components/utils/Text";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -359,6 +360,7 @@ export function SetupPart() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { loading, setupStates, globalState } = useIsSetup();
+  const isDesktopApp = useIsDesktopApp();
   if (loading || !setupStates) {
     return (
       <SettingsCard>
@@ -425,19 +427,27 @@ export function SetupPart() {
           <p className="max-w-[20rem] font-medium mb-6">
             {t(textLookupMap[globalState].desc)}
           </p>
-          <SetupCheckList status={setupStates.extension}>
-            {t("settings.connections.setup.items.extension")}
-          </SetupCheckList>
-          <SetupCheckList status={setupStates.proxy}>
-            {t("settings.connections.setup.items.proxy")}
-          </SetupCheckList>
-          <SetupCheckList
-            grey
-            highlight={globalState === "unset"}
-            status={setupStates.defaultProxy}
-          >
-            {t("settings.connections.setup.items.default")}
-          </SetupCheckList>
+          {!isDesktopApp ? (
+            <>
+              <SetupCheckList status={setupStates.extension}>
+                {t("settings.connections.setup.items.extension")}
+              </SetupCheckList>
+              <SetupCheckList status={setupStates.proxy}>
+                {t("settings.connections.setup.items.proxy")}
+              </SetupCheckList>
+              <SetupCheckList
+                grey
+                highlight={globalState === "unset"}
+                status={setupStates.defaultProxy}
+              >
+                {t("settings.connections.setup.items.default")}
+              </SetupCheckList>
+            </>
+          ) : (
+            <SetupCheckList status={setupStates.extension}>
+              {t("settings.connections.setup.items.desktopapp")}
+            </SetupCheckList>
+          )}
           {conf().ALLOW_DEBRID_KEY && (
             <SetupCheckList status={setupStates.debridTokenTest || "unset"}>
               Debrid Service
