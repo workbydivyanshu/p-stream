@@ -27,6 +27,7 @@ export async function singularProxiedFetch<T>(
   url: string,
   ops: P<T>[1] = {},
 ): R<T> {
+  if (!url) url = "";
   let combinedUrl = ops?.baseURL ?? "";
   if (
     combinedUrl.length > 0 &&

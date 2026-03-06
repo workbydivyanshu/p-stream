@@ -1,4 +1,3 @@
-import { ProviderControls, ScrapeMedia } from "@p-stream/providers";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -23,6 +22,7 @@ import {
 } from "@/hooks/useProviderScrape";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { ProviderControls, ScrapeMedia } from "@p-stream/providers";
 
 export interface ScrapingProps {
   media: ScrapeMedia;

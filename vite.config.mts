@@ -109,13 +109,6 @@ export default defineConfig(({ mode }) => {
           position: "tr",
         },
         typescript: true, // check typescript build errors in dev server
-        eslint: {
-          // check lint errors in dev server
-          lintCommand: "eslint --ext .tsx,.ts src",
-          dev: {
-            logLevel: ["error"],
-          },
-        },
       }),
       splitVendorChunkPlugin(),
       visualizer() as PluginOption,
@@ -167,6 +160,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
         "@themes": path.resolve(__dirname, "./themes"),
+        "react-native": path.resolve(__dirname, "./src/react-native-empty.ts"),
         "@sozialhelden/ietf-language-tags": path.resolve(
           __dirname,
           "./node_modules/@sozialhelden/ietf-language-tags/dist/cjs",

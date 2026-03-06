@@ -1,4 +1,3 @@
-import { ScrapeMedia } from "@p-stream/providers";
 import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +10,7 @@ import {
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { usePreferencesStore } from "@/stores/preferences";
+import { ScrapeMedia } from "@p-stream/providers";
 
 // Embed option component
 function EmbedOption(props: {

@@ -1,9 +1,9 @@
-import { RunOutput } from "@p-stream/providers";
 import DOMPurify from "dompurify";
 import { convert, detect, parse } from "subsrt-ts";
 import { ContentCaption } from "subsrt-ts/dist/types/handler";
 
 import { CaptionListItem } from "@/stores/player/slices/source";
+import { RunOutput } from "@p-stream/providers";
 
 export type CaptionCueType = ContentCaption;
 export const sanitize = DOMPurify.sanitize;

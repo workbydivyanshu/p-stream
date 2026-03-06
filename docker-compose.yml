@@ -1,0 +1,85 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pstream -d pstream"]
+      interval: 5s
+      retries: 10
+      timeout: 2s
+    environment:
+      - POSTGRES_USER=pstream
+      - POSTGRES_PASSWORD=pstream2024
+      - POSTGRES_DB=pstream
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pstream-network
+
+  # Backend API (User accounts, watch history)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://pstream:pstream2024@postgres:5432/pstream?schema=public
+      - META_NAME=P-Stream
+      - META_DESCRIPTION=P-Stream Streaming Platform
+      - CRYPTO_SECRET=pstream-secret-key-2024-production
+      - TMDB_API_KEY=078a38e3e012e0d945d6c59645a0e638
+      - TRAKT_CLIENT_ID=b41791e74c7afb9140d044bd438255c04b166fcc9bf1c1377b8514a11069c76a
+      - TRAKT_SECRET_ID=45826a6580b823979d4ae36a344338158eb1488018635929dd3b6a03405383fc
+      - CAPTCHA=false
+      - NODE_ENV=production
+    ports:
+      - "3001:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - pstream-network
+
+  # CORS Proxy (for streaming)
+  proxy:
+    build:
+      context: ./simple-proxy
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    networks:
+      - pstream-network
+
+  # Web App (Nginx serving built frontend)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TMDB_READ_API_KEY=078a38e3e012e0d945d6c59645a0e638
+        - CORS_PROXY_URL=http://proxy:3000
+        - BACKEND_URL=http://backend:3000
+        - APP_DOMAIN=http://localhost
+        - OPENSEARCH_ENABLED=false
+        - PWA_ENABLED=false
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - proxy
+      - backend
+    networks:
+      - pstream-network
+
+networks:
+  pstream-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

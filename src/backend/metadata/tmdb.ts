@@ -175,7 +175,6 @@ const apiKey = conf().TMDB_READ_API_KEY;
 
 const tmdbHeaders = {
   accept: "application/json",
-  Authorization: `Bearer ${apiKey}`,
 };
 
 // Cache for TMDB API responses
@@ -235,6 +234,7 @@ export async function get<T>(url: string, params?: object): Promise<T> {
   const fullUrl = new URL(tmdbBaseUrl1 + url);
   const allParams = {
     ...params,
+    api_key: apiKey,
     language: formattedLanguage,
   };
 

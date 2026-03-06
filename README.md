@@ -1,61 +1,154 @@
 # P-Stream
 
-[![P-Stream Image](.github/P-Stream.png)](https://p-stream.github.io/docs/)
+<p align="center">
+  <img src=".github/P-Stream.png" alt="P-Stream Logo" width="200">
+</p>
 
-## Quick Deploy
+<p align="center">
+  A free, open-source streaming platform for movies and TV shows. Watch your favorite content without ads, completely free and open source!
+</p>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fp-stream%2Fp-stream)
+<p align="center">
+  <a href="https://github.com/p-stream/p-stream/stargazers">
+    <img src="https://img.shields.io/github/stars/p-stream/p-stream?style=flat" alt="Stars">
+  </a>
+  <a href="https://github.com/p-stream/p-stream/issues">
+    <img src="https://img.shields.io/github/issues/p-stream/p-stream" alt="Issues">
+  </a>
+  <a href="LICENSE.md">
+    <img src="https://img.shields.io/github/license/p-stream/p-stream" alt="License">
+  </a>
+</p>
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/p-stream/p-stream)
+---
 
-**NOTE: To self-host, more setup is required. Check the [docs](https://p-stream.github.io/docs/) to properly set up!!!!**
+## ⚡ Quick Start
 
-## Links And Resources
-
-| Service       | Link                                            | Source Code                                             |
-| ------------- | ----------------------------------------------- | ------------------------------------------------------- |
-| P-Stream Docs | [docs](https://p-stream.github.io/docs/)                | [source code](https://github.com/p-stream/docs)         |
-| Extension     | [extension](https://p-stream.github.io/docs/extension) | [source code](https://github.com/p-stream/browser-ext)  |
-| Proxy         | [simple-proxy](https://p-stream.github.io/docs/proxy)  | [source code](https://github.com/p-stream/simple-proxy) |
-| Backend       | [backend](https://github.com/p-stream/backend)          | [source code](https://github.com/p-stream/backend)      |
-| Frontend      | [P-Stream](https://p-stream.github.io/docs/instances)  | [source code](https://github.com/p-stream/p-stream)     |
-| Weblate       | [weblate](https://p-stream.github.io/docs/weblate)          |                                                         |
-
-## Referrers
-
-- [FMHY (Voted as #1 streaming site of 2024, 2025)](https://fmhy.net)
-
-## Running Locally
-
-Type the following commands into your terminal / command line to run P-Stream locally
+### For Web App (Recommended)
 
 ```bash
+# Linux
+./scripts/linux/install-web.sh
+
+# Windows
+scripts\windows\install-web.bat
+
+# Mac
+./scripts/mac/install-web.sh
+```
+
+### For Desktop App
+
+```bash
+# Linux
+./scripts/linux/install-app.sh
+
+# Windows
+scripts\windows\install-app.bat
+
+# Mac
+./scripts/mac/install-app.sh
+```
+
+That's it! Open **http://localhost** in your browser!
+
+---
+
+## ✨ Features
+
+- 🎬 **Movies & TV Shows** - Stream your favorite content
+- 🚫 **No Ads** - Completely ad-free experience
+- 👤 **User Accounts** - Sign up to sync watch history across devices
+- 📚 **Watch History** - Resume watching where you left off
+- 🔖 **Bookmarks** - Save your favorite shows and movies
+- 🔄 **Multiple Sources** - Streams from various providers
+- 🚀 **Self-hostable** - Run your own instance
+- 📱 **Mobile Support** - Works on phones and tablets
+- 🖥️ **Desktop App** - Native Electron app for Linux, Windows, macOS
+
+---
+
+## 🏗️ Architecture
+
+| Service         | Port                  | Description                                  |
+| --------------- | --------------------- | -------------------------------------------- |
+| **Web App**     | http://localhost      | Main streaming interface (React + Vite)      |
+| **Backend API** | http://localhost:3001 | User accounts, authentication, watch history |
+| **Proxy**       | http://localhost:3000 | CORS proxy for streaming providers           |
+| **Database**    | localhost:5432        | PostgreSQL for user data                     |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS
+- **Backend:** Node.js, Hono, Prisma
+- **Database:** PostgreSQL
+- **Proxy:** Nitro (UnJS)
+- **Desktop:** Electron
+- **Container:** Docker, Docker Compose
+
+---
+
+## 📖 Documentation
+
+For detailed setup instructions, see [SETUP-GUIDE.md](./SETUP-GUIDE.md).
+
+### Manual Docker Setup
+
+```bash
+# Clone the repository
 git clone https://github.com/p-stream/p-stream.git
-cd smov
-git pull
+cd p-stream
+
+# Start all services
+docker compose up --build -d
+
+# Access at http://localhost
+```
+
+### Development Setup
+
+```bash
+# Install dependencies
 pnpm install
+
+# Run in development mode
 pnpm run dev
 ```
 
-Then you can visit the local instance [here](http://localhost:5173) or, at local host on port 5173.
+---
 
-## Updating a P-Stream Instance
+## 📦 Components
 
-To update a P-Stream instance you can type the below commands into a terminal at the root of your project.
+| Component       | Description                    | Location            |
+| --------------- | ------------------------------ | ------------------- |
+| **Web App**     | Main streaming web application | Root directory      |
+| **Desktop App** | Electron desktop application   | `p-stream-desktop/` |
+| **Backend**     | API server for user accounts   | `backend/`          |
+| **Proxy**       | CORS proxy for streaming       | `simple-proxy/`     |
+| **Providers**   | Streaming source scrapers      | `providers/`        |
 
-```bash
-git remote add upstream https://github.com/p-stream/p-stream.git
-git fetch upstream # Grab the contents of the new remote source
-git checkout <YOUR_MAIN_BRANCH>  # Most likely this would be `origin/production`
-git merge upstream/production
-# * Fix any conflicts present during merge *
-git add .  # Add all changes made during merge and conflict fixing
-git commit -m "Update p-stream instance (merge upstream/production)"
-git push  # Push to YOUR repository
-```
+---
 
-## Contact Me / Fluxer
+## 🤝 Contributing
 
-[Fluxer](https://fluxer.gg/rEBQ3B8E)
+Contributions are welcome! Please read our [contributing guidelines](.github/CONTRIBUTING.md) first.
 
-(Fluxer is an OSS Discord alternative platform)
+---
+
+## 📝 License
+
+This project is licensed under the [MIT License](LICENSE.md).
+
+---
+
+## ⚠️ Disclaimer
+
+P-Stream is an open-source project for educational purposes. The maintainers do not host or provide any streaming content. Users are responsible for ensuring they have the right to access content in their jurisdiction.
+
+---
+
+<p align="center">
+  Made with ❤️ by the P-Stream community
+</p>

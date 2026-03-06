@@ -1,4 +1,3 @@
-import { ScrapeMedia } from "@p-stream/providers";
 import { nanoid } from "nanoid";
 import { ofetch } from "ofetch";
 import { useCallback } from "react";
@@ -8,6 +7,7 @@ import { ScrapingItems, ScrapingSegment } from "@/hooks/useProviderScrape";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { PlayerMeta } from "@/stores/player/slices/source";
+import { ScrapeMedia } from "@p-stream/providers";
 
 // for anybody who cares - these are anonymous metrics.
 // They are just used for figuring out if providers are broken or not

@@ -1,4 +1,3 @@
-import { labelToLanguageCode } from "@p-stream/providers";
 import classNames from "classnames";
 import Fuse from "fuse.js";
 import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
@@ -26,6 +25,7 @@ import {
   getPrettyLanguageNameFromLocale,
   sortLangCodes,
 } from "@/utils/language";
+import { labelToLanguageCode } from "@p-stream/providers";
 
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
 

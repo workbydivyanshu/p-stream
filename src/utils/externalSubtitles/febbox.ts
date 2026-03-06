@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
-import { labelToLanguageCode } from "@p-stream/providers";
-
 import { CaptionListItem } from "@/stores/player/slices/source";
+import { labelToLanguageCode } from "@p-stream/providers";
 
 export async function scrapeFebboxCaptions(
   imdbId: string,

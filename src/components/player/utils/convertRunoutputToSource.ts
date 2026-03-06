@@ -1,10 +1,9 @@
-import { Stream } from "@p-stream/providers";
-
 import {
   SourceFileStream,
   SourceQuality,
   SourceSliceSource,
 } from "@/stores/player/utils/qualities";
+import { Stream } from "@p-stream/providers";
 
 const allowedQualitiesMap: Record<SourceQuality, SourceQuality> = {
   "4k": "4k",

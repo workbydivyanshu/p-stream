@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { ScrapeMedia } from "@p-stream/providers";
 
 import { downloadCaption } from "@/backend/helpers/subs";
 import { MakeSlice } from "@/stores/player/slices/types";
@@ -12,6 +11,7 @@ import { useQualityStore } from "@/stores/quality";
 import googletranslate from "@/utils/translation/googletranslate";
 import { translate } from "@/utils/translation/index";
 import { ValuesOf } from "@/utils/typeguard";
+import { ScrapeMedia } from "@p-stream/providers";
 
 export const playerStatus = {
   IDLE: "idle",

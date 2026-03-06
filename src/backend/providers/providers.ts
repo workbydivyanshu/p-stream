@@ -1,15 +1,14 @@
-import {
-  makeProviders,
-  makeStandardFetcher,
-  targets,
-} from "@p-stream/providers";
-
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import {
   makeExtensionFetcher,
   makeLoadBalancedSimpleProxyFetcher,
   setupM3U8Proxy,
 } from "@/backend/providers/fetchers";
+import {
+  makeProviders,
+  makeStandardFetcher,
+  targets,
+} from "@p-stream/providers";
 
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();

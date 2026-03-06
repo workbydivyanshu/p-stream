@@ -1,8 +1,3 @@
-import {
-  EmbedOutput,
-  NotFoundError,
-  SourcererOutput,
-} from "@p-stream/providers";
 import { useAsyncFn } from "react-use";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
@@ -19,6 +14,11 @@ import { metaToScrapeMedia } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
+import {
+  EmbedOutput,
+  NotFoundError,
+  SourcererOutput,
+} from "@p-stream/providers";
 
 function getSavedProgress(items: Record<string, any>, meta: any): number {
   const item = items[meta?.tmdbId ?? ""];
